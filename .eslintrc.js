@@ -22,7 +22,12 @@ module.exports = {
         'plugin:prettier/recommended',
     ],
     settings: {
-        'import/resolver': 'webpack',
+        'import/resolver': {
+            alias: {
+                map: ['./src'],
+                extensions: ['.js', '.jsx', '.ts', '.tsx'],
+            },
+        },
         react: {
             version: 'detect',
         },
@@ -32,6 +37,15 @@ module.exports = {
         'react/jsx-indent': [2, 4],
         'react/jsx-indent-props': [2, 4],
         'prettier/prettier': 'error',
-        'import/no-unresolved': 'ignore',
+        'import/extensions': [
+            'error',
+            'ignorePackages',
+            {
+                js: 'never',
+                jsx: 'never',
+                ts: 'never',
+                tsx: 'never',
+            },
+        ],
     },
 };
