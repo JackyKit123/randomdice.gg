@@ -447,6 +447,11 @@ module.exports = function(webpackEnv) {
                   loader: 'css-loader', // translates CSS into CommonJS
               }, {
                   loader: 'less-loader', // compiles Less to CSS
+                  options: {
+                    lessOptions : {
+                      javascriptEnabled: true,
+                    }
+                  }
               }],
             },
             // Adds support for CSS Modules (https://github.com/css-modules/css-modules)

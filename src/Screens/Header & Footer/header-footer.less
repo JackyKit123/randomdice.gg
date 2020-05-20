@@ -1,0 +1,190 @@
+@import '../../cross_import_lesshat.less';
+
+body {
+    header,
+    footer {
+        width: 100%;
+
+        & > .container {
+            width: 100%;
+            margin: auto;
+            z-index: 10;
+        }
+    }
+
+    header {
+        & > .container {
+            position: fixed;
+
+            & > .headerBar {
+                display: block;
+                position: relative;
+
+                &.topHeaderBar {
+                    z-index: 2;
+                    height: 30px;
+                    background-color: #525252;
+                    .box-shadow(0 -5px 10px 11px rgba(0, 0, 0, 1));
+
+                    & > .container {
+                        display: table;
+                        width: 100%;
+
+                        & > .login {
+                            display: table-cell;
+                            text-align: right;
+                            vertical-align: middle;
+                            color: #ffffff;
+                            cursor: pointer;
+
+                            &:hover {
+                                color: #6ba4a5;
+                            }
+                        }
+                    }
+                }
+
+                &.lowHeaderBar {
+                    z-index: 1;
+                    height: 120px;
+                    background-color: #ffffff;
+                    .box-shadow(0 -8px 10px 11px rgba(0, 0, 0, 1));
+
+                    ul.menu {
+                        .display(flex);
+                        .justify-content(flex-end);
+                        height: 100%;
+                        position: relative;
+
+                        & > li {
+                            &:first-of-type {
+                                position: absolute;
+                                left: 0;
+                                margin-left: 0;
+                            }
+                            display: table;
+                            margin-left: 40px;
+                            position: relative;
+                            height: 100%;
+
+                            a,
+                            span {
+                                display: table-cell;
+                                vertical-align: middle;
+                                text-decoration: none;
+                                cursor: pointer;
+                                color: #525252;
+                                font-size: 30px;
+                                font-weight: 500;
+                            }
+
+                            &:hover {
+                                a,
+                                span {
+                                    color: #6ba4a5;
+                                }
+
+                                & > ul {
+                                    display: block;
+                                }
+                            }
+
+                            & > ul {
+                                display: none;
+                                position: absolute;
+                                background-color: rgba(5, 41, 46, 0.9);
+                                right: 0;
+                                top: 100px;
+                                padding: 30px;
+
+                                & > li {
+                                    text-align: right;
+                                    margin: 30px 0;
+                                    white-space: nowrap;
+
+                                    & > a,
+                                    & > span {
+                                        color: #6ba4a5;
+
+                                        &:hover {
+                                            color: #ffffff;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                & > .container {
+                    padding: 0 10px;
+                    height: 100%;
+                    vertical-align: middle;
+                    margin: 0 auto;
+                    max-width: 1200px;
+                }
+            }
+        }
+
+        & > .header-placeholder {
+            height: 150px;
+        }
+    }
+
+    footer {
+        position: absolute;
+        bottom: 0;
+
+        & > .container {
+            bottom: 0;
+            height: 100px;
+            background-color: #05292e;
+            color: #ffffff;
+
+            & > .footerBar {
+                display: block;
+                position: relative;
+                height: 100%;
+
+                & > .container {
+                    text-align: center;
+                    margin: 0 auto;
+                    padding: 30px 10px 0;
+                    max-width: 1200px;
+
+                    & > .community {
+                        padding-top: 10px;
+
+                        & > div {
+                            display: inline-block;
+                            margin: 0 5px;
+
+                            & > a {
+                                text-decoration: none;
+
+                                &:link,
+                                &:visited {
+                                    color: #525252;
+                                }
+
+                                &:hover {
+                                    &.discord {
+                                        color: #7289da;
+                                    }
+
+                                    &.reddit {
+                                        color: #ff4301;
+                                    }
+
+                                    &.wiki {
+                                        color: #009bbe;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
