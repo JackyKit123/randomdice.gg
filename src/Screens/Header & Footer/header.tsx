@@ -21,8 +21,7 @@ export default function Header(): JSX.Element {
                 <div className='topHeaderBar headerBar'>
                     <div className='container'>
                         <span className='login'>
-                            <FontAwesomeIcon icon={faUserCircle} /> LogIn /
-                            Register
+                            <FontAwesomeIcon icon={faUserCircle} /> ADMIN Login
                         </span>
                     </div>
                 </div>
