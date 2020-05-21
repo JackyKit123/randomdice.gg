@@ -35,6 +35,7 @@ body {
                             color: #ffffff;
                             line-height: 30px;
                             cursor: pointer;
+                            .transition(color 0.2s ease-in-out);
 
                             &:hover {
                                 color: #6ba4a5;
@@ -44,6 +45,7 @@ body {
                 }
 
                 &.lowHeaderBar {
+                    .transition(height, 0.4s ease-out);
                     z-index: 1;
                     height: 120px;
                     background-color: #ffffff;
@@ -75,21 +77,27 @@ body {
                                 color: #525252;
                                 font-size: 30px;
                                 font-weight: 500;
+                                .transition(color 0.2s ease-in-out);
+
+                                &:hover {
+                                    color: #6ba4a5;
+                                }
                             }
 
                             &:hover {
-                                a,
-                                span {
-                                    color: #6ba4a5;
-                                }
-
                                 & > ul {
                                     display: block;
+                                    visibility: visible;
+                                    opacity: 1;
+                                    z-index: 10;
                                 }
                             }
 
                             & > ul {
-                                display: none;
+                                .transition(opacity 0.3s ease-in-out);
+                                opacity: 0;
+                                visibility: hidden;
+                                z-index: 10;
                                 position: absolute;
                                 background-color: rgba(5, 41, 46, 0.9);
                                 right: 0;
@@ -104,6 +112,7 @@ body {
                                     & > a,
                                     & > span {
                                         color: #6ba4a5;
+                                        .transition(color 0.2s ease-in-out);
 
                                         &:hover {
                                             color: #ffffff;
@@ -127,11 +136,25 @@ body {
 
         & > .header-placeholder {
             height: 150px;
+            .transition(height, 0.4s ease-out);
+        }
+
+        &.scroll {
+            & > .header-placeholder {
+                height: 80px;
+            }
+
+            & > .container .lowHeaderBar {
+                height: 50px;
+
+                ul.menu > li > ul {
+                    top: 50px;
+                }
+            }
         }
     }
 
     footer {
-        position: absolute;
         bottom: 0;
 
         & > .container {

@@ -1,10 +1,11 @@
 import React from 'react';
+import './banner.less';
 
-export default function Banner(): JSX.Element {
+export default function Banner({ title }: { title: string }): JSX.Element {
     return (
         <div className='banner'>
             <div className='title-container'>
-                <h2 className='title'> Random Dice Unofficial Site</h2>
+                <h2 className='title'>{title}</h2>
             </div>
         </div>
     );

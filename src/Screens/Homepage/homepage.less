@@ -1,27 +1,74 @@
-.banner {
-    width: 100%;
-    height: 500px;
-    background-image: url('loading_title.png');
-    background-repeat: no-repeat;
-    background-position: center -150px;
-    background-size: cover;
-    position: relative;
+@import '../../cross_import_lesshat.less';
 
-    & > .title-container {
-        overflow: hidden;
-        display: table;
-        max-width: 1200px;
-        margin: auto;
-        height: 100%;
-        padding: 0 10px;
+body {
+    main {
+        h3 {
+            text-align: center;
+            font-weight: 500;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
 
-        & > h2.title {
-            display: table-cell;
-            font-weight: 700;
-            font-size: 90px;
-            color: #ffffff;
-            text-shadow: 0 0 10px #000000;
-            vertical-align: middle;
+        p {
+            line-height: 30px;
+            margin-bottom: 20px;
+        }
+
+        ul.menu {
+            .display(flex);
+            .justify-content(space-around);
+            .flex-wrap(wrap);
+
+            & > li {
+                text-align: center;
+                padding: 0 10px;
+                font-size: 25px;
+                font-weight: 500;
+                color: #6ba4a5;
+                display: block;
+                margin-bottom: 20px;
+                min-width: 25%;
+
+                &:first-of-type {
+                    display: none;
+                }
+
+                & > a,
+                span {
+                    border-bottom: 5px solid #6ba4a5;
+                    color: #6ba4a5;
+                    display: inline-block;
+                    margin-bottom: 10px;
+                }
+
+                & > a {
+                    cursor: pointer;
+                    text-decoration: none;
+                    .transition(all 0.2s ease-in-out);
+
+                    &:hover {
+                        color: #ffffff;
+                        border-bottom: 5px solid #ffffff;
+                    }
+                }
+
+                & > ul {
+                    & > li {
+                        font-size: 15px;
+                        margin-bottom: 5px;
+                        font-weight: 400;
+
+                        & > a {
+                            color: #6ba4a5;
+                            .transition(all 0.2s ease-in-out);
+
+                            &:hover {
+                                color: #ffffff;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

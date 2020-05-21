@@ -1,22 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './header-footer.less';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import Menu from './menu';
+import Menu from '../../Components/Menu/menu';
+import menulist from '../menu.config';
 
 export default function Header(): JSX.Element {
-    const menuList = {
-        Home: '/',
-        Decks: '/decks',
-        Caculator: {
-            'Blizzard Slow Effect Caculator': '/caculator/blizzard',
-            'Combo Damage Caculator': '/caculator/combo',
-            'Solar Light vs Crit Comparison': '/caculator/solar',
-        },
-    };
+    const [scrolled, setScrolled] = useState(true);
+    useEffect(() => {
+        function handler(): void {
+            setScrolled(window.scrollY > 0);
+        }
+        handler();
+        window.addEventListener('scroll', handler);
+        return (): void => window.removeEventListener('scroll', handler);
+    });
 
     return (
-        <header>
+        <header className={scrolled ? 'scroll' : ''}>
             <div className='container'>
                 <div className='topHeaderBar headerBar'>
                     <div className='container'>
@@ -27,7 +28,7 @@ export default function Header(): JSX.Element {
                 </div>
                 <div className='lowHeaderBar headerBar'>
                     <div className='container'>
-                        <Menu menuList={menuList} />
+                        <Menu menuList={menulist} />
                     </div>
                 </div>
             </div>
