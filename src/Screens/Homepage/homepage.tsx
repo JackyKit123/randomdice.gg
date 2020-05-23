@@ -2,7 +2,7 @@ import React from 'react';
 import Main from '../../Components/Main/main';
 import Menu from '../../Components/Menu/menu';
 import './homepage.less';
-import menulist from '../menu.config';
+import { menu } from '../menuConfig';
 
 export default function Homepage(): JSX.Element {
     return (
@@ -16,8 +16,10 @@ export default function Homepage(): JSX.Element {
                         website. Please note that this is not a website created
                         by the official developers. Please contact the webmaster
                         through discord or by emailing{' '}
-                        <a href={`mailto:admin@${window.location.hostname}`}>
-                            {`admin@${window.location.hostname}`}
+                        <a
+                            href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}
+                        >
+                            {`admin@${process.env.REACT_APP_DOMAIN}`}
                         </a>{' '}
                         for any web related issue. In this website, you may
                         found useful resources to the game such as the deck
@@ -28,7 +30,7 @@ export default function Homepage(): JSX.Element {
                     <br />
                     <br />
                     <h3>Menu</h3>
-                    <Menu menuList={menulist} />
+                    <Menu menuList={menu} />
                 </>
             }
         />

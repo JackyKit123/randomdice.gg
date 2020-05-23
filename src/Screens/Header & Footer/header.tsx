@@ -3,7 +3,7 @@ import './header-footer.less';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import Menu from '../../Components/Menu/menu';
-import menulist from '../menu.config';
+import { menu } from '../menuConfig';
 
 export default function Header(): JSX.Element {
     const [scrolled, setScrolled] = useState(true);
@@ -28,7 +28,7 @@ export default function Header(): JSX.Element {
                 </div>
                 <div className='lowHeaderBar headerBar'>
                     <div className='container'>
-                        <Menu menuList={menulist} />
+                        <Menu menuList={menu} />
                     </div>
                 </div>
             </div>

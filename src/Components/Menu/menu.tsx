@@ -1,24 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Menu } from '../../Screens/menuConfig';
 
-interface MenuItem {
-    [key: string]: string | MenuItem;
+interface MenuProps {
+    menuList: Menu;
 }
 
-export default function Menu({
-    menuList,
-}: {
-    menuList: MenuItem;
-}): JSX.Element {
-    const createMenu = (menu: MenuItem): JSX.Element[] =>
-        Object.entries(menu).map(menuItem => (
+export default function menu({ menuList }: MenuProps): JSX.Element {
+    const createMenu = (menulist: Menu | string): JSX.Element[] =>
+        Object.entries(menulist).map(menuItem => (
             <li key={menuItem[0]}>
-                {typeof menuItem[1] === 'string' ? (
-                    <Link to={menuItem[1]}> {menuItem[0]}</Link>
+                {typeof menuItem[1].path === 'string' ? (
+                    <Link to={menuItem[1].path}> {menuItem[0]}</Link>
                 ) : (
                     <span>{menuItem[0]}</span>
                 )}
-                {typeof menuItem[1] === 'string' ? (
+                {typeof menuItem[1].path === 'string' ? (
                     ''
                 ) : (
                     <ul>{createMenu(menuItem[1])}</ul>
