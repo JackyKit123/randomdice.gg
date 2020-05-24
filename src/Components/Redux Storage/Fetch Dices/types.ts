@@ -2,10 +2,11 @@ import { AxiosError } from 'axios';
 
 export const FETCH_DICES_SUCCESS = 'FETCH_DICES_SUCCESS';
 export const FETCH_DICES_FAIL = 'FETCH_DICES_FAIL';
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 type Dices = {
     id: string;
-    name: string | null;
+    name: string;
     type: string;
     desc: string;
     target: string;
@@ -44,4 +45,11 @@ interface FetchDicesFailureAction {
     payload: AxiosError;
 }
 
-export type Action = FetchDicesSuccessAction | FetchDicesFailureAction;
+interface ClearErrorAction {
+    type: typeof CLEAR_ERRORS;
+}
+
+export type Action =
+    | FetchDicesSuccessAction
+    | FetchDicesFailureAction
+    | ClearErrorAction;

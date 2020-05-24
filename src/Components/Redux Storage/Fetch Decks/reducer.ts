@@ -3,6 +3,7 @@ import {
     FETCH_DECKS_FAIL,
     Action,
     FetchState,
+    CLEAR_ERRORS,
 } from './types';
 
 const initialState: FetchState = { decks: [], error: undefined };
@@ -18,6 +19,11 @@ export default function(state = initialState, action: Action): FetchState {
             return {
                 decks: undefined,
                 error: action.payload,
+            };
+        case CLEAR_ERRORS:
+            return {
+                decks: state.decks,
+                error: undefined,
             };
         default:
             return state;

@@ -2,10 +2,10 @@ import { AxiosError } from 'axios';
 
 export const FETCH_DECKS_SUCCESS = 'FETCH_DECKS_SUCCESS';
 export const FETCH_DECKS_FAIL = 'FETCH_DECKS_FAIL';
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 type Decks = {
     id: string;
-    name: string | null;
     type: string;
     rating: string;
     slot1: string;
@@ -32,4 +32,11 @@ interface FetchDecksFailureAction {
     payload: AxiosError;
 }
 
-export type Action = FetchDecksSuccessAction | FetchDecksFailureAction;
+interface ClearErrorAction {
+    type: typeof CLEAR_ERRORS;
+}
+
+export type Action =
+    | FetchDecksSuccessAction
+    | FetchDecksFailureAction
+    | ClearErrorAction;

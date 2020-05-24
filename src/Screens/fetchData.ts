@@ -3,10 +3,12 @@ import { Dispatch } from 'react';
 import {
     FETCH_DECKS_SUCCESS,
     FETCH_DECKS_FAIL,
+    CLEAR_ERRORS as CLEAR_ERRORS_1,
 } from '../Components/Redux Storage/Fetch Decks/types';
 import {
     FETCH_DICES_SUCCESS,
     FETCH_DICES_FAIL,
+    CLEAR_ERRORS as CLEAR_ERRORS_2,
 } from '../Components/Redux Storage/Fetch Dices/types';
 
 export async function fetchDecks(dispatch: Dispatch<{}>): Promise<void> {
@@ -27,4 +29,9 @@ export async function fetchDices(dispatch: Dispatch<{}>): Promise<void> {
     } catch (err) {
         dispatch({ type: FETCH_DICES_FAIL, payload: err });
     }
+}
+
+export async function clearError(dispatch: Dispatch<{}>): Promise<void> {
+    dispatch({ type: CLEAR_ERRORS_1 });
+    dispatch({ type: CLEAR_ERRORS_2 });
 }
