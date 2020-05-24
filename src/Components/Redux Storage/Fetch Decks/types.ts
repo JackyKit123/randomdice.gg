@@ -7,6 +7,7 @@ export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 type Decks = {
     id: string;
     type: string;
+    name: string;
     rating: string;
     slot1: string;
     slot2: string;

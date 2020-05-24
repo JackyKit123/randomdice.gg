@@ -21,13 +21,16 @@ export default function Dice({
         if (targetDice) {
             return (
                 <img
-                    alt={targetDice.name}
+                    alt={`dice ${targetDice.name}`}
                     key={targetDice.name}
                     src={Image[targetDice.name]}
                 />
             );
         }
-        return null;
+        return <img alt='dice ?' src={Image['?']} />;
     }
-    return <img alt={dice} key={dice} src={Image[dice]} />;
+    if (dices.find(d => d.name === dice)) {
+        return <img alt={`dice ${dice}`} key={dice} src={Image[dice]} />;
+    }
+    return <img alt='dice ?' src={Image['?']} />;
 }

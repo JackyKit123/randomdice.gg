@@ -45,6 +45,7 @@ import Time from './Dice Image/time.png';
 import Typhoon from './Dice Image/typhoon.png';
 import Wave from './Dice Image/wave.png';
 import Wind from './Dice Image/wind.png';
+import NULL from './Dice Image/empty.png';
 
 const image: {
     [key: string]: string;
@@ -96,6 +97,7 @@ const image: {
     Typhoon,
     Wave,
     Wind,
+    '?': NULL,
 };
 
 export default image;
