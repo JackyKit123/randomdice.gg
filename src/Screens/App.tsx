@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Component } from 'react';
+import React, { FunctionComponent } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import 'reset-css';
 import './App.less';
