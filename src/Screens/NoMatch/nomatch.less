@@ -1,0 +1,39 @@
+@import '../../cross_import_lesshat.less';
+
+.NoMatch {
+    position: relative;
+    text-align: center;
+
+    & > img {
+        display: block;
+        margin: 0 auto;
+
+        &#assassin-cross {
+            position: absolute;
+            bottom: -30px;
+            max-height: 100%;
+            z-index: 5;
+            height: 70%;
+            opacity: 0.3;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+        }
+    }
+
+    button {
+        margin: 10px 0;
+        font-size: inherit;
+        background: none;
+        border: none;
+        text-decoration: underline;
+        font-weight: 600;
+        color: #6ba4a5;
+        cursor: pointer;
+        .transition(all 0.2s ease-in-out);
+
+        &:hover {
+            color: #ffffff;
+        }
+    }
+}

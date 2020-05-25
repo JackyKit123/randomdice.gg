@@ -9,7 +9,10 @@ export default function Header(): JSX.Element {
     const [scrolled, setScrolled] = useState(true);
     useEffect(() => {
         function handler(): void {
-            setScrolled(window.scrollY > 0);
+            setScrolled(
+                document.body.clientHeight - window.innerHeight > 70 &&
+                    window.scrollY > 0
+            );
         }
         handler();
         window.addEventListener('scroll', handler);

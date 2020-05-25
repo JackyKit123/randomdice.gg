@@ -1,3 +1,5 @@
+@import '../../cross_import_lesshat.less';
+
 .error-message {
     color: #ff0000;
 }
@@ -12,4 +14,9 @@
     background-color: #05292e;
     padding: 10px;
     color: #ffffff;
+    .transition(all 0.2s ease-in-out);
+
+    &:hover {
+        color: #eeeeee;
+    }
 }

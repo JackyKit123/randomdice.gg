@@ -1,6 +1,7 @@
 import { FunctionComponent } from 'react';
 import Homepage from './Homepage/homepage';
 import Deck from './Decks/decklist';
+import Combo from './Caculator/Combo/combo';
 
 export type Menu = {
     [key: string]:
@@ -31,7 +32,7 @@ export const menu = {
         },
         'Combo Damage Caculator': {
             path: '/caculator/combo',
-            component: null,
+            component: Combo,
             external: false,
         },
         'Solar Light vs Crit Comparison': {
