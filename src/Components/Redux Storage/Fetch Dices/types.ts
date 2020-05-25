@@ -4,7 +4,7 @@ export const FETCH_DICES_SUCCESS = 'FETCH_DICES_SUCCESS';
 export const FETCH_DICES_FAIL = 'FETCH_DICES_FAIL';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
-type Dices = {
+export type Dices = {
     id: string;
     name: string;
     type: string;

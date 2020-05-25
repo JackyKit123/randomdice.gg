@@ -6,7 +6,7 @@ import { RootState } from '../../Components/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import { fetchDecks, fetchDices, clearError } from '../fetchData';
 import Dice from '../../Components/Dice/dice';
-import DiceList from '../../Components/Dice/dicelist';
+import Dicelist from '../../Components/Dice/dicelist';
 import './decklist.less';
 
 export default function DeckList(): JSX.Element {
@@ -16,14 +16,23 @@ export default function DeckList(): JSX.Element {
         selection.fetchDecksReducer || selection.fetchDicesReducer;
     let { decks } = selection.fetchDecksReducer;
     const { dices } = selection.fetchDicesReducer;
+    const dicelist = Dicelist(dices);
 
     const [filter1, setFilter1] = useState('PvP');
     const [filter2, setFilter2] = useState(
-        DiceList.legendary.map(legendary => ({
+        dicelist.legendary.map(legendary => ({
             name: legendary,
             checked: true,
         }))
     );
+    if (dicelist.common.length > 0 && filter2.length === 0) {
+        setFilter2(
+            dicelist.legendary.map(legendary => ({
+                name: legendary,
+                checked: true,
+            }))
+        );
+    }
     const [filter3, setFilter3] = useState('?');
     const legendaryMissing = filter2
         .filter(filter => !filter.checked)
@@ -49,7 +58,7 @@ export default function DeckList(): JSX.Element {
     );
 
     let jsx = <div />;
-    if (decks && decks.length > 0) {
+    if (decks && dicelist.common.length > 0 && decks.length > 0) {
         const deckKeys = Object.keys(decks[0]);
         decks = decks
             .filter(deckData => {
@@ -94,7 +103,7 @@ export default function DeckList(): JSX.Element {
                 <form className='filter'>
                     <div className='top-label'>
                         <label htmlFor='pvepvp'>
-                            PVE / PVE :
+                            <span>PVE / PVE :</span>
                             <select
                                 name='pvepvp'
                                 onChange={(evt): void =>
@@ -106,7 +115,7 @@ export default function DeckList(): JSX.Element {
                             </select>
                         </label>
                         <label htmlFor='Custom Search'>
-                            Custom Search :
+                            <span>Custom Search :</span>
                             <select
                                 name='Custom Search'
                                 onChange={(evt): void =>
@@ -114,7 +123,7 @@ export default function DeckList(): JSX.Element {
                                 }
                             >
                                 <option>?</option>
-                                {Object.values(DiceList)
+                                {Object.values(dicelist)
                                     .flat()
                                     .map(dice => (
                                         <option key={dice}>{dice}</option>
@@ -126,12 +135,12 @@ export default function DeckList(): JSX.Element {
                     <div className='lower-label'>
                         <label htmlFor='legendariesOwned'>
                             <div className='label'>
-                                Legendaries Owned :
+                                <span>Legendaries Owned :</span>
                                 <input
                                     type='submit'
                                     value={
                                         filter2.every(filter => filter.checked)
-                                            ? 'Unselect All'
+                                            ? 'Deselect All'
                                             : 'Select All'
                                     }
                                     onClick={(
@@ -153,7 +162,7 @@ export default function DeckList(): JSX.Element {
                                     }}
                                 />
                             </div>
-                            {DiceList.legendary.map((legendary: string, i) => (
+                            {dicelist.legendary.map((legendary: string, i) => (
                                 <div
                                     className='legendary-filter'
                                     key={legendary}
