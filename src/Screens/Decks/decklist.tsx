@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { RootState } from '../../Components/Redux Storage/store';
 import Main from '../../Components/Main/main';
+import Error from '../../Components/Error/error';
+import LoadingScreen from '../../Components/Loading/loading';
 import { fetchDecks, fetchDices, clearError } from '../fetchData';
 import Dice from '../../Components/Dice/dice';
 import Dicelist from '../../Components/Dice/dicelist';
@@ -121,12 +123,15 @@ export default function DeckList(): JSX.Element {
                                 onChange={(evt): void =>
                                     setFilter3(evt.target.value)
                                 }
+                                data-value={filter3}
                             >
-                                <option>?</option>
+                                <option value='?'>?</option>
                                 {Object.values(dicelist)
                                     .flat()
                                     .map(dice => (
-                                        <option key={dice}>{dice}</option>
+                                        <option value={dice} key={dice}>
+                                            {dice}
+                                        </option>
                                     ))}
                             </select>
                             <Dice dice={filter3} />
@@ -218,24 +223,17 @@ export default function DeckList(): JSX.Element {
         );
     } else if (error) {
         jsx = (
-            <>
-                <h3 className='error'>Oops! Something went wrong.</h3>
-                <h4 className='error error-message'>{error.message}</h4>
-                <button
-                    type='button'
-                    className='error-retry'
-                    onClick={(): void => {
-                        clearError(dispatch);
-                        fetchDecks(dispatch);
-                        fetchDices(dispatch);
-                    }}
-                >
-                    Click Here to try again
-                </button>
-            </>
+            <Error
+                error={error}
+                retryFn={(): void => {
+                    clearError(dispatch);
+                    fetchDecks(dispatch);
+                    fetchDices(dispatch);
+                }}
+            />
         );
     } else {
-        jsx = <div>Loading...</div>;
+        jsx = <LoadingScreen />;
     }
     return <Main title='Deck List' content={jsx} />;
 }

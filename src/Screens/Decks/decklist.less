@@ -1,21 +1,5 @@
 @import '../../cross_import_lesshat.less';
 
-.error-message {
-    color: #ff0000;
-}
-
-.error-retry {
-    display: block;
-    text-align: center;
-    margin: 0 auto;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 20px;
-    background-color: #05292e;
-    padding: 10px;
-    color: #ffffff;
-}
-
 form.filter {
     margin-bottom: 30px;
     font-size: 20px;
@@ -36,6 +20,15 @@ form.filter {
                 margin: 10px 0;
                 font-size: inherit;
                 font-weight: 200;
+                background-color: #6ba4a5;
+                .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+                border: 0;
+                border-radius: 3px;
+                padding: 2px 4px;
+
+                &[data-value='?'] {
+                    background: #eeeeee;
+                }
             }
 
             & > img {
@@ -60,6 +53,15 @@ form.filter {
                 input {
                     font-size: inherit;
                     font-weight: 200;
+                    background-color: #6ba4a5;
+                    .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+                    border: 0;
+                    border-radius: 3px;
+                    padding: 2px 4px;
+
+                    &[value='Select All'] {
+                        background-color: #eeeeee;
+                    }
                 }
             }
 
