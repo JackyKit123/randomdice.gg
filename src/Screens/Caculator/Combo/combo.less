@@ -1,0 +1,89 @@
+@import '../../../cross_import_lesshat.less';
+
+.combo-dmg-cal {
+    img {
+        display: block;
+        margin: 0 auto;
+    }
+
+    .desc {
+        font-style: italic;
+        font-weight: 400;
+        font-size: 15px;
+    }
+
+    form {
+        .display(flex);
+        .justify-content(center);
+        .flex-wrap(wrap);
+
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 20px;
+            margin: 10px;
+
+            & > span {
+                margin-right: 10px;
+            }
+
+            select,
+            input {
+                height: 20px;
+                width: 50px;
+                font-size: 15px;
+                font-weight: 200;
+                background-color: #6ba4a5;
+                .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+                border: 0;
+                border-radius: 3px;
+                padding: 2px 4px;
+                vertical-align: middle;
+            }
+
+            input.invalid {
+                background-color: #ff0000;
+            }
+        }
+
+        .invalid-warning {
+            color: #ff0000;
+            margin: 5px auto;
+
+            & > strong {
+                font-weight: 600;
+            }
+        }
+    }
+
+    div.filter-divisor {
+        border-bottom: 5px solid #ffffff;
+        margin: 20px auto;
+        width: 100%;
+    }
+
+    .result {
+        .display(flex);
+        .justify-content(center);
+
+        & > div {
+            margin: 0 20px;
+            font-size: 25px;
+            font-weight: 500;
+
+            & > span,
+            input {
+                display: block;
+                text-align: center;
+            }
+
+            input {
+                margin: 20px auto;
+                width: 80%;
+                font: inherit;
+                color: #6ba4a5;
+                background: #ffffff;
+            }
+        }
+    }
+}
