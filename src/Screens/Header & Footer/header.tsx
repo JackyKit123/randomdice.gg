@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import './header-footer.less';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+    faUserCircle,
+    faBars,
+    faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 import Menu from '../../Components/Menu/menu';
 import { menu } from '../menuConfig';
 
 export default function Header(): JSX.Element {
     const [scrolled, setScrolled] = useState(true);
+    const [menuToggle, setMenuToggle] = useState(false);
     useEffect(() => {
         function handler(): void {
-            setScrolled(
-                document.body.clientHeight - window.innerHeight > 70 &&
-                    window.scrollY > 0
-            );
+            if (
+                document.body.clientHeight -
+                    window.innerHeight -
+                    window.scrollY >
+                    120 &&
+                window.scrollY > 0
+            ) {
+                setScrolled(true);
+            } else if (window.scrollY === 0) setScrolled(false);
         }
         handler();
         window.addEventListener('scroll', handler);
@@ -31,7 +41,19 @@ export default function Header(): JSX.Element {
                 </div>
                 <div className='lowHeaderBar headerBar'>
                     <div className='container'>
-                        <Menu menuList={menu} />
+                        <Menu
+                            menuList={menu}
+                            className={menuToggle ? 'open' : ''}
+                        />
+                        <button
+                            type='button'
+                            className='toggleMenu'
+                            onClick={(): void => setMenuToggle(!menuToggle)}
+                        >
+                            <FontAwesomeIcon
+                                icon={menuToggle ? faTimes : faBars}
+                            />
+                        </button>
                     </div>
                 </div>
             </div>

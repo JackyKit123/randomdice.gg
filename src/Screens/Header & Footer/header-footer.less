@@ -34,7 +34,7 @@ body {
                             vertical-align: middle;
                             color: #ffffff;
                             line-height: 30px;
-                            cursor: pointer;
+                            cursor: not-allowed;
                             .transition(color 0.2s ease-in-out);
 
                             &:hover {
@@ -51,71 +51,200 @@ body {
                     background-color: #ffffff;
                     .box-shadow(0 -8px 10px 11px rgba(0, 0, 0, 1));
 
-                    ul.menu {
-                        .display(flex);
-                        .justify-content(flex-end);
-                        height: 100%;
+                    @media @mobile {
+                        height: 50px;
+                    }
+
+                    button.toggleMenu {
+                        @media @desktop {
+                            display: none;
+                        }
+
+                        @media @mobile {
+                            z-index: 100;
+                            display: block;
+                            position: absolute;
+                            right: 10px;
+                            top: 13px;
+                            height: 30px;
+                            width: 30px;
+                            border-radius: 3px;
+                            cursor: pointer;
+                            color: #525252;
+                            border: 1px solid #525252;
+                            background-color: transparent;
+                            font-size: 20px;
+                            .transition(all 0.4s ease-in-out);
+                        }
+                    }
+
+                    .container {
                         position: relative;
+                        padding-top: 1px;
 
-                        & > li {
-                            &:first-of-type {
-                                position: absolute;
-                                left: 0;
-                                margin-left: 0;
-                            }
-                            display: table;
-                            margin-left: 40px;
-                            position: relative;
+                        ul.menu {
+                            .display(flex);
+                            .justify-content(flex-end);
                             height: 100%;
+                            position: relative;
 
-                            a,
-                            span {
-                                display: table-cell;
-                                vertical-align: middle;
-                                text-decoration: none;
-                                cursor: pointer;
-                                color: #525252;
-                                font-size: 30px;
-                                font-weight: 500;
-                                .transition(color 0.2s ease-in-out);
+                            @media @mobile {
+                                .flex-direction(column);
+                                .justify-content(flex-start);
+                                height: auto;
+                                overflow: auto;
+                                border-radius: 5px;
+                                min-height: 100%;
+                                border: 5px solid transparent;
+                                .calc(max-height, ~'100vh - 60px');
+                                .transition(0.4s all ease-in-out);
+                                visibility: hidden;
+                                margin-top: 0;
 
-                                &:hover {
+                                &.open {
+                                    border: 5px solid #525252;
+                                    opacity: 1;
+                                    visibility: visible;
+                                    margin-top: 10px;
+
+                                    & > li {
+                                        &:first-of-type {
+                                            pointer-events: initial;
+                                            display: block;
+                                            opacity: 1;
+                                            position: initial;
+                                            margin-left: 0;
+                                            visibility: visible;
+                                            background-color: #ffffffee;
+                                            padding: 10px;
+                                            border-bottom: 2px solid #525252;
+                                            height: auto;
+                                            .transition(0.4s all ease-in-out);
+
+                                            & > a {
+                                                display: inline-block;
+                                            }
+                                        }
+
+                                        &:nth-of-type(n + 2) {
+                                            pointer-events: initial;
+                                            display: block;
+                                            opacity: 1;
+                                        }
+                                    }
+
+                                    & ~ button.toggleMenu {
+                                        top: 25px;
+                                        right: 25px;
+                                        border: 0;
+                                    }
+                                }
+                            }
+
+                            & > li {
+                                &:first-of-type {
+                                    position: absolute;
+                                    left: 0;
+                                    margin-left: 0;
+                                    display: table;
+                                    visibility: visible;
+                                }
+
+                                a,
+                                span {
+                                    display: table-cell;
+                                    vertical-align: middle;
+                                    text-decoration: none;
+                                    color: #525252;
+                                    font-size: 30px;
+                                    font-weight: 500;
+                                    .transition(color 0.2s ease-in-out);
+                                }
+
+                                & > span {
+                                    cursor: context-menu;
+                                }
+
+                                & > a:hover {
+                                    cursor: pointer;
                                     color: #6ba4a5;
                                 }
-                            }
 
-                            &:hover {
-                                & > ul {
-                                    display: block;
-                                    visibility: visible;
-                                    opacity: 1;
-                                    z-index: 10;
+                                @media @desktop {
+                                    display: table;
+                                    margin-left: 40px;
+                                    position: relative;
+                                    height: 100%;
+
+                                    &:hover {
+                                        & > ul {
+                                            display: block;
+                                            visibility: visible;
+                                            opacity: 1;
+                                            z-index: 10;
+                                        }
+                                    }
+
+                                    & > ul {
+                                        .transition(opacity 0.3s ease-in-out);
+                                        opacity: 0;
+                                        visibility: hidden;
+                                        z-index: 10;
+                                        position: absolute;
+                                        background-color: rgba(5, 41, 46, 0.9);
+                                        right: 0;
+                                        top: 100px;
+                                        padding: 0 30px;
+
+                                        & > li {
+                                            text-align: right;
+                                            margin: 25px 0;
+                                            white-space: nowrap;
+
+                                            & > a,
+                                            & > span {
+                                                color: #6ba4a5;
+                                                .transition(
+                                                    color 0.2s ease-in-out
+                                                );
+
+                                                &:hover {
+                                                    color: #ffffff;
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                            }
 
-                            & > ul {
-                                .transition(opacity 0.3s ease-in-out);
-                                opacity: 0;
-                                visibility: hidden;
-                                z-index: 10;
-                                position: absolute;
-                                background-color: rgba(5, 41, 46, 0.9);
-                                right: 0;
-                                top: 100px;
-                                padding: 0 30px;
+                                @media @mobile {
+                                    &:first-of-type {
+                                        height: 40px;
+                                    }
 
-                                & > li {
-                                    text-align: right;
-                                    margin: 25px 0;
-                                    white-space: nowrap;
+                                    &:nth-of-type(n + 2) {
+                                        pointer-events: none;
+                                        opacity: 0;
+                                        .calc(width, ~'100% - 20px');
+                                        margin-left: 0;
+                                        background-color: #ffffffee;
+                                        padding: 10px;
+                                        z-index: 40;
+                                        .transition(0.4s all ease-in-out);
 
-                                    & > a,
-                                    & > span {
-                                        color: #6ba4a5;
-                                        .transition(color 0.2s ease-in-out);
+                                        & > ul {
+                                            margin-left: 20px;
 
-                                        &:hover {
-                                            color: #ffffff;
+                                            & > li {
+                                                margin: 10px 0;
+
+                                                & > a {
+                                                    font-size: 20px;
+                                                }
+
+                                                &:hover > a {
+                                                    color: #6ba4a5;
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -137,18 +266,26 @@ body {
         & > .header-placeholder {
             height: 150px;
             .transition(height, 0.4s ease-out);
+
+            @media @mobile {
+                height: 80px;
+            }
         }
 
         &.scroll {
-            & > .header-placeholder {
-                height: 80px;
-            }
+            @media @desktop {
+                & > .header-placeholder {
+                    height: 80px;
+                }
 
-            & > .container .lowHeaderBar {
-                height: 50px;
+                & > .container .headerBar.lowHeaderBar {
+                    height: 50px;
 
-                ul.menu > li > ul {
-                    top: 50px;
+                    ul.menu > li {
+                        & > ul {
+                            top: 50px;
+                        }
+                    }
                 }
             }
         }

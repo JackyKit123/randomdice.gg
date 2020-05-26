@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu } from '../../Screens/menuConfig';
 
-interface MenuProps {
+export default function menu(props: {
     menuList: Menu;
-}
-
-export default function menu({ menuList }: MenuProps): JSX.Element {
+    className?: string | undefined;
+}): JSX.Element {
+    const { menuList, className } = props;
     const createMenu = (menulist: Menu | string): JSX.Element[] =>
         Object.entries(menulist).map(menuItem => {
             let returnJsx;
@@ -39,5 +39,5 @@ export default function menu({ menuList }: MenuProps): JSX.Element {
             }
             return <li key={menuItem[0]}>{returnJsx}</li>;
         });
-    return <ul className='menu'>{createMenu(menuList)}</ul>;
+    return <ul className={`menu ${className}`}>{createMenu(menuList)}</ul>;
 }
