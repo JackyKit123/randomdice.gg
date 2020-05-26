@@ -11,8 +11,9 @@ export default function NoMatch(): JSX.Element {
         <>
             <Main
                 title='404 Not found'
+                className='NoMatch'
                 content={
-                    <div className='NoMatch'>
+                    <>
                         <img
                             id='assassin-cross'
                             alt='assassinate effect'
@@ -34,7 +35,7 @@ export default function NoMatch(): JSX.Element {
                                 Click Here to return to Homepage.
                             </button>
                         </div>
-                    </div>
+                    </>
                 }
             />
         </>

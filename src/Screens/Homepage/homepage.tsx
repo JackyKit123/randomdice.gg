@@ -7,6 +7,7 @@ import { menu } from '../menuConfig';
 export default function Homepage(): JSX.Element {
     return (
         <Main
+            className='homepage'
             title='Random Dice Unofficial Site'
             content={
                 <>

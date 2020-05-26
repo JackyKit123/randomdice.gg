@@ -235,5 +235,5 @@ export default function DeckList(): JSX.Element {
     } else {
         jsx = <LoadingScreen />;
     }
-    return <Main title='Deck List' content={jsx} />;
+    return <Main title='Deck List' className='deck-list' content={jsx} />;
 }

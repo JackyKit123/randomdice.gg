@@ -1,56 +1,24 @@
 @import '../../cross_import_lesshat.less';
 
-form.filter {
-    margin-bottom: 30px;
-    font-size: 20px;
-    font-weight: 600;
+.deck-list {
+    form.filter {
+        margin-bottom: 30px;
+        font-size: 20px;
+        font-weight: 600;
 
-    & > .top-label {
-        & > label {
-            display: inline-block;
-            margin-bottom: 20px;
-            margin-right: 30px;
-            position: relative;
+        & > .top-label {
+            & > label {
+                display: inline-block;
+                margin-bottom: 20px;
+                margin-right: 30px;
+                position: relative;
 
-            & > span {
-                margin-right: 15px;
-            }
-
-            & > select {
-                margin: 10px 0;
-                font-size: inherit;
-                font-weight: 200;
-                background-color: #6ba4a5;
-                .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
-                border: 0;
-                border-radius: 3px;
-                padding: 2px 4px;
-
-                &[data-value='?'] {
-                    background: #eeeeee;
-                }
-            }
-
-            & > img {
-                height: 50px;
-                vertical-align: middle;
-                margin-left: 15px;
-            }
-        }
-    }
-
-    & > .lower-label {
-        & > label {
-            & > .label {
-                margin-bottom: 30px;
-
-                span {
+                & > span {
                     margin-right: 15px;
-                    margin-bottom: 10px;
-                    display: inline-block;
                 }
 
-                input {
+                & > select {
+                    margin: 10px 0;
                     font-size: inherit;
                     font-weight: 200;
                     background-color: #6ba4a5;
@@ -58,149 +26,183 @@ form.filter {
                     border: 0;
                     border-radius: 3px;
                     padding: 2px 4px;
-                    .transition(all 0.2s ease-in-out);
-                    cursor: pointer;
 
-                    &[value='Select All'] {
-                        background-color: #eeeeee;
+                    &[data-value='?'] {
+                        background: #eeeeee;
                     }
                 }
-            }
-
-            & > .legendary-filter {
-                display: inline-block;
-                text-align: center;
-                position: relative;
-                cursor: pointer;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                height: 90px;
-                margin-bottom: 10px;
 
                 & > img {
-                    display: block;
-                    height: 60px;
+                    height: 50px;
+                    vertical-align: middle;
+                    margin-left: 15px;
                 }
+            }
+        }
 
-                & > input {
-                    display: inline-block;
-                    position: absolute;
-                    z-index: 10;
-                    opacity: 0;
-                    top: 0;
-                    left: 0;
-                    cursor: pointer;
-                    height: 100%;
-                    width: 100%;
+        & > .lower-label {
+            & > label {
+                & > .label {
+                    margin-bottom: 30px;
 
-                    &:checked ~ .checkbox-styler {
+                    span {
+                        margin-right: 15px;
+                        margin-bottom: 10px;
+                        display: inline-block;
+                    }
+
+                    input {
+                        font-size: inherit;
+                        font-weight: 200;
                         background-color: #6ba4a5;
+                        .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+                        border: 0;
+                        border-radius: 3px;
+                        padding: 2px 4px;
+                        .transition(all 0.2s ease-in-out);
+                        cursor: pointer;
 
-                        & > .fa-check {
-                            display: block;
+                        &[value='Select All'] {
+                            background-color: #eeeeee;
                         }
                     }
                 }
 
-                & > .checkbox-styler {
-                    position: absolute;
-                    border-radius: 5px;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    margin: 0 auto;
-                    height: 25px;
-                    width: 25px;
-                    background-color: #eeeeee;
-                    .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
-                    .transition(all 0.2s ease-in-out);
+                & > .legendary-filter {
+                    display: inline-block;
+                    text-align: center;
+                    position: relative;
+                    cursor: pointer;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    height: 90px;
+                    margin-bottom: 10px;
 
-                    & > .fa-check {
-                        display: none;
+                    & > img {
+                        display: block;
+                        height: 60px;
+                    }
+
+                    & > input {
+                        display: inline-block;
                         position: absolute;
-                        bottom: 3px;
+                        z-index: 10;
+                        opacity: 0;
+                        top: 0;
+                        left: 0;
+                        cursor: pointer;
+                        height: 100%;
+                        width: 100%;
+
+                        &:checked ~ .checkbox-styler {
+                            background-color: #6ba4a5;
+
+                            & > .fa-check {
+                                display: block;
+                            }
+                        }
+                    }
+
+                    & > .checkbox-styler {
+                        position: absolute;
+                        border-radius: 5px;
+                        bottom: 0;
                         left: 0;
                         right: 0;
                         margin: 0 auto;
-                    }
-                }
+                        height: 25px;
+                        width: 25px;
+                        background-color: #eeeeee;
+                        .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+                        .transition(all 0.2s ease-in-out);
 
-                &:hover input ~ .checkbox-styler {
-                    background-color: #525252;
+                        & > .fa-check {
+                            display: none;
+                            position: absolute;
+                            bottom: 3px;
+                            left: 0;
+                            right: 0;
+                            margin: 0 auto;
+                        }
+                    }
+
+                    &:hover input ~ .checkbox-styler {
+                        background-color: #525252;
+                    }
                 }
             }
         }
     }
-}
 
-div.filter-divisor {
-    border-bottom: 5px solid #ffffff;
-    margin: 0 auto;
-    width: 100%;
-    margin-bottom: 30px;
-}
-
-.table-container {
-    overflow: auto;
-    height: 500px;
-    border: 2px solid #6ba4a5;
-
-    table {
-        border-spacing: 0;
-        height: 100%;
+    div.filter-divisor {
+        border-bottom: 5px solid #ffffff;
+        margin: 0 auto;
         width: 100%;
-        text-align: center;
-        position: relative;
-        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
 
-        & > thead {
-            tr {
-                th {
-                    background-color: #6ba4a5;
-                    position: sticky;
-                    top: 0;
-                    z-index: 5;
-                    height: 40px;
-                    padding: 0 5px;
-                    vertical-align: middle;
-                    .box-shadow(9px 4px 7px 0 rgba(0, 0, 0, 0.4));
-                }
-            }
-        }
+    .table-container {
+        overflow: auto;
+        height: 500px;
+        border: 2px solid #6ba4a5;
 
-        & > tbody {
-            & > tr {
-                & > td {
-                    vertical-align: middle;
+        table {
+            border-spacing: 0;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            border-collapse: collapse;
 
-                    img {
-                        height: 50px;
+            & > thead {
+                tr {
+                    th {
+                        background-color: #6ba4a5;
+                        position: sticky;
+                        top: 0;
+                        z-index: 5;
+                        height: 40px;
+                        padding: 0 5px;
+                        vertical-align: middle;
+                        .box-shadow(9px 4px 7px 0 rgba(0, 0, 0, 0.4));
                     }
                 }
+            }
 
-                &:nth-of-type(odd):not(.nomatch) {
-                    background: #f8d298;
-                }
-
-                &:nth-of-type(even) {
-                    background: #b8dadc;
-                }
-
-                &.nomatch {
-                    position: relative;
-
+            & > tbody {
+                & > tr {
                     & > td {
-                        z-index: 1;
-                        position: absolute;
-                        background-color: #f07a7a;
-                        left: 0;
-                        right: 0;
-                        margin: 0 auto;
-                        top: 0;
-                        bottom: 0;
-                        line-height: 200px;
+                        vertical-align: middle;
+
+                        img {
+                            height: 50px;
+                        }
+                    }
+
+                    &:nth-of-type(odd):not(.nomatch) {
+                        background: #f8d298;
+                    }
+
+                    &:nth-of-type(even) {
+                        background: #b8dadc;
+                    }
+
+                    &.nomatch {
+                        position: relative;
+
+                        & > td {
+                            z-index: 1;
+                            position: absolute;
+                            background-color: #f07a7a;
+                            left: 0;
+                            right: 0;
+                            margin: 0 auto;
+                            top: 0;
+                            bottom: 0;
+                            line-height: 200px;
+                        }
                     }
                 }
             }
