@@ -1,38 +1,13 @@
-import React, { FunctionComponent } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import 'reset-css';
-import './App.less';
+import React from 'react';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchDecks, fetchDices } from './fetchData';
+import { fetchDecks, fetchDices } from './Misc/fetchData';
 import Header from './Header & Footer/header';
 import Footer from './Header & Footer/footer';
-import NoMatch from './NoMatch/NoMatch';
-import { menu as menuConfig, Menu } from './menuConfig';
-
-const mapRouter = (
-    menu: Menu[]
-): (JSX.Element | FunctionComponent<Route> | null)[] =>
-    menu
-        .map(item => {
-            if (item.childNode) {
-                if (item.component) {
-                    return [...mapRouter(item.childNode), item.component];
-                }
-                return mapRouter(item.childNode);
-            }
-            if (item.component) {
-                return (
-                    <Route
-                        key={`Route-path-${item.path}`}
-                        exact
-                        path={item.path}
-                        component={item.component}
-                    />
-                );
-            }
-            return null;
-        })
-        .flat();
+import mapRouter from './Router/router';
+import { menu } from './Misc/menuConfig';
+import 'reset-css';
+import './App.less';
 
 export default function App(): JSX.Element {
     const dispatch = useDispatch();
@@ -41,10 +16,7 @@ export default function App(): JSX.Element {
     return (
         <Router>
             <Header />
-            <Switch>
-                {mapRouter(menuConfig)}
-                <Route component={NoMatch} />
-            </Switch>
+            <Switch>{mapRouter(menu)}</Switch>
             <Footer />
         </Router>
     );

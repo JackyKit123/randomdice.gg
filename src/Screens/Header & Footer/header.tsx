@@ -7,7 +7,7 @@ import {
     faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import Menu from '../../Components/Menu/menu';
-import { menu } from '../menuConfig';
+import { menu } from '../Misc/menuConfig';
 
 export default function Header(): JSX.Element {
     const [scrolled, setScrolled] = useState(true);

@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
-import Homepage from './Homepage/homepage';
-import Deck from './Decks/decklist';
-import Combo from './Caculator/Combo/combo';
+import Homepage from '../Homepage/homepage';
+import Deck from '../Decks/decklist';
+import Combo from '../Caculator/Combo/combo';
 
 export type Menu = {
     name: string;

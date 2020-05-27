@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu as MenuProp } from '../../Screens/menuConfig';
+import { Menu as MenuProp } from '../../Screens/Misc/menuConfig';
 
 export default function Menu(props: {
     menuList: MenuProp[];

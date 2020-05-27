@@ -5,7 +5,7 @@ import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
 import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Components/Redux Storage/store';
-import { clearError, fetchDices } from '../../fetchData';
+import { clearError, fetchDices } from '../../Misc/fetchData';
 import './combo.less';
 
 export default function ComboCaculator(): JSX.Element {

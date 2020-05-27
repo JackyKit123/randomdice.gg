@@ -4,12 +4,12 @@ import {
     FETCH_DECKS_SUCCESS,
     FETCH_DECKS_FAIL,
     CLEAR_ERRORS as CLEAR_ERRORS_1,
-} from '../Components/Redux Storage/Fetch Decks/types';
+} from '../../Components/Redux Storage/Fetch Decks/types';
 import {
     FETCH_DICES_SUCCESS,
     FETCH_DICES_FAIL,
     CLEAR_ERRORS as CLEAR_ERRORS_2,
-} from '../Components/Redux Storage/Fetch Dices/types';
+} from '../../Components/Redux Storage/Fetch Dices/types';
 
 export async function fetchDecks(dispatch: Dispatch<{}>): Promise<void> {
     const apiUrl = '' || process.env.REACT_APP_API_HOST;

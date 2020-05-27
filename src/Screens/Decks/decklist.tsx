@@ -6,7 +6,7 @@ import { RootState } from '../../Components/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
-import { fetchDecks, fetchDices, clearError } from '../fetchData';
+import { fetchDecks, fetchDices, clearError } from '../Misc/fetchData';
 import Dice from '../../Components/Dice/dice';
 import Dicelist from '../../Components/Dice/dicelist';
 import './decklist.less';
