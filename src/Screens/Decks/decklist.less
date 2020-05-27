@@ -17,6 +17,18 @@
                     margin-right: 15px;
                 }
 
+                & > button {
+                    font-size: inherit;
+                    font-weight: 200;
+                    background-color: #6ba4a5;
+                    .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+                    border: 0;
+                    border-radius: 3px;
+                    padding: 2px 4px;
+                    .transition(all 0.2s ease-in-out);
+                    cursor: pointer;
+                }
+
                 & > select {
                     margin: 10px 0;
                     font-size: inherit;
@@ -51,7 +63,7 @@
                         display: inline-block;
                     }
 
-                    input {
+                    button {
                         font-size: inherit;
                         font-weight: 200;
                         background-color: #6ba4a5;
@@ -62,7 +74,7 @@
                         .transition(all 0.2s ease-in-out);
                         cursor: pointer;
 
-                        &[value='Select All'] {
+                        &[data-select-all='false'] {
                             background-color: #eeeeee;
                         }
                     }

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { useHistory } from 'react-router-dom';
 import { RootState } from '../../Components/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
@@ -10,36 +11,42 @@ import { fetchDecks, fetchDices, clearError } from '../Misc/fetchData';
 import Dice from '../../Components/Dice/dice';
 import Dicelist from '../../Components/Dice/dicelist';
 import './decklist.less';
+import { FILTER_ACTION } from '../../Components/Redux Storage/Deck Filter/types';
 
-export default function DeckList(): JSX.Element {
+export default function DeckList({
+    deckType,
+}: {
+    deckType: string;
+}): JSX.Element {
+    const history = useHistory();
     const dispatch = useDispatch();
     const selection = useSelector((state: RootState) => state);
     const { error } =
         selection.fetchDecksReducer || selection.fetchDicesReducer;
     let { decks } = selection.fetchDecksReducer;
     const { dices } = selection.fetchDicesReducer;
+    const { filter } = selection.filterReducer;
     const dicelist = Dicelist(dices);
 
-    const [filter1, setFilter1] = useState('PvP');
-    const [filter2, setFilter2] = useState(
-        dicelist.legendary.map(legendary => ({
-            name: legendary,
-            checked: true,
-        }))
-    );
-    if (dicelist.common.length > 0 && filter2.length === 0) {
-        setFilter2(
-            dicelist.legendary.map(legendary => ({
-                name: legendary,
-                checked: true,
-            }))
-        );
+    if (dicelist.common.length > 0 && filter.legendary.length === 0) {
+        dispatch({
+            type: FILTER_ACTION,
+            payload: {
+                legendary: dicelist.legendary.map(legendary => ({
+                    name: legendary,
+                    checked: true,
+                })),
+                customSearch: filter.customSearch,
+            },
+        });
     }
-    const [filter3, setFilter3] = useState('?');
-    const legendaryMissing = filter2
-        .filter(filter => !filter.checked)
-        .map(filter => dices?.find(dice => dice.name === filter.name)?.id);
-    const customSearch = dices?.find(dice => dice.name === filter3)?.id || '';
+    const legendaryMissing = filter.legendary
+        .filter(legendary => !legendary.checked)
+        .map(
+            legendary => dices?.find(dice => dice.name === legendary.name)?.id
+        );
+    const customSearch =
+        dices?.find(dice => dice.name === filter.customSearch)?.id || '';
 
     const Checkbox = ({
         legendary,
@@ -51,10 +58,13 @@ export default function DeckList(): JSX.Element {
         <input
             name={legendary}
             type='checkbox'
-            defaultChecked={filter2[i].checked}
+            defaultChecked={filter.legendary[i].checked}
             onChange={(evt): void => {
-                filter2[i].checked = evt.target.checked;
-                setFilter2([...filter2]);
+                filter.legendary[i].checked = evt.target.checked;
+                dispatch({
+                    type: FILTER_ACTION,
+                    payload: filter,
+                });
             }}
         />
     );
@@ -73,8 +83,10 @@ export default function DeckList(): JSX.Element {
                 ];
                 return (
                     deck.every(dice => !legendaryMissing.includes(dice)) &&
-                    deckData.type === filter1 &&
-                    (filter3 === '?' ? true : deck.indexOf(customSearch) > 0)
+                    deckData.type === deckType &&
+                    (filter.customSearch === '?'
+                        ? true
+                        : deck.includes(customSearch))
                 );
             })
             .map(deck => {
@@ -89,7 +101,7 @@ export default function DeckList(): JSX.Element {
             decks.push({
                 id: `xxx-${decks.length}`,
                 name: '-',
-                type: filter1,
+                type: deckType,
                 rating: '-',
                 slot1: '0',
                 slot2: '0',
@@ -106,24 +118,31 @@ export default function DeckList(): JSX.Element {
                     <div className='top-label'>
                         <label htmlFor='pvepvp'>
                             <span>PVE / PVE :</span>
-                            <select
+                            <button
+                                type='button'
                                 name='pvepvp'
-                                onChange={(evt): void =>
-                                    setFilter1(evt.target.value)
+                                onClick={(): void =>
+                                    history.replace(
+                                        deckType === 'PvP' ? 'pve' : 'pvp'
+                                    )
                                 }
                             >
-                                <option value='PvP'>PvP</option>
-                                <option value='PvE'>PvE</option>
-                            </select>
+                                Switch to {deckType === 'PvP' ? 'PvE ' : 'PvP '}
+                                view
+                            </button>
                         </label>
                         <label htmlFor='Custom Search'>
                             <span>Custom Search :</span>
                             <select
                                 name='Custom Search'
-                                onChange={(evt): void =>
-                                    setFilter3(evt.target.value)
-                                }
-                                data-value={filter3}
+                                onChange={(evt): void => {
+                                    filter.customSearch = evt.target.value;
+                                    dispatch({
+                                        type: FILTER_ACTION,
+                                        payload: filter,
+                                    });
+                                }}
+                                data-value={filter.customSearch}
                             >
                                 <option value='?'>?</option>
                                 {Object.values(dicelist)
@@ -134,38 +153,37 @@ export default function DeckList(): JSX.Element {
                                         </option>
                                     ))}
                             </select>
-                            <Dice dice={filter3} />
+                            <Dice dice={filter.customSearch} />
                         </label>
                     </div>
                     <div className='lower-label'>
                         <label htmlFor='legendariesOwned'>
                             <div className='label'>
                                 <span>Legendaries Owned :</span>
-                                <input
-                                    type='submit'
-                                    value={
-                                        filter2.every(filter => filter.checked)
-                                            ? 'Deselect All'
-                                            : 'Select All'
-                                    }
-                                    onClick={(
-                                        evt: React.MouseEvent<HTMLInputElement>
-                                    ): void => {
-                                        evt.preventDefault();
-                                        const {
-                                            value,
-                                        } = evt?.target as HTMLInputElement;
-                                        setFilter2(
-                                            filter2.map(filter => {
-                                                return {
-                                                    name: filter.name,
-                                                    checked:
-                                                        value === 'Select All',
-                                                };
+                                <button
+                                    type='button'
+                                    data-select-all={filter.legendary.every(
+                                        legendary => legendary.checked
+                                    )}
+                                    onClick={(): void => {
+                                        filter.legendary = filter.legendary.map(
+                                            legendary => ({
+                                                name: legendary.name,
+                                                checked: !filter.legendary.every(
+                                                    f => f.checked
+                                                ),
                                             })
                                         );
+                                        dispatch({
+                                            type: FILTER_ACTION,
+                                            payload: filter,
+                                        });
                                     }}
-                                />
+                                >
+                                    {filter.legendary.every(f => f.checked)
+                                        ? 'Deselect All'
+                                        : 'Select All'}
+                                </button>
                             </div>
                             {dicelist.legendary.map((legendary: string, i) => (
                                 <div
@@ -235,5 +253,14 @@ export default function DeckList(): JSX.Element {
     } else {
         jsx = <LoadingScreen />;
     }
-    return <Main title='Deck List' className='deck-list' content={jsx} />;
+    return (
+        <Main
+            title={`Deck List (${deckType})`}
+            className='deck-list'
+            content={jsx}
+        />
+    );
 }
+
+export const pvpDeck = (): JSX.Element => <DeckList deckType='PvP' />;
+export const pveDeck = (): JSX.Element => <DeckList deckType='PvE' />;

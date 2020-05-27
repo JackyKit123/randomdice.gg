@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react';
 import Homepage from '../Homepage/homepage';
-import Deck from '../Decks/decklist';
+import { pveDeck, pvpDeck } from '../Decks/decklist';
 import Combo from '../Caculator/Combo/combo';
 
 export type Menu = {
@@ -19,8 +19,18 @@ export const menu: Menu[] = [
     },
     {
         name: 'Decks',
-        path: '/decks',
-        component: Deck,
+        childNode: [
+            {
+                name: 'PvP Deck List',
+                path: '/decks/pvp',
+                component: pvpDeck,
+            },
+            {
+                name: 'PvE Deck List',
+                path: '/decks/pve',
+                component: pveDeck,
+            },
+        ],
     },
     {
         name: 'Caculator',
