@@ -46,7 +46,7 @@ export default function ComboCaculator(): JSX.Element {
             comboDiceData.baseAtkPerLevel * (filter.level - 1);
         const dmg =
             (dmgPerCombo / 2) * (filter.combo ** 2 - filter.combo) + baseAtk;
-        const dps = dmg * 0.8 + (dmg * 0.2 * filter.crit) / 100;
+        const dps = dmg * 0.95 + (dmg * 0.05 * filter.crit) / 100;
         jsx = (
             <>
                 <Dice dice='Combo' />
