@@ -11,7 +11,7 @@ export default function Homepage(): JSX.Element {
             title='Random Dice Unofficial Site'
             content={
                 <>
-                    <h3>Welcome</h3>
+                    <h3 className='welcome'>Welcome</h3>
                     <p>
                         Hello all, this is a Random Dice community created
                         website. Please note that this is not a website created
@@ -30,7 +30,7 @@ export default function Homepage(): JSX.Element {
                     <br />
                     <br />
                     <br />
-                    <h3>Menu</h3>
+                    <h3 className='menu'>Menu</h3>
                     <Menu menuList={menu} />
                 </>
             }
