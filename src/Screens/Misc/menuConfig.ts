@@ -1,7 +1,8 @@
 import { FunctionComponent } from 'react';
 import Homepage from '../Homepage/homepage';
 import { pveDeck, pvpDeck } from '../Decks/decklist';
-import Combo from '../Caculator/Combo/combo';
+import Combo from '../Cal/Combo/combo';
+import Blizzard from '../Cal/Blizzard/blizzard';
 
 export type Menu = {
     name: string;
@@ -38,6 +39,7 @@ export const menu: Menu[] = [
             {
                 name: 'Blizzard Slow Effect Caculator',
                 path: '/caculator/blizzard',
+                component: Blizzard,
             },
             {
                 name: 'Combo Damage Caculator',

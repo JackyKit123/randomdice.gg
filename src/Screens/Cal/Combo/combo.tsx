@@ -6,7 +6,7 @@ import LoadingScreen from '../../../Components/Loading/loading';
 import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Components/Redux Storage/store';
 import { clearError, fetchDices } from '../../Misc/fetchData';
-import './combo.less';
+import '../cal.less';
 
 export default function ComboCaculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -28,13 +28,13 @@ export default function ComboCaculator(): JSX.Element {
     const data = dices?.find(dice => dice.name === 'Combo');
     if (data) {
         const comboDiceData = {
-            baseAtk: Number(data.atk),
-            baseAtkPerClass: Number(data.cupAtk),
-            baseAtkPerLevel: Number(data.pupAtk),
-            atkSpd: Number(data.spd),
-            baseComboAtk: Number(data.eff1),
-            ComboAtkPerClass: Number(data.cupEff1),
-            ComboAtkPerLevel: Number(data.pupEff1),
+            baseAtk: data.atk,
+            baseAtkPerClass: data.cupAtk,
+            baseAtkPerLevel: data.pupAtk,
+            atkSpd: data.spd,
+            baseComboAtk: data.eff1,
+            ComboAtkPerClass: data.cupEff1,
+            ComboAtkPerLevel: data.pupEff1,
         };
         const dmgPerCombo =
             comboDiceData.baseComboAtk +
@@ -162,11 +162,11 @@ export default function ComboCaculator(): JSX.Element {
                 <div className='filter-divisor' />
                 <div className='result'>
                     <div className='dmg'>
-                        <span>Your Damage:</span>
+                        <span>Your Damage per Combo pip:</span>
                         <input type='textbox' value={dmg} disabled />
                     </div>
                     <div className='dps'>
-                        <span>Your DPS:</span>
+                        <span>Your DPS per Combo Pip:</span>
                         <input type='textbox' value={dps} disabled />
                     </div>
                 </div>
@@ -188,7 +188,7 @@ export default function ComboCaculator(): JSX.Element {
     return (
         <Main
             title='Combo Damage Caculator'
-            className='combo-dmg-cal'
+            className='combo-dmg-cal cal'
             content={jsx}
         />
     );
