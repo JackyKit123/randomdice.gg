@@ -17,7 +17,7 @@ export default function Dice({
         return null;
     }
     if (typeof dice === 'number') {
-        targetDice = dices.find(d => d.id === dice.toString());
+        targetDice = dices.find(d => d.id === dice);
         if (targetDice) {
             return (
                 <img

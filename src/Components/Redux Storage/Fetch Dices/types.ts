@@ -5,29 +5,29 @@ export const FETCH_DICES_FAIL = 'FETCH_DICES_FAIL';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 export type Dices = {
-    id: string;
+    id: number;
     name: string;
     type: string;
     desc: string;
     target: string;
     rarity: string;
     image: string;
-    atk: string;
-    spd: string;
-    eff1: string;
-    eff2: string;
+    atk: number;
+    spd: number;
+    eff1: number;
+    eff2: number;
     nameEff1: string;
     nameEff2: string;
     unitEff1: string;
     unitEff2: string;
-    cupAtk: string;
-    cupSpd: string;
-    cupEff1: string;
-    cupEff2: string;
-    pupAtk: string;
-    pupSpd: string;
-    pupEff1: string;
-    pupEff2: string;
+    cupAtk: number;
+    cupSpd: number;
+    cupEff1: number;
+    cupEff2: number;
+    pupAtk: number;
+    pupSpd: number;
+    pupEff1: number;
+    pupEff2: number;
 }[];
 
 export interface FetchState {

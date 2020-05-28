@@ -46,7 +46,7 @@ export default function DeckList({
             legendary => dices?.find(dice => dice.name === legendary.name)?.id
         );
     const customSearch =
-        dices?.find(dice => dice.name === filter.customSearch)?.id || '';
+        dices?.find(dice => dice.name === filter.customSearch)?.id || 0;
 
     let jsx = <div />;
     if (
@@ -95,7 +95,6 @@ export default function DeckList({
             })
             .map(deck => {
                 const tempDeck = deck;
-                tempDeck.name = '-';
                 if (!tempDeck.updated) {
                     tempDeck.updated = '-';
                 }
@@ -103,15 +102,14 @@ export default function DeckList({
             });
         while (decks.length < 9 && decks.length !== 0) {
             decks.push({
-                id: `xxx-${decks.length}`,
-                name: '-',
-                type: deckType,
-                rating: '-',
-                slot1: '0',
-                slot2: '0',
-                slot3: '0',
-                slot4: '0',
-                slot5: '0',
+                id: 0,
+                type: '-',
+                rating: 0,
+                slot1: 0,
+                slot2: 0,
+                slot3: 0,
+                slot4: 0,
+                slot5: 0,
                 added: '-',
                 updated: '-',
             });
@@ -227,7 +225,10 @@ export default function DeckList({
                                                 ) ? (
                                                     <Dice dice={Number(data)} />
                                                 ) : (
-                                                    data?.replace(/-[1-9]/, '')
+                                                    String(data).replace(
+                                                        /^0$/,
+                                                        '-'
+                                                    )
                                                 )}
                                             </td>
                                         ))}

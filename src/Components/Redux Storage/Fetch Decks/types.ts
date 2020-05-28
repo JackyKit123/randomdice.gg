@@ -5,15 +5,14 @@ export const FETCH_DECKS_FAIL = 'FETCH_DECKS_FAIL';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 type Decks = {
-    id: string;
+    id: number;
     type: string;
-    name: string;
-    rating: string;
-    slot1: string;
-    slot2: string;
-    slot3: string;
-    slot4: string;
-    slot5: string;
+    rating: number;
+    slot1: number;
+    slot2: number;
+    slot3: number;
+    slot4: number;
+    slot5: number;
     added: string;
     updated: string | null;
 }[];
