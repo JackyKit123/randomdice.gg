@@ -48,29 +48,33 @@ export default function DeckList({
     const customSearch =
         dices?.find(dice => dice.name === filter.customSearch)?.id || '';
 
-    const Checkbox = ({
-        legendary,
-        i,
-    }: {
-        legendary: string;
-        i: number;
-    }): JSX.Element => (
-        <input
-            name={legendary}
-            type='checkbox'
-            defaultChecked={filter.legendary[i].checked}
-            onChange={(evt): void => {
-                filter.legendary[i].checked = evt.target.checked;
-                dispatch({
-                    type: FILTER_ACTION,
-                    payload: filter,
-                });
-            }}
-        />
-    );
-
     let jsx = <div />;
-    if (decks && dicelist.common.length > 0 && decks.length > 0) {
+    if (
+        decks &&
+        dicelist.common.length > 0 &&
+        decks.length > 0 &&
+        filter.legendary.length > 0
+    ) {
+        const Checkbox = ({
+            legendary,
+            i,
+        }: {
+            legendary: string;
+            i: number;
+        }): JSX.Element => (
+            <input
+                name={legendary}
+                type='checkbox'
+                defaultChecked={filter.legendary[i].checked}
+                onChange={(evt): void => {
+                    filter.legendary[i].checked = evt.target.checked;
+                    dispatch({
+                        type: FILTER_ACTION,
+                        payload: filter,
+                    });
+                }}
+            />
+        );
         const deckKeys = Object.keys(decks[0]);
         decks = decks
             .filter(deckData => {
