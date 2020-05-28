@@ -9,7 +9,7 @@ import { clearError, fetchDices } from '../../Misc/fetchData';
 import '../cal.less';
 import './blizzard.less';
 
-export default function ComboCaculator(): JSX.Element {
+export default function BlizzardCaculator(): JSX.Element {
     const dispatch = useDispatch();
     const selection = useSelector(
         (state: RootState) => state.fetchDicesReducer
