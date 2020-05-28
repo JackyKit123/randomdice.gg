@@ -4,11 +4,13 @@ import {
     FETCH_DECKS_SUCCESS,
     FETCH_DECKS_FAIL,
     CLEAR_ERRORS as CLEAR_ERRORS_1,
+    Decks,
 } from '../../Components/Redux Storage/Fetch Decks/types';
 import {
     FETCH_DICES_SUCCESS,
     FETCH_DICES_FAIL,
     CLEAR_ERRORS as CLEAR_ERRORS_2,
+    Dices,
 } from '../../Components/Redux Storage/Fetch Dices/types';
 
 interface DeckApiResponseData {
@@ -55,18 +57,20 @@ export async function fetchDecks(dispatch: Dispatch<{}>): Promise<void> {
     const apiUrl = '' || process.env.REACT_APP_API_HOST;
     try {
         const res = await axios.get(`${apiUrl}/api/decks`);
-        const decks = res.data.decks.map((each: DeckApiResponseData) => ({
-            id: Number(each.id),
-            type: each.type,
-            rating: Number(each.rating),
-            slot1: Number(each.slot1),
-            slot2: Number(each.slot2),
-            slot3: Number(each.slot3),
-            slot4: Number(each.slot4),
-            slot5: Number(each.slot5),
-            added: each.added,
-            updated: each.updated,
-        }));
+        const decks: Decks = res.data.decks.map(
+            (each: DeckApiResponseData) => ({
+                id: Number(each.id),
+                type: each.type,
+                rating: Number(each.rating),
+                slot1: Number(each.slot1),
+                slot2: Number(each.slot2),
+                slot3: Number(each.slot3),
+                slot4: Number(each.slot4),
+                slot5: Number(each.slot5),
+                added: each.added,
+                updated: each.updated,
+            })
+        );
         dispatch({ type: FETCH_DECKS_SUCCESS, payload: decks });
     } catch (err) {
         dispatch({ type: FETCH_DECKS_FAIL, payload: err });
@@ -77,7 +81,7 @@ export async function fetchDices(dispatch: Dispatch<{}>): Promise<void> {
     const apiUrl = '' || process.env.REACT_APP_API_HOST;
     try {
         const res = await axios.get(`${apiUrl}/api/dice`);
-        const dices = res.data.dice.map((each: DiceApiResponseData) => ({
+        const dices: Dices = res.data.dice.map((each: DiceApiResponseData) => ({
             id: Number(each.id),
             name: each.name,
             type: each.type,
@@ -90,8 +94,8 @@ export async function fetchDices(dispatch: Dispatch<{}>): Promise<void> {
             eff2: Number(each.eff2),
             nameEff1: each.nameEff1,
             nameEff2: each.nameEff2,
-            unitEff1: Number(each.unitEff1),
-            unitEff2: Number(each.unitEff2),
+            unitEff1: each.unitEff1,
+            unitEff2: each.unitEff2,
             cupAtk: Number(each.cupAtk),
             cupSpd: Number(each.cupSpd),
             cupEff1: Number(each.cupEff1),

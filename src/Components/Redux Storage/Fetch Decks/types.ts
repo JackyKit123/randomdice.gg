@@ -4,7 +4,7 @@ export const FETCH_DECKS_SUCCESS = 'FETCH_DECKS_SUCCESS';
 export const FETCH_DECKS_FAIL = 'FETCH_DECKS_FAIL';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
-type Decks = {
+export type Decks = {
     id: number;
     type: string;
     rating: number;
