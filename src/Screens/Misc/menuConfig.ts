@@ -35,21 +35,21 @@ export const menu: Menu[] = [
         ],
     },
     {
-        name: 'Caculator',
+        name: 'Calculator',
         childNode: [
             {
                 name: 'Blizzard Slow Effect Caculator',
-                path: '/caculator/blizzard',
+                path: '/calculator/blizzard',
                 component: Blizzard,
             },
             {
                 name: 'Combo Damage Caculator',
-                path: '/caculator/combo',
+                path: '/calculator/combo',
                 component: Combo,
             },
             {
                 name: 'Solar Light vs Crit Comparison',
-                path: '/caculator/solar',
+                path: '/calculator/solar',
                 component: Solar,
             },
         ],
