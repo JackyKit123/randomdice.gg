@@ -4,6 +4,7 @@ import { pveDeck, pvpDeck } from '../Decks/decklist';
 import Combo from '../Cal/Combo/combo';
 import Blizzard from '../Cal/Blizzard/blizzard';
 import Solar from '../Cal/Solar/solar';
+import Gears from '../Cal/Gears/gears';
 
 export type Menu = {
     name: string;
@@ -38,12 +39,12 @@ export const menu: Menu[] = [
         name: 'Calculator',
         childNode: [
             {
-                name: 'Blizzard Slow Effect Caculator',
+                name: 'Blizzard Slow Effect Calculator',
                 path: '/calculator/blizzard',
                 component: Blizzard,
             },
             {
-                name: 'Combo Damage Caculator',
+                name: 'Combo Damage Calculator',
                 path: '/calculator/combo',
                 component: Combo,
             },
@@ -51,6 +52,11 @@ export const menu: Menu[] = [
                 name: 'Solar Light vs Crit Comparison',
                 path: '/calculator/solar',
                 component: Solar,
+            },
+            {
+                name: 'Gears DPS Calculator',
+                path: '/calculator/gears',
+                component: Gears,
             },
         ],
     },
