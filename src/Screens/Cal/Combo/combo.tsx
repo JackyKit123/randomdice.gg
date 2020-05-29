@@ -20,12 +20,12 @@ export default function ComboCaculator(): JSX.Element {
         combo: 0,
         crit: 111,
     });
-    const [isInvalidInput, setIsInvalidInput] = useState({
-        combo: false,
-        crit: false,
-    });
     let jsx = <div />;
     const data = dices?.find(dice => dice.name === 'Combo');
+    const isInvalidCrit = (val: number): boolean =>
+        !Number.isInteger(val) || val < 111 || val > 2036;
+    const isInvalidCombo = (val: number): boolean =>
+        !Number.isInteger(val) || val < 0;
     if (data) {
         const comboDiceData = {
             baseAtk: data.atk,
@@ -49,8 +49,12 @@ export default function ComboCaculator(): JSX.Element {
         const dps = dmg * 0.95 + (dmg * 0.05 * filter.crit) / 100;
         jsx = (
             <>
-                <Dice dice='Combo' />
-                <h3 className='desc'>{data.desc}</h3>
+                <div className='dice-container'>
+                    <div>
+                        <Dice dice='Combo' />
+                        <h3 className='desc'>{data.desc}</h3>
+                    </div>
+                </div>
                 <form className='filter'>
                     <label htmlFor='class'>
                         <span>Class :</span>
@@ -97,21 +101,16 @@ export default function ComboCaculator(): JSX.Element {
                         <input
                             type='textbox'
                             name='combo count'
-                            className={isInvalidInput.combo ? 'invalid' : ''}
+                            className={
+                                isInvalidCombo(filter.combo) ? 'invalid' : ''
+                            }
                             defaultValue={0}
                             onChange={(
                                 evt: React.ChangeEvent<HTMLInputElement>
                             ): void => {
                                 const val = Number(evt.target.value);
-                                if (!Number.isInteger(val)) {
-                                    isInvalidInput.combo = true;
-                                    setIsInvalidInput({ ...isInvalidInput });
-                                } else {
-                                    filter.combo = val;
-                                    isInvalidInput.combo = false;
-                                    setIsInvalidInput({ ...isInvalidInput });
-                                    setFilter({ ...filter });
-                                }
+                                filter.combo = val;
+                                setFilter({ ...filter });
                             }}
                         />
                     </label>
@@ -121,53 +120,74 @@ export default function ComboCaculator(): JSX.Element {
                             type='textbox'
                             name='crit dmg'
                             defaultValue={111}
-                            className={isInvalidInput.crit ? 'invalid' : ''}
+                            className={
+                                isInvalidCrit(filter.crit) ? 'invalid' : ''
+                            }
                             onChange={(
                                 evt: React.ChangeEvent<HTMLInputElement>
                             ): void => {
                                 const val = Number(evt.target.value);
-                                if (
-                                    !Number.isInteger(val) ||
-                                    val < 111 ||
-                                    val > 2036
-                                ) {
-                                    isInvalidInput.crit = true;
-                                    setIsInvalidInput({ ...isInvalidInput });
-                                } else {
-                                    filter.crit = val;
-                                    isInvalidInput.crit = false;
-                                    setIsInvalidInput({ ...isInvalidInput });
-                                    setFilter({ ...filter });
-                                }
+                                filter.crit = val;
+                                setFilter({ ...filter });
                             }}
                         />
                     </label>
-                    {isInvalidInput.combo ? (
-                        <span className='invalid-warning'>
-                            Invalid Combo Count Input! Acceptable input is{' '}
-                            <strong>whole number.</strong>
-                        </span>
-                    ) : (
-                        ''
-                    )}
-                    {isInvalidInput.crit ? (
-                        <span className='invalid-warning'>
-                            Invalid Crit% Input! Acceptable input is{' '}
-                            <strong>111-2036.</strong>
-                        </span>
-                    ) : (
-                        ''
-                    )}
                 </form>
+                {isInvalidCombo(filter.combo) ? (
+                    <span className='invalid-warning'>
+                        Invalid Combo Count Input! Acceptable input is{' '}
+                        <strong>positive integer</strong>.
+                    </span>
+                ) : (
+                    ''
+                )}
+                {isInvalidCrit(filter.crit) ? (
+                    <span className='invalid-warning'>
+                        Invalid Crit% Input! Acceptable input is{' '}
+                        <strong>111-2036</strong>.
+                    </span>
+                ) : (
+                    ''
+                )}
                 <div className='filter-divisor' />
                 <div className='result'>
                     <div className='dmg'>
-                        <span>Your Damage per Combo pip:</span>
-                        <input type='textbox' value={dmg} disabled />
+                        <span>Damage per Combo pip:</span>
+                        <input
+                            type='textbox'
+                            className={
+                                isInvalidCombo(filter.combo) ||
+                                isInvalidCrit(filter.crit)
+                                    ? 'invalid'
+                                    : ''
+                            }
+                            value={
+                                isInvalidCombo(filter.combo) ||
+                                isInvalidCrit(filter.crit)
+                                    ? 'Check Input'
+                                    : dmg
+                            }
+                            disabled
+                        />
                     </div>
                     <div className='dps'>
-                        <span>Your DPS per Combo Pip:</span>
-                        <input type='textbox' value={dps} disabled />
+                        <span>DPS per Combo Pip:</span>
+                        <input
+                            type='textbox'
+                            className={
+                                isInvalidCombo(filter.combo) ||
+                                isInvalidCrit(filter.crit)
+                                    ? 'invalid'
+                                    : ''
+                            }
+                            value={
+                                isInvalidCombo(filter.combo) ||
+                                isInvalidCrit(filter.crit)
+                                    ? 'Check Input'
+                                    : dps
+                            }
+                            disabled
+                        />
                     </div>
                 </div>
             </>

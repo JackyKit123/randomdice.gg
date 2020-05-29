@@ -48,8 +48,12 @@ export default function BlizzardCaculator(): JSX.Element {
 
         jsx = (
             <>
-                <Dice dice='Blizzard' />
-                <h3 className='desc'>{data.desc}</h3>
+                <div className='dice-container'>
+                    <div>
+                        <Dice dice='Blizzard' />
+                        <h3 className='desc'>{data.desc}</h3>
+                    </div>
+                </div>
                 <form className='filter'>
                     <label htmlFor='class'>
                         <span>Class :</span>

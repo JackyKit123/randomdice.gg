@@ -1,0 +1,44 @@
+@import '../../../cross_import_lesshat.less';
+
+.cal.solar-cal {
+    .dice-container {
+        & > div {
+            width: 33%;
+            margin: 0 20px;
+
+            @media @mobile {
+                width: 100%;
+                max-width: 400px;
+                margin: 0 0 20px;
+            }
+        }
+    }
+
+    .result {
+        margin-top: 30px;
+
+        & > .title {
+            position: absolute;
+            margin: 0 auto;
+            font-size: 30px;
+        }
+
+        & > div {
+            margin-top: 70px;
+            .display(flex);
+            .flex-direction(column);
+            .justify-content(center);
+
+            @media @mobile {
+                &:nth-of-type(n + 3) {
+                    margin-top: 50px;
+                }
+            }
+
+            & > span,
+            input {
+                display: block;
+            }
+        }
+    }
+}

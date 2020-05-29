@@ -3,6 +3,7 @@ import Homepage from '../Homepage/homepage';
 import { pveDeck, pvpDeck } from '../Decks/decklist';
 import Combo from '../Cal/Combo/combo';
 import Blizzard from '../Cal/Blizzard/blizzard';
+import Solar from '../Cal/Solar/solar';
 
 export type Menu = {
     name: string;
@@ -49,6 +50,7 @@ export const menu: Menu[] = [
             {
                 name: 'Solar Light vs Crit Comparison',
                 path: '/caculator/solar',
+                component: Solar,
             },
         ],
     },
