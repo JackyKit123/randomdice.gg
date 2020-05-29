@@ -102,7 +102,7 @@ export default function DeckList({
             });
         while (decks.length < 9 && decks.length !== 0) {
             decks.push({
-                id: 0,
+                id: decks.length,
                 type: '-',
                 rating: 0,
                 slot1: 0,
@@ -220,15 +220,15 @@ export default function DeckList({
                                             <td
                                                 key={`deck-${deck.id}-datapoint-${deckKeys[i]}`}
                                             >
+                                                {/* eslint-disable-next-line no-nested-ternary */}
                                                 {deckKeys[i].match(
                                                     /^slot[1-5]$/
                                                 ) ? (
                                                     <Dice dice={Number(data)} />
+                                                ) : deck.type === '-' ? (
+                                                    '-'
                                                 ) : (
-                                                    String(data).replace(
-                                                        /^0$/,
-                                                        '-'
-                                                    )
+                                                    data
                                                 )}
                                             </td>
                                         ))}
