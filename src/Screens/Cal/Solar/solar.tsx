@@ -46,10 +46,13 @@ export default function SolarCaculator(): JSX.Element {
     const solarData = dices?.find(dice => dice.name === 'Solar');
     const lightData = dices?.find(dice => dice.name === 'Light');
     const critData = dices?.find(dice => dice.name === 'Critical');
-    const isInvalidCrit = (val: number): boolean =>
-        !Number.isInteger(val) || val < 111 || val > 2036;
-    const isInvalidDuration = (val: number): boolean =>
-        !Number.isInteger(val) || val <= 0;
+    const isInvalidCrit =
+        !Number.isInteger(filter.crit) ||
+        filter.crit < 111 ||
+        filter.crit > 2036;
+    const isInvalidDuration =
+        !Number.isInteger(filter.duration) || filter.duration <= 0;
+    const invalidInput = isInvalidCrit || isInvalidDuration;
 
     if (solarData && lightData && critData) {
         const diceData = {
@@ -115,10 +118,7 @@ export default function SolarCaculator(): JSX.Element {
 
             const totalDmg = hitDmgMultiplier * sourceDmgPerHit;
             const finalDps = totalDmg * crit;
-            return isInvalidCrit(filter.crit) ||
-                isInvalidDuration(filter.duration)
-                ? 0
-                : finalDps;
+            return invalidInput ? 0 : finalDps;
         };
 
         const result = {
@@ -207,7 +207,7 @@ export default function SolarCaculator(): JSX.Element {
                                 <span>Class :</span>
                                 <select
                                     name='light-class'
-                                    defaultValue={filter.light.class}
+                                    defaultValue={10}
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
@@ -368,7 +368,7 @@ export default function SolarCaculator(): JSX.Element {
                                 <span>Class :</span>
                                 <select
                                     name='crit-class'
-                                    defaultValue={filter.critical.class}
+                                    defaultValue={10}
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
@@ -450,10 +450,8 @@ export default function SolarCaculator(): JSX.Element {
                         <input
                             type='textbox'
                             name='crit dmg'
-                            defaultValue={filter.crit}
-                            className={
-                                isInvalidCrit(filter.crit) ? 'invalid' : ''
-                            }
+                            defaultValue={111}
+                            className={isInvalidCrit ? 'invalid' : ''}
                             onChange={(
                                 evt: React.ChangeEvent<HTMLInputElement>
                             ): void => {
@@ -470,17 +468,14 @@ export default function SolarCaculator(): JSX.Element {
                             name='duration'
                             maxLength={3}
                             style={
-                                !isInvalidDuration(filter.duration) &&
-                                filter.duration > 200
+                                !isInvalidDuration && filter.duration > 200
                                     ? {
                                           backgroundColor: '#ffff00',
                                       }
                                     : undefined
                             }
-                            defaultValue={filter.duration}
-                            className={
-                                isInvalidDuration(filter.crit) ? 'invalid' : ''
-                            }
+                            defaultValue={10}
+                            className={isInvalidDuration ? 'invalid' : ''}
                             onChange={(
                                 evt: React.ChangeEvent<HTMLInputElement>
                             ): void => {
@@ -491,7 +486,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                     </label>
                 </form>
-                {isInvalidCrit(filter.crit) ? (
+                {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
                         <strong>111-2036</strong>.
@@ -499,7 +494,7 @@ export default function SolarCaculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                {isInvalidDuration(filter.duration) ? (
+                {isInvalidDuration ? (
                     <span className='invalid-warning'>
                         Invalid Time Input! Acceptable input is{' '}
                         <strong>positive integer</strong>.
@@ -521,7 +516,7 @@ export default function SolarCaculator(): JSX.Element {
                 <div className='chart-container'>
                     <VictoryChart
                         maxDomain={{
-                            x: filter.duration,
+                            x: filter.duration || 0,
                             y: dps(
                                 basicDmgPerHit,
                                 buffedAtkSpd,
@@ -645,7 +640,7 @@ export default function SolarCaculator(): JSX.Element {
                 <div className='chart-container'>
                     <VictoryChart
                         maxDomain={{
-                            x: filter.duration,
+                            x: filter.duration || 0,
                             y: dps(
                                 basicDmgPerHit,
                                 buffedAtkSpd,
@@ -779,13 +774,23 @@ export default function SolarCaculator(): JSX.Element {
                         <span>Basic Attack</span>
                         <input
                             type='textbox'
-                            value={result.basicAtkDps}
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : result.basicAtkDps
+                            }
                             disabled
                         />
                         <span>Splash Dmg</span>
                         <input
                             type='textbox'
-                            value={result.basicSplashDps}
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : result.basicSplashDps
+                            }
                             disabled
                         />
                     </div>
@@ -793,13 +798,23 @@ export default function SolarCaculator(): JSX.Element {
                         <span>Light Buffed Basic Atk</span>
                         <input
                             type='textbox'
-                            value={result.lightBuffAtk}
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : result.lightBuffAtk
+                            }
                             disabled
                         />
                         <span>Light Buffed Splash Dmg</span>
                         <input
                             type='textbox'
-                            value={result.lightBuffSplash}
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : result.lightBuffSplash
+                            }
                             disabled
                         />
                     </div>
@@ -807,13 +822,23 @@ export default function SolarCaculator(): JSX.Element {
                         <span>Crit Buffed Basic Atk</span>
                         <input
                             type='textbox'
-                            value={result.critBuffAtk}
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : result.critBuffAtk
+                            }
                             disabled
                         />
                         <span>Crit Buffed Splash Dmg</span>
                         <input
                             type='textbox'
-                            value={result.critBuffSplash}
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : result.critBuffSplash
+                            }
                             disabled
                         />
                     </div>
@@ -821,13 +846,23 @@ export default function SolarCaculator(): JSX.Element {
                         <span>Double Buffed Basic Atk</span>
                         <input
                             type='textbox'
-                            value={result.doubleBuffAtk}
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : result.doubleBuffAtk
+                            }
                             disabled
                         />
                         <span>Double Buffed Splash Dmg</span>
                         <input
                             type='textbox'
-                            value={result.doubleBuffSpash}
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : result.doubleBuffSpash
+                            }
                             disabled
                         />
                     </div>

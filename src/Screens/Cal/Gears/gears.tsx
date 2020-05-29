@@ -29,7 +29,8 @@ export default function GearsCaculator(): JSX.Element {
         filter.crit > 2036;
     const isInvalidPip =
         !Number.isInteger(filter.pip) || filter.pip < 1 || filter.pip > 7 * 15;
-    const isInvalidChain = filter.pip < filter.chain + 1;
+    const isInvalidChain =
+        filter.pip < filter.chain + 1 || filter.pip > (filter.chain + 1) * 7;
     const invalidInput = isInvalidCrit || isInvalidChain || isInvalidPip;
 
     if (data) {
@@ -172,8 +173,11 @@ export default function GearsCaculator(): JSX.Element {
                 </form>
                 {isInvalidChain ? (
                     <span className='invalid-warning'>
-                        Invalid chain amount, total gears pip count should be
-                        less chain amount.
+                        {`Invalid pip amount, ${
+                            filter.pip > filter.chain
+                                ? 'too many gears pips comparing to the chain length.'
+                                : 'chain length should be smaller than total gears pip.'
+                        }`}
                     </span>
                 ) : (
                     ''
