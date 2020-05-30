@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import './header-footer.less';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,8 +11,10 @@ import Menu from '../../Components/Menu/menu';
 import { menu } from '../Misc/menuConfig';
 
 export default function Header(): JSX.Element {
+    const history = useHistory();
     const [scrolled, setScrolled] = useState(true);
     const [menuToggle, setMenuToggle] = useState(false);
+    history.listen(() => setMenuToggle(false));
     useEffect(() => {
         function handler(): void {
             if (
