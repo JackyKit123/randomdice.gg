@@ -236,7 +236,7 @@ export default function GearsCaculator(): JSX.Element {
     }
     return (
         <Main
-            title='Gears DPS Caculator'
+            title='Gears DPS Caclulator'
             className='gears-dmg-cal cal'
             content={jsx}
         />
