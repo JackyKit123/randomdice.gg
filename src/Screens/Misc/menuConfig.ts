@@ -5,6 +5,7 @@ import Combo from '../Cal/Combo/combo';
 import Blizzard from '../Cal/Blizzard/blizzard';
 import Solar from '../Cal/Solar/solar';
 import Gears from '../Cal/Gears/gears';
+import Gold from '../Cal/Gold/gold';
 
 export type Menu = {
     name: string;
@@ -57,6 +58,11 @@ export const menu: Menu[] = [
                 name: 'Gears DPS Calculator',
                 path: '/calculator/gears',
                 component: Gears,
+            },
+            {
+                name: 'Gold Grind Calculator',
+                path: '/calculator/gold',
+                component: Gold,
             },
         ],
     },
