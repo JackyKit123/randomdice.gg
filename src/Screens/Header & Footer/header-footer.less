@@ -163,6 +163,11 @@ body {
 
                                 & > span {
                                     cursor: context-menu;
+
+                                    &.active {
+                                        color: #6ba4a5;
+                                        font-weight: 700;
+                                    }
                                 }
 
                                 & > a:hover {
@@ -225,6 +230,12 @@ body {
                                 @media @mobile {
                                     &:first-of-type {
                                         height: 40px;
+
+                                        span.active {
+                                            cursor: context-menu;
+                                            color: #6ba4a5;
+                                            font-weight: 700;
+                                        }
                                     }
 
                                     &:nth-of-type(n + 2) {
@@ -236,6 +247,12 @@ body {
                                         padding: 10px;
                                         z-index: 40;
                                         .transition(0.4s all ease-in-out);
+
+                                        span.active {
+                                            cursor: context-menu;
+                                            color: #6ba4a5;
+                                            font-weight: 700;
+                                        }
 
                                         & > ul {
                                             margin-left: 20px;
