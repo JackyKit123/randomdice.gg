@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu as MenuProp } from '../../Screens/Misc/menuConfig';
 
 export default function Menu(props: {
@@ -7,6 +7,8 @@ export default function Menu(props: {
     className?: string | undefined;
 }): JSX.Element {
     const { menuList, className } = props;
+    const location = useLocation();
+    console.log(location.pathname);
     const createMenu = (menulist: MenuProp[]): (JSX.Element | null)[] => {
         return menulist.map((menu: MenuProp) => {
             let anchor;
@@ -21,6 +23,9 @@ export default function Menu(props: {
                             {menu.name}
                         </a>
                     );
+                    break;
+                case !menu.external && menu.path === location.pathname:
+                    anchor = <span className='active'>{menu.name}</span>;
                     break;
                 case !menu.external && menu.path !== undefined:
                     anchor = <Link to={String(menu.path)}>{menu.name}</Link>;

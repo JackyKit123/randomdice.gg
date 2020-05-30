@@ -211,6 +211,12 @@ body {
                                                 &:hover {
                                                     color: #ffffff;
                                                 }
+
+                                                &.active {
+                                                    cursor: context-menu;
+                                                    color: #ffffff;
+                                                    font-weight: 700;
+                                                }
                                             }
                                         }
                                     }
@@ -237,12 +243,19 @@ body {
                                             & > li {
                                                 margin: 10px 0;
 
-                                                & > a {
+                                                & > a,
+                                                span {
                                                     font-size: 20px;
                                                 }
 
                                                 &:hover > a {
                                                     color: #6ba4a5;
+                                                }
+
+                                                span.active {
+                                                    cursor: context-menu;
+                                                    color: #6ba4a5;
+                                                    font-weight: 700;
                                                 }
                                             }
                                         }
