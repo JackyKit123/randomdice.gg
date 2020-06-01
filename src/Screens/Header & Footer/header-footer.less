@@ -37,7 +37,8 @@ body {
                             cursor: not-allowed;
                             .transition(color 0.2s ease-in-out);
 
-                            &:hover {
+                            &:hover,
+                            &:focus {
                                 color: #6ba4a5;
                             }
                         }
@@ -170,9 +171,12 @@ body {
                                     }
                                 }
 
-                                & > a:hover {
-                                    cursor: pointer;
-                                    color: #6ba4a5;
+                                & > a {
+                                    &:hover,
+                                    &:focus {
+                                        cursor: pointer;
+                                        color: #6ba4a5;
+                                    }
                                 }
 
                                 @media @desktop {
@@ -181,7 +185,9 @@ body {
                                     position: relative;
                                     height: 100%;
 
-                                    &:hover {
+                                    &:hover,
+                                    &:focus,
+                                    &.focused {
                                         & > ul {
                                             display: block;
                                             visibility: visible;
@@ -213,7 +219,8 @@ body {
                                                     color 0.2s ease-in-out
                                                 );
 
-                                                &:hover {
+                                                &:hover,
+                                                &:focus {
                                                     color: #ffffff;
                                                 }
 
@@ -265,8 +272,11 @@ body {
                                                     font-size: 20px;
                                                 }
 
-                                                &:hover > a {
-                                                    color: #6ba4a5;
+                                                &:hover,
+                                                &:focus {
+                                                    & > a {
+                                                        color: #6ba4a5;
+                                                    }
                                                 }
 
                                                 span.active {
@@ -356,7 +366,8 @@ body {
                                     color: #525252;
                                 }
 
-                                &:hover {
+                                &:hover,
+                                &:focus {
                                     &.discord {
                                         color: #7289da;
                                     }
