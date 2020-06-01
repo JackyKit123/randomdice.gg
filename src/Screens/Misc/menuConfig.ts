@@ -6,6 +6,7 @@ import Blizzard from '../Cal/Blizzard/blizzard';
 import Solar from '../Cal/Solar/solar';
 import Gears from '../Cal/Gears/gears';
 import Gold from '../Cal/Gold/gold';
+import critData from '../Crit Info/crit';
 
 export type Menu = {
     name: string;
@@ -22,7 +23,7 @@ export const menu: Menu[] = [
         component: Homepage,
     },
     {
-        name: 'Decks',
+        name: 'Resources',
         childNode: [
             {
                 name: 'PvP Deck List',
@@ -33,6 +34,11 @@ export const menu: Menu[] = [
                 name: 'PvE Deck List',
                 path: '/decks/pve',
                 component: pveDeck,
+            },
+            {
+                name: 'Crit% Data Per Class',
+                path: '/critData',
+                component: critData,
             },
         ],
     },

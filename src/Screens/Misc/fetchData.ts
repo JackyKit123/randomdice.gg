@@ -12,6 +12,11 @@ import {
     CLEAR_ERRORS as CLEAR_ERRORS_2,
     Dices,
 } from '../../Components/Redux Storage/Fetch Dices/types';
+import {
+    FETCH_GAPI_RESPONSE_FORM_FAIL,
+    FETCH_GAPI_RESPONSE_FORM_SUCCESS,
+    CLEAR_ERRORS as CLEAR_ERRORS_3,
+} from '../../Components/Redux Storage/Google API Fetch Response Form/types';
 
 interface DeckApiResponseData {
     id: string;
@@ -111,7 +116,65 @@ export async function fetchDices(dispatch: Dispatch<{}>): Promise<void> {
     }
 }
 
+export async function fetchResponseForm(dispatch: Dispatch<{}>): Promise<void> {
+    try {
+        const res = await window.gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.REACT_APP_CRIT_RESPONSE_SPREADSHEET_ID,
+            range: 'Responses!D2:E',
+        });
+        const rawData = res.result.values
+            .map((row: string[]) => row.map((cell: string) => Number(cell)))
+            .filter(
+                (row: number[]) => row.some(data => data) && row.length === 2
+            );
+        const res2 = await window.gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.REACT_APP_CRIT_RESPONSE_SPREADSHEET_ID,
+            range: 'Results!C2:D21',
+        });
+        const summarizedData = res2.result.values.map((row: string[]) =>
+            row.map((cell: string) => Number(cell))
+        );
+        dispatch({
+            type: FETCH_GAPI_RESPONSE_FORM_SUCCESS,
+            payload: {
+                raw: rawData,
+                summarized: summarizedData,
+            },
+        });
+    } catch (err) {
+        dispatch({
+            type: FETCH_GAPI_RESPONSE_FORM_FAIL,
+            payload: err.result.error,
+        });
+    }
+}
+
+export function initGAPI(dispatch: Dispatch<{}>): void {
+    const script = document.createElement('script');
+    script.src = 'https://apis.google.com/js/client.js';
+    script.onload = (): void => {
+        window.gapi.load('client', async () => {
+            try {
+                await window.gapi.client.init({
+                    apiKey: process.env.REACT_APP_GAPI_KEY,
+                    discoveryDocs: [
+                        'https://sheets.googleapis.com/$discovery/rest?version=v4',
+                    ],
+                });
+                fetchResponseForm(dispatch);
+            } catch (err) {
+                dispatch({
+                    type: FETCH_GAPI_RESPONSE_FORM_FAIL,
+                    payload: err.result.error,
+                });
+            }
+        });
+    };
+    document.body.append(script);
+}
+
 export async function clearError(dispatch: Dispatch<{}>): Promise<void> {
     dispatch({ type: CLEAR_ERRORS_1 });
     dispatch({ type: CLEAR_ERRORS_2 });
+    dispatch({ type: CLEAR_ERRORS_3 });
 }

@@ -140,8 +140,15 @@
                         }
                     }
 
-                    &:hover input ~ .checkbox-styler {
-                        background-color: #525252;
+                    &:hover,
+                    &:focus {
+                        & input ~ .checkbox-styler {
+                            background-color: #525252;
+                        }
+                    }
+
+                    input:focus ~ .checkbox-styler {
+                        border: 2px solid #ffffff;
                     }
                 }
             }

@@ -1,0 +1,97 @@
+@import '../../cross_import_lesshat.less';
+
+.crit-data {
+    p {
+        font-size: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    div.filter-divisor {
+        border-bottom: 5px solid #ffffff;
+        margin: 20px auto;
+        width: 100%;
+    }
+
+    .chart-container {
+        @media @desktop {
+            .display(flex);
+        }
+    }
+
+    .table-container {
+        overflow: auto;
+
+        table {
+            border: 1px solid black;
+            border-collapse: separate;
+            border-spacing: 1px;
+
+            &:first-of-type {
+                margin-bottom: 20px;
+            }
+
+            @media @desktop {
+                &.vertical {
+                    display: none;
+                }
+            }
+
+            @media @mobile {
+                &.horizontal {
+                    display: none;
+                }
+            }
+
+            &.horizontal {
+                width: 100%;
+
+                td {
+                    min-width: 57px;
+                }
+            }
+
+            &.vertical {
+                margin: 0 auto;
+
+                td {
+                    width: 80px;
+                }
+            }
+
+            th {
+                border: 1px solid black;
+                font-size: 18px;
+                text-align: left;
+                font-weight: 600;
+                background-color: #4b8bc1;
+            }
+
+            td {
+                border: 1px solid black;
+                font-size: 18px;
+                text-align: right;
+
+                &:nth-of-type(odd) {
+                    background-color: #b8dadc;
+                }
+
+                &:nth-of-type(even) {
+                    background-color: #f8d298;
+                }
+            }
+
+            tr:nth-of-type(even) {
+                td {
+                    &:nth-of-type(odd) {
+                        background-color: #f8d298;
+                    }
+
+                    &:nth-of-type(even) {
+                        background-color: #b8dadc;
+                    }
+                }
+            }
+        }
+    }
+}

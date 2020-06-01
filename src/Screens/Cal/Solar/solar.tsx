@@ -532,24 +532,6 @@ export default function SolarCaculator(): JSX.Element {
                             y={30}
                             textAnchor='middle'
                         />
-                        <VictoryLegend
-                            x={50}
-                            y={70}
-                            orientation='vertical'
-                            gutter={20}
-                            colorScale={[
-                                '#ffa500',
-                                '#ffff00',
-                                '#ff0000',
-                                '#111111',
-                            ]}
-                            data={[
-                                { name: 'Double Buffed' },
-                                { name: 'Light Buffed' },
-                                { name: 'Crit Buffed' },
-                                { name: 'No Buff' },
-                            ]}
-                        />
                         <VictoryAxis
                             label='Hit Duration (seconds)'
                             fixLabelOverlap
@@ -578,6 +560,24 @@ export default function SolarCaculator(): JSX.Element {
                                         return t;
                                 }
                             }}
+                        />
+                        <VictoryLegend
+                            x={50}
+                            y={70}
+                            orientation='vertical'
+                            gutter={20}
+                            colorScale={[
+                                '#ffa500',
+                                '#ffff00',
+                                '#ff0000',
+                                '#111111',
+                            ]}
+                            data={[
+                                { name: 'Double Buffed' },
+                                { name: 'Light Buffed' },
+                                { name: 'Crit Buffed' },
+                                { name: 'No Buff' },
+                            ]}
                         />
                         <VictoryLine
                             name='No Buff'
@@ -635,9 +635,6 @@ export default function SolarCaculator(): JSX.Element {
                             }
                         />
                     </VictoryChart>
-                </div>
-                <div className='filter-divisor' />
-                <div className='chart-container'>
                     <VictoryChart
                         maxDomain={{
                             x: filter.duration || 0,
@@ -655,24 +652,6 @@ export default function SolarCaculator(): JSX.Element {
                             x={175}
                             y={30}
                             textAnchor='middle'
-                        />
-                        <VictoryLegend
-                            x={50}
-                            y={70}
-                            orientation='vertical'
-                            gutter={20}
-                            colorScale={[
-                                '#ffa500',
-                                '#ffff00',
-                                '#ff0000',
-                                '#111111',
-                            ]}
-                            data={[
-                                { name: 'Double Buffed' },
-                                { name: 'Light Buffed' },
-                                { name: 'Crit Buffed' },
-                                { name: 'No Buff' },
-                            ]}
                         />
                         <VictoryAxis
                             label='Hit Duration (seconds)'
@@ -762,6 +741,24 @@ export default function SolarCaculator(): JSX.Element {
                                     d.x
                                 )
                             }
+                        />
+                        <VictoryLegend
+                            x={50}
+                            y={70}
+                            orientation='vertical'
+                            gutter={20}
+                            colorScale={[
+                                '#ffa500',
+                                '#ffff00',
+                                '#ff0000',
+                                '#111111',
+                            ]}
+                            data={[
+                                { name: 'Double Buffed' },
+                                { name: 'Light Buffed' },
+                                { name: 'Crit Buffed' },
+                                { name: 'No Buff' },
+                            ]}
                         />
                     </VictoryChart>
                 </div>

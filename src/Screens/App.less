@@ -1,3 +1,5 @@
+@import '../cross_import_lesshat.less';
+
 body {
     margin: 0;
     background-color: #6ba4a5;
@@ -25,6 +27,17 @@ body {
         p {
             line-height: 30px;
             margin-bottom: 20px;
+        }
+
+        a {
+            font: inherit;
+            color: #6ba4a5;
+            .transition(all 0.2s ease-in-out);
+
+            &:hover,
+            &:focus {
+                color: #ffffff;
+            }
         }
     }
 }
