@@ -4,12 +4,12 @@
   "icons": [
     {
       "src": "title_dice.png",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "510x510",
       "type": "image/png"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#6ba4a5",
+  "background_color": "#6ba4a5"
 }
