@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { Menu as MenuProp } from '../../Screens/Misc/menuConfig';
 
 export default function Menu(props: {
@@ -8,6 +8,7 @@ export default function Menu(props: {
 }): JSX.Element {
     const { menuList, className } = props;
     const [focusedTab, setFocusedTab] = useState(-1);
+    const history = useHistory();
     const location = useLocation();
 
     const keyup = (evt: KeyboardEvent): void => {
@@ -19,6 +20,9 @@ export default function Menu(props: {
 
     useEffect(() => {
         document.addEventListener('keyup', keyup);
+        history.listen(() => {
+            setFocusedTab(-1);
+        });
         return (): void => document.removeEventListener('keyup', keyup);
     });
     const createMenu = (
