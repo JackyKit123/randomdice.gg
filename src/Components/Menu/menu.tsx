@@ -63,11 +63,18 @@ export default function Menu(props: {
                 <ul>{createMenu(menu.childNode, depth + 1)}</ul>
             ) : null;
             return (
+                // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
                 <li
                     key={`menu-${className}-${menu.name}`}
                     tabIndex={depth === 0 ? 0 : -1}
                     className={`menu-item ${focusedTab === i ? 'focused' : ''}`}
                     onFocus={(): void => setFocusedTab(i)}
+                    onMouseOver={(): void => setFocusedTab(i)}
+                    onMouseOut={(): void => {
+                        if (i > 0) {
+                            setFocusedTab(-1);
+                        }
+                    }}
                 >
                     {anchor}
                     {childNode}
