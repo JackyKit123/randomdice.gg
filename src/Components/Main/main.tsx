@@ -1,5 +1,4 @@
 import React from 'react';
-import Banner from '../Banner/banner';
 import './main.less';
 
 export default function Main(props: {
@@ -10,7 +9,11 @@ export default function Main(props: {
     const { title, className, content } = props;
     return (
         <main className={className}>
-            <Banner title={title} />
+            <div className='banner'>
+                <div className='title-container'>
+                    <h2 className='title'>{title}</h2>
+                </div>
+            </div>
             <div className='main'>
                 <div className='container'>
                     <div className='content'>{content}</div>
