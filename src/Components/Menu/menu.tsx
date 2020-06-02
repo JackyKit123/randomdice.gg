@@ -13,7 +13,7 @@ export default function Menu(props: {
 
     const keyup = (evt: KeyboardEvent): void => {
         const target = evt.target as HTMLElement;
-        if (!target.className.split(' ').includes('menu-item')) {
+        if (!target.classList.contains('menu-item')) {
             setFocusedTab(-1);
         }
     };
