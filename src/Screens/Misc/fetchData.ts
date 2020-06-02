@@ -13,9 +13,15 @@ import {
     Dices,
 } from '../../Components/Redux Storage/Fetch Dices/types';
 import {
+    FETCH_ALTS_SUCCESS,
+    FETCH_ALTS_FAIL,
+    CLEAR_ERRORS as CLEAR_ERRORS_3,
+    Alts,
+} from '../../Components/Redux Storage/Fetch Alt/types';
+import {
     FETCH_GAPI_RESPONSE_FORM_FAIL,
     FETCH_GAPI_RESPONSE_FORM_SUCCESS,
-    CLEAR_ERRORS as CLEAR_ERRORS_3,
+    CLEAR_ERRORS as CLEAR_ERRORS_4,
 } from '../../Components/Redux Storage/Google API Fetch Response Form/types';
 
 interface DeckApiResponseData {
@@ -56,6 +62,17 @@ interface DiceApiResponseData {
     pupSpd: string;
     pupEff1: string;
     pupEff2: string;
+}
+
+interface AltsApiResponseData {
+    id: string;
+    dice: string | null;
+    best: string | null;
+    good: string | null;
+    okay: string | null;
+    bad: string | null;
+    worst: string | null;
+    description: string | null;
 }
 
 export async function fetchDecks(dispatch: Dispatch<{}>): Promise<void> {
@@ -116,6 +133,27 @@ export async function fetchDices(dispatch: Dispatch<{}>): Promise<void> {
     }
 }
 
+export async function fetchAlts(dispatch: Dispatch<{}>): Promise<void> {
+    const apiUrl = '' || process.env.REACT_APP_API_HOST;
+    try {
+        const res = await axios.get(`${apiUrl}/api/alternates`);
+        const alts: Alts = res.data.alts.map((each: AltsApiResponseData) => ({
+            id: Number(each.dice),
+            list: [
+                Number(each.best),
+                Number(each.good),
+                Number(each.okay),
+                Number(each.bad),
+                Number(each.worst),
+            ],
+            desc: each.description,
+        }));
+        dispatch({ type: FETCH_ALTS_SUCCESS, payload: alts });
+    } catch (err) {
+        dispatch({ type: FETCH_ALTS_FAIL, payload: err });
+    }
+}
+
 export async function fetchResponseForm(dispatch: Dispatch<{}>): Promise<void> {
     try {
         const res = await window.gapi.client.sheets.spreadsheets.values.get({
@@ -144,7 +182,7 @@ export async function fetchResponseForm(dispatch: Dispatch<{}>): Promise<void> {
     } catch (err) {
         dispatch({
             type: FETCH_GAPI_RESPONSE_FORM_FAIL,
-            payload: err.result.error,
+            payload: err.error,
         });
     }
 }
@@ -165,7 +203,7 @@ export function initGAPI(dispatch: Dispatch<{}>): void {
             } catch (err) {
                 dispatch({
                     type: FETCH_GAPI_RESPONSE_FORM_FAIL,
-                    payload: err.result.error,
+                    payload: err.error,
                 });
             }
         });
@@ -177,4 +215,5 @@ export async function clearError(dispatch: Dispatch<{}>): Promise<void> {
     dispatch({ type: CLEAR_ERRORS_1 });
     dispatch({ type: CLEAR_ERRORS_2 });
     dispatch({ type: CLEAR_ERRORS_3 });
+    dispatch({ type: CLEAR_ERRORS_4 });
 }

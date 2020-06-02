@@ -1,5 +1,97 @@
 @import '../../cross_import_lesshat.less';
 
+body {
+    .popup-overlay {
+        display: none;
+    }
+
+    &.popup-opened {
+        overflow: hidden;
+
+        .popup-overlay {
+            position: fixed;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            left: 0;
+            top: 0;
+            background: #000000aa;
+            z-index: 999;
+            .display(flex);
+            .align-items(center);
+
+            & > .popup {
+                background: #6ba4a5;
+                max-width: 80%;
+                max-height: 90%;
+                border-radius: 20px;
+                margin: 0 auto;
+                overflow: auto;
+                padding: 0;
+                display: block;
+                .box-shadow(0 0 10px 10px rgba(0, 0, 0, 1));
+
+                & > .container {
+                    background-color: rgba(255, 255, 255, 0.5);
+                    margin: 0;
+                    height: 100%;
+                    width: 100%;
+                    max-width: 500px;
+                    padding: 20px 10px;
+                    position: relative;
+
+                    & > div {
+                        text-align: center;
+                        vertical-align: middle;
+                        border-bottom: 5px double #ffffff;
+                        margin: 0 0 30px;
+
+                        &.original {
+                            border-bottom: 10px double #ffffff;
+                            padding: 0;
+                        }
+
+                        img {
+                            max-width: 20%;
+                        }
+
+                        h5 {
+                            font-style: italic;
+                            margin-bottom: 10px;
+                        }
+
+                        &:last-child {
+                            margin-bottom: 0;
+                            border-bottom: 0;
+                        }
+                    }
+
+                    button.close {
+                        display: block;
+                        text-align: center;
+                        margin: 0 auto;
+                        text-decoration: none;
+                        cursor: pointer;
+                        font-size: 20px;
+                        background-color: #05292e;
+                        padding: 10px;
+                        border-radius: 5px;
+                        color: #ffffff;
+                        .transition(all 0.2s ease-in-out);
+
+                        &:hover,
+                        &:focus {
+                            color: #05292e;
+                            background-color: #eeeeee;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .deck-list {
     form.filter {
         margin-bottom: 30px;
@@ -199,6 +291,46 @@
 
                         img {
                             height: 50px;
+                        }
+
+                        button {
+                            display: block;
+                            text-align: center;
+                            margin: 0 auto;
+                            text-decoration: none;
+                            cursor: pointer;
+                            font-size: 15px;
+                            background-color: #05292e;
+                            padding: 5px;
+                            border-radius: 5px;
+                            color: #ffffff;
+                            .transition(all 0.2s ease-in-out);
+                            position: relative;
+
+                            &:hover,
+                            &:focus {
+                                color: #05292e;
+                                background-color: #eeeeee;
+
+                                &::after {
+                                    display: inline-block;
+                                    opacity: 1;
+                                }
+                            }
+
+                            &::after {
+                                pointer-events: none;
+                                color: #05292e;
+                                background-color: #eeeeeedd;
+                                border-radius: 3px;
+                                content: 'Click to Show';
+                                position: absolute;
+                                left: 40px;
+                                opacity: 0;
+                                white-space: nowrap;
+                                padding: 3px;
+                                .transition(all 0.2s ease-in-out);
+                            }
                         }
                     }
 

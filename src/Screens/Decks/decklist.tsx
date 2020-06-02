@@ -1,13 +1,20 @@
-import React from 'react';
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/jsx-indent */
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '../../Components/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
-import { fetchDecks, fetchDices, clearError } from '../Misc/fetchData';
+import {
+    fetchDecks,
+    fetchDices,
+    fetchAlts,
+    clearError,
+} from '../Misc/fetchData';
 import Dice from '../../Components/Dice/dice';
 import Dicelist from '../../Components/Dice/dicelist';
 import './decklist.less';
@@ -22,11 +29,18 @@ export default function DeckList({
     const dispatch = useDispatch();
     const selection = useSelector((state: RootState) => state);
     const { error } =
-        selection.fetchDecksReducer || selection.fetchDicesReducer;
-    let { decks } = selection.fetchDecksReducer;
+        selection.fetchDecksReducer ||
+        selection.fetchDicesReducer ||
+        selection.fetchAltsReducer;
+    const { decks } = selection.fetchDecksReducer;
     const { dices } = selection.fetchDicesReducer;
     const { filter } = selection.filterReducer;
+    const { alts } = selection.fetchAltsReducer;
     const dicelist = Dicelist(dices);
+    const [findAlt, setFindAlt] = useState({
+        list: [] as number[],
+        open: false,
+    });
 
     if (dicelist.common.length > 0 && filter.legendary.length === 0) {
         dispatch({
@@ -48,7 +62,7 @@ export default function DeckList({
     const customSearch =
         dices?.find(dice => dice.name === filter.customSearch)?.id || 0;
 
-    let jsx = <div />;
+    let jsx;
     if (
         decks &&
         dicelist.common.length > 0 &&
@@ -75,8 +89,21 @@ export default function DeckList({
                 }}
             />
         );
-        const deckKeys = Object.keys(decks[0]);
-        decks = decks
+
+        const options = [
+            alts?.find(alt => alt.id === findAlt.list[0]),
+            alts?.find(alt => alt.id === findAlt.list[1]),
+            alts?.find(alt => alt.id === findAlt.list[2]),
+            alts?.find(alt => alt.id === findAlt.list[3]),
+            alts?.find(alt => alt.id === findAlt.list[4]),
+        ];
+        if (findAlt.open) {
+            document.body.classList.add('popup-opened');
+        } else {
+            document.body.classList.remove('popup-opened');
+        }
+
+        const filteredDeck = decks
             .filter(deckData => {
                 const deck = [
                     deckData.slot1,
@@ -94,15 +121,30 @@ export default function DeckList({
                 );
             })
             .map(deck => {
-                const tempDeck = deck;
-                if (!tempDeck.updated) {
-                    tempDeck.updated = '-';
-                }
-                return tempDeck;
+                return {
+                    id: deck.id,
+                    type: deck.type,
+                    rating: deck.rating,
+                    slot1: deck.slot1,
+                    slot2: deck.slot2,
+                    slot3: deck.slot3,
+                    slot4: deck.slot4,
+                    slot5: deck.slot5,
+                    alternatives: [
+                        deck.slot1,
+                        deck.slot2,
+                        deck.slot3,
+                        deck.slot4,
+                        deck.slot5,
+                    ],
+                    added: deck.added,
+                    updated: deck.updated ? deck.updated : '-',
+                };
             });
-        while (decks.length < 9 && decks.length !== 0) {
-            decks.push({
-                id: decks.length,
+        const deckKeys = Object.keys(filteredDeck[0]);
+        while (filteredDeck.length < 9 && filteredDeck.length !== 0) {
+            filteredDeck.push({
+                id: filteredDeck.length,
                 type: '-',
                 rating: 0,
                 slot1: 0,
@@ -110,12 +152,83 @@ export default function DeckList({
                 slot3: 0,
                 slot4: 0,
                 slot5: 0,
+                alternatives: [],
                 added: '-',
                 updated: '-',
             });
         }
         jsx = (
             <>
+                <div
+                    className='popup-overlay'
+                    role='button'
+                    tabIndex={0}
+                    onClick={(evt): void => {
+                        const target = evt.target as HTMLDivElement;
+                        if (target.classList.contains('popup-overlay')) {
+                            setFindAlt({
+                                list: [] as number[],
+                                open: false,
+                            });
+                        }
+                    }}
+                    onKeyUp={(evt): void => {
+                        if (evt.key === 'Escape') {
+                            setFindAlt({
+                                list: [] as number[],
+                                open: false,
+                            });
+                        }
+                    }}
+                >
+                    <div className='popup'>
+                        <div className='container'>
+                            <h3>Alternatives List</h3>
+                            <div className='original'>
+                                <Dice dice={findAlt.list[0]} />
+                                <Dice dice={findAlt.list[1]} />
+                                <Dice dice={findAlt.list[2]} />
+                                <Dice dice={findAlt.list[3]} />
+                                <Dice dice={findAlt.list[4]} />
+                            </div>
+                            {options?.map((alt, i) => (
+                                <div key={Number(new Date()) + Math.random()}>
+                                    <Dice dice={findAlt.list[i]} />
+                                    <h4>
+                                        {alt?.desc
+                                            ? alt.desc
+                                            : 'You should not need to replace this.'}
+                                    </h4>
+                                    {alt?.desc ? <h5>Alternatives :</h5> : null}
+                                    <div className='replacement'>
+                                        {options[
+                                            i
+                                        ]?.list?.map((altDice: number) =>
+                                            altDice ? (
+                                                <Dice
+                                                    dice={altDice}
+                                                    key={altDice}
+                                                />
+                                            ) : null
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                            <button
+                                type='button'
+                                className='close'
+                                onClick={(): void =>
+                                    setFindAlt({
+                                        list: [] as number[],
+                                        open: false,
+                                    })
+                                }
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <form className='filter'>
                     <div className='top-label'>
                         <label htmlFor='pvepvp'>
@@ -213,20 +326,34 @@ export default function DeckList({
                             </tr>
                         </thead>
                         <tbody>
-                            {decks.length > 0 ? (
-                                decks.map(deck => (
+                            {filteredDeck.length > 0 ? (
+                                filteredDeck.map(deck => (
                                     <tr key={`deck-${deck.id}`}>
                                         {Object.values(deck).map((data, i) => (
                                             <td
                                                 key={`deck-${deck.id}-datapoint-${deckKeys[i]}`}
                                             >
-                                                {/* eslint-disable-next-line no-nested-ternary */}
                                                 {deckKeys[i].match(
                                                     /^slot[1-5]$/
                                                 ) ? (
                                                     <Dice dice={Number(data)} />
                                                 ) : deck.type === '-' ? (
                                                     '-'
+                                                ) : deckKeys[i] ===
+                                                  'alternatives' ? (
+                                                    <button
+                                                        type='button'
+                                                        onClick={(): void => {
+                                                            setFindAlt({
+                                                                list: data as number[],
+                                                                open: true,
+                                                            });
+                                                        }}
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={faExchangeAlt}
+                                                        />
+                                                    </button>
                                                 ) : (
                                                     data
                                                 )}
@@ -252,6 +379,7 @@ export default function DeckList({
                     clearError(dispatch);
                     fetchDecks(dispatch);
                     fetchDices(dispatch);
+                    fetchAlts(dispatch);
                 }}
             />
         );
