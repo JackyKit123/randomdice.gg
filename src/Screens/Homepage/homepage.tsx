@@ -30,6 +30,21 @@ export default function Homepage(): JSX.Element {
                     <br />
                     <br />
                     <br />
+                    <h3 className='welcome'>News</h3>
+                    <p>
+                        This is not a stable release of the website. More
+                        features are still under development. You may
+                        encountered some minor glitches when browing. The
+                        website may also have unexpected downtime. You can have
+                        a peak through of this website. For issue with the
+                        website, due to the webmaster email has not yet been set
+                        up, please do not hesitate to dm or mention
+                        JackyKit#0333 in discord. I hope you enjoy browsing this
+                        website.
+                    </p>
+                    <br />
+                    <br />
+                    <br />
                     <h3 className='menu'>Menu</h3>
                     <Menu menuList={menu} />
                 </>

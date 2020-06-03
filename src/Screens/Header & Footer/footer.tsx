@@ -12,7 +12,7 @@ export default function Footer(): JSX.Element {
         discord: {
             name: 'discord',
             icon: faDiscord,
-            hyperlink: 'https://discord.gg/yfhWny9',
+            hyperlink: 'https://discord.gg/zQj6tCM',
         },
         reddit: {
             name: 'reddit',
@@ -59,7 +59,15 @@ export default function Footer(): JSX.Element {
                         <div className='footer-link'>
                             <Link to='/about/terms'>Terms and Conditions</Link>
                             <Link to='/about/privacy'>Privacy Policy</Link>
-                            <Link to='/about'>About Us</Link>
+                            {/* <Link disabled to='/about'>About Us</Link> */}
+                            <span
+                                style={{
+                                    marginLeft: '10px',
+                                    cursor: 'not-allowed',
+                                }}
+                            >
+                                About Us
+                            </span>
                         </div>
                     </div>
                 </div>
