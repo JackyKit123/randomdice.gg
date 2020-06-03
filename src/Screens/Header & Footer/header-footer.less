@@ -334,14 +334,16 @@ body {
 
         & > .container {
             bottom: 0;
-            height: 100px;
             background-color: #05292e;
             color: #ffffff;
+
+            &.upper {
+                height: 100px;
+            }
 
             & > .footerBar {
                 display: block;
                 position: relative;
-                height: 100%;
 
                 & > .container {
                     text-align: center;
@@ -379,6 +381,42 @@ body {
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+            }
+
+            &.lower {
+                @media @desktop {
+                    height: 25px;
+                }
+                background-color: #525252;
+
+                & > .footerBar > .container {
+                    padding: 0 10px;
+                    height: 100%;
+                    line-height: 25px;
+                    font-size: 12px;
+                    font-weight: 100;
+
+                    a {
+                        color: #ffffff;
+                        margin-left: 10px;
+                        .transition(color 0.2s ease-in-out);
+
+                        &:hover,
+                        &:active {
+                            color: #05292e;
+                        }
+                    }
+
+                    @media @desktop {
+                        #copyright {
+                            float: left;
+                        }
+
+                        .footer-link {
+                            float: right;
                         }
                     }
                 }

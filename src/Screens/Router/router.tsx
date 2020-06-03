@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { Route } from 'react-router-dom';
 import NoMatch from '../NoMatch/NoMatch';
+import PrivacyPolicy from '../Legal/privacyPolicy';
+import Terms from '../Legal/terms';
 import { Menu } from '../Misc/menuConfig';
 
 const mapRouter = (
@@ -30,9 +32,10 @@ const mapRouter = (
                 return null;
             })
             .flat();
-    return mapThis(rootMenu).concat(
-        <Route key='Router-path-404' component={NoMatch} />
-    );
+    return mapThis(rootMenu)
+        .concat(<Route path='/about/privacy' exact component={PrivacyPolicy} />)
+        .concat(<Route path='/about/terms' exact component={Terms} />)
+        .concat(<Route key='Router-path-404' component={NoMatch} />);
 };
 
 export default mapRouter;

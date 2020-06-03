@@ -5,6 +5,7 @@ import {
     faDiscord,
     faWikipediaW,
 } from '@fortawesome/free-brands-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function Footer(): JSX.Element {
     const communityList = {
@@ -26,7 +27,7 @@ export default function Footer(): JSX.Element {
     };
     return (
         <footer>
-            <div className='container'>
+            <div className='container upper'>
                 <div className='footerBar'>
                     <div className='container'>
                         Join the community!
@@ -44,6 +45,21 @@ export default function Footer(): JSX.Element {
                                     </a>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className='container lower'>
+                <div className='footerBar'>
+                    <div className='container'>
+                        <span id='copyright'>
+                            &#169; Copyright {new Date().getFullYear()} Random
+                            Dice Community
+                        </span>
+                        <div className='footer-link'>
+                            <Link to='/about/terms'>Terms and Conditions</Link>
+                            <Link to='/about/privacy'>Privacy Policy</Link>
+                            <Link to='/about'>About Us</Link>
                         </div>
                     </div>
                 </div>
