@@ -37,6 +37,8 @@ export default function Footer(): JSX.Element {
                                     <a
                                         href={community.hyperlink}
                                         className={community.name}
+                                        target='_blank'
+                                        rel='noopener noreferrer'
                                     >
                                         <FontAwesomeIcon
                                             icon={community.icon}
