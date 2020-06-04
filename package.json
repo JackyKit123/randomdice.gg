@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "7.9.0",
+    "@babel/core": "^7.10.2",
+    "@babel/register": "^7.10.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
@@ -71,6 +72,7 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
+    "react-router-ga": "^1.2.3",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "reset-css": "^5.0.1",

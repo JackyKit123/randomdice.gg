@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import NoMatch from '../NoMatch/NoMatch';
 import PrivacyPolicy from '../Legal/privacyPolicy';
 import Terms from '../Legal/terms';
@@ -33,9 +33,25 @@ const mapRouter = (
             })
             .flat();
     return mapThis(rootMenu)
-        .concat(<Route path='/about/privacy' exact component={PrivacyPolicy} />)
-        .concat(<Route path='/about/terms' exact component={Terms} />)
+        .concat(
+            <Route
+                path='/about/privacy'
+                key='/about/privacy'
+                exact
+                component={PrivacyPolicy}
+            />
+        )
+        .concat(
+            <Route
+                path='/about/terms'
+                key='/about/terms'
+                exact
+                component={Terms}
+            />
+        )
         .concat(<Route key='Router-path-404' component={NoMatch} />);
 };
 
-export default mapRouter;
+export default function router(menu: Menu[]): JSX.Element {
+    return <Switch>{mapRouter(menu)}</Switch>;
+}
