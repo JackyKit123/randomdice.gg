@@ -7,5 +7,6 @@ https://randomdice.gg/calculator/combo
 https://randomdice.gg/calculator/solar
 https://randomdice.gg/calculator/gears
 https://randomdice.gg/calculator/gold
+https://randomdice.gg/calculator/dice
 https://randomdice.gg/about/privacy
 https://randomdice.gg/about/terms

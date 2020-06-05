@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Analytics from 'react-router-ga';
 import { fetchDecks, fetchDices, initGAPI, fetchAlts } from './Misc/fetchData';
