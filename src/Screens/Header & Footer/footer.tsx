@@ -61,15 +61,7 @@ export default function Footer(): JSX.Element {
                         <div className='footer-link'>
                             <Link to='/about/terms'>Terms and Conditions</Link>
                             <Link to='/about/privacy'>Privacy Policy</Link>
-                            {/* <Link disabled to='/about'>About Us</Link> */}
-                            <span
-                                style={{
-                                    marginLeft: '10px',
-                                    cursor: 'not-allowed',
-                                }}
-                            >
-                                About Us
-                            </span>
+                            <Link to='/about/us'>About Us</Link>
                         </div>
                     </div>
                 </div>

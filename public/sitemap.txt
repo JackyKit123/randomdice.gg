@@ -10,3 +10,5 @@ https://randomdice.gg/calculator/gold
 https://randomdice.gg/calculator/dice
 https://randomdice.gg/about/privacy
 https://randomdice.gg/about/terms
+https://randomdice.gg/about/us
+https://randomdice.gg/about/credit

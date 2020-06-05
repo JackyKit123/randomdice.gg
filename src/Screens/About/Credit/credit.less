@@ -1,0 +1,37 @@
+@import '../../../cross_import_lesshat.less';
+
+.credit {
+    font-size: 20px;
+    line-height: 25px;
+
+    h3 {
+        margin: 40px auto;
+    }
+
+    ul {
+        text-align: center;
+
+        li {
+            margin: 15px 0;
+
+            & > .img-container {
+                display: inline-block;
+                margin-left: 20px;
+                border-radius: 50%;
+                overflow: hidden;
+                height: 100px;
+                width: 100px;
+                vertical-align: middle;
+
+                @media @mobile {
+                    display: block;
+                    margin: 10px auto;
+                }
+
+                & > img {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

@@ -31,11 +31,17 @@ export default function Homepage(): JSX.Element {
                     <br />
                     <br />
                     <br />
-                    <h3 className='welcome'>News</h3>
+                    <h3 className='welcome'>What&apos;s New?</h3>
                     <p style={{ textAlign: 'center' }}>
                         A Dice Stat Calculator is added. You can take a look at
                         this by clicking the link{' '}
                         <Link to='/calculator/dice'>HERE</Link>.
+                    </p>
+                    <p style={{ textAlign: 'center' }}>
+                        An about us page is added. You can check out our message
+                        and the credits into creating the website.{' '}
+                        <Link to='/about/us'>About US</Link>{' '}
+                        <Link to='/about/credit'>Credit</Link>
                     </p>
                     <br />
                     <br />
