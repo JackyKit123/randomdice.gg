@@ -25,7 +25,11 @@ body {
                 color: #6ba4a5;
                 display: block;
                 margin-bottom: 20px;
-                min-width: 25%;
+                width: 25%;
+
+                @media @mobile {
+                    width: 50%;
+                }
 
                 &:first-of-type {
                     display: none;
