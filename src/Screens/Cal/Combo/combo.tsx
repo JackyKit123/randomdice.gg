@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+    VictoryTheme,
+    VictoryChart,
+    VictoryAxis,
+    VictoryLine,
+    VictoryLabel,
+    VictoryLegend,
+} from 'victory';
 import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
@@ -7,6 +15,7 @@ import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Components/Redux Storage/store';
 import { clearError, fetchDices } from '../../Misc/fetchData';
 import '../cal.less';
+import './combo.less';
 
 export default function ComboCaculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -15,105 +24,241 @@ export default function ComboCaculator(): JSX.Element {
     );
     const { error, dices } = selection;
     const [filter, setFilter] = useState({
-        class: 7,
-        level: 1,
-        combo: 0,
         crit: 111,
+        combo: {
+            class: 7,
+            level: 1,
+            count: 0,
+        },
+        critical: {
+            class: 3,
+            level: 1,
+            pip: 0,
+        },
     });
-    let jsx = <div />;
-    const data = dices?.find(dice => dice.name === 'Combo');
+    let jsx;
+    const comboData = dices?.find(dice => dice.name === 'Combo');
+    const critData = dices?.find(dice => dice.name === 'Critical');
+
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
         filter.crit > 2036;
-    const isInvalidCombo = !Number.isInteger(filter.combo) || filter.combo < 0;
+    const isInvalidCombo =
+        !Number.isInteger(filter.combo.count) || filter.combo.count < 0;
     const invalidInput = isInvalidCombo || isInvalidCrit;
-    if (data) {
+
+    if (comboData && critData) {
         const comboDiceData = {
-            baseAtk: data.atk,
-            baseAtkPerClass: data.cupAtk,
-            baseAtkPerLevel: data.pupAtk,
-            atkSpd: data.spd,
-            baseComboAtk: data.eff1,
-            ComboAtkPerClass: data.cupEff1,
-            ComboAtkPerLevel: data.pupEff1,
+            baseAtk: comboData.atk,
+            baseAtkPerClass: comboData.cupAtk,
+            baseAtkPerLevel: comboData.pupAtk,
+            atkSpd: comboData.spd,
+            baseComboAtk: comboData.eff1,
+            ComboAtkPerClass: 2 /* comboData.cupEff1 Combo Dice Data is mistken */,
+            ComboAtkPerLevel: comboData.pupEff1,
         };
+        const critDiceData = {
+            baseBuff: critData.eff1,
+            buffPerClass: critData.cupEff1,
+            buffPerLevel: critData.pupEff1,
+        };
+
         const dmgPerCombo =
             comboDiceData.baseComboAtk +
-            comboDiceData.ComboAtkPerClass * (filter.class - 7) +
-            comboDiceData.ComboAtkPerLevel * (filter.level - 1);
+            comboDiceData.ComboAtkPerClass * (filter.combo.class - 7) +
+            comboDiceData.ComboAtkPerLevel * (filter.combo.level - 1);
         const baseAtk =
             comboDiceData.baseAtk +
-            comboDiceData.baseAtkPerClass * (filter.class - 7) +
-            comboDiceData.baseAtkPerLevel * (filter.level - 1);
+            comboDiceData.baseAtkPerClass * (filter.combo.class - 7) +
+            comboDiceData.baseAtkPerLevel * (filter.combo.level - 1);
+        const critBuff =
+            ((filter.critical.class - 3) * critDiceData.buffPerClass +
+                critDiceData.baseBuff) *
+                filter.critical.pip +
+            critDiceData.buffPerLevel * (filter.critical.level - 1);
+        const critMultiplier = filter.critical.pip
+            ? (5 + critBuff) / 100
+            : 0.05;
+
         const dmg =
-            (dmgPerCombo / 2) * (filter.combo ** 2 - filter.combo) + baseAtk;
-        const dps = dmg * 0.95 + (dmg * 0.05 * filter.crit) / 100;
+            (dmgPerCombo / 2) * (filter.combo.count ** 2 - filter.combo.count) +
+            baseAtk;
+        const dps =
+            dmg * (1 - critMultiplier) +
+            (dmg * critMultiplier * filter.crit) / 100;
+
+        const dpsPerComboCount = (count: number, useCrit: boolean): number => {
+            if (invalidInput) {
+                return 0;
+            }
+            const dmgInFn = (dmgPerCombo / 2) * (count ** 2 - count) + baseAtk;
+            const critMultiplierInFn =
+                useCrit && filter.critical.pip ? (5 + critBuff) / 100 : 0.05;
+            return (
+                dmgInFn * (1 - critMultiplierInFn) +
+                (dmgInFn * critMultiplierInFn * filter.crit) / 100
+            );
+        };
+
         jsx = (
             <>
                 <div className='dice-container'>
                     <div>
                         <Dice dice='Combo' />
-                        <h3 className='desc'>{data.desc}</h3>
+                        <h3 className='desc'>{comboData.desc}</h3>
+                        <form className='filter'>
+                            <label htmlFor='class'>
+                                <span>Class :</span>
+                                <select
+                                    name='class'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.combo.class = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                </select>
+                            </label>
+                            <label htmlFor='combo level'>
+                                <span>Level :</span>
+                                <select
+                                    name='combo level'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.combo.level = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </label>
+                            <label htmlFor='combo count'>
+                                <span>Combo:</span>
+                                <input
+                                    type='textbox'
+                                    name='combo count'
+                                    className={isInvalidCombo ? 'invalid' : ''}
+                                    defaultValue={0}
+                                    onChange={(
+                                        evt: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
+                                        const val = Number(evt.target.value);
+                                        filter.combo.count = val;
+                                        setFilter({ ...filter });
+                                    }}
+                                />
+                            </label>
+                        </form>
+                    </div>
+                    <div>
+                        <Dice dice='Critical' />
+                        <h3 className='desc'>{critData.desc}</h3>
+                        <form className='filter'>
+                            <label htmlFor='crit class'>
+                                <span>Class :</span>
+                                <select
+                                    name='crit class'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.critical.class = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                </select>
+                            </label>
+                            <label htmlFor='crit level'>
+                                <span>Level :</span>
+                                <select
+                                    name='crit level'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.critical.level = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </label>
+                            <label htmlFor='crit pip'>
+                                <span>Pip :</span>
+                                <select
+                                    name='crit pip'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.critical.pip = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                </select>
+                            </label>
+                        </form>
                     </div>
                 </div>
                 <form className='filter'>
-                    <label htmlFor='class'>
-                        <span>Class :</span>
-                        <select
-                            name='class'
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLSelectElement>
-                            ): void => {
-                                filter.class = Number(evt.target.value);
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                            <option>11</option>
-                            <option>12</option>
-                            <option>13</option>
-                            <option>14</option>
-                            <option>15</option>
-                        </select>
-                    </label>
-                    <label htmlFor='level'>
-                        <span>Level :</span>
-                        <select
-                            name='level'
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLSelectElement>
-                            ): void => {
-                                filter.level = Number(evt.target.value);
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </label>
-                    <label htmlFor='combo count'>
-                        <span>Combo:</span>
-                        <input
-                            type='textbox'
-                            name='combo count'
-                            className={isInvalidCombo ? 'invalid' : ''}
-                            defaultValue={0}
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLInputElement>
-                            ): void => {
-                                const val = Number(evt.target.value);
-                                filter.combo = val;
-                                setFilter({ ...filter });
-                            }}
-                        />
-                    </label>
                     <label htmlFor='crit dmg'>
                         <span>Crit%:</span>
                         <input
@@ -167,6 +312,92 @@ export default function ComboCaculator(): JSX.Element {
                             disabled
                         />
                     </div>
+                </div>
+                <div className='chart-container'>
+                    <VictoryChart
+                        maxDomain={{
+                            x: filter.combo.count + 10 || 10,
+                            y: dpsPerComboCount(filter.combo.count + 10, true),
+                        }}
+                        theme={VictoryTheme.material}
+                    >
+                        <VictoryLabel
+                            text='DPS Per Combo Pip'
+                            x={175}
+                            y={30}
+                            textAnchor='middle'
+                        />
+                        <VictoryAxis
+                            label='Combo Count'
+                            fixLabelOverlap
+                            style={{
+                                axisLabel: {
+                                    padding: 30,
+                                },
+                            }}
+                        />
+                        <VictoryAxis
+                            dependentAxis
+                            tickFormat={(t): string => {
+                                switch (true) {
+                                    case t > 999999999999999999999:
+                                        return t;
+                                    case t > 999999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000000
+                                        ) / 10}T`;
+                                    case t > 999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000
+                                        ) / 10}T`;
+                                    case t > 999999999999:
+                                        return `${Math.round(t / 100000000000) /
+                                            10}G`;
+                                    case t > 999999999:
+                                        return `${Math.round(t / 100000000) /
+                                            10}B`;
+                                    case t > 999999:
+                                        return `${Math.round(t / 100000) /
+                                            10}M`;
+                                    case t > 999:
+                                        return `${Math.round(t / 100) / 10}K`;
+                                    default:
+                                        return t;
+                                }
+                            }}
+                        />
+                        <VictoryLegend
+                            x={50}
+                            y={70}
+                            orientation='vertical'
+                            gutter={20}
+                            colorScale={['#ff0000', '#111111']}
+                            data={[
+                                { name: 'Crit Buffed' },
+                                { name: 'No Buff' },
+                            ]}
+                        />
+                        <VictoryLine
+                            name='Crit Buffed'
+                            samples={100}
+                            style={{
+                                data: { stroke: '#ff0000', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number =>
+                                dpsPerComboCount(d.x, true)
+                            }
+                        />
+                        <VictoryLine
+                            name='No Buff'
+                            samples={100}
+                            style={{
+                                data: { stroke: '#111111', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number =>
+                                dpsPerComboCount(d.x, false)
+                            }
+                        />
+                    </VictoryChart>
                 </div>
             </>
         );

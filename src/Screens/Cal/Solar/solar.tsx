@@ -466,7 +466,6 @@ export default function SolarCaculator(): JSX.Element {
                         <input
                             type='textbox'
                             name='duration'
-                            maxLength={3}
                             style={
                                 !isInvalidDuration && filter.duration > 200
                                     ? {
@@ -498,16 +497,6 @@ export default function SolarCaculator(): JSX.Element {
                     <span className='invalid-warning'>
                         Invalid Time Input! Acceptable input is{' '}
                         <strong>positive integer</strong>.
-                    </span>
-                ) : (
-                    ''
-                )}
-                {filter.duration > 200 ? (
-                    <span className='invalid-warning'>
-                        Warning! You have entered a duration larger than 200
-                        seconds, a normal wave should not exceed 120 seconds,
-                        entering a number too large will cause intensive
-                        rendering.
                     </span>
                 ) : (
                     ''
@@ -545,9 +534,19 @@ export default function SolarCaculator(): JSX.Element {
                             dependentAxis
                             tickFormat={(t): string => {
                                 switch (true) {
+                                    case t > 999999999999999999999:
+                                        return t;
+                                    case t > 999999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000000
+                                        ) / 10}T`;
+                                    case t > 999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000
+                                        ) / 10}T`;
                                     case t > 999999999999:
                                         return `${Math.round(t / 100000000000) /
-                                            10}T`;
+                                            10}G`;
                                     case t > 999999999:
                                         return `${Math.round(t / 100000000) /
                                             10}B`;
@@ -581,7 +580,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                         <VictoryLine
                             name='No Buff'
-                            samples={filter.duration * 10}
+                            samples={100}
                             style={{
                                 data: { stroke: '#111111', strokeWidth: 1 },
                             }}
@@ -591,7 +590,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                         <VictoryLine
                             name='Light Buffed'
-                            samples={filter.duration * 10}
+                            samples={100}
                             style={{
                                 data: { stroke: '#ffff00', strokeWidth: 1 },
                             }}
@@ -606,7 +605,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                         <VictoryLine
                             name='Crit Buffed'
-                            samples={filter.duration * 10}
+                            samples={100}
                             style={{
                                 data: { stroke: '#ff0000', strokeWidth: 1 },
                             }}
@@ -621,7 +620,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                         <VictoryLine
                             name='Double Buffed'
-                            samples={filter.duration * 10}
+                            samples={100}
                             style={{
                                 data: { stroke: '#ffa500', strokeWidth: 1 },
                             }}
@@ -666,9 +665,19 @@ export default function SolarCaculator(): JSX.Element {
                             dependentAxis
                             tickFormat={(t): string => {
                                 switch (true) {
+                                    case t > 999999999999999999999:
+                                        return t;
+                                    case t > 999999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000000
+                                        ) / 10}T`;
+                                    case t > 999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000
+                                        ) / 10}T`;
                                     case t > 999999999999:
                                         return `${Math.round(t / 100000000000) /
-                                            10}T`;
+                                            10}G`;
                                     case t > 999999999:
                                         return `${Math.round(t / 100000000) /
                                             10}B`;
@@ -684,7 +693,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                         <VictoryLine
                             name='No Buff'
-                            samples={filter.duration * 10}
+                            samples={100}
                             style={{
                                 data: { stroke: '#111111', strokeWidth: 1 },
                             }}
@@ -699,7 +708,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                         <VictoryLine
                             name='Light Buffed'
-                            samples={filter.duration * 10}
+                            samples={100}
                             style={{
                                 data: { stroke: '#ffff00', strokeWidth: 1 },
                             }}
@@ -714,7 +723,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                         <VictoryLine
                             name='Crit Buffed'
-                            samples={filter.duration * 10}
+                            samples={100}
                             style={{
                                 data: { stroke: '#ff0000', strokeWidth: 1 },
                             }}
@@ -729,7 +738,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                         <VictoryLine
                             name='Double Buffed'
-                            samples={filter.duration * 10}
+                            samples={100}
                             style={{
                                 data: { stroke: '#ffa500', strokeWidth: 1 },
                             }}

@@ -31,17 +31,27 @@ export default function Homepage(): JSX.Element {
                     <br />
                     <br />
                     <br />
-                    <h3 className='welcome'>What&apos;s New?</h3>
-                    <p style={{ textAlign: 'center' }}>
+                    <h3 className='news'>What&apos;s New?</h3>
+                    <p>
                         A Dice Stat Calculator is added. You can take a look at
                         this by clicking the link{' '}
                         <Link to='/calculator/dice'>HERE</Link>.
                     </p>
-                    <p style={{ textAlign: 'center' }}>
+                    <p>
                         An about us page is added. You can check out our message
                         and the credits into creating the website.{' '}
                         <Link to='/about/us'>About US</Link>{' '}
                         <Link to='/about/credit'>Credit</Link>
+                    </p>
+                    <p>
+                        A graph is now added to the combo calculator, You may
+                        also now calcuate the combo dps with crit dice. Check it
+                        out at{' '}
+                        <Link to='/calculator/combo'>Combo Calculator</Link>!
+                    </p>
+                    <p>
+                        Solar calculator graphing function is optimized to
+                        reduce lag.
                     </p>
                     <br />
                     <br />
