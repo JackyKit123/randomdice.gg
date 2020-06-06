@@ -103,6 +103,20 @@ export default function DeckList({
             document.body.classList.remove('popup-opened');
         }
 
+        const deckKeys = [
+            'id',
+            'type',
+            'rating',
+            'slot1',
+            'slot2',
+            'slot3',
+            'slot4',
+            'slot5',
+            'alternatives',
+            'added',
+            'updated',
+        ];
+
         const filteredDeck = decks
             .filter(deckData => {
                 const deck = [
@@ -141,7 +155,6 @@ export default function DeckList({
                     updated: deck.updated ? deck.updated : '-',
                 };
             });
-        const deckKeys = Object.keys(filteredDeck[0]);
         while (filteredDeck.length < 9 && filteredDeck.length !== 0) {
             filteredDeck.push({
                 id: filteredDeck.length,
