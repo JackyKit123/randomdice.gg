@@ -101,7 +101,7 @@ export default function critData(): JSX.Element {
                     . The data you submitted will be immediately added below
                     upon refreshing.
                 </p>
-                <div className='filter-divisor' />
+                <div className='divisor' />
                 <div className='chart-container'>
                     <VictoryChart
                         theme={VictoryTheme.material}
@@ -233,7 +233,7 @@ export default function critData(): JSX.Element {
                         />
                     </VictoryChart>
                 </div>
-                <div className='filter-divisor' />
+                <div className='divisor' />
                 <div className='table-container'>
                     <table className='horizontal'>
                         <tbody>

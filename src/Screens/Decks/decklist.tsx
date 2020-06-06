@@ -328,7 +328,7 @@ export default function DeckList({
                         </label>
                     </div>
                 </form>
-                <div className='filter-divisor' />
+                <div className='divisor' />
                 <div className='table-container'>
                     <table>
                         <thead>

@@ -292,7 +292,7 @@ export default function ComboCaculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                <div className='filter-divisor' />
+                <div className='divisor' />
                 <div className='result'>
                     <div className='dmg'>
                         <span>Damage per Combo pip:</span>

@@ -212,7 +212,7 @@ export default function GoldImageCaculator(): JSX.Element {
                     ) : (
                         ''
                     )}
-                    <div className='filter-divisor' />
+                    <div className='divisor' />
                     <div className='result'>
                         <div>
                             <span>Target number of runs :</span>

@@ -501,7 +501,7 @@ export default function SolarCaculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                <div className='filter-divisor' />
+                <div className='divisor' />
                 <div className='chart-container'>
                     <VictoryChart
                         maxDomain={{
@@ -771,7 +771,7 @@ export default function SolarCaculator(): JSX.Element {
                         />
                     </VictoryChart>
                 </div>
-                <div className='filter-divisor' />
+                <div className='divisor' />
                 <div className='result'>
                     <div className='title'>
                         Cumulative Damage Over {filter.duration} seconds.

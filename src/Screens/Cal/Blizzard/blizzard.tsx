@@ -159,7 +159,7 @@ export default function BlizzardCaculator(): JSX.Element {
                         </select>
                     </label>
                 </form>
-                <div className='filter-divisor' />
+                <div className='divisor' />
                 <div className='result'>
                     <div>
                         <span>Slow Effect of 1st Blizzard:</span>
