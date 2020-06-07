@@ -72,6 +72,21 @@ export default function GoldImageCaculator(): JSX.Element {
             className='cal gold-cal'
             content={
                 <>
+                    <p>
+                        This is a calculator for the estimated time need to
+                        grind certain amount of gold in Co-op quick run.
+                    </p>
+                    <p>
+                        By default, there are 3 modes: Gear deck wave 30 run (10
+                        mins), Solar/Time wave 56 runs(18mins), Combo Mirror
+                        wave 76 run(25mins). You can also enter a custom target
+                        wave goal.
+                    </p>
+                    <p>
+                        Keep in mind that the calculator assume average 20
+                        seconds per wave.
+                    </p>
+                    <div className='divisor' />
                     <img src={GoldImage} alt='gold' />
                     <form className='filter'>
                         <label htmlFor='class'>

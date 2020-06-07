@@ -71,98 +71,113 @@ export default function DiceStat(): JSX.Element {
                     100
             ) / 100;
         jsx = (
-            <div className='container'>
-                <div className='upper'>
-                    <div className='img-container'>
-                        <Dice dice={dice.name} />
-                    </div>
-                    <label htmlFor='class'>
-                        Class :{' '}
-                        <select
-                            onChange={(evt): void => {
-                                filter.class = Number(evt.target.value);
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            {Array(15 - minClass + 1)
-                                .fill('')
-                                .map((_, i) => (
-                                    <option key={`class-val-${i + minClass}`}>
-                                        {i + minClass}
-                                    </option>
+            <>
+                <p>
+                    This is a basic stat calculator for every dice. Note that
+                    the pip count variable is not taken into account. It only
+                    depicts the raw stat, you should not use this calculor to
+                    calculate dps for dice like typhoon, mighty wind.
+                </p>
+                <div className='divisor' />
+                <div className='container'>
+                    <div className='upper'>
+                        <div className='img-container'>
+                            <Dice dice={dice.name} />
+                        </div>
+                        <label htmlFor='class'>
+                            Class :{' '}
+                            <select
+                                onChange={(evt): void => {
+                                    filter.class = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                {Array(15 - minClass + 1)
+                                    .fill('')
+                                    .map((_, i) => (
+                                        <option
+                                            key={`class-val-${i + minClass}`}
+                                        >
+                                            {i + minClass}
+                                        </option>
+                                    ))}
+                            </select>
+                        </label>
+                        <div className='dice-name'>
+                            <span className={dice.rarity}>{dice.rarity}</span>
+                            <select
+                                onChange={(evt): void => {
+                                    const diceName = evt.target.value.replace(
+                                        ' Dice',
+                                        ''
+                                    );
+                                    filter.activeDice = diceName;
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                {dices?.map(d => (
+                                    <option key={d.name}>{d.name} Dice</option>
                                 ))}
-                        </select>
-                    </label>
-                    <div className='dice-name'>
-                        <span className={dice.rarity}>{dice.rarity}</span>
-                        <select
-                            onChange={(evt): void => {
-                                const diceName = evt.target.value.replace(
-                                    ' Dice',
-                                    ''
-                                );
-                                filter.activeDice = diceName;
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            {dices?.map(d => (
-                                <option key={d.name}>{d.name} Dice</option>
-                            ))}
-                        </select>
+                            </select>
+                        </div>
+                        <label htmlFor='level'>
+                            Level :{' '}
+                            <select
+                                onChange={(evt): void => {
+                                    filter.level = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </label>
+                        <div className='desc'>{dice.desc}</div>
                     </div>
-                    <label htmlFor='level'>
-                        Level :{' '}
-                        <select
-                            onChange={(evt): void => {
-                                filter.level = Number(evt.target.value);
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </label>
-                    <div className='desc'>{dice.desc}</div>
-                </div>
-                <div className='lower'>
-                    <div className='type'>
-                        <span className='label'>Type</span>
-                        <span className='value'>{dice.type}</span>
-                    </div>
-                    <div className='atk'>
-                        <span className='label'>Atk</span>
-                        <span className='value'>{atk || '-'}</span>
-                    </div>
-                    <div className='spd'>
-                        <span className='label'>Attack Speed</span>
-                        <span className='value'>
-                            {spd || '-'}
-                            {spd ? 's' : ''}
-                        </span>
-                    </div>
-                    <div className='target'>
-                        <span className='label'>Target</span>
-                        <span className='value'>{dice.target || '-'}</span>
-                    </div>
-                    <div className='eff1'>
-                        <span className='label'>{dice.nameEff1 || '.'}</span>
-                        <span className='value'>
-                            {eff1 || '-'}
-                            {dice.unitEff1}
-                        </span>
-                    </div>
-                    <div className='eff2'>
-                        <span className='label'>{dice.nameEff2 || '.'}</span>
-                        <span className='value'>
-                            {eff2 || '-'}
-                            {dice.unitEff2}
-                        </span>
+                    <div className='lower'>
+                        <div className='type'>
+                            <span className='label'>Type</span>
+                            <span className='value'>{dice.type}</span>
+                        </div>
+                        <div className='atk'>
+                            <span className='label'>Atk</span>
+                            <span className='value'>{atk || '-'}</span>
+                        </div>
+                        <div className='spd'>
+                            <span className='label'>Attack Speed</span>
+                            <span className='value'>
+                                {spd || '-'}
+                                {spd ? 's' : ''}
+                            </span>
+                        </div>
+                        <div className='target'>
+                            <span className='label'>Target</span>
+                            <span className='value'>{dice.target || '-'}</span>
+                        </div>
+                        <div className='eff1'>
+                            <span className='label'>
+                                {dice.nameEff1 || '.'}
+                            </span>
+                            <span className='value'>
+                                {eff1 || '-'}
+                                {dice.unitEff1}
+                            </span>
+                        </div>
+                        <div className='eff2'>
+                            <span className='label'>
+                                {dice.nameEff2 || '.'}
+                            </span>
+                            <span className='value'>
+                                {eff2 || '-'}
+                                {dice.unitEff2}
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     } else if (error) {
         jsx = (

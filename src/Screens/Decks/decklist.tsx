@@ -172,6 +172,20 @@ export default function DeckList({
         }
         jsx = (
             <>
+                <p>
+                    This is a interactive deck list for PVP and PVE decks. You
+                    can filter the legendary you have below. Click the button to
+                    switch between PVP and PVE view. You can also specify a dice
+                    in Custom Search, which will show the decks with the dice
+                    you specified.
+                </p>
+                <p>
+                    We know that that not everyone have every legendary dices
+                    for every decks, so you can click on the button in
+                    alternatives column to show yourself some alternative
+                    options for some legendary dice.
+                </p>
+                <div className='divisor' />
                 <div
                     className='popup-overlay'
                     role='button'

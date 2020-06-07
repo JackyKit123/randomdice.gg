@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Main from '../../Components/Main/main';
 import Menu from '../../Components/Menu/menu';
 import './homepage.less';
@@ -33,6 +32,11 @@ export default function Homepage(): JSX.Element {
                     <br />
                     <h3 className='news'>What&apos;s New?</h3>
                     <p>Site Performance is greatly enhanced.</p>
+                    <p>
+                        A meaningful description is added to each resource in
+                        the website to allow easier understanding of usage of
+                        each tools.
+                    </p>
                     <br />
                     <br />
                     <br />

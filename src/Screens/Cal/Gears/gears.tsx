@@ -15,7 +15,7 @@ export default function GearsCaculator(): JSX.Element {
     );
     const { error, dices } = selection;
     const [filter, setFilter] = useState({
-        class: 7,
+        class: 5,
         level: 1,
         chain: 0,
         pip: 1,
@@ -58,6 +58,13 @@ export default function GearsCaculator(): JSX.Element {
 
         jsx = (
             <>
+                <p>
+                    This is a calculator for calculating the damage per pip and
+                    the total dps of the Gear Dice. The chain length start with
+                    0 (1 dice on board) and maxed at 14 chain length (board full
+                    of dice).
+                </p>
+                <div className='divisor' />
                 <div className='dice-container'>
                     <div>
                         <Dice dice='Gears' />

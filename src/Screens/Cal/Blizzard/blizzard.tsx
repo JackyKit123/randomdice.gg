@@ -48,6 +48,13 @@ export default function BlizzardCaculator(): JSX.Element {
 
         jsx = (
             <>
+                <p>
+                    This calculator is not for calculating the dps of Blizzard
+                    Dice. It is for calculating the total slow effect by
+                    Blizzard Dice. Maximum slow effect is 50%. You can calculate
+                    the total slow using the calculator below.
+                </p>
+                <div className='divisor' />
                 <div className='dice-container'>
                     <div>
                         <Dice dice='Blizzard' />

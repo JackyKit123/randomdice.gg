@@ -103,6 +103,18 @@ export default function ComboCaculator(): JSX.Element {
 
         jsx = (
             <>
+                <p>
+                    This is a calculator for calculating the Combo Dice damage.
+                    By default Critical Dice is not used (0 pip). You can
+                    compare the dps per combo pip of with and without Critical
+                    Dice.
+                </p>
+                <p>
+                    Do Remember that damage and dps shown is per pip. You will
+                    have to multiply the total pip count on your board to get
+                    the final dps.
+                </p>
+                <div className='divisor' />
                 <div className='dice-container'>
                     <div>
                         <Dice dice='Combo' />

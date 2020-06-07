@@ -198,6 +198,19 @@ export default function SolarCaculator(): JSX.Element {
 
         jsx = (
             <>
+                <p>
+                    This calculator is for calcuting the cumulative damage of
+                    the Solar Dice over a period of time with the buff of
+                    Critical Dice and Light Dice. You can compare the difference
+                    in damage of Solar with different class and level of Light
+                    Dice or Critical Dice.
+                </p>
+                <p>
+                    Please note that the graph is depicting the total damage
+                    across certain period of time instead of the damage per
+                    second at a certain point of time.
+                </p>
+                <div className='divisor' />
                 <div className='dice-container'>
                     <div>
                         <Dice dice='Light' />
