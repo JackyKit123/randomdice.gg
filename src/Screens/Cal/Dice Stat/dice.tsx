@@ -190,13 +190,7 @@ export default function DiceStat(): JSX.Element {
             />
         );
     } else {
-        jsx = (
-            <LoadingScreen
-                fnDispatch={(): void => {
-                    fetchDices(dispatch);
-                }}
-            />
-        );
+        jsx = <LoadingScreen />;
     }
     return (
         <Main

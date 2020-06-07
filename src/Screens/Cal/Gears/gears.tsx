@@ -239,13 +239,7 @@ export default function GearsCaculator(): JSX.Element {
             />
         );
     } else {
-        jsx = (
-            <LoadingScreen
-                fnDispatch={(): void => {
-                    fetchDices(dispatch);
-                }}
-            />
-        );
+        jsx = <LoadingScreen />;
     }
     return (
         <Main

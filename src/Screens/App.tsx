@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Analytics from 'react-router-ga';
 import Header from './Header & Footer/header';
 import Footer from './Header & Footer/footer';
 import mapRouter from './Router/router';
+import {
+    fetchResponseForm,
+    fetchAlts,
+    fetchDecks,
+    fetchDices,
+    initGoogleAd,
+} from './Misc/fetchData';
 import { menu } from './Misc/menuConfig';
 import './App.less';
 
 export default function App(): JSX.Element {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        fetchResponseForm(dispatch, true);
+        fetchAlts(dispatch);
+        fetchDecks(dispatch);
+        fetchDices(dispatch);
+        initGoogleAd();
+    }, []);
+
     return (
         <Router>
             <Analytics

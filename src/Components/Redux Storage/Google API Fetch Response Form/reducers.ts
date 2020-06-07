@@ -14,11 +14,11 @@ export default function(state = initialState, action: Action): FetchState {
         case FETCH_GAPI_RESPONSE_FORM_SUCCESS:
             return {
                 formData: action.payload,
-                error: undefined,
+                error: state.error,
             };
         case FETCH_GAPI_RESPONSE_FORM_FAIL:
             return {
-                formData: undefined,
+                formData: state.formData,
                 error: action.payload,
             };
         case CLEAR_ERRORS:

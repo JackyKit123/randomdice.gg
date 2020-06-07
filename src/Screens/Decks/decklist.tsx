@@ -411,15 +411,7 @@ export default function DeckList({
             />
         );
     } else {
-        jsx = (
-            <LoadingScreen
-                fnDispatch={(): void => {
-                    fetchDecks(dispatch);
-                    fetchDices(dispatch);
-                    fetchAlts(dispatch);
-                }}
-            />
-        );
+        jsx = <LoadingScreen />;
     }
     return (
         <Main

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Dispatch } from 'react';
-import { store } from '../../Components/Redux Storage/store';
 import {
     FETCH_DECKS_SUCCESS,
     FETCH_DECKS_FAIL,
@@ -76,7 +75,27 @@ interface AltsApiResponseData {
     description: string | null;
 }
 
+function corruptedStorage(item: string): boolean {
+    try {
+        JSON.parse(item);
+        return false;
+    } catch (err) {
+        return true;
+    }
+}
+
 export async function fetchDecks(dispatch: Dispatch<{}>): Promise<void> {
+    const localCache = localStorage.getItem('decks');
+    if (localCache) {
+        if (corruptedStorage(localCache)) {
+            localStorage.removeItem('decks');
+        } else {
+            dispatch({
+                type: FETCH_DECKS_SUCCESS,
+                payload: JSON.parse(localCache),
+            });
+        }
+    }
     const apiUrl = '' || process.env.REACT_APP_API_HOST;
     try {
         const res = await axios.get(`${apiUrl}/api/decks`);
@@ -95,12 +114,24 @@ export async function fetchDecks(dispatch: Dispatch<{}>): Promise<void> {
             })
         );
         dispatch({ type: FETCH_DECKS_SUCCESS, payload: decks });
+        localStorage.setItem('decks', JSON.stringify(decks));
     } catch (err) {
         dispatch({ type: FETCH_DECKS_FAIL, payload: err });
     }
 }
 
 export async function fetchDices(dispatch: Dispatch<{}>): Promise<void> {
+    const localCache = localStorage.getItem('dices');
+    if (localCache) {
+        if (corruptedStorage(localCache)) {
+            localStorage.removeItem('dices');
+        } else {
+            dispatch({
+                type: FETCH_DICES_SUCCESS,
+                payload: JSON.parse(localCache),
+            });
+        }
+    }
     const apiUrl = '' || process.env.REACT_APP_API_HOST;
     try {
         const res = await axios.get(`${apiUrl}/api/dice`);
@@ -129,12 +160,24 @@ export async function fetchDices(dispatch: Dispatch<{}>): Promise<void> {
             pupEff2: Number(each.pupEff2),
         }));
         dispatch({ type: FETCH_DICES_SUCCESS, payload: dices });
+        localStorage.setItem('dices', JSON.stringify(dices));
     } catch (err) {
         dispatch({ type: FETCH_DICES_FAIL, payload: err });
     }
 }
 
 export async function fetchAlts(dispatch: Dispatch<{}>): Promise<void> {
+    const localCache = localStorage.getItem('alts');
+    if (localCache) {
+        if (corruptedStorage(localCache)) {
+            localStorage.removeItem('alts');
+        } else {
+            dispatch({
+                type: FETCH_ALTS_SUCCESS,
+                payload: JSON.parse(localCache),
+            });
+        }
+    }
     const apiUrl = '' || process.env.REACT_APP_API_HOST;
     try {
         const res = await axios.get(`${apiUrl}/api/alternates`);
@@ -150,13 +193,28 @@ export async function fetchAlts(dispatch: Dispatch<{}>): Promise<void> {
             desc: each.description,
         }));
         dispatch({ type: FETCH_ALTS_SUCCESS, payload: alts });
+        localStorage.setItem('alts', JSON.stringify(alts));
     } catch (err) {
         dispatch({ type: FETCH_ALTS_FAIL, payload: err });
     }
 }
 
-export async function fetchResponseForm(dispatch: Dispatch<{}>): Promise<void> {
-    if (!store.getState().fetchGAPIresponseFormReducer.formData?.raw) {
+export async function fetchResponseForm(
+    dispatch: Dispatch<{}>,
+    init?: boolean
+): Promise<void> {
+    const localCache = localStorage.getItem('critData');
+    if (localCache) {
+        if (corruptedStorage(localCache)) {
+            localStorage.removeItem('critData');
+        } else {
+            dispatch({
+                type: FETCH_GAPI_RESPONSE_FORM_SUCCESS,
+                payload: JSON.parse(localCache),
+            });
+        }
+    }
+    if (init) {
         const script = document.createElement('script');
         script.src = 'https://apis.google.com/js/client.js';
         script.onload = (): void => {
@@ -168,12 +226,8 @@ export async function fetchResponseForm(dispatch: Dispatch<{}>): Promise<void> {
                             'https://sheets.googleapis.com/$discovery/rest?version=v4',
                         ],
                     });
+                } finally {
                     fetchResponseForm(dispatch);
-                } catch (err) {
-                    dispatch({
-                        type: FETCH_GAPI_RESPONSE_FORM_FAIL,
-                        payload: err.error,
-                    });
                 }
             });
         };
@@ -196,19 +250,29 @@ export async function fetchResponseForm(dispatch: Dispatch<{}>): Promise<void> {
         const summarizedData = res2.result.values.map((row: string[]) =>
             row.map((cell: string) => Number(cell))
         );
+        const payload = {
+            raw: rawData,
+            summarized: summarizedData,
+        };
         dispatch({
             type: FETCH_GAPI_RESPONSE_FORM_SUCCESS,
-            payload: {
-                raw: rawData,
-                summarized: summarizedData,
-            },
+            payload,
         });
+        localStorage.setItem('critData', JSON.stringify(payload));
     } catch (err) {
         dispatch({
             type: FETCH_GAPI_RESPONSE_FORM_FAIL,
             payload: err.error,
         });
     }
+}
+
+export function initGoogleAd(): void {
+    const script = document.createElement('script');
+    script.src =
+        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+    script.setAttribute('data-ad-client', 'ca-pub-3031422008949072');
+    document.body.append(script);
 }
 
 export async function clearError(dispatch: Dispatch<{}>): Promise<void> {

@@ -9,6 +9,24 @@ body {
         background-size: cover;
         position: relative;
 
+        &.offline {
+            .filter(grayscale(100%));
+
+            span {
+                position: absolute;
+                bottom: 0;
+                background: #000000;
+                color: #ffffff;
+                padding: 7px 5px;
+                width: 100%;
+                text-align: center;
+
+                @media @mobile {
+                    text-align: left;
+                }
+            }
+        }
+
         @media @desktop {
             background-position: center 15%;
         }

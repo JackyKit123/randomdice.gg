@@ -1,4 +1,5 @@
 import React from 'react';
+import { Offline, Online } from 'react-detect-offline';
 import './main.less';
 
 export default function Main(props: {
@@ -9,11 +10,24 @@ export default function Main(props: {
     const { title, className, content } = props;
     return (
         <main className={className}>
-            <div className='banner'>
-                <div className='title-container'>
-                    <h2 className='title'>{title}</h2>
+            <Offline>
+                <div className='banner offline'>
+                    <div className='title-container'>
+                        <h2 className='title'>{title}</h2>
+                    </div>
+                    <span>
+                        You are currently offline, please check your connection,
+                        content of this website will continue to be served.
+                    </span>
                 </div>
-            </div>
+            </Offline>
+            <Online>
+                <div className='banner'>
+                    <div className='title-container'>
+                        <h2 className='title'>{title}</h2>
+                    </div>
+                </div>
+            </Online>
             <div className='main'>
                 <div className='container'>
                     <div className='content'>{content}</div>

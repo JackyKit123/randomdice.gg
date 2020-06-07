@@ -424,13 +424,7 @@ export default function ComboCaculator(): JSX.Element {
             />
         );
     } else {
-        jsx = (
-            <LoadingScreen
-                fnDispatch={(): void => {
-                    fetchDices(dispatch);
-                }}
-            />
-        );
+        jsx = <LoadingScreen />;
     }
     return (
         <Main
