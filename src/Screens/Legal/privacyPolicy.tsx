@@ -11,11 +11,10 @@ export default function PrivacyPolicy(): JSX.Element {
                 <>
                     <p>
                         At Random Dice Community, accessible from{' '}
-                        {process.env.REACT_APP_DOMAIN}, one of our main
-                        priorities is the privacy of our visitors. This Privacy
-                        Policy document contains types of information that is
-                        collected and recorded by Random Dice Community and how
-                        we use it.
+                        {process.env.PUBLIC_URL}, one of our main priorities is
+                        the privacy of our visitors. This Privacy Policy
+                        document contains types of information that is collected
+                        and recorded by Random Dice Community and how we use it.
                     </p>
 
                     <p>
@@ -70,9 +69,9 @@ export default function PrivacyPolicy(): JSX.Element {
                     </p>
 
                     <ul>
-                        <li>Provide, operate, and maintain our webste</li>
-                        <li>Improve, personalize, and expand our webste</li>
-                        <li>Understand and analyze how you use our webste</li>
+                        <li>Provide, operate, and maintain our website</li>
+                        <li>Improve, personalize, and expand our website</li>
+                        <li>Understand and analyze how you use our website</li>
                         <li>
                             Develop new products, services, features, and
                             functionality
@@ -81,7 +80,7 @@ export default function PrivacyPolicy(): JSX.Element {
                             Communicate with you, either directly or through one
                             of our partners, including for customer service, to
                             provide you with updates and other information
-                            relating to the webste, and for marketing and
+                            relating to the website, and for marketing and
                             promotional purposes
                         </li>
                         <li>Send you emails</li>

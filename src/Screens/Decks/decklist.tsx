@@ -258,11 +258,11 @@ export default function DeckList({
                 </div>
                 <form className='filter'>
                     <div className='top-label'>
-                        <label htmlFor='pvepvp'>
+                        <label htmlFor='pvePvp'>
                             <span>PVE / PVE :</span>
                             <button
                                 type='button'
-                                name='pvepvp'
+                                name='pvePvp'
                                 onClick={(): void =>
                                     history.replace(
                                         deckType === 'PvP' ? 'pve' : 'pvp'
@@ -299,9 +299,9 @@ export default function DeckList({
                         </label>
                     </div>
                     <div className='lower-label'>
-                        <label htmlFor='legendariesOwned'>
+                        <label htmlFor='legendaryOwned'>
                             <div className='label'>
-                                <span>Legendaries Owned :</span>
+                                <span>Legendary Owned :</span>
                                 <button
                                     type='button'
                                     data-select-all={filter.legendary.every(
