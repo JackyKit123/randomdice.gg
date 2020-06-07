@@ -373,7 +373,13 @@ export default function critData(): JSX.Element {
             />
         );
     } else {
-        jsx = <LoadingScreen />;
+        jsx = (
+            <LoadingScreen
+                fnDispatch={(): void => {
+                    fetchResponseForm(dispatch);
+                }}
+            />
+        );
     }
     return <Main title='Crti% Data' className='crit-data' content={jsx} />;
 }

@@ -1,9 +1,8 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, lazy, Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import NoMatch from '../NoMatch/NoMatch';
-import PrivacyPolicy from '../Legal/privacyPolicy';
-import Terms from '../Legal/terms';
 import { Menu } from '../Misc/menuConfig';
+import Main from '../../Components/Main/main';
+import Loading from '../../Components/Loading/loading';
 
 const mapRouter = (
     rootMenu: Menu[]
@@ -38,7 +37,7 @@ const mapRouter = (
                 path='/about/privacy'
                 key='/about/privacy'
                 exact
-                component={PrivacyPolicy}
+                component={lazy(() => import('../Legal/privacyPolicy'))}
             />
         )
         .concat(
@@ -46,12 +45,21 @@ const mapRouter = (
                 path='/about/terms'
                 key='/about/terms'
                 exact
-                component={Terms}
+                component={lazy(() => import('../Legal/terms'))}
             />
         )
-        .concat(<Route key='Router-path-404' component={NoMatch} />);
+        .concat(
+            <Route
+                key='Router-path-404'
+                component={lazy(() => import('../NoMatch/NoMatch'))}
+            />
+        );
 };
 
 export default function router(menu: Menu[]): JSX.Element {
-    return <Switch>{mapRouter(menu)}</Switch>;
+    return (
+        <Suspense fallback={<Main title='Loading...' content={<Loading />} />}>
+            <Switch>{mapRouter(menu)}</Switch>
+        </Suspense>
+    );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Main from '../../Components/Main/main';
 import Dice from '../../Components/Dice/dice';
-import Effect from './effect.png';
+import Effect from './effect.webp';
 import './nomatch.less';
 
 export default function NoMatch(): JSX.Element {

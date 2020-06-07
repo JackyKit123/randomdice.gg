@@ -397,7 +397,15 @@ export default function DeckList({
             />
         );
     } else {
-        jsx = <LoadingScreen />;
+        jsx = (
+            <LoadingScreen
+                fnDispatch={(): void => {
+                    fetchDecks(dispatch);
+                    fetchDices(dispatch);
+                    fetchAlts(dispatch);
+                }}
+            />
+        );
     }
     return (
         <Main
@@ -407,6 +415,3 @@ export default function DeckList({
         />
     );
 }
-
-export const pvpDeck = (): JSX.Element => <DeckList deckType='PvP' />;
-export const pveDeck = (): JSX.Element => <DeckList deckType='PvE' />;

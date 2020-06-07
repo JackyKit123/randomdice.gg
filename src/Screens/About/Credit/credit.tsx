@@ -1,9 +1,9 @@
 import React from 'react';
 import Main from '../../../Components/Main/main';
 import './credit.less';
-import JackyKit from './JackyKit.png';
-import Sweeney from './Sweeney.png';
-import Campion from './Campion.png';
+import JackyKit from './JackyKit.webp';
+import Sweeney from './Sweeney.webp';
+import Campion from './Campion.webp';
 import FinDiesel from './FinDiesel.webp';
 import TAXA from './TAXA.webp';
 import BadLuck from './BadLuck.webp';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Main from '../../../Components/Main/main';
-import GoldImage from './gold.png';
+import GoldImage from './gold.webp';
 import '../cal.less';
 import './gold.less';
 

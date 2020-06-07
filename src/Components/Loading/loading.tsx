@@ -2,9 +2,15 @@ import React, { useState, useEffect } from 'react';
 import loading from './loading.gif';
 import './loading.less';
 
-export default function Loading(): JSX.Element {
+export default function Loading(props: {
+    fnDispatch?: () => void;
+}): JSX.Element {
+    const { fnDispatch } = props;
     const [loadingTime, setLoadingTime] = useState(0);
     useEffect(() => {
+        if (fnDispatch) {
+            fnDispatch();
+        }
         const timer = setTimeout(() => {
             setLoadingTime(loadingTime + 1);
         }, 1000);

@@ -175,7 +175,13 @@ export default function DiceStat(): JSX.Element {
             />
         );
     } else {
-        jsx = <LoadingScreen />;
+        jsx = (
+            <LoadingScreen
+                fnDispatch={(): void => {
+                    fetchDices(dispatch);
+                }}
+            />
+        );
     }
     return (
         <Main

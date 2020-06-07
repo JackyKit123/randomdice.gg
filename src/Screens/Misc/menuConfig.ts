@@ -1,15 +1,5 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, lazy } from 'react';
 import Homepage from '../Homepage/homepage';
-import { pveDeck, pvpDeck } from '../Decks/decklist';
-import Combo from '../Cal/Combo/combo';
-import Blizzard from '../Cal/Blizzard/blizzard';
-import Solar from '../Cal/Solar/solar';
-import Gears from '../Cal/Gears/gears';
-import Gold from '../Cal/Gold/gold';
-import critData from '../Crit Info/crit';
-import DiceStat from '../Cal/Dice Stat/dice';
-import AboutUs from '../About/About Us/about';
-import Credit from '../About/Credit/credit';
 
 export type Menu = {
     name: string;
@@ -31,17 +21,17 @@ export const menu: Menu[] = [
             {
                 name: 'PvP Deck List',
                 path: '/decks/pvp',
-                component: pvpDeck,
+                component: lazy(() => import('../Decks/pvpDeck')),
             },
             {
                 name: 'PvE Deck List',
                 path: '/decks/pve',
-                component: pveDeck,
+                component: lazy(() => import('../Decks/pveDeck')),
             },
             {
                 name: 'Crit% Data Per Class',
                 path: '/critData',
-                component: critData,
+                component: lazy(() => import('../Crit Info/crit')),
             },
         ],
     },
@@ -51,32 +41,32 @@ export const menu: Menu[] = [
             {
                 name: 'Blizzard Slow Effect Calculator',
                 path: '/calculator/blizzard',
-                component: Blizzard,
+                component: lazy(() => import('../Cal/Blizzard/blizzard')),
             },
             {
                 name: 'Combo Damage Calculator',
                 path: '/calculator/combo',
-                component: Combo,
+                component: lazy(() => import('../Cal/Combo/combo')),
             },
             {
                 name: 'Solar Light vs Crit Comparison',
                 path: '/calculator/solar',
-                component: Solar,
+                component: lazy(() => import('../Cal/Solar/solar')),
             },
             {
                 name: 'Gears DPS Calculator',
                 path: '/calculator/gears',
-                component: Gears,
+                component: lazy(() => import('../Cal/Gears/gears')),
             },
             {
                 name: 'Gold Grind Calculator',
                 path: '/calculator/gold',
-                component: Gold,
+                component: lazy(() => import('../Cal/Gold/gold')),
             },
             {
                 name: 'Dice Stat Calculator',
                 path: '/calculator/dice',
-                component: DiceStat,
+                component: lazy(() => import('../Cal/Dice Stat/dice')),
             },
         ],
     },
@@ -142,12 +132,12 @@ export const menu: Menu[] = [
             {
                 name: 'About Us',
                 path: '/about/us',
-                component: AboutUs,
+                component: lazy(() => import('../About/About Us/about')),
             },
             {
                 name: 'Credit',
                 path: '/about/credit',
-                component: Credit,
+                component: lazy(() => import('../About/Credit/credit')),
             },
         ],
     },

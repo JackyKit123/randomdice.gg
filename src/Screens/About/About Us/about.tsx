@@ -1,6 +1,6 @@
 import React from 'react';
 import Main from '../../../Components/Main/main';
-import Icon from './discord_icon.png';
+import Icon from './JackyKit.webp';
 import './about.less';
 
 export default function AboutUs(): JSX.Element {

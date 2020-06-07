@@ -42,7 +42,7 @@ export default function SolarCaculator(): JSX.Element {
             pip: 1,
         },
     });
-    let jsx = <LoadingScreen />;
+    let jsx;
     const solarData = dices?.find(dice => dice.name === 'Solar');
     const lightData = dices?.find(dice => dice.name === 'Light');
     const critData = dices?.find(dice => dice.name === 'Critical');
@@ -886,7 +886,13 @@ export default function SolarCaculator(): JSX.Element {
             />
         );
     } else {
-        jsx = <LoadingScreen />;
+        jsx = (
+            <LoadingScreen
+                fnDispatch={(): void => {
+                    fetchDices(dispatch);
+                }}
+            />
+        );
     }
     return (
         <Main

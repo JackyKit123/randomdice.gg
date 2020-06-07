@@ -22,7 +22,7 @@ export default function BlizzardCaculator(): JSX.Element {
         dice2Pips: 0,
         dice3Pips: 0,
     });
-    let jsx = <LoadingScreen />;
+    let jsx;
     const data = dices?.find(dice => dice.name === 'Blizzard');
 
     if (data) {
@@ -212,7 +212,13 @@ export default function BlizzardCaculator(): JSX.Element {
             />
         );
     } else {
-        jsx = <LoadingScreen />;
+        jsx = (
+            <LoadingScreen
+                fnDispatch={(): void => {
+                    fetchDices(dispatch);
+                }}
+            />
+        );
     }
     return (
         <Main
