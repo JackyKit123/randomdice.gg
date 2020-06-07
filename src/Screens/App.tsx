@@ -23,7 +23,6 @@ export default function App(): JSX.Element {
         fetchAlts(dispatch);
         fetchDecks(dispatch);
         fetchDices(dispatch);
-        initGoogleAd();
     }, []);
 
     return (
