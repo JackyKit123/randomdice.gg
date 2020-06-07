@@ -156,11 +156,7 @@ export async function fetchAlts(dispatch: Dispatch<{}>): Promise<void> {
 }
 
 export async function fetchResponseForm(dispatch: Dispatch<{}>): Promise<void> {
-    if (
-        Object.values(store.getState().fetchGAPIresponseFormReducer).every(
-            state => !state
-        )
-    ) {
+    if (!store.getState().fetchGAPIresponseFormReducer.formData?.raw) {
         const script = document.createElement('script');
         script.src = 'https://apis.google.com/js/client.js';
         script.onload = (): void => {

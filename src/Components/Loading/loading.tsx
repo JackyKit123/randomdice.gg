@@ -8,12 +8,12 @@ export default function Loading(props: {
     const { fnDispatch } = props;
     const [loadingTime, setLoadingTime] = useState(0);
     useEffect(() => {
-        if (fnDispatch) {
+        if (fnDispatch && loadingTime === 0) {
             fnDispatch();
         }
         const timer = setTimeout(() => {
-            setLoadingTime(loadingTime + 1);
-        }, 1000);
+            setLoadingTime(loadingTime + 10);
+        }, 10000);
         return (): void => window.clearTimeout(timer);
     }, [loadingTime]);
     return (
