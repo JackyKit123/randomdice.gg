@@ -9,6 +9,10 @@ body {
         background-size: cover;
         position: relative;
 
+        &.noWebp {
+            background-image: url('banner.jpg');
+        }
+
         &.offline {
             .filter(grayscale(100%));
 

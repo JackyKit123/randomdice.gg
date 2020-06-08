@@ -1,7 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { isWebpSupported } from 'react-image-webp/dist/utils';
 import { RootState } from '../../Misc/Redux Storage/store';
-import Image from './images';
+import webp from './webp';
+import png from './png';
 
 export default function Dice({
     dice,
@@ -23,14 +25,26 @@ export default function Dice({
                 <img
                     alt={`dice ${targetDice.name}`}
                     key={targetDice.name}
-                    src={Image[targetDice.name]}
+                    src={
+                        isWebpSupported()
+                            ? webp[targetDice.name]
+                            : png[targetDice.name]
+                    }
                 />
             );
         }
-        return <img alt='dice ?' src={Image['?']} />;
+        return (
+            <img alt='dice ?' src={isWebpSupported() ? webp['?'] : png['?']} />
+        );
     }
     if (dices.find(d => d.name === dice)) {
-        return <img alt={`dice ${dice}`} key={dice} src={Image[dice]} />;
+        return (
+            <img
+                alt={`dice ${dice}`}
+                key={dice}
+                src={isWebpSupported() ? webp[dice] : png[dice]}
+            />
+        );
     }
-    return <img alt='dice ?' src={Image['?']} />;
+    return <img alt='dice ?' src={isWebpSupported() ? webp['?'] : png['?']} />;
 }

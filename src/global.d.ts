@@ -11,3 +11,7 @@ declare module 'react-detect-offline' {
     export const Offline: any;
     export const Online: any;
 }
+
+declare module 'react-image-webp/dist/utils' {
+    export const isWebpSupported: () => boolean;
+}

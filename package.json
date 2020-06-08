@@ -70,6 +70,7 @@
     "react-detect-offline": "^2.4.0",
     "react-dev-utils": "^10.2.1",
     "react-dom": "^16.13.1",
+    "react-image-webp": "^0.7.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-router-ga": "^1.2.3",

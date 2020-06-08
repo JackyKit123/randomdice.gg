@@ -1,14 +1,23 @@
 import React from 'react';
+import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
 import './credit.less';
-import JackyKit from './JackyKit.webp';
-import Sweeney from './Sweeney.webp';
-import Campion from './Campion.webp';
-import FinDiesel from './FinDiesel.webp';
-import TAXA from './TAXA.webp';
-import BadLuck from './BadLuck.webp';
-import Staple from './Staple.webp';
-import Enry from './Enry.webp';
+import JackyKitWebp from './People/JackyKit.webp';
+import SweeneyWebp from './People/Sweeney.webp';
+import CampionWebp from './People/Campion.webp';
+import FinDieselWebp from './People/FinDiesel.webp';
+import TAXAWebp from './People/TAXA.webp';
+import BadLuckWebp from './People/BadLuck.webp';
+import StapleWebp from './People/Staple.webp';
+import EnryWebp from './People/Enry.webp';
+import JackyKitJpg from './People/JackyKit.jpg';
+import SweeneyJpg from './People/Sweeney.jpg';
+import CampionJpg from './People/Campion.jpg';
+import FinDieselJpg from './People/FinDiesel.jpg';
+import TAXAJpg from './People/TAXA.jpg';
+import BadLuckJpg from './People/BadLuck.jpg';
+import StapleJpg from './People/Staple.jpg';
+import EnryJpg from './People/Enry.jpg';
 
 export default function Credit(): JSX.Element {
     return (
@@ -18,13 +27,19 @@ export default function Credit(): JSX.Element {
                 <li>
                     The creator of this website: JackyKit{' '}
                     <div className='img-container'>
-                        <img src={JackyKit} alt='icon of JackyKit' />
+                        <img
+                            src={isWebpSupported() ? JackyKitWebp : JackyKitJpg}
+                            alt='icon of JackyKit'
+                        />
                     </div>
                 </li>
                 <li>
                     Backend server support: Sweeney{' '}
                     <div className='img-container'>
-                        <img src={Sweeney} alt='icon of Sweeney' />
+                        <img
+                            src={isWebpSupported() ? SweeneyWebp : SweeneyJpg}
+                            alt='icon of Sweeney'
+                        />
                     </div>
                 </li>
             </ul>
@@ -33,25 +48,39 @@ export default function Credit(): JSX.Element {
                 <li>
                     Original Deck Database Creator: Campion{' '}
                     <div className='img-container'>
-                        <img src={Campion} alt='icon of Campion' />
+                        <img
+                            src={isWebpSupported() ? CampionWebp : CampionJpg}
+                            alt='icon of Campion'
+                        />
                     </div>
                 </li>
                 <li>
                     Original Deck Database Creator: FinDiesel{' '}
                     <div className='img-container'>
-                        <img src={FinDiesel} alt='icon of FinDiesel' />
+                        <img
+                            src={
+                                isWebpSupported() ? FinDieselWebp : FinDieselJpg
+                            }
+                            alt='icon of FinDiesel'
+                        />
                     </div>
                 </li>
                 <li>
                     Original Decks and Calculator Maker: TAXA{' '}
                     <div className='img-container'>
-                        <img src={TAXA} alt='icon of TAXA' />
+                        <img
+                            src={isWebpSupported() ? TAXAWebp : TAXAJpg}
+                            alt='icon of TAXA'
+                        />
                     </div>
                 </li>
                 <li>
                     Decks Maker: BadLuck™{' '}
                     <div className='img-container'>
-                        <img src={BadLuck} alt='icon of BadLuck' />
+                        <img
+                            src={isWebpSupported() ? BadLuckWebp : BadLuckJpg}
+                            alt='icon of BadLuck'
+                        />
                     </div>
                 </li>
             </ul>
@@ -60,13 +89,19 @@ export default function Credit(): JSX.Element {
                 <li>
                     Reddit and Discord Manager: Staple{' '}
                     <div className='img-container'>
-                        <img src={Staple} alt='icon of Staple' />
+                        <img
+                            src={isWebpSupported() ? StapleWebp : StapleJpg}
+                            alt='icon of Staple'
+                        />
                     </div>
                 </li>
                 <li>
                     Wiki Creator: Enry{' '}
                     <div className='img-container'>
-                        <img src={Enry} alt='icon of Enry' />
+                        <img
+                            src={isWebpSupported() ? EnryWebp : EnryJpg}
+                            alt='icon of Enry'
+                        />
                     </div>
                 </li>
             </ul>
@@ -75,7 +110,7 @@ export default function Credit(): JSX.Element {
                 <li>
                     Oh, it looks like we don&apos;t have any supporter yet. You
                     can be the first one to support this website by joining out
-                    pateron at{' '}
+                    patreon at{' '}
                     <a
                         target='_blank'
                         href='https://www.patreon.com/RandomDiceCommunityWebsite'

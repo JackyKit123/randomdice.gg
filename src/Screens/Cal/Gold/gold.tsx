@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
-import GoldImage from './gold.webp';
+import GoldWebp from './gold.webp';
+import GoldPng from './gold.png';
 import '../cal.less';
 import './gold.less';
 
-export default function GoldImageCaculator(): JSX.Element {
+export default function GoldCalculator(): JSX.Element {
     const [filter, setFilter] = useState({
         class: 12,
         currentGold: 0,
@@ -82,7 +84,7 @@ export default function GoldImageCaculator(): JSX.Element {
                 wave.
             </p>
             <div className='divisor' />
-            <img src={GoldImage} alt='gold' />
+            <img src={isWebpSupported() ? GoldWebp : GoldPng} alt='gold' />
             <form className='filter'>
                 <label htmlFor='class'>
                     <span>Class :</span>

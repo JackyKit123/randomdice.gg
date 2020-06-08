@@ -1,6 +1,8 @@
 import React from 'react';
+import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
-import Icon from './JackyKit.webp';
+import IconWebp from './JackyKit.webp';
+import IconJpg from './JackyKit.jpg';
 import './about.less';
 
 export default function AboutUs(): JSX.Element {
@@ -24,7 +26,10 @@ export default function AboutUs(): JSX.Element {
             <div className='divisor' />
             <h3>Webmaster Information</h3>
             <div className='img-container'>
-                <img src={Icon} alt='Icon of JackyKit' />
+                <img
+                    src={isWebpSupported() ? IconWebp : IconJpg}
+                    alt='Icon of JackyKit'
+                />
             </div>
             <p>Hi, I am the developer of this website.</p>
             <p>
@@ -45,9 +50,9 @@ export default function AboutUs(): JSX.Element {
             </p>
             <p>
                 Lastly, this website runs off my personal pocket, it costs me
-                some money montly to operate the website. If you appreciate what
-                I am doing, you can consider supporting me on patreon, details
-                can be seen on the Pateron page at{' '}
+                some money monthly to operate the website. If you appreciate
+                what I am doing, you can consider supporting me on patreon,
+                details can be seen on the Patreon page at{' '}
                 <a
                     target='_blank'
                     href='https://www.patreon.com/RandomDiceCommunityWebsite'
