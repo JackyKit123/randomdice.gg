@@ -86,8 +86,8 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Dice Mechanics',
-                path: `https://random-dice.fandom.com/wiki/Dice_Mechanics`,
-                external: true,
+                path: '/wiki/dice_mechanics',
+                component: lazy(() => import('../Wiki/Dice/dice')),
             },
             {
                 name: 'Boss Mechanics',

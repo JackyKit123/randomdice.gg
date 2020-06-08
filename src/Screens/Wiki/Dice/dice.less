@@ -1,0 +1,30 @@
+.dice-mechanics {
+    p.intro {
+        font-size: 24px;
+    }
+
+    h3 {
+        display: inline-block;
+        font-size: 32px;
+    }
+
+    .dice-container {
+        height: 150px;
+
+        & > img {
+            height: 100%;
+        }
+    }
+
+    li:nth-of-type(odd) > .dice-container {
+        float: left;
+    }
+
+    li:nth-of-type(even) > .dice-container {
+        float: right;
+    }
+
+    p {
+        min-height: 100px;
+    }
+}

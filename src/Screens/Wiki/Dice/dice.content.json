@@ -1,0 +1,193 @@
+{
+    "version": "v3.15.2",
+    "dice": [
+        {
+            "name": "Fire",
+            "desc": "Fire Dice Attacks the first enemy dealing the Base Damage as well as Splash Damage. After dealing damage to the first enemy, the splash damage will then hit nearby enemies."
+        },
+        {
+            "name": "Electric",
+            "desc": "Electric Dice attacks the first enemy dealing base damage as well as dealing 70% of its Electric Damage to the second target and 30% to the third target."
+        },
+        {
+            "name": "Wind",
+            "desc": "Wind Dice will attack the first target and deal his basic damage, his Attack Speed Increase Rate % will affect the attack speed of dice, which can be increased by leveling up the Dice In-Game."
+        },
+        {
+            "name": "Poison",
+            "desc": "Poison Dice is a Special Dice and will work differently than the rest of the dices since v2.0, his basic attack will attack the first Enemy Target without the poison effect on him, affected dices will get the Poison Damage every second; this dice works differently than the other dices when its dots get increased, for every dot it gets the base poison damage increases, which means if the dice had 50 Poison Damage per second at 2 dots it will become 100 Poison Damage per second, also his speed would be doubled since it has 2 dots, same for 3+ dots, 150 Poison Damage per second and speed is 3 times faster than a 1 dot. The In-Game upgrade doesn't get affected by dots. The Poison Damage formula would be: [(Base Poison Damage)*(Dots)]+(In-Game Level-Up)."
+        },
+        {
+            "name": "Ice",
+            "desc": "Ice Dice will attack the first enemy and will apply 1 layer of frost for each attack, each layer of frost increase the slowness effect on the enemy, only Magician Boss can remove the frost effect from himself. Upgrading In-Game will higher the slow effect. (MAX Slow is 50%)"
+        },
+        {
+            "name": "Iron",
+            "desc": "Iron Dice attacks the strongest Enemy on the track, has low attack speed but instead has a high Damage output. Good against Bosses."
+        },
+        {
+            "name": "Broken",
+            "desc": "Broken Dice attacks a random target and has a high Damage Output, useful when it comes to bosses but when (on PvP) your track is filled with enemies, it will be harder to survive since it will not attack the first target."
+        },
+        {
+            "name": "Gamble",
+            "desc": "Gamble Dice attacks the first enemy but instead of just dealing the Base Damage, he deals the Base Damage (class 1 dice will have 1 attack and will get 10 attack for each class-up) added with a random value between 1 and 100. Formula would be: (Base Damage)+(Class-Up)+(1~100)."
+        },
+        {
+            "name": "Lock",
+            "desc": "Lock Dice will attack the first target with a fixed chance to paralyze it, after an enemy is paralyzed, it will free itself after a while. You can see if an enemy is paralyzed by seeing the lock icon on top of it, after a while, when it's no longer paralyzed, it will change the icon on top of it into a broken lock, which means the enemy will no longer be able to be paralyzed. In-Game Power-Up increases the Lock Duration, so higher level makes the lock effect last longer."
+        },
+        {
+            "name": "Mine",
+            "desc": "Mine Dice does not attack but instead will produce SP every few seconds. Every few seconds (depending on the dice class), it will produce the Base SP multiplied by dots, the power-ups will be added to the final count."
+        },
+        {
+            "name": "Light",
+            "desc": "Light Dice does not attack but instead gives a Speed Boost to adjacent Dices. Speed boost is increased by Dots and Power-Up In-Game."
+        },
+        {
+            "name": "Thorn",
+            "desc": "Spike Dice does not attack but instead sets up a spike trap on a random point of your track every few seconds. Traps deals AoE (Area) damage every second on the place of the trap. The traps lasts for a couple of seconds but the In-Game Power-Up will higher the trap duration. Trap production speed is increased by Dots, however, Light Dice will NOT effect the dice production speed."
+        },
+        {
+            "name": "Crack",
+            "desc": "Crack Dice is a Special Dice and will work differently than the rest of the dices since v2.0, his basic attack will attack the first Enemy Target without the Armor Decrease effect on him, this dice works differently than the other dice when its dots get increased, for every dot it gets the base Armor Decrease effect increases, also his speed would be doubled since it has 2 dots, same for 3+ dots, speed is 3 times faster than a 1 dot. The In-Game upgrade doesn't get affected by dots. The Armor Decrease effect formula is: [(Base Armor Decrease)*(Dots)]+(In-Game Level-Up). Armor Decrease effect makes the enemy get more damage from your Dice."
+        },
+        {
+            "name": "Critical",
+            "desc": "Critical Dice does not attack but instead gives more Critical hit Chance to adjacent dice. Critical Chance is increased by Dots and Power-Up In-Game. The Critical Damage % can be seen on the dice section (on the menu) and can be increased by upgrading the dice. The Formula is: [(Base Stats)*(Dots)]+(Power-Up)."
+        },
+        {
+            "name": "Energy",
+            "desc": "Energy Dice attacks the first enemy dealing his Base Damage added with a % of your actual SP In-Game, the % can be increased by upgrading the dice In-Game."
+        },
+        {
+            "name": "Sacrificial",
+            "desc": "Sacrificial Dice attacks the first enemy, this Dice gives a fixed amount of SP when merged with another Sacrificial/Mimic. For every dot consumed during the merge, it will give the player 80 SP, so if a player merges 2 Sacrificial Dice with 2 dots, the total amount of dots consumed is 4, therefore you get 320 SP, if you instead use 1 Sacrificial Dice with 2 dots and 1 Mimic Dice with 2 dots, it will give 160 SP for the 2 Dot Sacrificial but will NOT Give the money for the Mimic Dice as it is NOT a Sacrificial Dice."
+        },
+        {
+            "name": "Crossbow",
+            "desc": "Crossbow Dice attacks enemies at random dealing base damage, after every 5 attacks it will shoot its ability at a random enemy."
+        },
+        {
+            "name": "Death",
+            "desc": "Death Dice attacks a random enemy and has a fixed chance to instantly kill non-bosses enemies. Kill chance is increase by Upgrading the dice In-Game."
+        },
+        {
+            "name": "Teleport",
+            "desc": "Teleport Dice Attacks a random target and has a fixed chance chance to teleport the enemy back to the start of the track. After an enemy has been teleported back to the start, it will have an icon on the top which means that it cannot be teleported again. Magician Boss's Clear Magic ability also removed the Teleport Effect from himself, therefore it can be teleported again to the start of the track once the barrier disappears."
+        },
+        {
+            "name": "Laser",
+            "desc": "Laser Dice attacks the first enemy, the first hit deals the base dice Damage with the in-game upgrade, after the first hit, the laser dice starts stacking damage which means if the first attack damaged the enemy by 10, the second hit will deal him 20, then third hit will deal 30 damage and so on, forever. Starts getting quite strong at 4+ Dots, Light Dice make him attack faster so the damage grows faster. If the laser dice target is slowed and another enemy passes through, the attacking stacks resets and he starts back with basic attack."
+        },
+        {
+            "name": "Mimic",
+            "desc": "Mimic Dice attacks the first enemy, the special thing about this dice is that it can be merged with any dice with the same dot amount which can be helpful if you got an assassin or summoner deck."
+        },
+        {
+            "name": "Infect",
+            "desc": "Infect Dice is a Special Dice and will work differently than the rest of the dices since v2.0, his basic attack will attack the first Enemy Target without the Infect effect on him, this dice works differently than the other dices when its dots get increased, for every dot it gets the base Gas Damage increased, also his speed would be doubled since it has 2 dots, same for 3+ dots, speed is 3 times faster than a 1 dot. The In-Game upgrade doesn't get affected by dots. The Gas Damage formula would be: [(Base Gas Damage)*(Dots)]+(In-Game Level-Up). Gas will be released into the track once the enemy is killed, does AoE (area damage) on the ground for 3 seconds, then disappears0."
+        },
+        {
+            "name": "Modified Electric",
+            "desc": "Modified Electric Dice attacks the first enemy dealing his base attack damage and his Chain Lightning effect will hit the first enemy with the base special attack damage and for every dot, the chain effect will get an extra target."
+        },
+        {
+            "name": "Absorb",
+            "desc": "Absorb dice attacks the first target without Absorb Effect on it and deals his basic damage to the target, every affected enemy will produce SP every few seconds until they die. In-Game Power-Up increases the SP Produced. Dots will multiply the SP produced. Formula [(base production rate)*(dots)]+(Power-Up)"
+        },
+        {
+            "name": "Mighty Wind",
+            "desc": "Mighty Wind Dice attacks the first enemy dealing his Base Attack Damage, every 7 seconds it transforms into Mighty Wind Mode, which has greatly increased attack speed, Class-Up and Level-Up In-Game increases the Mighty Wind Mode duration."
+        },
+        {
+            "name": "Switch",
+            "desc": "Switch Dice attacks the first enemy dealing his Base Attack Damage, if merged with any dice with the same dot amount, they will swap position, useful if you're using Element Dice that needs to be on the border. Has quite high Base Attack Damage on early game. If merged with another Switch Dice, it will result into a normal dice merge."
+        },
+        {
+            "name": "Gears",
+            "desc": "Gear Dice attacks the first enemy dealing his Base Attack Damage, has a slow starting Attack Damage, but when it is connected to another gear dice with any amount of Dots, his Attack Damage increases by the Base increase rate of the dice (can be seen on the Dice list menu). In-Game Power-Up will increase the Attack Damage rate per Dice connected."
+        },
+        {
+            "name": "Wave",
+            "desc": "Wave Dice attacks the first enemy dealing base Attack Damage, it will deal extra damage based on distance from the target. (I.E. If you have one near your exit gate it will deal more damage to freshly spawned enemies.)"
+        },
+        {
+            "name": "Nuclear",
+            "desc": "Nuclear Dice attacks the first enemy dealing his Base Attack Damage, if merged with another nuclear or mimic dice with same dots amount, it will cause a nuclear explosion on the first enemy on the track which causes Infinite Area Damage for a short time, but it will instantly kill any enemy but will not kill Bosses or Small Bosses, but instead will deal proportional Damage based on Dots count. If the Nuclear damage % is 10%, when it explodes it will deal 10% of the boss current HP, the damage is also proportional to the Dot amount, so the higher dots, the higher % damage dealt."
+        },
+        {
+            "name": "Landmine",
+            "desc": "Landmine Dice does not attack but instead sets up a Mine trap on a random point of your track every few seconds. Landmine also has a 10% chance to install a special landmine which will deal 2% of the Enemy current HP. The install chance is increased by Class-Up on dice menu and is also Increased by the In-Game Power-Up. The In-Game Power-Up increases the Mine Damage, the Install chance, and the Special Mine Damage %. Mine production speed is increased by Dots, however Light Dice will NOT effect the dice production speed."
+        },
+        {
+            "name": "Sand Swamp",
+            "desc": "Sand Swamp Dice attacks a Random Enemy dealing his Base Attack Damage, every few seconds it sets a sand swamp on a random point of the track which will slow enemies for a few seconds, then it disappears, sand swamps can be stacked on each other and will greatly increase the slowing effect. Dots doesn't affect the Swamp Cooldown. The In-Game Power-Up increases the Sand Swamp Duration (the Swamps will stay longer on the track)."
+        },
+        {
+            "name": "Joker",
+            "desc": "Joker Dice attacks the first enemy and will deal his Base Attack Damage, it can be merged with any dice with the same dots, as a result it transform into the chosen dice, extremely useful when using Growth or Assassin, if merged with another joker, it gets merged normally."
+        },
+        {
+            "name": "Holy Sword",
+            "desc": "Lighted Sword attacks the first enemy and will deal his Base Attack Damage, has a fixed chance to cut in half the enemy's current HP, doesn't work with Bosses and Small Bosses."
+        },
+        {
+            "name": "Hell",
+            "desc": "Hell Dice does not attack but instead gives a fixed Instant Death chance to adjacent Dices (Basic Attack Only). Instant Death is increased by Dots and Power-Up In-Game. The Formula is: [(Base Stats)*(Dots)]+(Power-Up)."
+        },
+        {
+            "name": "Shield",
+            "desc": "Shield Dice attacks the first enemy and will deal his Base Attack Damage, every few seconds it will set a Blocking Barrier on a random point of the track which completely stops any enemy from moving, after some seconds the barrier disappears, after all barriers that are touching an enemy disappears, the enemy can then move freely until it finds another barrier. In-Game Power-Up increases the Block Duration (the barrier will stay longer on the track). Works good if used with: Solar, Fire, Death, Lighted Sword, Element, Gun, Mine, Absorb, Infect, Poison."
+        },
+        {
+            "name": "Blizzard",
+            "desc": "Blizzard Dice attacks the first enemy and will deal his Base Attack Damage, every 8 seconds it sends a frost layer to all enemies on your side(PvP) and to all enemies you can reach(PvE) which is slow them down. As of this is a special dice, it will work differently the other dice. Blizzard will get a higher amount of Slow as it gets more Dots. In-Game Power-Up increases the Slow Effect. Works perfectly with: Solar, Element, Laser, Gun, Growth, Death, Lighted Sword, Sand Swamp, Mighty Wind, Mine."
+        },
+        {
+            "name": "Growth",
+            "desc": "Might be considered the best dice in the game. Growth dice will slowly attack the first enemy and will deal his Base Attack Damage, After around 15 seconds(based on dice class) it automatically increase his dots quantity by 1 point, if it turns into another Growth Dice, it can grow 1 more dot after around 15 seconds(based on dice class) so you can get a High-Dot Dice within the first minute which could change the game outcome by a lot. At 7 Dots (1 Star), growth stops growing. 0Extremely effective with Joker Dice."
+        },
+        {
+            "name": "Summoner",
+            "desc": "Summoner Dice attacks the first enemy dealing his Base Attack Damage, if merged with another summoner (same dots quantity) or an Mimic dice, it will summon a dice, the summoned dice dots quantity is random but will be lower than when it was merged, merging 2 4-Dots summoner ends up summoning a 1~3 Dots Random Dice (from your deck)."
+        },
+        {
+            "name": "Solar",
+            "desc": "Biggest Damage Dealer in the Game. INACTIVE Solar Dice attacks the first enemy dealing his Base Attack Damage, after which, the damage increases (dots stacks separately every 2 hits from the same dot). You get an ACTIVE Solar if certain conditions are met, you will have an active solar if you got either 1, 4 or 9 solar dices on your board, otherwise it will deactivate. ACTIVE Solar will attack a lot faster than INACTIVE solar and will deal the Base Attack Damage to the first enemy, then it starts stacking like the inactive solar, but instead of stacking base damage, it starts stacking splash damage. You can easily calculate the Splash Damage he's doing by the dimension of the SUN effect on the enemies, the bigger the Sun effect, the bigger the Damage. At a certain point, the Sun Effect created on the enemy stops growing and will do a 'whip' effect. Damage Stacks can be stacked faster by giving him a Light Dice to shoot faster. Solar gets countered by Knight Boss, Magician Boss and Silence Boss, silence boss can be easily beaten by having a full board. Stacks gets reset if an enemy passes in front of the first enemy, when it deactivates and when Knight Boss switches the dice on the board. Works Really Good with: Growth, Joker, Mod.Electric, Typhoon, Blizzard, Light, Gun(PvE)."
+        },
+        {
+            "name": "Assassin",
+            "desc": "Best Offensive Dice in the Game. Assassin Dice attacks the first enemy dealing his Base Attack Damage, if you merge 2 Assassins or an assassin with a Mimic dice, it will decrease a random opponent's Dice by 1 Dot. If on PvE (Alliance) Mode, it will instead higher a random ally's Dice by 1 Dot. Extremely effective if played with: Sacrificial, Joker, Mimic, Summoner, Typhoon, M.Electric."
+        },
+        {
+            "name": "Gun",
+            "desc": "Best Late game Dice on PvE in the Game. Gun Dice attacks the first enemy and for every dot from 2 to 6 attacks an extra target, attack speed also get increased, all dots attacks at the same time, all together. At 7 Dots (1 Star), it transforms into the Sniper, which attacks a Random enemy and instantly kills the target, in the case of Bosses and Small bosses, Sniper Dice will deals 20% of the target's current HP, of course it has really low attack speed at 7 Dots since it has to aim, then shoot, this process can be faster if near a Light Dice that boosts his speed. Works Really Good with: Light, Growth, Solar, Element, Joker, Blizzard. Notice: Even if it no longer does basic attacks, at 7 dots before aiming and shooting, it will also stack up some Base Damage that will be added to the final damage."
+        },
+        {
+            "name": "Element",
+            "desc": "Late-Game Dice. Element Dice attacks the first enemy dealing his Base Attack Damage. Because of the spinning spheres, the dice Must be placed on the Border of your Board to deal Damage. For Every dot the Element Dice has, it will gain a rotating sphere which will Deal enemy HP % for each hit, on the early game, it might be slow but once you Maxed out the level In-Game, the cycle will be faster. Works really good with: Joker, Growth, Blizzard, Typhoon, M.Electric."
+        },
+        {
+            "name": "Supplement",
+            "desc": "Supplement Dice attacks the first enemy dealing the base attack damage, If merged towards another dice with the same amount of Dots, the Merged Dice will get his dots increased by one without changing the Dice Type. Example: 2 dot Supplement merged towards a 2 dot Solar, it will 100% result into a 3 dot solar. If merged with another supplement, it will still keep the Dice Type (supplement) with an extra dot."
+        },
+        {
+            "name": "Metastasis",
+            "desc": "Metastasis attacks the first enemy dealing his base attack damage. When merge with another Metastasis or Mimic, it will trigger his ability, which will cause the opponent to get an extra enemy on his field, with more HP than other normal enemies. Effective if the opponent is unable to kill the Boss and you time it correctly so that the summoned entity will be right behind the boss when it hits the end point of the opponent's track, so instead of dealing 2 hearth damage, the boss fight will result into a total loss for your opponent. SP Formula: [2x(N°of Dots) × (Monster SP)] + (Monster SP)"
+        },
+        {
+            "name": "Typhoon",
+            "desc": "Typhoon attacks the first enemy dealing his base attack damage, after 6 seconds it triggers his Second phase which will last for 4 seconds, on this phase the Dice will attack faster, when the Second phase ends (4 seconds), it will trigger the Third phase which consists on a Fast attack speed with 100% crit chance, this second phase lasts for 1 second, but will deal a really high damage."
+        },
+        {
+            "name": "Time",
+            "desc": "Time Dice does not attack. On PvP it decreases the enemy's dice on his board with the same dot amount by the Base slow speed of Time Dice + In-Game Power-Ups. On PvE it increases the ally's dice on his board with the same dot amount by the Base increased attack speed of Time Dice + In-Game Power-Ups."
+        },
+        {
+            "name": "Combo",
+            "desc": "Combo Dice targets the first enemy dealing base Attack Damage. Every time you merge a Combo with itself or a Mimic Dice it will gain a counter dealing +10 damage per count at Class 7."
+        }
+    ]
+}

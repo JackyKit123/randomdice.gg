@@ -10,7 +10,6 @@ import {
     fetchAlts,
     fetchDecks,
     fetchDices,
-    initGoogleAd,
 } from './Misc/fetchData';
 import { menu } from './Misc/menuConfig';
 import './App.less';
