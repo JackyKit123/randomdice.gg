@@ -72,6 +72,10 @@ export default function Homepage(): JSX.Element {
                 A meaningful description is added to each resource in the
                 website to allow easier understanding of usage of each tools.
             </p>
+            <p>
+                Fixed images corruption issue on IOS devices, All images should
+                now be viewable.
+            </p>
             <br />
             <br />
             <br />
