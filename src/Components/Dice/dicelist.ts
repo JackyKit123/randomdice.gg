@@ -1,4 +1,4 @@
-import { Dices } from '../Redux Storage/Fetch Dices/types';
+import { Dices } from '../../Misc/Redux Storage/Fetch Dices/types';
 
 interface DiceList {
     common: string[];

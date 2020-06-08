@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router-dom';
-import { RootState } from '../../Components/Redux Storage/store';
+import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
@@ -14,11 +14,11 @@ import {
     fetchDices,
     fetchAlts,
     clearError,
-} from '../Misc/fetchData';
+} from '../../Misc/fetchData';
 import Dice from '../../Components/Dice/dice';
 import Dicelist from '../../Components/Dice/dicelist';
 import './decklist.less';
-import { FILTER_ACTION } from '../../Components/Redux Storage/Deck Filter/types';
+import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
 
 export default function DeckList({
     deckType,

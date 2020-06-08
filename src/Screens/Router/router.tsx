@@ -1,6 +1,6 @@
 import React, { FunctionComponent, lazy, Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Menu } from '../Misc/menuConfig';
+import { Menu } from '../../Misc/menuConfig';
 import Main from '../../Components/Main/main';
 import Loading from '../../Components/Loading/loading';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import Main from '../../Components/Main/main';
 import Menu from '../../Components/Menu/menu';
 import './homepage.less';
-import { menu } from '../Misc/menuConfig';
+import { menu } from '../../Misc/menuConfig';
 
 export default function Homepage(): JSX.Element {
     return (

@@ -9,11 +9,11 @@ import {
     VictoryLine,
     VictoryLegend,
 } from 'victory';
-import { RootState } from '../../Components/Redux Storage/store';
+import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
-import { fetchResponseForm, clearError } from '../Misc/fetchData';
+import { fetchResponseForm, clearError } from '../../Misc/fetchData';
 import './crit.less';
 
 export default function critData(): JSX.Element {

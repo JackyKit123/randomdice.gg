@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../Redux Storage/store';
+import { RootState } from '../../Misc/Redux Storage/store';
 import Image from './images';
 
 export default function Dice({

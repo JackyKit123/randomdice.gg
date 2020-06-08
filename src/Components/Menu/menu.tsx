@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
-import { Menu as MenuProp } from '../../Screens/Misc/menuConfig';
+import { Menu as MenuProp } from '../../Misc/menuConfig';
 
 export default function Menu(props: {
     menuList: MenuProp[];

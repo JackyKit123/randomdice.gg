@@ -10,8 +10,8 @@ import {
     fetchAlts,
     fetchDecks,
     fetchDices,
-} from './Misc/fetchData';
-import { menu } from './Misc/menuConfig';
+} from '../Misc/fetchData';
+import { menu } from '../Misc/menuConfig';
 import './App.less';
 
 export default function App(): JSX.Element {

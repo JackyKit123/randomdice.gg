@@ -12,8 +12,8 @@ import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
 import Dice from '../../../Components/Dice/dice';
-import { RootState } from '../../../Components/Redux Storage/store';
-import { clearError, fetchDices } from '../../Misc/fetchData';
+import { RootState } from '../../../Misc/Redux Storage/store';
+import { clearError, fetchDices } from '../../../Misc/fetchData';
 import '../cal.less';
 import './solar.less';
 

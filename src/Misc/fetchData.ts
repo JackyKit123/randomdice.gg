@@ -5,24 +5,24 @@ import {
     FETCH_DECKS_FAIL,
     CLEAR_ERRORS as CLEAR_ERRORS_1,
     Decks,
-} from '../../Components/Redux Storage/Fetch Decks/types';
+} from './Redux Storage/Fetch Decks/types';
 import {
     FETCH_DICES_SUCCESS,
     FETCH_DICES_FAIL,
     CLEAR_ERRORS as CLEAR_ERRORS_2,
     Dices,
-} from '../../Components/Redux Storage/Fetch Dices/types';
+} from './Redux Storage/Fetch Dices/types';
 import {
     FETCH_ALTS_SUCCESS,
     FETCH_ALTS_FAIL,
     CLEAR_ERRORS as CLEAR_ERRORS_3,
     Alts,
-} from '../../Components/Redux Storage/Fetch Alt/types';
+} from './Redux Storage/Fetch Alt/types';
 import {
     FETCH_GAPI_RESPONSE_FORM_FAIL,
     FETCH_GAPI_RESPONSE_FORM_SUCCESS,
     CLEAR_ERRORS as CLEAR_ERRORS_4,
-} from '../../Components/Redux Storage/Google API Fetch Response Form/types';
+} from './Redux Storage/Google API Fetch Response Form/types';
 
 interface DeckApiResponseData {
     id: string;
