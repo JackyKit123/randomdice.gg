@@ -78,13 +78,13 @@ export const menu: Menu[] = [
         childNode: [
             {
                 name: 'PvP',
-                path: `https://random-dice.fandom.com/wiki/PvP_(Player_versus_Player)`,
-                external: true,
+                path: '/wiki/pvp',
+                component: lazy(() => import('../Screens/Wiki/Game Intro/pvp')),
             },
             {
                 name: 'PvE',
-                path: `https://random-dice.fandom.com/wiki/PvE_(Player_versus_Enviroment)`,
-                external: true,
+                path: '/wiki/pve',
+                component: lazy(() => import('../Screens/Wiki/Game Intro/pve')),
             },
             {
                 name: 'Dice Mechanics',
@@ -93,8 +93,8 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Boss Mechanics',
-                path: `https://random-dice.fandom.com/wiki/Boss`,
-                external: true,
+                path: '/wiki/boss_mechanics',
+                component: lazy(() => import('../Screens/Wiki/Boss/boss')),
             },
             {
                 name: 'Guide',

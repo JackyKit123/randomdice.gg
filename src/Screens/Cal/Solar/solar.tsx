@@ -785,10 +785,8 @@ export default function SolarCaculator(): JSX.Element {
                     </VictoryChart>
                 </div>
                 <div className='divisor' />
+                <h3>Cumulative Damage Over {filter.duration} seconds.</h3>
                 <div className='result'>
-                    <div className='title'>
-                        Cumulative Damage Over {filter.duration} seconds.
-                    </div>
                     <div>
                         <span>Basic Attack</span>
                         <input

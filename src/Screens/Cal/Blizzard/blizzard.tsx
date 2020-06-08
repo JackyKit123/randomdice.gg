@@ -52,7 +52,9 @@ export default function BlizzardCaculator(): JSX.Element {
                     This calculator is not for calculating the dps of Blizzard
                     Dice. It is for calculating the total slow effect by
                     Blizzard Dice. Maximum slow effect is 50%. You can calculate
-                    the total slow using the calculator below.
+                    the total slow using the calculator below. Max Slow is 3
+                    Frost layers, extra blizzard dices will not give extra slow
+                    when 3 layers of frost are applied.
                 </p>
                 <div className='divisor' />
                 <div className='dice-container'>
@@ -194,11 +196,6 @@ export default function BlizzardCaculator(): JSX.Element {
                     </div>
                     <div>
                         <span>Total Slow Effect:</span>
-                        <span className='tip'>
-                            Max Slow is 3 Forst layers, extra blizzard dices
-                            will not give extra slow when 3 layers of frost are
-                            applied.
-                        </span>
                         <input
                             type='textbox'
                             value={`${totalSlow}${blizzardDiceData.unit}`}
