@@ -427,10 +427,8 @@ export default function ComboCaculator(): JSX.Element {
         jsx = <LoadingScreen />;
     }
     return (
-        <Main
-            title='Combo Damage Caculator'
-            className='combo-dmg-cal cal'
-            content={jsx}
-        />
+        <Main title='Combo Damage Calculator' className='combo-dmg-cal cal'>
+            {jsx}
+        </Main>
     );
 }

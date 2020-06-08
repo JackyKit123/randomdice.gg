@@ -185,7 +185,7 @@ export default function SolarCaculator(): JSX.Element {
                         filter.duration
                     ) * 100
                 ) / 100,
-            doubleBuffSpash:
+            doubleBuffSplash:
                 Math.round(
                     dps(
                         basicDmgPerSplash,
@@ -199,7 +199,7 @@ export default function SolarCaculator(): JSX.Element {
         jsx = (
             <>
                 <p>
-                    This calculator is for calcuting the cumulative damage of
+                    This calculator is for calculating the cumulative damage of
                     the Solar Dice over a period of time with the buff of
                     Critical Dice and Light Dice. You can compare the difference
                     in damage of Solar with different class and level of Light
@@ -880,7 +880,7 @@ export default function SolarCaculator(): JSX.Element {
                             value={
                                 invalidInput
                                     ? 'Check Input'
-                                    : result.doubleBuffSpash
+                                    : result.doubleBuffSplash
                             }
                             disabled
                         />
@@ -903,9 +903,10 @@ export default function SolarCaculator(): JSX.Element {
     }
     return (
         <Main
-            title='Solar Light vs Crit Damage Caculator'
+            title='Solar Light vs Crit Damage Calculator'
             className='solar-cal cal'
-            content={jsx}
-        />
+        >
+            {jsx}
+        </Main>
     );
 }

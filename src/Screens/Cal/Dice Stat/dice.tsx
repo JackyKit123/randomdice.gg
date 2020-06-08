@@ -193,10 +193,8 @@ export default function DiceStat(): JSX.Element {
         jsx = <LoadingScreen />;
     }
     return (
-        <Main
-            title='Dice Stat Caculator'
-            className='dice-stat-cal cal'
-            content={jsx}
-        />
+        <Main title='Dice Stat Calculator' className='dice-stat-cal cal'>
+            {jsx}
+        </Main>
     );
 }

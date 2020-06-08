@@ -223,9 +223,10 @@ export default function BlizzardCaculator(): JSX.Element {
     }
     return (
         <Main
-            title='Blizzard Slow Effect Caculator'
+            title='Blizzard Slow Effect Calculator'
             className='blizz-slow-cal cal'
-            content={jsx}
-        />
+        >
+            {jsx}
+        </Main>
     );
 }

@@ -67,195 +67,181 @@ export default function GoldImageCaculator(): JSX.Element {
             : `${minutesNeeded} Minute(s)`;
 
     return (
-        <Main
-            title='Gold Per Co-op Time Calculator'
-            className='cal gold-cal'
-            content={
-                <>
-                    <p>
-                        This is a calculator for the estimated time need to
-                        grind certain amount of gold in Co-op quick run.
-                    </p>
-                    <p>
-                        By default, there are 3 modes: Gear deck wave 30 run (10
-                        mins), Solar/Time wave 56 runs(18mins), Combo Mirror
-                        wave 76 run(25mins). You can also enter a custom target
-                        wave goal.
-                    </p>
-                    <p>
-                        Keep in mind that the calculator assume average 20
-                        seconds per wave.
-                    </p>
-                    <div className='divisor' />
-                    <img src={GoldImage} alt='gold' />
-                    <form className='filter'>
-                        <label htmlFor='class'>
-                            <span>Class :</span>
-                            <select
-                                name='class'
-                                defaultValue={12}
-                                onChange={(
-                                    evt: React.ChangeEvent<HTMLSelectElement>
-                                ): void => {
-                                    filter.class = Number(evt.target.value);
-                                    setFilter({ ...filter });
-                                }}
-                            >
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                                <option>11</option>
-                                <option>12</option>
-                                <option>13</option>
-                                <option>14</option>
-                                <option>15</option>
-                                <option>16</option>
-                                <option>17</option>
-                                <option>18</option>
-                                <option>19</option>
-                                <option>20</option>
-                            </select>
-                        </label>
-                        <label htmlFor='current-gold'>
-                            <span>Current Gold :</span>
-                            <input
-                                type='textbox'
-                                name='current-gold'
-                                defaultValue={0}
-                                className={
-                                    isInvalidCurrentGold ||
-                                    invalidGoldRelationship
-                                        ? 'invalid'
-                                        : ''
-                                }
-                                onChange={(
-                                    evt: React.ChangeEvent<HTMLInputElement>
-                                ): void => {
-                                    const val = Number(evt.target.value);
-                                    filter.currentGold = val;
-                                    setFilter({ ...filter });
-                                }}
-                            />
-                        </label>
-                        <label htmlFor='target-gold'>
-                            <span>Target Gold :</span>
-                            <input
-                                type='textbox'
-                                name='target-gold'
-                                defaultValue={40000}
-                                className={
-                                    isInvalidTargetGold ||
-                                    invalidGoldRelationship
-                                        ? 'invalid'
-                                        : ''
-                                }
-                                onChange={(
-                                    evt: React.ChangeEvent<HTMLInputElement>
-                                ): void => {
-                                    const val = Number(evt.target.value);
-                                    filter.targetGold = val;
-                                    setFilter({ ...filter });
-                                }}
-                            />
-                        </label>
-                        <label htmlFor='wave'>
-                            <span>Mode :</span>
-                            <select
-                                name='wave'
-                                onChange={(
-                                    evt: React.ChangeEvent<HTMLSelectElement>
-                                ): void => {
-                                    filter.custom =
-                                        evt.target.value === 'Custom';
-                                    if (!filter.custom) {
-                                        const val = Number(evt.target.value);
-                                        filter.targetWave = val;
-                                    }
-                                    setFilter({ ...filter });
-                                }}
-                            >
-                                <option value={30}>Gears 30s</option>
-                                <option value={56}>Solar / Time 56s</option>
-                                <option value={76}>Combo Mirror 76s</option>
-                                <option>Custom</option>
-                            </select>
-                            {filter.custom ? (
-                                <input
-                                    type='textbox'
-                                    name='wave'
-                                    placeholder='Wave#'
-                                    className={isInvalidWave ? 'invalid' : ''}
-                                    onChange={(
-                                        evt: React.ChangeEvent<HTMLInputElement>
-                                    ): void => {
-                                        const val = Number(evt.target.value);
-                                        filter.targetWave = val;
-                                        setFilter({ ...filter });
-                                    }}
-                                />
-                            ) : null}
-                        </label>
-                    </form>
-                    {isInvalidCurrentGold || isInvalidTargetGold ? (
-                        <span className='invalid-warning'>
-                            Invalid Gold Amount Input! Acceptable input is{' '}
-                            <strong>positive integer</strong>.
-                        </span>
-                    ) : (
-                        ''
-                    )}
-                    {invalidGoldRelationship ? (
-                        <span className='invalid-warning'>
-                            Invalid Gold Amount Input! Current Gold should be
-                            less than Target Gold.
-                        </span>
-                    ) : (
-                        ''
-                    )}
-                    {isInvalidWave ? (
-                        <span className='invalid-warning'>
-                            Invalid Wave Number. Acceptable input is{' '}
-                            <strong>positive integer</strong>.
-                        </span>
-                    ) : (
-                        ''
-                    )}
-                    <div className='divisor' />
-                    <div className='result'>
-                        <div>
-                            <span>Target number of runs :</span>
-                            <input
-                                type='textbox'
-                                className={invalidInput ? 'invalid' : ''}
-                                value={
-                                    invalidInput
-                                        ? 'Check Input'
-                                        : targetNumberOfRuns
-                                }
-                                disabled
-                            />
-                        </div>
-                        <div>
-                            <span>Estimated Time needed :</span>
-                            <input
-                                type='textbox'
-                                className={invalidInput ? 'invalid' : ''}
-                                value={
-                                    invalidInput ? 'Check Input' : timeNeeded
-                                }
-                                disabled
-                            />
-                        </div>
-                    </div>
-                </>
-            }
-        />
+        <Main title='Gold Per Co-op Time Calculator' className='cal gold-cal'>
+            <p>
+                This is a calculator for the estimated time need to grind
+                certain amount of gold in Co-op quick run.
+            </p>
+            <p>
+                By default, there are 3 modes: Gear deck wave 30 run (10 mins),
+                Solar/Time wave 56 runs(18mins), Combo Mirror wave 76
+                run(25mins). You can also enter a custom target wave goal.
+            </p>
+            <p>
+                Keep in mind that the calculator assume average 20 seconds per
+                wave.
+            </p>
+            <div className='divisor' />
+            <img src={GoldImage} alt='gold' />
+            <form className='filter'>
+                <label htmlFor='class'>
+                    <span>Class :</span>
+                    <select
+                        name='class'
+                        defaultValue={12}
+                        onChange={(
+                            evt: React.ChangeEvent<HTMLSelectElement>
+                        ): void => {
+                            filter.class = Number(evt.target.value);
+                            setFilter({ ...filter });
+                        }}
+                    >
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                        <option>13</option>
+                        <option>14</option>
+                        <option>15</option>
+                        <option>16</option>
+                        <option>17</option>
+                        <option>18</option>
+                        <option>19</option>
+                        <option>20</option>
+                    </select>
+                </label>
+                <label htmlFor='current-gold'>
+                    <span>Current Gold :</span>
+                    <input
+                        type='textbox'
+                        name='current-gold'
+                        defaultValue={0}
+                        className={
+                            isInvalidCurrentGold || invalidGoldRelationship
+                                ? 'invalid'
+                                : ''
+                        }
+                        onChange={(
+                            evt: React.ChangeEvent<HTMLInputElement>
+                        ): void => {
+                            const val = Number(evt.target.value);
+                            filter.currentGold = val;
+                            setFilter({ ...filter });
+                        }}
+                    />
+                </label>
+                <label htmlFor='target-gold'>
+                    <span>Target Gold :</span>
+                    <input
+                        type='textbox'
+                        name='target-gold'
+                        defaultValue={40000}
+                        className={
+                            isInvalidTargetGold || invalidGoldRelationship
+                                ? 'invalid'
+                                : ''
+                        }
+                        onChange={(
+                            evt: React.ChangeEvent<HTMLInputElement>
+                        ): void => {
+                            const val = Number(evt.target.value);
+                            filter.targetGold = val;
+                            setFilter({ ...filter });
+                        }}
+                    />
+                </label>
+                <label htmlFor='wave'>
+                    <span>Mode :</span>
+                    <select
+                        name='wave'
+                        onChange={(
+                            evt: React.ChangeEvent<HTMLSelectElement>
+                        ): void => {
+                            filter.custom = evt.target.value === 'Custom';
+                            if (!filter.custom) {
+                                const val = Number(evt.target.value);
+                                filter.targetWave = val;
+                            }
+                            setFilter({ ...filter });
+                        }}
+                    >
+                        <option value={30}>Gears 30s</option>
+                        <option value={56}>Solar / Time 56s</option>
+                        <option value={76}>Combo Mirror 76s</option>
+                        <option>Custom</option>
+                    </select>
+                    {filter.custom ? (
+                        <input
+                            type='textbox'
+                            name='wave'
+                            placeholder='Wave#'
+                            className={isInvalidWave ? 'invalid' : ''}
+                            onChange={(
+                                evt: React.ChangeEvent<HTMLInputElement>
+                            ): void => {
+                                const val = Number(evt.target.value);
+                                filter.targetWave = val;
+                                setFilter({ ...filter });
+                            }}
+                        />
+                    ) : null}
+                </label>
+            </form>
+            {isInvalidCurrentGold || isInvalidTargetGold ? (
+                <span className='invalid-warning'>
+                    Invalid Gold Amount Input! Acceptable input is{' '}
+                    <strong>positive integer</strong>.
+                </span>
+            ) : (
+                ''
+            )}
+            {invalidGoldRelationship ? (
+                <span className='invalid-warning'>
+                    Invalid Gold Amount Input! Current Gold should be less than
+                    Target Gold.
+                </span>
+            ) : (
+                ''
+            )}
+            {isInvalidWave ? (
+                <span className='invalid-warning'>
+                    Invalid Wave Number. Acceptable input is{' '}
+                    <strong>positive integer</strong>.
+                </span>
+            ) : (
+                ''
+            )}
+            <div className='divisor' />
+            <div className='result'>
+                <div>
+                    <span>Target number of runs :</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={
+                            invalidInput ? 'Check Input' : targetNumberOfRuns
+                        }
+                        disabled
+                    />
+                </div>
+                <div>
+                    <span>Estimated Time needed :</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={invalidInput ? 'Check Input' : timeNeeded}
+                        disabled
+                    />
+                </div>
+            </div>
+        </Main>
     );
 }

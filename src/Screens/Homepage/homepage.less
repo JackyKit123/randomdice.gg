@@ -1,83 +1,81 @@
 @import '../../cross_import_lesshat.less';
 
-body {
-    main.homepage {
-        h3 {
-            &.welcome {
-                font-size: 40px;
-            }
+.homepage {
+    h3 {
+        &.welcome {
+            font-size: 40px;
+        }
 
-            &.news {
-                font-size: 30px;
+        &.news {
+            font-size: 30px;
 
-                & ~ p {
-                    text-align: center;
-                }
-            }
-
-            &.menu {
-                font-size: 30px;
+            & ~ p {
+                text-align: center;
             }
         }
 
-        ul.menu {
-            .display(flex);
-            .justify-content(space-around);
-            .flex-wrap(wrap);
+        &.menu {
+            font-size: 30px;
+        }
+    }
 
-            & > li {
-                text-align: center;
-                padding: 0 10px;
-                font-size: 25px;
-                font-weight: 500;
+    ul.menu {
+        .display(flex);
+        .justify-content(space-around);
+        .flex-wrap(wrap);
+
+        & > li {
+            text-align: center;
+            padding: 0 10px;
+            font-size: 25px;
+            font-weight: 500;
+            color: #6ba4a5;
+            display: block;
+            margin-bottom: 20px;
+            width: 25%;
+
+            @media @mobile {
+                width: 50%;
+            }
+
+            &:first-of-type {
+                display: none;
+            }
+
+            & > a,
+            span {
+                border-bottom: 5px solid #6ba4a5;
                 color: #6ba4a5;
-                display: block;
-                margin-bottom: 20px;
-                width: 25%;
+                display: inline-block;
+                margin-bottom: 10px;
+            }
 
-                @media @mobile {
-                    width: 50%;
+            & > a {
+                cursor: pointer;
+                text-decoration: none;
+                .transition(all 0.2s ease-in-out);
+
+                &:hover,
+                &:focus {
+                    color: #ffffff;
+                    border-bottom: 5px solid #ffffff;
                 }
+            }
 
-                &:first-of-type {
-                    display: none;
-                }
+            & > ul {
+                & > li {
+                    font-size: 15px;
+                    margin-bottom: 5px;
+                    font-weight: 400;
 
-                & > a,
-                span {
-                    border-bottom: 5px solid #6ba4a5;
-                    color: #6ba4a5;
-                    display: inline-block;
-                    margin-bottom: 10px;
-                }
+                    & > a {
+                        word-break: break-word;
+                        color: #6ba4a5;
+                        .transition(all 0.2s ease-in-out);
 
-                & > a {
-                    cursor: pointer;
-                    text-decoration: none;
-                    .transition(all 0.2s ease-in-out);
-
-                    &:hover,
-                    &:focus {
-                        color: #ffffff;
-                        border-bottom: 5px solid #ffffff;
-                    }
-                }
-
-                & > ul {
-                    & > li {
-                        font-size: 15px;
-                        margin-bottom: 5px;
-                        font-weight: 400;
-
-                        & > a {
-                            word-break: break-word;
-                            color: #6ba4a5;
-                            .transition(all 0.2s ease-in-out);
-
-                            &:hover,
-                            &:focus {
-                                color: #ffffff;
-                            }
+                        &:hover,
+                        &:focus {
+                            color: #ffffff;
                         }
                     }
                 }

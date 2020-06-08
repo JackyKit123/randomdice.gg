@@ -58,7 +58,13 @@ const mapRouter = (
 
 export default function router(menu: Menu[]): JSX.Element {
     return (
-        <Suspense fallback={<Main title='Loading...' content={<Loading />} />}>
+        <Suspense
+            fallback={
+                <Main title='Loading...'>
+                    <Loading />
+                </Main>
+            }
+        >
             <Switch>{mapRouter(menu)}</Switch>
         </Suspense>
     );

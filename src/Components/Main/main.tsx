@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Offline, Online } from 'react-detect-offline';
 import './main.less';
 
 export default function Main(props: {
     title: string;
     className?: string;
-    content: JSX.Element;
+    children: ReactNode;
 }): JSX.Element {
-    const { title, className, content } = props;
+    const { title, className, children } = props;
     return (
-        <main className={className}>
+        <main>
             <Offline>
                 <div className='banner offline'>
                     <div className='title-container'>
@@ -28,10 +28,8 @@ export default function Main(props: {
                     </div>
                 </div>
             </Online>
-            <div className='main'>
-                <div className='container'>
-                    <div className='content'>{content}</div>
-                </div>
+            <div className={`main ${className}`}>
+                <div className='content'>{children}</div>
             </div>
         </main>
     );

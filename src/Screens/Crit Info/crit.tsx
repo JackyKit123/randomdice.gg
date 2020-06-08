@@ -375,5 +375,9 @@ export default function critData(): JSX.Element {
     } else {
         jsx = <LoadingScreen />;
     }
-    return <Main title='Crti% Data' className='crit-data' content={jsx} />;
+    return (
+        <Main title='Crti% Data' className='crit-data'>
+            {jsx}
+        </Main>
+    );
 }

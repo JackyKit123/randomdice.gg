@@ -64,22 +64,22 @@ body {
         position: relative;
         height: 100%;
 
-        & > .container {
-            .calc(min-height, ~'100vh - 750px');
-            .display(flex);
-            align-items: stretch;
-            justify-content: center;
-            padding: 20px 10px;
+        // & > .container {
+        .calc(min-height, ~'100vh - 750px');
+        .display(flex);
+        align-items: stretch;
+        justify-content: center;
+        padding: 20px 10px;
 
-            & > .content {
-                .box-shadow(0 0 14px -1px rgb(25, 36, 37));
-                padding: 20px;
-                background: rgba(255, 255, 255, 0.5);
-                border-radius: 5px;
-                max-width: 1200px;
-                min-height: 200px;
-                width: 100%;
-            }
+        & > .content {
+            .box-shadow(0 0 14px -1px rgb(25, 36, 37));
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            max-width: 1200px;
+            min-height: 200px;
+            width: 100%;
         }
+        // }
     }
 }

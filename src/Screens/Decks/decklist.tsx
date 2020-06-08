@@ -414,10 +414,8 @@ export default function DeckList({
         jsx = <LoadingScreen />;
     }
     return (
-        <Main
-            title={`Deck List (${deckType})`}
-            className='deck-list'
-            content={jsx}
-        />
+        <Main title={`Deck List (${deckType})`} className='deck-list'>
+            {jsx}
+        </Main>
     );
 }
