@@ -25,8 +25,10 @@ export default function BossGuide(): JSX.Element {
                 field (PvP only), it will do an animation which lasts for a few
                 seconds where Blizzard can Apply Slowness effects and
                 Spike/Landmine can damage the boss before it goes to the
-                starting point. Boss Health points seems to be random, but are
-                still based on a Hp Range (based on wave/n° of boss).
+                starting point. Boss Health points increases per waves, and in
+                PvP mode, the mobs on board that are not killed will contribute
+                to the increment of the boss health. So try not to overwhelm
+                your board with too many mobs.
             </p>
             <p>
                 Any boss is not affected by Death/Hell and some other Dice will
@@ -164,7 +166,10 @@ export default function BossGuide(): JSX.Element {
                     <p>
                         If Element Dice is Silenced, he will no longer attack
                         but the spinning spheres will still spin around it and
-                        damage the Silencer Boss.
+                        damage the Silencer Boss. If Gears Dice is silenced, it
+                        cannot attack but the chain buff to the chained gears
+                        dice retains. If a support dice is silenced, it will no
+                        longer buff the neighbor dice.
                     </p>
                 </li>
                 <li>
@@ -182,7 +187,7 @@ export default function BossGuide(): JSX.Element {
                     </p>
                     <p>
                         Ability (Randomize): Switches all your Dice in the
-                        board, Dots are not affected. Cooldown: 8 seconds.
+                        board, Dots are not affected. Cooldown: 10 seconds.
                     </p>
                     <p>
                         Can be used as a Growth Boost or for Assassin/Summoner
@@ -246,8 +251,9 @@ export default function BossGuide(): JSX.Element {
                     </p>
                     <p>
                         First Ability (Howl): Downgrades Half of your Dice on
-                        the board by 1, Dice that has 1 Dot only, will be
-                        destroyed. Time till next ability: 5 seconds.
+                        the board by 1 (If your board has odd amount of dice, it
+                        will be rounded down) , Dice that has 1 Dot only, will
+                        be destroyed. Time till next ability: 5 seconds.
                     </p>
                     <p>
                         Second Ability (Dash): Dashes forward in the track,

@@ -34,7 +34,11 @@ export default function BoxGuide(): JSX.Element {
     }, []);
 
     const imgGold = (
-        <img src={isWebpSupported() ? GoldWebp : GoldPng} alt='gold' />
+        <img
+            src={isWebpSupported() ? GoldWebp : GoldPng}
+            alt='gold'
+            className='gold'
+        />
     );
 
     return (
@@ -227,7 +231,7 @@ export default function BoxGuide(): JSX.Element {
                     </div>
                     <p>Obtained from: Sales Bundle, PvP Reward</p>
                     <p>
-                        Contains: <Dice dice='Sacrifice' /> +{' '}
+                        Contains: <Dice dice='Sacrificial' /> +{' '}
                         <Dice dice='Supplement' />
                     </p>
                 </li>
@@ -351,7 +355,7 @@ export default function BoxGuide(): JSX.Element {
                             alt='Legend Box'
                         />
                     </div>
-                    <p>Obtained from: Shop</p>
+                    <p>Obtained from: Shop, PvP Reward</p>
                     <p>Contains: 1 legendary dice</p>
                 </li>
                 <div className='divisor' />
@@ -377,8 +381,8 @@ export default function BoxGuide(): JSX.Element {
                         <img
                             src={
                                 isWebpSupported()
-                                    ? boxList.webp[9]
-                                    : boxList.png[9]
+                                    ? boxList.webp[14]
+                                    : boxList.png[14]
                             }
                             alt='Platinum Box'
                         />
@@ -436,8 +440,8 @@ export default function BoxGuide(): JSX.Element {
                     </div>
                     <p>Obtained from: 40 cards from PvE</p>
                     <p>
-                        Contains: {imgGold}, normal , rare, unique dice and 1%
-                        chance of legendary
+                        Contains:{imgGold}, 3 Diamond, normal , rare, unique
+                        dice and 1% chance of legendary
                     </p>
                 </li>
             </ul>

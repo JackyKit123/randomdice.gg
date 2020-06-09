@@ -31,7 +31,7 @@
         },
         {
             "name": "Gamble",
-            "desc": "Gamble Dice attacks the first enemy but instead of just dealing the Base Damage, he deals the Base Damage (class 1 dice will have 1 attack and will get 10 attack for each class-up) added with a random value between 1 and 100. Formula would be: (Base Damage)+(Class-Up)+(1~100)."
+            "desc": "Gamble Dice attacks the first enemy but instead of just dealing the Base Damage, he deals the Base Damage (class 1 dice will have 1 attack and will get 10 attack for each class-up) added with a random value between 1 and and your overall crit% dmg. Formula would be: (Base Damage)+(Class-Up)+(1~your crit%)."
         },
         {
             "name": "Lock",
@@ -79,11 +79,11 @@
         },
         {
             "name": "Laser",
-            "desc": "Laser Dice attacks the first enemy, the first hit deals the base dice Damage with the in-game upgrade, after the first hit, the laser dice starts stacking damage which means if the first attack damaged the enemy by 10, the second hit will deal him 20, then third hit will deal 30 damage and so on, forever. Starts getting quite strong at 4+ Dots, Light Dice make him attack faster so the damage grows faster. If the laser dice target is slowed and another enemy passes through, the attacking stacks resets and he starts back with basic attack."
+            "desc": "Laser Dice attacks the first enemy, the first hit deals the base dice Damage with the in-game upgrade, every two hit, the laser dice starts stacking damage which means if the first attack damaged the enemy by 10, the second hit will deal him 10, then third hit will deal 20 damage then 20 then 30 then 30 and so on, forever. Starts getting quite strong at 4+ Dots, Light Dice make him attack faster so the damage grows faster. If the laser dice target is slowed and another enemy passes through, the attacking stacks resets and he starts back with basic attack."
         },
         {
             "name": "Mimic",
-            "desc": "Mimic Dice attacks the first enemy, the special thing about this dice is that it can be merged with any dice with the same dot amount which can be helpful if you got an assassin or summoner deck."
+            "desc": "Mimic Dice attacks the first enemy, the special thing about this dice is that it can be merged with any dice with the same dot amount which can have very good synergy with dice like assassin, metastasis and summoner which has the best value when being merged"
         },
         {
             "name": "Infect",
@@ -155,19 +155,19 @@
         },
         {
             "name": "Solar",
-            "desc": "Biggest Damage Dealer in the Game. INACTIVE Solar Dice attacks the first enemy dealing his Base Attack Damage, after which, the damage increases (dots stacks separately every 2 hits from the same dot). You get an ACTIVE Solar if certain conditions are met, you will have an active solar if you got either 1, 4 or 9 solar dices on your board, otherwise it will deactivate. ACTIVE Solar will attack a lot faster than INACTIVE solar and will deal the Base Attack Damage to the first enemy, then it starts stacking like the inactive solar, but instead of stacking base damage, it starts stacking splash damage. You can easily calculate the Splash Damage he's doing by the dimension of the SUN effect on the enemies, the bigger the Sun effect, the bigger the Damage. At a certain point, the Sun Effect created on the enemy stops growing and will do a 'whip' effect. Damage Stacks can be stacked faster by giving him a Light Dice to shoot faster. Solar gets countered by Knight Boss, Magician Boss and Silence Boss, silence boss can be easily beaten by having a full board. Stacks gets reset if an enemy passes in front of the first enemy, when it deactivates and when Knight Boss switches the dice on the board. Works Really Good with: Growth, Joker, Mod.Electric, Typhoon, Blizzard, Light, Gun(PvE)."
+            "desc": "Biggest Damage Dealer in the Game. INACTIVE Solar Dice attacks the first enemy dealing his Base Attack Damage, after which, the damage increases (dots stacks separately every 2 hits from the same dot). You get an ACTIVE Solar if certain conditions are met, you will have an active solar if you got either 1, 4 or 9 solar dices on your board, otherwise it will deactivate. ACTIVE Solar will attack a lot faster than INACTIVE solar and will deal the Base Attack Damage to the first enemy, then it starts stacking like the inactive solar, but instead of stacking base damage, it starts stacking splash damage. You can easily calculate the Splash Damage he's doing by the dimension of the SUN effect on the enemies, the bigger the Sun effect, the bigger the Damage. At a certain point, the Sun Effect created on the enemy stops growing and will do a 'whip' effect. Damage Stacks can be stacked faster by giving him a Light Dice to shoot faster. Solar gets countered by Knight Boss, Magician Boss and Silence Boss, silence boss can be easily beaten by having a full board. Stacks gets reset if an enemy passes in front of the first enemy, when it deactivates and when Knight Boss switches the dice on the board. Works Really Good with: Growth, Joker, Mod.Electric, Typhoon, Blizzard, Light, Crit."
         },
         {
             "name": "Assassin",
-            "desc": "Best Offensive Dice in the Game. Assassin Dice attacks the first enemy dealing his Base Attack Damage, if you merge 2 Assassins or an assassin with a Mimic dice, it will decrease a random opponent's Dice by 1 Dot. If on PvE (Alliance) Mode, it will instead higher a random ally's Dice by 1 Dot. Extremely effective if played with: Sacrificial, Joker, Mimic, Summoner, Typhoon, M.Electric."
+            "desc": "Assassin Dice attacks the first enemy dealing his Base Attack Damage, if you merge 2 Assassins or an assassin with a Mimic dice, it will decrease a random opponent's Dice by 1 Dot. If on PvE (Alliance) Mode, it will instead higher a random ally's Dice by 1 Dot. Extremely effective if played with: Sacrificial, Joker, Mimic, Summoner, Typhoon, M.Electric."
         },
         {
             "name": "Gun",
-            "desc": "Best Late game Dice on PvE in the Game. Gun Dice attacks the first enemy and for every dot from 2 to 6 attacks an extra target, attack speed also get increased, all dots attacks at the same time, all together. At 7 Dots (1 Star), it transforms into the Sniper, which attacks a Random enemy and instantly kills the target, in the case of Bosses and Small bosses, Sniper Dice will deals 20% of the target's current HP, of course it has really low attack speed at 7 Dots since it has to aim, then shoot, this process can be faster if near a Light Dice that boosts his speed. Works Really Good with: Light, Growth, Solar, Element, Joker, Blizzard. Notice: Even if it no longer does basic attacks, at 7 dots before aiming and shooting, it will also stack up some Base Damage that will be added to the final damage."
+            "desc": "Gun Dice attacks the first enemy and for every dot from 2 to 6 attacks an extra target, attack speed also get increased, all dots attacks at the same time, all together. At 7 Dots (1 Star), it transforms into the Sniper, which attacks a Random enemy and instantly kills the target, in the case of Bosses and Small bosses, Sniper Dice will deals 20% of the target's current HP, of course it has really low attack speed at 7 Dots since it has to aim, then shoot, this process can be faster if near a Light Dice that boosts his speed. Works Really Good with: Light, Growth, Solar, Element, Joker, Blizzard. Notice: Even if it no longer does basic attacks, at 7 dots before aiming and shooting, it will also stack up some Base Damage that will be added to the final damage. Gun dice has the best value at 7pip, however, due to the introduction of leon boss, the value of gun dice has been greatly reduced and almost unusable."
         },
         {
             "name": "Element",
-            "desc": "Late-Game Dice. Element Dice attacks the first enemy dealing his Base Attack Damage. Because of the spinning spheres, the dice Must be placed on the Border of your Board to deal Damage. For Every dot the Element Dice has, it will gain a rotating sphere which will Deal enemy HP % for each hit, on the early game, it might be slow but once you Maxed out the level In-Game, the cycle will be faster. Works really good with: Joker, Growth, Blizzard, Typhoon, M.Electric."
+            "desc": "Late-Game Dice. Element Dice attacks the first enemy dealing his Base Attack Damage. Because of the spinning spheres, the dice Must be placed on the Border of your Board to deal Damage. For Every dot the Element Dice has, it will gain a rotating sphere which will Deal enemy HP % for each hit, on the early game, it might be slow but once you Maxed out the level In-Game, the cycle will be faster. Works really good with: Joker, Growth, Blizzard, Typhoon"
         },
         {
             "name": "Supplement",
@@ -187,7 +187,7 @@
         },
         {
             "name": "Combo",
-            "desc": "Combo Dice targets the first enemy dealing base Attack Damage. Every time you merge a Combo with itself or a Mimic Dice it will gain a counter dealing +10 damage per count at Class 7."
+            "desc": "Best Late game Dice on PvE in the Game. Combo Dice targets the first enemy dealing base Attack Damage. Every time you merge a Combo with itself or a Mimic Dice it will gain a counter dealing +10 damage per count at Class 7."
         }
     ]
 }

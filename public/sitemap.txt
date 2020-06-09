@@ -12,3 +12,12 @@ https://randomdice.gg/about/privacy
 https://randomdice.gg/about/terms
 https://randomdice.gg/about/us
 https://randomdice.gg/about/credit
+https://randomdice.gg/wiki/pvp
+https://randomdice.gg/wiki/pve
+https://randomdice.gg/wiki/dice_mechanics
+https://randomdice.gg/wiki/boss_mechanics
+https://randomdice.gg/wiki/guide
+https://randomdice.gg/wiki/patch_note
+https://randomdice.gg/wiki/store
+https://randomdice.gg/wiki/arena
+https://randomdice.gg/wiki/box_guide
