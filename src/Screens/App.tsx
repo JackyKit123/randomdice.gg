@@ -13,6 +13,7 @@ import {
 } from '../Misc/fetchData';
 import { menu } from '../Misc/menuConfig';
 import './App.less';
+import ToTop from '../Components/To Top/btn';
 
 export default function App(): JSX.Element {
     const dispatch = useDispatch();
@@ -31,6 +32,7 @@ export default function App(): JSX.Element {
             >
                 <Header />
                 {mapRouter(menu)}
+                <ToTop />
                 <Footer />
             </Analytics>
         </Router>

@@ -1,0 +1,32 @@
+@import '../../cross_import_lesshat.less';
+
+#to-top {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    height: 40px;
+    width: 40px;
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+    z-index: 99;
+    color: #6ba4a5;
+    font-size: 20px;
+    .transition(all 0.2 ease-in-out);
+
+    @media all and (min-width: 1230px) {
+        right: calc(50% - 585px);
+    }
+
+    &.scroll {
+        pointer-events: initial;
+        opacity: 0.7;
+    }
+
+    &:hover {
+        color: #002528;
+        .transform(scale(1.2));
+    }
+}
