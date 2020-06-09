@@ -47,34 +47,19 @@ export default function Homepage(): JSX.Element {
             <br />
             <h3 className='news'>What&apos;s New?</h3>
             <p>
-                Site Performance is greatly enhanced. Initial loading speed
-                should be decreased. This web page can now also be loaded
-                without internet connection. This web app can now be installed
-                onto your device, method can be seen in the link here for{' '}
+                There are new content in the Wiki tab, we strive to provide the
+                latest and the most accurate content. You may{' '}
+                <a href={`admin@${process.env.REACT_APP_DOMAIN}`}>contact us</a>{' '}
+                for suggestions with the content. Or you may put your suggestion
+                in the{' '}
                 <a
-                    href='https://www.howtogeek.com/fyi/how-to-install-progressive-web-apps-pwas-in-chrome/'
+                    href='https://discord.gg/zQj6tCM'
                     target='_blank'
                     rel='noopener noreferrer'
                 >
-                    Desktop
-                </a>{' '}
-                and{' '}
-                <a
-                    href='https://medium.com/progressivewebapps/how-to-install-a-pwa-to-your-device-68a8d37fadc1'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                >
-                    Mobile
+                    community discord
                 </a>
                 .
-            </p>
-            <p>
-                A meaningful description is added to each resource in the
-                website to allow easier understanding of usage of each tools.
-            </p>
-            <p>
-                Fixed images corruption issue on IOS devices, All images should
-                now be viewable.
             </p>
             <br />
             <br />

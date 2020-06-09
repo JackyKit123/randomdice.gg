@@ -1,0 +1,39 @@
+@import '../../../cross_import_lesshat.less';
+
+.boss-guide {
+    ul.dice {
+        & > li {
+            .display(flex);
+            .align-items(center);
+            margin: 30px 0;
+
+            & > .dice-container {
+                height: 100px;
+
+                & > img {
+                    height: 100%;
+                }
+            }
+        }
+    }
+
+    ul.boss-list {
+        & > li {
+            min-height: 200px;
+
+            h3 {
+                text-align: left;
+            }
+
+            &:nth-of-type(odd) > .boss-container {
+                float: left;
+                margin-right: 20px;
+            }
+
+            &:nth-of-type(even) > .boss-container {
+                float: right;
+                margin-left: 20px;
+            }
+        }
+    }
+}

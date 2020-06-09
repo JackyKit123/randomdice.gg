@@ -77,12 +77,12 @@ export const menu: Menu[] = [
         path: `https://random-dice.fandom.com/wiki/Random_Dice_Wiki`,
         childNode: [
             {
-                name: 'PvP',
+                name: 'PvP Introduction',
                 path: '/wiki/pvp',
                 component: lazy(() => import('../Screens/Wiki/Game Intro/pvp')),
             },
             {
-                name: 'PvE',
+                name: 'PvE  Introduction',
                 path: '/wiki/pve',
                 component: lazy(() => import('../Screens/Wiki/Game Intro/pve')),
             },
@@ -97,34 +97,33 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Wiki/Boss/boss')),
             },
             {
-                name: 'Guide',
-                path: `https://random-dice.fandom.com/wiki/Dice_Merging_Guide`,
-                external: true,
+                name: 'Guide and Tips',
+                path: '/wiki/guide',
+                component: lazy(() =>
+                    import('../Screens/Wiki/Basic Guide/guide')
+                ),
             },
             {
-                name: 'Patch Notes',
-                path: `https://random-dice.fandom.com/wiki/Patch_Notes`,
-                external: true,
+                name: 'Patch Note',
+                path: '/wiki/patch_note',
+                component: lazy(() =>
+                    import('../Screens/Wiki/Patch Note/table')
+                ),
             },
             {
                 name: 'The Store',
-                path: `https://random-dice.fandom.com/wiki/Store`,
-                external: true,
+                path: '/wiki/store',
+                component: lazy(() => import('../Screens/Wiki/Store/store')),
             },
             {
                 name: 'The Arena',
-                path: `https://random-dice.fandom.com/wiki/Arena`,
-                external: true,
+                path: '/wiki/arena',
+                component: lazy(() => import('../Screens/Wiki/Arena/arena')),
             },
             {
-                name: 'Dice Menu/List',
-                path: `https://random-dice.fandom.com/wiki/Dice_Menu`,
-                external: true,
-            },
-            {
-                name: 'Box Drop Rates',
-                path: `https://random-dice.fandom.com/wiki/Box_Drop_Rates`,
-                external: true,
+                name: 'Box Guide',
+                path: '/wiki/box_guide',
+                component: lazy(() => import('../Screens/Wiki/Box Guide/box')),
             },
         ],
     },
