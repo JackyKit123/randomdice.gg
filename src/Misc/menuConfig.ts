@@ -74,7 +74,6 @@ export const menu: Menu[] = [
     },
     {
         name: 'Wiki',
-        path: `https://random-dice.fandom.com/wiki/Random_Dice_Wiki`,
         childNode: [
             {
                 name: 'PvP Introduction',

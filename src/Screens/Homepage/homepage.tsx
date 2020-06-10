@@ -49,7 +49,9 @@ export default function Homepage(): JSX.Element {
             <p>
                 There are new content in the Wiki tab, we strive to provide the
                 latest and the most accurate content. You may{' '}
-                <a href={`admin@${process.env.REACT_APP_DOMAIN}`}>contact us</a>{' '}
+                <a href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}>
+                    contact us
+                </a>{' '}
                 for suggestions with the content. Or you may put your suggestion
                 in the{' '}
                 <a
