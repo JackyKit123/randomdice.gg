@@ -61,6 +61,11 @@ export default function Homepage(): JSX.Element {
                 </a>
                 .
             </p>
+            <p>
+                Some broken styling has been corrected for iOS device, namely
+                the issues with faded text color in textbox and mis-aligned
+                content.
+            </p>
             <br />
             <br />
             <br />

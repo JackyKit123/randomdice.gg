@@ -34,7 +34,7 @@ export default function AboutUs(): JSX.Element {
             <p>Hi, I am the developer of this website.</p>
             <p>
                 I hope you are enjoying the content of this website and found it
-                useful
+                useful.
             </p>
             <p>
                 I like to listen to what you want. You can contact me through
@@ -46,7 +46,7 @@ export default function AboutUs(): JSX.Element {
             </p>
             <p>
                 My discord tag is JackyKit#0333. You can find me and play games
-                with me. I am also a fan of random dice!
+                with me. I am also a fan of Random Dice!
             </p>
             <p>
                 Lastly, this website runs off my personal pocket, it costs me

@@ -109,7 +109,7 @@ export default function Credit(): JSX.Element {
             <ul>
                 <li>
                     Oh, it looks like we don&apos;t have any supporter yet. You
-                    can be the first one to support this website by joining out
+                    can be the first one to support this website by joining our
                     patreon at{' '}
                     <a
                         target='_blank'

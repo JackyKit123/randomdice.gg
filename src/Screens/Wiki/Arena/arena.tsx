@@ -21,7 +21,7 @@ export default function Arena(): JSX.Element {
             <p>
                 The Arena is a form of PvP that costs 100 Gems to gain entry to,
                 after entering the Arena you will be asked to choose your deck
-                settings. This will let you pick a random dice out of 3 options
+                settings. This will let you pick a Random Dice out of 3 options
                 to complete your deck, upon completing your deck settings you
                 can then compete with other players whom match your number of
                 wins up to 12 wins.

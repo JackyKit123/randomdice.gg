@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import './header-footer.less';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faUserCircle,
+    // faUserCircle,
     faBars,
     faTimes,
 } from '@fortawesome/free-solid-svg-icons';
@@ -37,9 +37,9 @@ export default function Header(): JSX.Element {
             <div className='container'>
                 <div className='topHeaderBar headerBar'>
                     <div className='container'>
-                        <span className='login'>
+                        {/* <span className='login'>
                             <FontAwesomeIcon icon={faUserCircle} /> ADMIN Login
-                        </span>
+                        </span> */}
                     </div>
                 </div>
                 <div className='lowHeaderBar headerBar'>
