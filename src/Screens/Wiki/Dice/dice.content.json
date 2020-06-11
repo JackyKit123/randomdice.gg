@@ -163,7 +163,7 @@
         },
         {
             "name": "Gun",
-            "desc": "Gun Dice attacks the first enemy and for every dot from 2 to 6 attacks an extra target, attack speed also get increased, all dots attacks at the same time, all together. At 7 Dots (1 Star), it transforms into the Sniper, which attacks a Random enemy and instantly kills the target, in the case of Bosses and Small bosses, Sniper Dice will deals 20% of the target's current HP, of course it has really low attack speed at 7 Dots since it has to aim, then shoot, this process can be faster if near a Light Dice that boosts his speed. Works Really Good with: Light, Growth, Solar, Element, Joker, Blizzard. Notice: Even if it no longer does basic attacks, at 7 dots before aiming and shooting, it will also stack up some Base Damage that will be added to the final damage. Gun dice has the best value at 7pip, however, due to the introduction of leon boss, the value of gun dice has been greatly reduced and almost unusable."
+            "desc": "Gun Dice attacks the first enemy and for every dot from 2 to 6 attacks an extra target, attack speed also get increased, all dots attacks at the same time, all together. At 7 Dots (1 Star), it transforms into the Sniper, which attacks a Random enemy and instantly kills the target, in the case of Bosses and Small bosses, Sniper Dice will deals 20% of the target's current HP, of course it has really low attack speed at 7 Dots since it has to aim, then shoot, this process can be faster if near a Light Dice that boosts his speed. Works Really Good with: Light, Growth, Solar, Element, Joker, Blizzard. Notice: Even if it no longer does basic attacks, at 7 dots before aiming and shooting, it will also stack up some Base Damage that will be added to the final damage. Gun dice has the best value at 7pip."
         },
         {
             "name": "Element",
@@ -187,7 +187,7 @@
         },
         {
             "name": "Combo",
-            "desc": "Best Late game Dice on PvE in the Game. Combo Dice targets the first enemy dealing base Attack Damage. Every time you merge a Combo with itself or a Mimic Dice it will gain a counter dealing +10 damage per count at Class 7."
+            "desc": "Best Late game Dice on PvE in the Game. Combo Dice targets the first enemy dealing base Attack Damage. Every time you merge a Combo with itself or a Mimic Dice it will gain a counter dealing +8 damage per count at Class 7. Leveling up will gain +1 damage per count. The formula is (dmgPerCombo * Combo) * (combo count - 1) / 2 "
         }
     ]
 }
