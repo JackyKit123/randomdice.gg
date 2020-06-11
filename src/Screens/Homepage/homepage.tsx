@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Main from '../../Components/Main/main';
 import Menu from '../../Components/Menu/menu';
 import './homepage.less';
@@ -47,26 +48,14 @@ export default function Homepage(): JSX.Element {
             <br />
             <h3 className='news'>What&apos;s New?</h3>
             <p>
-                There are new content in the Wiki tab, we strive to provide the
-                latest and the most accurate content. You may{' '}
-                <a href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}>
-                    contact us
-                </a>{' '}
-                for suggestions with the content. Or you may put your suggestion
-                in the{' '}
-                <a
-                    href='https://discord.gg/zQj6tCM'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                >
-                    community discord
-                </a>
-                .
+                A new <Link to='/calculator/dps'>dice DPS calculator</Link> has
+                been added. You can now use that tool to calculate the dps for
+                certain, as well as finding out the most optimal dps dice for
+                yourself.
             </p>
             <p>
-                Some broken styling has been corrected for iOS device, namely
-                the issues with faded text color in textbox and mis-aligned
-                content.
+                As update 4.0.0 is coming ahead, we will keep an eye on the new
+                dice and will update the content as soon as possible.
             </p>
             <br />
             <br />

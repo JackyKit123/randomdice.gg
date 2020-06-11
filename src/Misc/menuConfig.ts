@@ -66,13 +66,13 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Cal/Gold/gold')),
             },
             {
-                name: 'Generic DPS Calculator',
-                path: '/calculator/generic',
+                name: 'General DPS Calculator',
+                path: '/calculator/dps',
                 component: lazy(() => import('../Screens/Cal/DPS/dps')),
             },
             {
                 name: 'Dice Stat Calculator',
-                path: '/calculator/dice',
+                path: '/calculator/stat',
                 component: lazy(() => import('../Screens/Cal/Dice Stat/dice')),
             },
         ],

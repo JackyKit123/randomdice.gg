@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
@@ -76,7 +77,10 @@ export default function DiceStat(): JSX.Element {
                     This is a basic stat calculator for every dice. Note that
                     the pip count variable is not taken into account. It only
                     depicts the raw stat, you should not use this calculator to
-                    calculate dps for dice like typhoon, mighty wind.
+                    calculate dps for dice like typhoon, mighty wind. For DPS
+                    calculation, please use{' '}
+                    <Link to='/calculator/dps'>dice DPS calculator</Link>{' '}
+                    instead.
                 </p>
                 <div className='divisor' />
                 <div className='container'>
