@@ -148,12 +148,11 @@ export default function DpsCalculator(): JSX.Element {
         const gambleDps = (level = filter.level): number => {
             data.gamble.atk = 7;
             const dpsPerPip =
-                ((baseAtkDmg(data.gamble, filter.gambleClass, level) +
+                (baseAtkDmg(data.gamble, filter.gambleClass, level) *
+                    atkSpdMultiplier +
                     (1 + filter.crit) / 2) /
-                    ((data.gamble.spd +
-                        data.gamble.cupSpd * (filter.gambleClass - 1)) *
-                        atkSpdMultiplier)) *
-                critMultiplier;
+                (data.gamble.spd +
+                    data.gamble.cupSpd * (filter.gambleClass - 1));
             const dps = dpsPerPip * filter.pip;
             return roundTo3Sf(dps);
         };
