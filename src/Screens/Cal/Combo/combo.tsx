@@ -17,7 +17,7 @@ import { clearError, fetchDices } from '../../../Misc/fetchData';
 import '../cal.less';
 import './combo.less';
 
-export default function ComboCaculator(): JSX.Element {
+export default function ComboCalculator(): JSX.Element {
     const dispatch = useDispatch();
     const selection = useSelector(
         (state: RootState) => state.fetchDicesReducer
@@ -55,7 +55,7 @@ export default function ComboCaculator(): JSX.Element {
             baseAtkPerLevel: comboData.pupAtk,
             atkSpd: comboData.spd,
             baseComboAtk: comboData.eff1,
-            ComboAtkPerClass: 2 /* comboData.cupEff1 Combo Dice Data is mistken */,
+            ComboAtkPerClass: 2 /* comboData.cupEff1 Combo Dice Data is mistaken */,
             ComboAtkPerLevel: comboData.pupEff1,
         };
         const critDiceData = {
@@ -85,8 +85,11 @@ export default function ComboCaculator(): JSX.Element {
             (dmgPerCombo / 2) * (filter.combo.count ** 2 - filter.combo.count) +
             baseAtk;
         const dps =
-            dmg * (1 - critMultiplier) +
-            (dmg * critMultiplier * filter.crit) / 100;
+            Math.round(
+                (dmg * (1 - critMultiplier) +
+                    (dmg * critMultiplier * filter.crit) / 100) *
+                    100
+            ) / 100;
 
         const dpsPerComboCount = (count: number, useCrit: boolean): number => {
             if (invalidInput) {
@@ -115,8 +118,8 @@ export default function ComboCaculator(): JSX.Element {
                     the final dps.
                 </p>
                 <div className='divisor' />
-                <div className='dice-container'>
-                    <div>
+                <div className='multiple-dice'>
+                    <div className='dice-container'>
                         <Dice dice='Combo' />
                         <h3 className='desc'>{comboData.desc}</h3>
                         <form className='filter'>
@@ -186,7 +189,7 @@ export default function ComboCaculator(): JSX.Element {
                             </label>
                         </form>
                     </div>
-                    <div>
+                    <div className='dice-container'>
                         <Dice dice='Critical' />
                         <h3 className='desc'>{critData.desc}</h3>
                         <form className='filter'>

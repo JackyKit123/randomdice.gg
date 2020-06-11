@@ -75,7 +75,7 @@ export default function DiceStat(): JSX.Element {
                 <p>
                     This is a basic stat calculator for every dice. Note that
                     the pip count variable is not taken into account. It only
-                    depicts the raw stat, you should not use this calculor to
+                    depicts the raw stat, you should not use this calculator to
                     calculate dps for dice like typhoon, mighty wind.
                 </p>
                 <div className='divisor' />

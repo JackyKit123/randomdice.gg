@@ -4,7 +4,7 @@ export const FETCH_DICES_SUCCESS = 'FETCH_DICES_SUCCESS';
 export const FETCH_DICES_FAIL = 'FETCH_DICES_FAIL';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
-export type Dices = {
+export type Dice = {
     id: number;
     name: string;
     type: string;
@@ -28,7 +28,9 @@ export type Dices = {
     pupSpd: number;
     pupEff1: number;
     pupEff2: number;
-}[];
+};
+
+export type Dices = Dice[];
 
 export interface FetchState {
     dices: Dices | undefined;

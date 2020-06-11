@@ -54,7 +54,12 @@ export default function GearsCaculator(): JSX.Element {
             gearsDiceData.chainBuffPerLevel * (filter.level - 1);
         const dmgPerPip = atkDmg * (1 + (rawBuff / 100) * filter.chain);
         const dps =
-            dmgPerPip * filter.pip * (0.95 + (0.05 * filter.crit) / 100);
+            Math.round(
+                dmgPerPip *
+                    filter.pip *
+                    (0.95 + (0.05 * filter.crit) / 100) *
+                    100
+            ) / 100;
 
         jsx = (
             <>

@@ -9,7 +9,7 @@ import { clearError, fetchDices } from '../../../Misc/fetchData';
 import '../cal.less';
 import './blizzard.less';
 
-export default function BlizzardCaculator(): JSX.Element {
+export default function BlizzardCalculator(): JSX.Element {
     const dispatch = useDispatch();
     const selection = useSelector(
         (state: RootState) => state.fetchDicesReducer
@@ -58,116 +58,115 @@ export default function BlizzardCaculator(): JSX.Element {
                 </p>
                 <div className='divisor' />
                 <div className='dice-container'>
-                    <div>
-                        <Dice dice='Blizzard' />
-                        <h3 className='desc'>{data.desc}</h3>
-                    </div>
+                    <Dice dice='Blizzard' />
+                    <h3 className='desc'>{data.desc}</h3>
+
+                    <form className='filter'>
+                        <label htmlFor='class'>
+                            <span>Class :</span>
+                            <select
+                                name='class'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.class = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+                        </label>
+                        <label htmlFor='level'>
+                            <span>Level :</span>
+                            <select
+                                name='level'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.level = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </label>
+                        <label htmlFor='dice1dot'>
+                            <span>Pips of the 1st Blizzard:</span>
+                            <select
+                                name='dice1dot'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.dice1Pips = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                            </select>
+                        </label>
+                        <label htmlFor='dice2dot'>
+                            <span>Pips of the 2nd Blizzard:</span>
+                            <select
+                                name='dice2dot'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.dice2Pips = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                            </select>
+                        </label>
+                        <label htmlFor='dice3dot'>
+                            <span>Pips of the 3rd Blizzard:</span>
+                            <select
+                                name='dice3dot'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.dice3Pips = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                            </select>
+                        </label>
+                    </form>
                 </div>
-                <form className='filter'>
-                    <label htmlFor='class'>
-                        <span>Class :</span>
-                        <select
-                            name='class'
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLSelectElement>
-                            ): void => {
-                                filter.class = Number(evt.target.value);
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                            <option>11</option>
-                            <option>12</option>
-                            <option>13</option>
-                            <option>14</option>
-                            <option>15</option>
-                        </select>
-                    </label>
-                    <label htmlFor='level'>
-                        <span>Level :</span>
-                        <select
-                            name='level'
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLSelectElement>
-                            ): void => {
-                                filter.level = Number(evt.target.value);
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </label>
-                    <label htmlFor='dice1dot'>
-                        <span>Pips of the 1st Blizzard:</span>
-                        <select
-                            name='dice1dot'
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLSelectElement>
-                            ): void => {
-                                filter.dice1Pips = Number(evt.target.value);
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            <option>0</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                        </select>
-                    </label>
-                    <label htmlFor='dice2dot'>
-                        <span>Pips of the 2nd Blizzard:</span>
-                        <select
-                            name='dice2dot'
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLSelectElement>
-                            ): void => {
-                                filter.dice2Pips = Number(evt.target.value);
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            <option>0</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                        </select>
-                    </label>
-                    <label htmlFor='dice3dot'>
-                        <span>Pips of the 3rd Blizzard:</span>
-                        <select
-                            name='dice3dot'
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLSelectElement>
-                            ): void => {
-                                filter.dice3Pips = Number(evt.target.value);
-                                setFilter({ ...filter });
-                            }}
-                        >
-                            <option>0</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                        </select>
-                    </label>
-                </form>
                 <div className='divisor' />
                 <div className='result'>
                     <div>

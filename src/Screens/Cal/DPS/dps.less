@@ -1,0 +1,77 @@
+@import '../../../cross_import_lesshat.less';
+
+.cal.generic-dmg-cal {
+    label[for='light-enable'],
+    label[for='crit-enable'] {
+        display: inline-block;
+        position: relative;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        width: 114px;
+        text-align: left;
+
+        & > input {
+            display: inline-block;
+            position: absolute;
+            z-index: 1;
+            opacity: 0;
+            top: 0;
+            right: 0;
+            margin: 0;
+            cursor: pointer;
+            height: 25px;
+            width: 25px;
+
+            &:hover,
+            &:focus {
+                & ~ .checkbox-styler {
+                    background-color: #525252;
+                }
+            }
+
+            &:focus ~ .checkbox-styler {
+                border: 2px solid #ffffff;
+            }
+
+            &:checked ~ .checkbox-styler {
+                background-color: #6ba4a5;
+
+                & > .fa-check {
+                    display: block;
+                }
+            }
+        }
+
+        & > .checkbox-styler {
+            position: absolute;
+            border-radius: 5px;
+            bottom: 0;
+            right: 0;
+            margin: 0 auto;
+            height: 25px;
+            width: 25px;
+            background-color: #eeeeee;
+            .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+            .transition(all 0.2s ease-in-out);
+
+            & > .fa-check {
+                display: none;
+                position: absolute;
+                bottom: 3px;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+            }
+        }
+    }
+
+    .result {
+        span.dice-name {
+            font-size: 20px;
+            font-weight: 400;
+            margin: 10px 0 -10px;
+        }
+    }
+}

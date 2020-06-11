@@ -1,10 +1,23 @@
 @import '../../cross_import_lesshat.less';
 
 .cal {
+    .multiple-dice {
+        .display(flex);
+        .flex-direction(row);
+        .flex-wrap(wrap);
+        .justify-content(center);
+
+        & > .dice-container {
+            margin: 20px;
+            width: 300px;
+        }
+    }
+
     .dice-container {
         .display(flex);
-        .justify-content(center);
-        .align-items(flex-start);
+        .justify-content(flex-start);
+        .flex-direction(column);
+        .align-items(center);
 
         @media @mobile {
             .flex-direction(column);
@@ -14,6 +27,7 @@
         img {
             display: block;
             margin: 0 auto;
+            height: 135px;
         }
 
         .desc {
@@ -69,6 +83,12 @@
         }
     }
 
+    .chart-container {
+        @media @desktop {
+            .display(flex);
+        }
+    }
+
     .result {
         .display(flex);
         .justify-content(center);
@@ -98,6 +118,7 @@
 
                 &.invalid {
                     color: #ff7777;
+                    -webkit-text-fill-color: #ff7777;
                 }
             }
         }

@@ -17,7 +17,7 @@ import { clearError, fetchDices } from '../../../Misc/fetchData';
 import '../cal.less';
 import './solar.less';
 
-export default function SolarCaculator(): JSX.Element {
+export default function SolarCalculator(): JSX.Element {
     const dispatch = useDispatch();
     const selection = useSelector(
         (state: RootState) => state.fetchDicesReducer
@@ -211,8 +211,8 @@ export default function SolarCaculator(): JSX.Element {
                     second at a certain point of time.
                 </p>
                 <div className='divisor' />
-                <div className='dice-container'>
-                    <div>
+                <div className='multiple-dice'>
+                    <div className='dice-container'>
                         <Dice dice='Light' />
                         <h3 className='desc'>{lightData.desc}</h3>
                         <form className='filter'>
@@ -295,7 +295,7 @@ export default function SolarCaculator(): JSX.Element {
                             </label>
                         </form>
                     </div>
-                    <div>
+                    <div className='dice-container'>
                         <Dice dice='Solar' />
                         <h3 className='desc'>{solarData.desc}</h3>
                         <form className='filter'>
@@ -373,7 +373,7 @@ export default function SolarCaculator(): JSX.Element {
                             </label>
                         </form>
                     </div>
-                    <div>
+                    <div className='dice-container'>
                         <Dice dice='Critical' />
                         <h3 className='desc'>{critData.desc}</h3>
                         <form className='filter'>
