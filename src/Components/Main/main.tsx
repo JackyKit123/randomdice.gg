@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { ReactNode } from 'react';
 import { Offline, Online } from 'react-detect-offline';
 import { isWebpSupported } from 'react-image-webp/dist/utils';
@@ -9,6 +10,16 @@ export default function Main(props: {
     children: ReactNode;
 }): JSX.Element {
     const { title, className, children } = props;
+
+    try {
+        // eslint-disable-next-line func-names
+        window._mNHandle.queue.push(function() {
+            window._mNDetails.loadTag('219055766', '970x90', '219055766');
+        });
+    } catch (err) {
+        //
+    }
+
     return (
         <main>
             <Offline>
@@ -34,6 +45,7 @@ export default function Main(props: {
                 </div>
             </Online>
             <div className={`main ${className}`}>
+                <div id='219055766' className='ad-container' />
                 <div className='content'>{children}</div>
             </div>
         </main>

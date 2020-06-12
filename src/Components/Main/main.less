@@ -68,12 +68,24 @@ body {
         position: relative;
         height: 100%;
 
-        // & > .container {
         .calc(min-height, ~'100vh - 750px');
         .display(flex);
-        align-items: stretch;
-        justify-content: center;
+        .flex-direction(column);
+        .align-items(center);
         padding: 20px 10px;
+
+        & > .ad-container {
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 20px;
+
+            & > iframe {
+                border: 1px solid #000000;
+                max-width: 100%;
+                display: block;
+                margin: 0 auto;
+            }
+        }
 
         & > .content {
             .box-shadow(0 0 14px -1px rgb(25, 36, 37));
@@ -84,6 +96,5 @@ body {
             min-height: 200px;
             width: 100%;
         }
-        // }
     }
 }

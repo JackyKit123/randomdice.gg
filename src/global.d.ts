@@ -1,5 +1,7 @@
 interface Window {
     gapi: gapi;
+    _mNHandle: _mNHandle;
+    _mNDetails: _mNDetails;
 }
 
 declare module 'react-router-ga' {
