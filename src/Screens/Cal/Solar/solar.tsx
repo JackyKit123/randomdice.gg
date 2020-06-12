@@ -652,6 +652,18 @@ export default function SolarCalculator(): JSX.Element {
                             x: filter.duration || 0,
                             y: Math.max(
                                 dps(
+                                    basicDmgPerHit,
+                                    buffedAtkSpd,
+                                    buffedCrit,
+                                    filter.duration
+                                ),
+                                dps(
+                                    basicDmgPerHit,
+                                    buffedAtkSpd,
+                                    basicCrit,
+                                    filter.duration
+                                ),
+                                dps(
                                     moonBuffedDmgPerHit,
                                     moonBuffedAtkSpd,
                                     moonBuffedCrit,
@@ -785,19 +797,19 @@ export default function SolarCalculator(): JSX.Element {
                             x: filter.duration || 0,
                             y: Math.max(
                                 dps(
-                                    basicDmgPerHit,
+                                    basicDmgPerSplash,
                                     buffedAtkSpd,
                                     buffedCrit,
                                     filter.duration
                                 ),
                                 dps(
-                                    basicDmgPerHit,
+                                    basicDmgPerSplash,
                                     buffedAtkSpd,
                                     basicCrit,
                                     filter.duration
                                 ),
                                 dps(
-                                    moonBuffedDmgPerHit,
+                                    moonBuffedDmgPerSplash,
                                     moonBuffedAtkSpd,
                                     moonBuffedCrit,
                                     filter.duration
