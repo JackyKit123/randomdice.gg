@@ -51,7 +51,7 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Cal/Combo/combo')),
             },
             {
-                name: 'Solar Light vs Crit Comparison',
+                name: 'Solar Damage Calculator',
                 path: '/calculator/solar',
                 component: lazy(() => import('../Screens/Cal/Solar/solar')),
             },
