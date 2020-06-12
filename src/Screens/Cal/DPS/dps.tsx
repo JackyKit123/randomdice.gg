@@ -42,6 +42,13 @@ export default function DpsCalculator(): JSX.Element {
             level: 1,
             pip: 1,
         },
+        moon: {
+            enable: false,
+            active: false,
+            class: 7,
+            level: 1,
+            pip: 1,
+        },
         light: {
             enable: false,
             class: 3,
@@ -69,6 +76,7 @@ export default function DpsCalculator(): JSX.Element {
         typhoon: dices?.find(dice => dice.name === 'Typhoon'),
         critical: dices?.find(dice => dice.name === 'Critical'),
         light: dices?.find(dice => dice.name === 'Light'),
+        moon: dices?.find(dice => dice.name === 'Moon'),
     } as { [key: string]: DiceType };
 
     if (Object.values(data).every(d => d !== undefined)) {
@@ -78,6 +86,11 @@ export default function DpsCalculator(): JSX.Element {
                   filter.light.pip +
               data.light.pupEff1 * (filter.light.level - 1)
             : 0;
+        const moonSpdBuff = filter.moon.enable
+            ? ((filter.moon.class - 7) * data.moon.cupEff1 + data.moon.eff1) *
+                  filter.moon.pip +
+              data.moon.pupEff1 * (filter.moon.level - 1)
+            : 0;
         const critBuff = filter.critical.enable
             ? (((filter.critical.class - 3) * data.critical.cupEff1 +
                   data.critical.eff1) *
@@ -85,10 +98,17 @@ export default function DpsCalculator(): JSX.Element {
                   data.critical.pupEff1 * (filter.critical.level - 1) +
                   5) /
               100
-            : 0.05;
+            : 0;
+        const moonCritBuff =
+            filter.moon.enable && filter.moon.active
+                ? (2 * filter.moon.pip) / 100
+                : 0;
+        const critBuffSum = critBuff + moonCritBuff + 0.05;
 
-        const atkSpdMultiplier = 1 - lightBuff / 100;
-        const critMultiplier = 1 - critBuff + critBuff * (filter.crit / 100);
+        const atkSpdMultiplier =
+            (1 - lightBuff / 100) * (1 - moonSpdBuff / 100);
+        const critMultiplier =
+            1 - critBuffSum + critBuffSum * (filter.crit / 100);
 
         const roundTo3Sf = (val: number): number => Math.round(val * 100) / 100;
 
@@ -114,11 +134,15 @@ export default function DpsCalculator(): JSX.Element {
                 default:
                     minClass = 1;
             }
-            return (
+            const atk =
                 dice.atk +
                 dice.cupAtk * (diceClass - minClass) +
-                dice.pupAtk * (level - 1)
-            );
+                dice.pupAtk * (level - 1);
+            const moonAtkBuffMultiplier =
+                filter.moon.enable && filter.moon.active
+                    ? (5 * filter.moon.pip) / 100 + 1
+                    : 1;
+            return atk * moonAtkBuffMultiplier;
         };
 
         const windDps = (level = filter.level): number => {
@@ -561,7 +585,10 @@ export default function DpsCalculator(): JSX.Element {
                         <Dice dice='Light' />
                         <h3 className='desc'>{data.light?.desc}</h3>
                         <form className='filter'>
-                            <label htmlFor='light-enable'>
+                            <label
+                                htmlFor='light-enable'
+                                className='checkbox-label'
+                            >
                                 <span>Enabled : </span>
                                 <input
                                     type='checkbox'
@@ -657,10 +684,128 @@ export default function DpsCalculator(): JSX.Element {
                         </form>
                     </div>
                     <div className='dice-container'>
+                        <Dice dice='Moon' />
+                        <h3 className='desc'>{data.moon?.desc}</h3>
+                        <form className='filter'>
+                            <label
+                                htmlFor='moon-enable'
+                                className='checkbox-label'
+                            >
+                                <span>Enabled : </span>
+                                <input
+                                    type='checkbox'
+                                    onChange={(
+                                        evt: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
+                                        filter.moon.enable = evt.target.checked;
+                                        setFilter({ ...filter });
+                                    }}
+                                />
+                                <span className='checkbox-styler'>
+                                    <FontAwesomeIcon icon={faCheck} />
+                                </span>
+                            </label>
+                            <label
+                                htmlFor='moon-active'
+                                className='checkbox-label'
+                            >
+                                <span>Active : </span>
+                                <input
+                                    type='checkbox'
+                                    onChange={(
+                                        evt: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
+                                        filter.moon.active = evt.target.checked;
+                                        setFilter({ ...filter });
+                                    }}
+                                />
+                                <span className='checkbox-styler'>
+                                    <FontAwesomeIcon icon={faCheck} />
+                                </span>
+                            </label>
+                            <label htmlFor='moon-class'>
+                                <span>Class :</span>
+                                <select
+                                    name='moon-class'
+                                    defaultValue={7}
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.moon.class = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                </select>
+                            </label>
+                            <label htmlFor='moon-level'>
+                                <span>Level :</span>
+                                <select
+                                    name='moon-level'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.moon.level = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </label>
+                            <label htmlFor='moon-pip'>
+                                <span>Pip :</span>
+                                <select
+                                    name='moon-pip'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.moon.pip = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                </select>
+                            </label>
+                        </form>
+                    </div>
+                    <div className='dice-container'>
                         <Dice dice='Critical' />
                         <h3 className='desc'>{data.critical?.desc}</h3>
                         <form className='filter'>
-                            <label htmlFor='crit-enable'>
+                            <label
+                                htmlFor='crit-enable'
+                                className='checkbox-label'
+                            >
                                 <span>Enabled : </span>
                                 <input
                                     type='checkbox'
@@ -1107,7 +1252,7 @@ export default function DpsCalculator(): JSX.Element {
         jsx = <LoadingScreen />;
     }
     return (
-        <Main title='Generic DPS Calculator' className='generic-dmg-cal cal'>
+        <Main title='General DPS Calculator' className='generic-dmg-cal cal'>
             {jsx}
         </Main>
     );

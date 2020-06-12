@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import {
     VictoryChart,
     VictoryLine,
@@ -41,11 +43,18 @@ export default function SolarCalculator(): JSX.Element {
             level: 1,
             pip: 1,
         },
+        moon: {
+            active: false,
+            class: 7,
+            level: 1,
+            pip: 1,
+        },
     });
     let jsx;
     const solarData = dices?.find(dice => dice.name === 'Solar');
     const lightData = dices?.find(dice => dice.name === 'Light');
     const critData = dices?.find(dice => dice.name === 'Critical');
+    const moonData = dices?.find(dice => dice.name === 'Moon');
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
@@ -54,7 +63,7 @@ export default function SolarCalculator(): JSX.Element {
         !Number.isInteger(filter.duration) || filter.duration <= 0;
     const invalidInput = isInvalidCrit || isInvalidDuration;
 
-    if (solarData && lightData && critData) {
+    if (solarData && lightData && critData && moonData) {
         const diceData = {
             solar: {
                 baseAtk: solarData.atk,
@@ -75,6 +84,13 @@ export default function SolarCalculator(): JSX.Element {
                 buffPerClass: critData.cupEff1,
                 buffPerLevel: critData.pupEff1,
             },
+            moon: {
+                baseBuff: moonData.eff1,
+                buffPerClass: moonData.cupEff1,
+                buffPerLevel: moonData.pupEff1,
+                activeAtkBuff: 5,
+                activeCritBuff: 2,
+            },
         };
 
         const basicDmgPerHit =
@@ -85,25 +101,43 @@ export default function SolarCalculator(): JSX.Element {
             (filter.solar.class - 7) * diceData.solar.splashDmgPerClass +
             diceData.solar.splashDmg +
             diceData.solar.splashDmgPerLevel * (filter.solar.level - 1);
+        const moonBuffedDmgPerHit = filter.moon.active
+            ? filter.moon.pip * 5 * basicDmgPerHit
+            : basicDmgPerHit;
+        const moonBuffedDmgPerSplash = filter.moon.active
+            ? filter.moon.pip * 5 * basicDmgPerSplash
+            : basicDmgPerSplash;
 
         const lightBuff =
             ((filter.light.class - 3) * diceData.light.buffPerClass +
                 diceData.light.baseBuff) *
                 filter.light.pip +
             diceData.light.buffPerLevel * (filter.light.level - 1);
+        const moonSpdBuff =
+            ((filter.moon.class - 7) * diceData.moon.buffPerClass +
+                diceData.moon.baseBuff) *
+                filter.moon.pip +
+            diceData.moon.buffPerLevel * (filter.moon.level - 1);
         const critBuff =
             ((filter.critical.class - 3) * diceData.crit.buffPerClass +
                 diceData.crit.baseBuff) *
                 filter.critical.pip +
             diceData.crit.buffPerLevel * (filter.critical.level - 1);
+        const moonCritBuff = filter.moon.pip * 2;
 
         const atkSpdMultiplier = 1 - lightBuff / 100;
+        const moonAtkSpdMultiplier = 1 - moonSpdBuff / 100;
         const basicAtkSpd = diceData.solar.atkSpd;
         const buffedAtkSpd = diceData.solar.atkSpd * atkSpdMultiplier;
+        const moonBuffedAtkSpd = diceData.solar.atkSpd * moonAtkSpdMultiplier;
+
         const critMultiplier = (5 + critBuff) / 100;
+        const moonCritMultiplier = (5 + moonCritBuff) / 100;
         const basicCrit = 0.95 + 0.05 * (filter.crit / 100);
         const buffedCrit =
             1 - critMultiplier + critMultiplier * (filter.crit / 100);
+        const moonBuffedCrit =
+            1 - moonCritMultiplier + moonCritMultiplier * (filter.crit / 100);
 
         const dps = (
             sourceDmgPerHit: number,
@@ -176,21 +210,21 @@ export default function SolarCalculator(): JSX.Element {
                         filter.duration
                     ) * 100
                 ) / 100,
-            doubleBuffAtk:
+            moonBuffAtk:
                 Math.round(
                     dps(
-                        basicDmgPerHit,
-                        buffedAtkSpd,
-                        buffedCrit,
+                        moonBuffedDmgPerHit,
+                        moonBuffedAtkSpd,
+                        moonBuffedCrit,
                         filter.duration
                     ) * 100
                 ) / 100,
-            doubleBuffSplash:
+            moonBuffSplash:
                 Math.round(
                     dps(
-                        basicDmgPerSplash,
-                        buffedAtkSpd,
-                        buffedCrit,
+                        moonBuffedDmgPerSplash,
+                        moonBuffedAtkSpd,
+                        moonBuffedCrit,
                         filter.duration
                     ) * 100
                 ) / 100,
@@ -296,19 +330,38 @@ export default function SolarCalculator(): JSX.Element {
                         </form>
                     </div>
                     <div className='dice-container'>
-                        <Dice dice='Solar' />
-                        <h3 className='desc'>{solarData.desc}</h3>
+                        <Dice dice='Moon' />
+                        <h3 className='desc'>{moonData?.desc}</h3>
                         <form className='filter'>
-                            <label htmlFor='solar-class'>
+                            <label
+                                htmlFor='moon-active'
+                                className='checkbox-label'
+                            >
+                                <span>Active : </span>
+                                <input
+                                    type='checkbox'
+                                    onChange={(
+                                        evt: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
+                                        filter.moon.active = evt.target.checked;
+                                        setFilter({ ...filter });
+                                    }}
+                                />
+                                <span className='checkbox-styler'>
+                                    <FontAwesomeIcon icon={faCheck} />
+                                </span>
+                            </label>
+                            <label htmlFor='moon-class'>
                                 <span>Class :</span>
                                 <select
-                                    name='solar-class'
+                                    name='moon-class'
+                                    defaultValue={7}
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.solar.class = Number(
+                                        filter.moon.class = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -325,16 +378,16 @@ export default function SolarCalculator(): JSX.Element {
                                     <option>15</option>
                                 </select>
                             </label>
-                            <label htmlFor='solar-level'>
+                            <label htmlFor='moon-level'>
                                 <span>Level :</span>
                                 <select
-                                    name='solar-level'
+                                    name='moon-level'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.solar.level = Number(
+                                        filter.moon.level = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -347,16 +400,16 @@ export default function SolarCalculator(): JSX.Element {
                                     <option>5</option>
                                 </select>
                             </label>
-                            <label htmlFor='solar-pip'>
+                            <label htmlFor='moon-pip'>
                                 <span>Pip :</span>
                                 <select
-                                    name='solar-pip'
+                                    name='moon-pip'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.solar.pip = Number(
+                                        filter.moon.pip = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -456,6 +509,84 @@ export default function SolarCalculator(): JSX.Element {
                             </label>
                         </form>
                     </div>
+                    <div className='dice-container'>
+                        <Dice dice='Solar' />
+                        <h3 className='desc'>{solarData.desc}</h3>
+                        <form className='filter'>
+                            <label htmlFor='solar-class'>
+                                <span>Class :</span>
+                                <select
+                                    name='solar-class'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.solar.class = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                </select>
+                            </label>
+                            <label htmlFor='solar-level'>
+                                <span>Level :</span>
+                                <select
+                                    name='solar-level'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.solar.level = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </label>
+                            <label htmlFor='solar-pip'>
+                                <span>Pip :</span>
+                                <select
+                                    name='solar-pip'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.solar.pip = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                </select>
+                            </label>
+                        </form>
+                    </div>
                 </div>
                 <form className='filter'>
                     <label htmlFor='crit dmg'>
@@ -519,11 +650,13 @@ export default function SolarCalculator(): JSX.Element {
                     <VictoryChart
                         maxDomain={{
                             x: filter.duration || 0,
-                            y: dps(
-                                basicDmgPerHit,
-                                buffedAtkSpd,
-                                buffedCrit,
-                                filter.duration
+                            y: Math.max(
+                                dps(
+                                    moonBuffedDmgPerHit,
+                                    moonBuffedAtkSpd,
+                                    moonBuffedCrit,
+                                    filter.duration
+                                )
                             ),
                         }}
                         theme={VictoryTheme.material}
@@ -579,13 +712,13 @@ export default function SolarCalculator(): JSX.Element {
                             orientation='vertical'
                             gutter={20}
                             colorScale={[
-                                '#ffa500',
+                                '#197cf0',
                                 '#ffff00',
                                 '#ff0000',
                                 '#111111',
                             ]}
                             data={[
-                                { name: 'Double Buffed' },
+                                { name: 'Moon Buffed' },
                                 { name: 'Light Buffed' },
                                 { name: 'Crit Buffed' },
                                 { name: 'No Buff' },
@@ -632,16 +765,16 @@ export default function SolarCalculator(): JSX.Element {
                             }
                         />
                         <VictoryLine
-                            name='Double Buffed'
+                            name='Moon Buffed'
                             samples={100}
                             style={{
-                                data: { stroke: '#ffa500', strokeWidth: 1 },
+                                data: { stroke: '#197cf0', strokeWidth: 1 },
                             }}
                             y={(d: { x: number }): number =>
                                 dps(
-                                    basicDmgPerHit,
-                                    buffedAtkSpd,
-                                    buffedCrit,
+                                    moonBuffedDmgPerHit,
+                                    moonBuffedAtkSpd,
+                                    moonBuffedCrit,
                                     d.x
                                 )
                             }
@@ -650,11 +783,25 @@ export default function SolarCalculator(): JSX.Element {
                     <VictoryChart
                         maxDomain={{
                             x: filter.duration || 0,
-                            y: dps(
-                                basicDmgPerHit,
-                                buffedAtkSpd,
-                                buffedCrit,
-                                filter.duration
+                            y: Math.max(
+                                dps(
+                                    basicDmgPerHit,
+                                    buffedAtkSpd,
+                                    buffedCrit,
+                                    filter.duration
+                                ),
+                                dps(
+                                    basicDmgPerHit,
+                                    buffedAtkSpd,
+                                    basicCrit,
+                                    filter.duration
+                                ),
+                                dps(
+                                    moonBuffedDmgPerHit,
+                                    moonBuffedAtkSpd,
+                                    moonBuffedCrit,
+                                    filter.duration
+                                )
                             ),
                         }}
                         theme={VictoryTheme.material}
@@ -750,16 +897,16 @@ export default function SolarCalculator(): JSX.Element {
                             }
                         />
                         <VictoryLine
-                            name='Double Buffed'
+                            name='Moon Buffed'
                             samples={100}
                             style={{
-                                data: { stroke: '#ffa500', strokeWidth: 1 },
+                                data: { stroke: '#197cf0', strokeWidth: 1 },
                             }}
                             y={(d: { x: number }): number =>
                                 dps(
-                                    basicDmgPerSplash,
-                                    buffedAtkSpd,
-                                    buffedCrit,
+                                    moonBuffedDmgPerSplash,
+                                    moonBuffedAtkSpd,
+                                    moonBuffedCrit,
                                     d.x
                                 )
                             }
@@ -770,13 +917,13 @@ export default function SolarCalculator(): JSX.Element {
                             orientation='vertical'
                             gutter={20}
                             colorScale={[
-                                '#ffa500',
+                                '#197cf0',
                                 '#ffff00',
                                 '#ff0000',
                                 '#111111',
                             ]}
                             data={[
-                                { name: 'Double Buffed' },
+                                { name: 'Moon Buffed' },
                                 { name: 'Light Buffed' },
                                 { name: 'Crit Buffed' },
                                 { name: 'No Buff' },
@@ -860,25 +1007,25 @@ export default function SolarCalculator(): JSX.Element {
                         />
                     </div>
                     <div>
-                        <span>Double Buffed Basic Atk</span>
+                        <span>Moon Buffed Basic Atk</span>
                         <input
                             type='textbox'
                             className={invalidInput ? 'invalid' : ''}
                             value={
                                 invalidInput
                                     ? 'Check Input'
-                                    : result.doubleBuffAtk
+                                    : result.moonBuffAtk
                             }
                             disabled
                         />
-                        <span>Double Buffed Splash Dmg</span>
+                        <span>Moon Buffed Splash Dmg</span>
                         <input
                             type='textbox'
                             className={invalidInput ? 'invalid' : ''}
                             value={
                                 invalidInput
                                     ? 'Check Input'
-                                    : result.doubleBuffSplash
+                                    : result.moonBuffSplash
                             }
                             disabled
                         />

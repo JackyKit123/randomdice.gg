@@ -51,11 +51,16 @@ export default function Homepage(): JSX.Element {
                 A new <Link to='/calculator/dps'>dice DPS calculator</Link> has
                 been added. You can now use that tool to calculate the dps for
                 certain, as well as finding out the most optimal dps dice for
-                yourself.
+                yourself. Moon Dice Buff is also added to the calculation.
             </p>
             <p>
-                As update 4.0.0 is coming ahead, we will keep an eye on the new
-                dice and will update the content as soon as possible.
+                As update 4.0.0 is released. We are actively inventing new decks
+                and updating content on this website.
+            </p>
+            <p>
+                Added moon dice buff to{' '}
+                <Link to='/calculator/solar'>Solar Calculator</Link>. Replacing
+                the old double buffed by light and crit.
             </p>
             <br />
             <br />

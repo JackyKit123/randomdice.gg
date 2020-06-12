@@ -11,6 +11,7 @@ import Electric from './Dice Image/png/electric.png';
 import Element from './Dice Image/png/element.png';
 import Energy from './Dice Image/png/energy.png';
 import Fire from './Dice Image/png/fire.png';
+import Flow from './Dice Image/png/flow.png';
 import Gamble from './Dice Image/png/gamble.png';
 import Gears from './Dice Image/png/gear.png';
 import Growth from './Dice Image/png/growth.png';
@@ -30,6 +31,7 @@ import Metastasis from './Dice Image/png/metas.png';
 import Mimic from './Dice Image/png/mimic.png';
 import Mine from './Dice Image/png/mine.png';
 import MightyWind from './Dice Image/png/mwind.png';
+import Moon from './Dice Image/png/moon.png';
 import Nuclear from './Dice Image/png/nuke.png';
 import Poison from './Dice Image/png/poison.png';
 import Sacrificial from './Dice Image/png/sac.png';
@@ -63,6 +65,7 @@ const image: {
     Element,
     Energy,
     Fire,
+    Flow,
     Gamble,
     Gears,
     Growth,
@@ -82,6 +85,7 @@ const image: {
     Mimic,
     Mine,
     'Mighty Wind': MightyWind,
+    Moon,
     Nuclear,
     Poison,
     Sacrificial,

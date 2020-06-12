@@ -11,6 +11,7 @@ import Electric from './Dice Image/webp/electric.webp';
 import Element from './Dice Image/webp/element.webp';
 import Energy from './Dice Image/webp/energy.webp';
 import Fire from './Dice Image/webp/fire.webp';
+import Flow from './Dice Image/webp/flow.webp';
 import Gamble from './Dice Image/webp/gamble.webp';
 import Gears from './Dice Image/webp/gear.webp';
 import Growth from './Dice Image/webp/growth.webp';
@@ -30,6 +31,7 @@ import Metastasis from './Dice Image/webp/metas.webp';
 import Mimic from './Dice Image/webp/mimic.webp';
 import Mine from './Dice Image/webp/mine.webp';
 import MightyWind from './Dice Image/webp/mwind.webp';
+import Moon from './Dice Image/webp/moon.webp';
 import Nuclear from './Dice Image/webp/nuke.webp';
 import Poison from './Dice Image/webp/poison.webp';
 import Sacrificial from './Dice Image/webp/sac.webp';
@@ -63,6 +65,7 @@ const image: {
     Element,
     Energy,
     Fire,
+    Flow,
     Gamble,
     Gears,
     Growth,
@@ -82,6 +85,7 @@ const image: {
     Mimic,
     Mine,
     'Mighty Wind': MightyWind,
+    Moon,
     Nuclear,
     Poison,
     Sacrificial,
