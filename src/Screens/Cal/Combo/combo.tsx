@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import {
     VictoryTheme,
     VictoryChart,
@@ -13,6 +15,7 @@ import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
 import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Misc/Redux Storage/store';
+import { Dice as DiceType } from '../../../Misc/Redux Storage/Fetch Dices/types';
 import { clearError, fetchDices } from '../../../Misc/fetchData';
 import '../cal.less';
 import './combo.less';
@@ -33,12 +36,23 @@ export default function ComboCalculator(): JSX.Element {
         critical: {
             class: 3,
             level: 1,
-            pip: 0,
+            pip: 1,
+        },
+        moon: {
+            active: false,
+            class: 7,
+            level: 1,
+            pip: 1,
         },
     });
     let jsx;
-    const comboData = dices?.find(dice => dice.name === 'Combo');
-    const critData = dices?.find(dice => dice.name === 'Critical');
+    const data = {
+        combo: dices?.find(dice => dice.name === 'Combo'),
+        crit: dices?.find(dice => dice.name === 'Critical'),
+        moon: dices?.find(dice => dice.name === 'Moon'),
+    } as {
+        [key: string]: DiceType;
+    };
 
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
@@ -48,80 +62,196 @@ export default function ComboCalculator(): JSX.Element {
         !Number.isInteger(filter.combo.count) || filter.combo.count < 0;
     const invalidInput = isInvalidCombo || isInvalidCrit;
 
-    if (comboData && critData) {
-        const comboDiceData = {
-            baseAtk: comboData.atk,
-            baseAtkPerClass: comboData.cupAtk,
-            baseAtkPerLevel: comboData.pupAtk,
-            atkSpd: comboData.spd,
-            baseComboAtk: comboData.eff1,
-            ComboAtkPerClass: 2 /* comboData.cupEff1 Combo Dice Data is mistaken */,
-            ComboAtkPerLevel: comboData.pupEff1,
-        };
-        const critDiceData = {
-            baseBuff: critData.eff1,
-            buffPerClass: critData.cupEff1,
-            buffPerLevel: critData.pupEff1,
-        };
+    if (Object.values(data).every(d => d !== undefined)) {
+        data.combo.cupEff1 = 2;
 
-        const dmgPerCombo =
-            comboDiceData.baseComboAtk +
-            comboDiceData.ComboAtkPerClass * (filter.combo.class - 7) +
-            comboDiceData.ComboAtkPerLevel * (filter.combo.level - 1);
-        const baseAtk =
-            comboDiceData.baseAtk +
-            comboDiceData.baseAtkPerClass * (filter.combo.class - 7) +
-            comboDiceData.baseAtkPerLevel * (filter.combo.level - 1);
-        const critBuff =
-            ((filter.critical.class - 3) * critDiceData.buffPerClass +
-                critDiceData.baseBuff) *
-                filter.critical.pip +
-            critDiceData.buffPerLevel * (filter.critical.level - 1);
-        const critMultiplier = filter.critical.pip
-            ? (5 + critBuff) / 100
-            : 0.05;
+        const dpsPerComboCount = (
+            mode: 'raw' | 'crit' | 'moon',
+            count = filter.combo.count
+        ): { dmg: number; dps: number } => {
+            const dmgPerCombo =
+                data.combo.eff1 +
+                data.combo.cupEff1 * (filter.combo.class - 7) +
+                data.combo.pupEff1 * (filter.combo.level - 1);
+            const baseAtk =
+                data.combo.atk +
+                data.combo.cupAtk * (filter.combo.class - 7) +
+                data.combo.pupAtk * (filter.combo.level - 1);
 
-        const dmg =
-            (dmgPerCombo / 2) * (filter.combo.count ** 2 - filter.combo.count) +
-            baseAtk;
-        const dps =
-            Math.round(
-                (dmg * (1 - critMultiplier) +
-                    (dmg * critMultiplier * filter.crit) / 100) *
-                    100
-            ) / 100;
+            const roundTo3Sf = (val: number): number =>
+                Math.round(val * 100) / 100;
 
-        const dpsPerComboCount = (count: number, useCrit: boolean): number => {
             if (invalidInput) {
-                return 0;
+                return {
+                    dmg: 0,
+                    dps: 0,
+                };
             }
-            const dmgInFn = (dmgPerCombo / 2) * (count ** 2 - count) + baseAtk;
-            const critMultiplierInFn =
-                useCrit && filter.critical.pip ? (5 + critBuff) / 100 : 0.05;
-            return (
-                dmgInFn * (1 - critMultiplierInFn) +
-                (dmgInFn * critMultiplierInFn * filter.crit) / 100
-            );
+            const dmg = (dmgPerCombo / 2) * (count ** 2 - count) + baseAtk;
+            switch (mode) {
+                case 'raw':
+                    return {
+                        dmg: roundTo3Sf(dmg),
+                        dps: roundTo3Sf(
+                            (dmg * 0.95 + dmg * 0.05 * (filter.crit / 100)) /
+                                data.combo.spd
+                        ),
+                    };
+                case 'crit': {
+                    const critMultiplier =
+                        (5 +
+                            ((filter.critical.class - 3) * data.crit.cupEff1 +
+                                data.crit.eff1) *
+                                filter.critical.pip +
+                            data.crit.pupEff1 * (filter.critical.level - 1)) /
+                        100;
+                    return {
+                        dmg: roundTo3Sf(dmg),
+                        dps: roundTo3Sf(
+                            (dmg * (1 - critMultiplier) +
+                                (dmg * critMultiplier * filter.crit) / 100) /
+                                data.combo.spd
+                        ),
+                    };
+                }
+                case 'moon': {
+                    const critMultiplier =
+                        (5 + (filter.moon.active ? filter.moon.pip * 2 : 0)) /
+                        100;
+                    const spdBuff =
+                        1 -
+                        ((data.moon.eff1 +
+                            data.moon.cupEff1 * (filter.moon.class - 7)) *
+                            filter.moon.pip +
+                            data.moon.pupEff1 * (filter.moon.level - 1)) /
+                            100;
+                    const buffedDmg = filter.moon.active
+                        ? (filter.moon.pip * 0.05 + 1) * dmg
+                        : dmg;
+                    return {
+                        dmg: roundTo3Sf(buffedDmg),
+                        dps: roundTo3Sf(
+                            (buffedDmg * (1 - critMultiplier) +
+                                (buffedDmg * critMultiplier * filter.crit) /
+                                    100) /
+                                (data.combo.spd * spdBuff)
+                        ),
+                    };
+                }
+                default:
+                    return {
+                        dmg: 0,
+                        dps: 0,
+                    };
+            }
         };
 
         jsx = (
             <>
                 <p>
                     This is a calculator for calculating the Combo Dice damage.
-                    By default Critical Dice is not used (0 pip). You can
-                    compare the dps per combo pip of with and without Critical
-                    Dice.
+                    You can see the dps of combo raw damage and the dps of combo
+                    when it is buffed by Critical and Moon Dice.
                 </p>
                 <p>
                     Do Remember that damage and dps shown is per pip. You will
                     have to multiply the total pip count on your board to get
                     the final dps.
                 </p>
+                <p>
+                    Although you can calculate the dps for both the use of
+                    critical dice and moon dice, the dps is not summed up. It
+                    should not make sense to use both dice with combo.
+                </p>
                 <div className='divisor' />
                 <div className='multiple-dice'>
                     <div className='dice-container'>
+                        <Dice dice='Critical' />
+                        <h3 className='desc'>{data.critical?.desc}</h3>
+                        <form className='filter'>
+                            <label htmlFor='crit-class'>
+                                <span>Class :</span>
+                                <select
+                                    name='crit-class'
+                                    defaultValue={3}
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.critical.class = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                </select>
+                            </label>
+                            <label htmlFor='crit-level'>
+                                <span>Level :</span>
+                                <select
+                                    name='crit-level'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.critical.level = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </label>
+                            <label htmlFor='crit-pip'>
+                                <span>Pip :</span>
+                                <select
+                                    name='crit-pip'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.critical.pip = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                </select>
+                            </label>
+                        </form>
+                    </div>
+
+                    <div className='dice-container'>
                         <Dice dice='Combo' />
-                        <h3 className='desc'>{comboData.desc}</h3>
+                        <h3 className='desc'>{data.combo.desc}</h3>
                         <form className='filter'>
                             <label htmlFor='class'>
                                 <span>Class :</span>
@@ -190,28 +320,43 @@ export default function ComboCalculator(): JSX.Element {
                         </form>
                     </div>
                     <div className='dice-container'>
-                        <Dice dice='Critical' />
-                        <h3 className='desc'>{critData.desc}</h3>
+                        <Dice dice='Moon' />
+                        <h3 className='desc'>{data.moon?.desc}</h3>
                         <form className='filter'>
-                            <label htmlFor='crit class'>
+                            <label
+                                htmlFor='moon-active'
+                                className='checkbox-label'
+                            >
+                                <span>Active : </span>
+                                <input
+                                    type='checkbox'
+                                    onChange={(
+                                        evt: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
+                                        filter.moon.active = evt.target.checked;
+                                        setFilter({ ...filter });
+                                    }}
+                                />
+                                <span className='checkbox-styler'>
+                                    <FontAwesomeIcon icon={faCheck} />
+                                </span>
+                            </label>
+                            <label htmlFor='moon-class'>
                                 <span>Class :</span>
                                 <select
-                                    name='crit class'
+                                    name='moon-class'
+                                    defaultValue={7}
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.critical.class = Number(
+                                        filter.moon.class = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
                                     }}
                                 >
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
                                     <option>7</option>
                                     <option>8</option>
                                     <option>9</option>
@@ -223,16 +368,16 @@ export default function ComboCalculator(): JSX.Element {
                                     <option>15</option>
                                 </select>
                             </label>
-                            <label htmlFor='crit level'>
+                            <label htmlFor='moon-level'>
                                 <span>Level :</span>
                                 <select
-                                    name='crit level'
+                                    name='moon-level'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.critical.level = Number(
+                                        filter.moon.level = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -245,22 +390,21 @@ export default function ComboCalculator(): JSX.Element {
                                     <option>5</option>
                                 </select>
                             </label>
-                            <label htmlFor='crit pip'>
+                            <label htmlFor='moon-pip'>
                                 <span>Pip :</span>
                                 <select
-                                    name='crit pip'
+                                    name='moon-pip'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.critical.pip = Number(
+                                        filter.moon.pip = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
                                     }}
                                 >
-                                    <option>0</option>
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
@@ -311,19 +455,73 @@ export default function ComboCalculator(): JSX.Element {
                 <div className='result'>
                     <div className='dmg'>
                         <span>Damage per Combo pip:</span>
+                        <span className='type'>No Buff</span>
                         <input
                             type='textbox'
                             className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : dmg}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : dpsPerComboCount('raw').dmg
+                            }
+                            disabled
+                        />
+                        <span className='type'>Crit Buffed</span>
+                        <input
+                            type='textbox'
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : dpsPerComboCount('crit').dmg
+                            }
+                            disabled
+                        />
+                        <span className='type'>Moon Buffed</span>
+                        <input
+                            type='textbox'
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : dpsPerComboCount('moon').dmg
+                            }
                             disabled
                         />
                     </div>
                     <div className='dps'>
                         <span>DPS per Combo Pip:</span>
+                        <span className='type'>No buff</span>
                         <input
                             type='textbox'
                             className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : dps}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : dpsPerComboCount('raw').dps
+                            }
+                            disabled
+                        />
+                        <span className='type'>Crit Buffed</span>
+                        <input
+                            type='textbox'
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : dpsPerComboCount('crit').dps
+                            }
+                            disabled
+                        />
+                        <span className='type'>Moon Buffed</span>
+                        <input
+                            type='textbox'
+                            className={invalidInput ? 'invalid' : ''}
+                            value={
+                                invalidInput
+                                    ? 'Check Input'
+                                    : dpsPerComboCount('moon').dps
+                            }
                             disabled
                         />
                     </div>
@@ -332,7 +530,16 @@ export default function ComboCalculator(): JSX.Element {
                     <VictoryChart
                         maxDomain={{
                             x: filter.combo.count + 10 || 10,
-                            y: dpsPerComboCount(filter.combo.count + 10, true),
+                            y: Math.max(
+                                dpsPerComboCount(
+                                    'crit',
+                                    filter.combo.count + 10
+                                ).dps,
+                                dpsPerComboCount(
+                                    'moon',
+                                    filter.combo.count + 10
+                                ).dps
+                            ),
                         }}
                         theme={VictoryTheme.material}
                     >
@@ -386,11 +593,22 @@ export default function ComboCalculator(): JSX.Element {
                             y={70}
                             orientation='vertical'
                             gutter={20}
-                            colorScale={['#ff0000', '#111111']}
+                            colorScale={['#197cf0', '#ff0000', '#111111']}
                             data={[
+                                { name: 'Moon Buffed' },
                                 { name: 'Crit Buffed' },
                                 { name: 'No Buff' },
                             ]}
+                        />
+                        <VictoryLine
+                            name='Moon Buffed'
+                            samples={100}
+                            style={{
+                                data: { stroke: '#197cf0', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number =>
+                                dpsPerComboCount('moon', d.x).dps
+                            }
                         />
                         <VictoryLine
                             name='Crit Buffed'
@@ -399,7 +617,7 @@ export default function ComboCalculator(): JSX.Element {
                                 data: { stroke: '#ff0000', strokeWidth: 1 },
                             }}
                             y={(d: { x: number }): number =>
-                                dpsPerComboCount(d.x, true)
+                                dpsPerComboCount('crit', d.x).dps
                             }
                         />
                         <VictoryLine
@@ -409,7 +627,7 @@ export default function ComboCalculator(): JSX.Element {
                                 data: { stroke: '#111111', strokeWidth: 1 },
                             }}
                             y={(d: { x: number }): number =>
-                                dpsPerComboCount(d.x, false)
+                                dpsPerComboCount('raw', d.x).dps
                             }
                         />
                     </VictoryChart>

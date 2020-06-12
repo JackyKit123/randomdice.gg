@@ -60,7 +60,8 @@ export default function Homepage(): JSX.Element {
             <p>
                 Added moon dice buff to{' '}
                 <Link to='/calculator/solar'>Solar Calculator</Link>. Replacing
-                the old double buffed by light and crit.
+                the old double buffed by light and crit. Moon buff is also added
+                to <Link to='/calculator/combo'>Combo Damage Calculator</Link>.
             </p>
             <br />
             <br />
