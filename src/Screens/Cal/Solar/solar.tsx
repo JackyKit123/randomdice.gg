@@ -123,7 +123,7 @@ export default function SolarCalculator(): JSX.Element {
                 diceData.crit.baseBuff) *
                 filter.critical.pip +
             diceData.crit.buffPerLevel * (filter.critical.level - 1);
-        const moonCritBuff = filter.moon.pip * 2;
+        const moonCritBuff = filter.moon.active ? filter.moon.pip * 2 : 0;
 
         const atkSpdMultiplier = 1 - lightBuff / 100;
         const moonAtkSpdMultiplier = 1 - moonSpdBuff / 100;
