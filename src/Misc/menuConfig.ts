@@ -33,6 +33,11 @@ export const menu: Menu[] = [
                 path: '/critData',
                 component: lazy(() => import('../Screens/Crit Info/crit')),
             },
+            {
+                name: 'Meta Decks Guide',
+                path: '/decks_guide',
+                component: lazy(() => import('../Screens/Deck Guide/guide')),
+            },
         ],
     },
     {
