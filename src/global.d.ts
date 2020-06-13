@@ -5,13 +5,12 @@ interface Window {
 }
 
 declare module 'react-router-ga' {
-    const Analytics: any;
-    export default Analytics;
+    export default function Analytics({ children }: ReactNode): JSX.Element;
 }
 
 declare module 'react-detect-offline' {
-    export const Offline: any;
-    export const Online: any;
+    export function Offline({ children }: ReactNode): JSX.Element;
+    export function Online({ children }: ReactNode): JSX.Element;
 }
 
 declare module 'react-image-webp/dist/utils' {
