@@ -5,6 +5,7 @@ import Analytics from 'react-router-ga';
 import Header from './Header & Footer/header';
 import Footer from './Header & Footer/footer';
 import mapRouter from './Router/router';
+import { installEvent } from '../Misc/customGaEvent';
 import {
     fetchResponseForm,
     fetchAlts,
@@ -23,6 +24,7 @@ export default function App(): JSX.Element {
         fetchAlts(dispatch);
         fetchDecks(dispatch);
         fetchDices(dispatch);
+        installEvent.mountListener();
     }, []);
 
     return (

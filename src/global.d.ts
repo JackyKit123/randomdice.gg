@@ -1,4 +1,5 @@
 interface Window {
+    ga: ga;
     gapi: gapi;
     _mNHandle: _mNHandle;
     _mNDetails: _mNDetails;
