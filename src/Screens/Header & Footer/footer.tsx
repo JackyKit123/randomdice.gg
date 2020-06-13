@@ -1,10 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faReddit,
-    faDiscord,
-    faWikipediaW,
-} from '@fortawesome/free-brands-svg-icons';
+import { faReddit, faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
 
 export default function Footer(): JSX.Element {
@@ -18,11 +14,6 @@ export default function Footer(): JSX.Element {
             name: 'reddit',
             icon: faReddit,
             hyperlink: 'https://www.reddit.com/r/randomdice/',
-        },
-        wiki: {
-            name: 'wiki',
-            icon: faWikipediaW,
-            hyperlink: 'https://random-dice.fandom.com/wiki/Random_Dice_Wiki',
         },
     };
     return (
