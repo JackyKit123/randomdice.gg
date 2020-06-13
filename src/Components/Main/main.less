@@ -78,11 +78,34 @@ body {
             max-width: 1200px;
             width: 100%;
 
-            & > iframe {
-                border: 1px solid #000000;
-                max-width: 100%;
-                display: block;
+            & > div {
+                width: 100%;
+                max-width: 970px;
+                min-height: 90px;
+                .box-shadow(0 0 10px -1px #192425);
+                display: table;
                 margin: 0 auto 20px;
+
+                & > iframe {
+                    max-width: 100%;
+                }
+
+                & > .ad-block-warning {
+                    display: table-cell;
+                    vertical-align: middle;
+                    background: rgba(255, 255, 255, 0.5);
+                    max-width: 970px;
+                    min-height: 90px;
+                    height: 100%;
+                    width: 100%;
+                    text-align: center;
+                    padding: 10px;
+                    line-height: 20px;
+
+                    & > a {
+                        font-size: inherit;
+                    }
+                }
             }
         }
 

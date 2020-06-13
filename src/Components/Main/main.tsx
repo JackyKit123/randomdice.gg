@@ -2,6 +2,7 @@
 import React, { ReactNode, useEffect } from 'react';
 import { Offline, Online } from 'react-detect-offline';
 import { isWebpSupported } from 'react-image-webp/dist/utils';
+import AdBlockDetect from 'react-ad-block-detect';
 import './main.less';
 
 export default function Main(props: {
@@ -14,7 +15,7 @@ export default function Main(props: {
         try {
             // eslint-disable-next-line func-names
             window._mNHandle.queue.push(function() {
-                window._mNDetails.loadTag('219055766', '970x90', '219055766');
+                window._mNDetails.loadTag('521838365', '970x90', '521838365');
             });
         } catch (err) {
             //
@@ -46,7 +47,27 @@ export default function Main(props: {
                 </div>
             </Online>
             <div className={`main ${className}`}>
-                <div id='219055766' className='ad-container' />
+                <div className='ad-container'>
+                    <div id='521838365'>
+                        <AdBlockDetect>
+                            <span className='ad-block-warning'>
+                                If you can see this message, that most likely
+                                means that you have an Ad Blocker running. We
+                                rely on advertising to keep this website alive!
+                                We kindly ask you to disable your AdBlock. Or if
+                                you want Ad free browsing, you can support us on{' '}
+                                <a
+                                    href='https://www.patreon.com/RandomDiceCommunityWebsite'
+                                    target='_blank'
+                                    rel='noopener noreferrer'
+                                >
+                                    Patreon
+                                </a>
+                                .
+                            </span>
+                        </AdBlockDetect>
+                    </div>
+                </div>
                 <div className='content'>{children}</div>
             </div>
         </main>

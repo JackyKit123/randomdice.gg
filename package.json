@@ -66,6 +66,7 @@
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
     "react": "^16.13.1",
+    "react-ad-block-detect": "^1.0.1",
     "react-app-polyfill": "^1.0.6",
     "react-detect-offline": "^2.4.0",
     "react-dev-utils": "^10.2.1",

@@ -17,3 +17,7 @@ declare module 'react-detect-offline' {
 declare module 'react-image-webp/dist/utils' {
     export const isWebpSupported: () => boolean;
 }
+
+declare module 'react-ad-block-detect' {
+    export default function AdBlockDetect({ children }: ReactNode): JSX.Element;
+}
