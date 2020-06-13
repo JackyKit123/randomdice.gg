@@ -10,6 +10,7 @@ import TAXAWebp from './People/TAXA.webp';
 import BadLuckWebp from './People/BadLuck.webp';
 import StapleWebp from './People/Staple.webp';
 import EnryWebp from './People/Enry.webp';
+import CrunchyWebp from './People/Crunchy.webp';
 import JackyKitJpg from './People/JackyKit.jpg';
 import SweeneyJpg from './People/Sweeney.jpg';
 import CampionJpg from './People/Campion.jpg';
@@ -18,6 +19,7 @@ import TAXAJpg from './People/TAXA.jpg';
 import BadLuckJpg from './People/BadLuck.jpg';
 import StapleJpg from './People/Staple.jpg';
 import EnryJpg from './People/Enry.jpg';
+import CrunchyJpg from './People/Crunchy.jpg';
 
 export default function Credit(): JSX.Element {
     return (
@@ -80,6 +82,15 @@ export default function Credit(): JSX.Element {
                         <img
                             src={isWebpSupported() ? BadLuckWebp : BadLuckJpg}
                             alt='icon of BadLuck'
+                        />
+                    </div>
+                </li>
+                <li>
+                    Deck Guide Writer: Crunchy{' '}
+                    <div className='img-container'>
+                        <img
+                            src={isWebpSupported() ? CrunchyWebp : CrunchyJpg}
+                            alt='icon of Crunchy'
                         />
                     </div>
                 </li>

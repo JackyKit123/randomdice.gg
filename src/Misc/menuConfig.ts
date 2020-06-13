@@ -35,7 +35,7 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Meta Decks Guide',
-                path: '/decks_guide',
+                path: '/decks/guide',
                 component: lazy(() => import('../Screens/Deck Guide/guide')),
             },
         ],

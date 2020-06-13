@@ -1,0 +1,54 @@
+@import '../../cross_import_lesshat.less';
+
+.meta-deck-guide {
+    .dice-container {
+        margin: 0 auto;
+        max-width: 500px;
+
+        & > img {
+            width: 20%;
+            height: auto;
+        }
+    }
+
+    table {
+        border-spacing: 2px;
+        max-width: 100%;
+        margin: 0 auto;
+
+        tbody {
+            & > tr {
+                cursor: pointer;
+                font-size: 28px;
+                position: relative;
+                .filter(opacity(0.5));
+                .transition(0.2s all ease-in-out);
+
+                &:nth-of-type(odd) {
+                    background: #f8d298;
+                }
+
+                &:nth-of-type(even) {
+                    background: #b8dadc;
+                }
+
+                &:hover {
+                    filter: none;
+                }
+
+                & > td {
+                    padding: 10px;
+                    border: 5px ridge #ededed;
+                    vertical-align: middle;
+                    text-align: center;
+                    font-weight: 500;
+                    line-height: 32px;
+
+                    &:first-of-type {
+                        max-width: 200px;
+                    }
+                }
+            }
+        }
+    }
+}
