@@ -1,6 +1,18 @@
 https://randomdice.gg/
 https://randomdice.gg/
 https://randomdice.gg/decks/guide
+https://randomdice.gg/decks/guide/Solar
+https://randomdice.gg/decks/guide/Elephoon
+https://randomdice.gg/decks/guide/Assphoon
+https://randomdice.gg/decks/guide/Thornphoon%20&%20Iron%20Thorn
+https://randomdice.gg/decks/guide/Hellphoon
+https://randomdice.gg/decks/guide/Non%20Legendary%20Meta
+https://randomdice.gg/decks/guide/Solar%20Time
+https://randomdice.gg/decks/guide/Gear%20Fast%2030s
+https://randomdice.gg/decks/guide/Landmine
+https://randomdice.gg/decks/guide/Combo%20Mirror
+https://randomdice.gg/decks/guide/Combo%20DPS
+https://randomdice.gg/decks/guide/Combo%20Support
 https://randomdice.gg/decks/pvp
 https://randomdice.gg/decks/pve
 https://randomdice.gg/critData
@@ -11,10 +23,6 @@ https://randomdice.gg/calculator/gears
 https://randomdice.gg/calculator/gold
 https://randomdice.gg/calculator/stat
 https://randomdice.gg/calculator/dps
-https://randomdice.gg/about/privacy
-https://randomdice.gg/about/terms
-https://randomdice.gg/about/us
-https://randomdice.gg/about/credit
 https://randomdice.gg/wiki/pvp
 https://randomdice.gg/wiki/pve
 https://randomdice.gg/wiki/dice_mechanics
@@ -24,3 +32,7 @@ https://randomdice.gg/wiki/patch_note
 https://randomdice.gg/wiki/store
 https://randomdice.gg/wiki/arena
 https://randomdice.gg/wiki/box_guide
+https://randomdice.gg/about/privacy
+https://randomdice.gg/about/terms
+https://randomdice.gg/about/us
+https://randomdice.gg/about/credit
