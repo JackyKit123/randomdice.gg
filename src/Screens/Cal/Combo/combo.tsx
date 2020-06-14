@@ -31,7 +31,7 @@ export default function ComboCalculator(): JSX.Element {
         combo: {
             class: 7,
             level: 1,
-            count: 0,
+            count: 1,
         },
         critical: {
             class: 3,
@@ -59,7 +59,7 @@ export default function ComboCalculator(): JSX.Element {
         filter.crit < 111 ||
         filter.crit > 2036;
     const isInvalidCombo =
-        !Number.isInteger(filter.combo.count) || filter.combo.count < 0;
+        !Number.isInteger(filter.combo.count) || filter.combo.count < 1;
     const invalidInput = isInvalidCombo || isInvalidCrit;
 
     if (Object.values(data).every(d => d !== undefined)) {
@@ -307,7 +307,7 @@ export default function ComboCalculator(): JSX.Element {
                                     type='textbox'
                                     name='combo count'
                                     className={isInvalidCombo ? 'invalid' : ''}
-                                    defaultValue={0}
+                                    defaultValue={1}
                                     onChange={(
                                         evt: React.ChangeEvent<HTMLInputElement>
                                     ): void => {
