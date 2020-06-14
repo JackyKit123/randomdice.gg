@@ -25,11 +25,16 @@ export default function DeckGuideMenu(): JSX.Element {
                     {decks.map(deck => (
                         <tr
                             key={deck.name}
-                            // eslint-disable-next-line jsx-a11y/tabindex-no-positive
-                            tabIndex={1}
+                            tabIndex={0}
                             onClick={(): void =>
                                 history.push(`/decks/guide/${deck.name}`)
                             }
+                            onKeyDown={(evt): void => {
+                                // Enter or SpaceBar
+                                if (evt.keyCode === 13 || evt.keyCode === 32) {
+                                    history.push(`/decks/guide/${deck.name}`);
+                                }
+                            }}
                         >
                             <td>{deck.name}</td>
                             <td>

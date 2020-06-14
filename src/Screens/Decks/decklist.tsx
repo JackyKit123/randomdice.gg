@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
@@ -27,6 +27,7 @@ export default function DeckList({
 }): JSX.Element {
     const history = useHistory();
     const dispatch = useDispatch();
+    const overlayRef = useRef(null as HTMLDivElement | null);
     const selection = useSelector((state: RootState) => state);
     const { error } =
         selection.fetchDecksReducer ||
@@ -170,6 +171,14 @@ export default function DeckList({
                 updated: '-',
             });
         }
+
+        useEffect(() => {
+            if (findAlt.open) {
+                // eslint-disable-next-line no-unused-expressions
+                overlayRef.current?.focus();
+            }
+        }, [findAlt.open]);
+
         jsx = (
             <>
                 <p>
@@ -209,7 +218,12 @@ export default function DeckList({
                     }}
                 >
                     <div className='popup'>
-                        <div className='container'>
+                        <div
+                            className='container'
+                            ref={overlayRef}
+                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                            tabIndex={0}
+                        >
                             <h3>Alternatives List</h3>
                             <div className='original'>
                                 <Dice dice={findAlt.list[0]} />
@@ -219,7 +233,9 @@ export default function DeckList({
                                 <Dice dice={findAlt.list[4]} />
                             </div>
                             {options?.map((alt, i) => (
-                                <div key={Number(new Date()) + Math.random()}>
+                                <div
+                                    key={Number(new Date()) + Math.random() + i}
+                                >
                                     <Dice dice={findAlt.list[i]} />
                                     <h4>
                                         {alt?.desc
