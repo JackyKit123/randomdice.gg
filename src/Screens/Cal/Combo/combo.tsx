@@ -528,6 +528,7 @@ export default function ComboCalculator(): JSX.Element {
                 </div>
                 <div className='chart-container'>
                     <VictoryChart
+                        minDomain={{ x: 1 }}
                         maxDomain={{
                             x: filter.combo.count + 10 || 10,
                             y: Math.max(
