@@ -1,4 +1,4 @@
-import React, { FunctionComponent, lazy, Suspense } from 'react';
+import React, { FunctionComponent, Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Menu } from '../../Misc/menuConfig';
 import Main from '../../Components/Main/main';
@@ -31,29 +31,7 @@ const mapRouter = (
                 return null;
             })
             .flat();
-    return mapThis(rootMenu)
-        .concat(
-            <Route
-                path='/about/privacy'
-                key='/about/privacy'
-                exact
-                component={lazy(() => import('../Legal/privacyPolicy'))}
-            />
-        )
-        .concat(
-            <Route
-                path='/about/terms'
-                key='/about/terms'
-                exact
-                component={lazy(() => import('../Legal/terms'))}
-            />
-        )
-        .concat(
-            <Route
-                key='Router-path-404'
-                component={lazy(() => import('../NoMatch/NoMatch'))}
-            />
-        );
+    return mapThis(rootMenu);
 };
 
 export default function router(menu: Menu[]): JSX.Element {

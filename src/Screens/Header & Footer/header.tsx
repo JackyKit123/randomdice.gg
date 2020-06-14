@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import './header-footer.less';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    // faUserCircle,
-    faBars,
-    faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Menu from '../../Components/Menu/menu';
 import { menu } from '../../Misc/menuConfig';
 

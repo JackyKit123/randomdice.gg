@@ -30,26 +30,17 @@ export default function Menu(props: {
         depth = 0
     ): (JSX.Element | null)[] => {
         return menulist.map((menu: MenuProp, i) => {
+            if (menu.excludeFromMenu) {
+                return null;
+            }
             let anchor;
             switch (true) {
-                case menu.external:
-                    anchor = (
-                        <a
-                            className='menu-item'
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            href={menu.path}
-                        >
-                            {menu.name}
-                        </a>
-                    );
-                    break;
-                case !menu.external && menu.path === location.pathname:
+                case menu.path === location.pathname:
                     anchor = (
                         <span className='active menu-item'>{menu.name}</span>
                     );
                     break;
-                case !menu.external && menu.path !== undefined:
+                case menu.path !== undefined:
                     anchor = (
                         <Link className='menu-item' to={String(menu.path)}>
                             {menu.name}

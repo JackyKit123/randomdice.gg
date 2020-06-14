@@ -2,10 +2,10 @@ import { FunctionComponent, lazy } from 'react';
 import Homepage from '../Screens/Homepage/homepage';
 
 export type Menu = {
-    name: string;
+    name?: string;
     path?: string;
     component?: FunctionComponent;
-    external?: boolean;
+    excludeFromMenu?: boolean;
     childNode?: Menu[];
 };
 
@@ -151,6 +151,20 @@ export const menu: Menu[] = [
                 path: '/about/credit',
                 component: lazy(() => import('../Screens/About/Credit/credit')),
             },
+            {
+                path: '/about/privacy',
+                excludeFromMenu: true,
+                component: lazy(() => import('../Screens/Legal/privacyPolicy')),
+            },
+            {
+                path: '/about/terms',
+                excludeFromMenu: true,
+                component: lazy(() => import('../Screens/Legal/terms')),
+            },
         ],
+    },
+    {
+        excludeFromMenu: true,
+        component: lazy(() => import('../Screens/NoMatch/NoMatch')),
     },
 ];
