@@ -181,6 +181,256 @@ export default function DiceStat(): JSX.Element {
                         </div>
                     </div>
                 </div>
+                <div className='divisor' />
+                <p>
+                    The table below shows the information of upgrading a dice
+                    class. Copies needed and gold needed mean the cost of
+                    upgrading the dice to the next level. While contribution to
+                    crit damage refers to the total critical damage contributed
+                    towards you total crit%, it does not increase the critical
+                    chance of the dice.
+                </p>
+                <div className='table-container'>
+                    <table>
+                        <thead>
+                            <th>Rarity</th>
+                            <th>Class Up</th>
+                            <th>Copies Needed</th>
+                            <th>Gold Need</th>
+                            <th>Contribution to Crit% dmg</th>
+                        </thead>
+                        <tbody>
+                            <tr className='common'>
+                                <td>
+                                    <p>Common</p>
+                                </td>
+                                <td>
+                                    <p>1 &gt; 2</p>
+                                    <p>2 &gt; 3</p>
+                                    <p>3 &gt; 4</p>
+                                    <p>4 &gt; 5</p>
+                                    <p>5 &gt; 6</p>
+                                    <p>6 &gt; 7</p>
+                                    <p>7 &gt; 8</p>
+                                    <p>8 &gt; 9</p>
+                                    <p>9 &gt; 10</p>
+                                    <p>10 &gt; 11</p>
+                                    <p>11 &gt; 12</p>
+                                    <p>12 &gt; 13</p>
+                                    <p>13 &gt; 14</p>
+                                    <p>14 &gt; 15</p>
+                                </td>
+                                <td>
+                                    <p>2</p>
+                                    <p>4</p>
+                                    <p>10</p>
+                                    <p>20</p>
+                                    <p>50</p>
+                                    <p>100</p>
+                                    <p>200</p>
+                                    <p>400</p>
+                                    <p>800</p>
+                                    <p>2,000</p>
+                                    <p>5,000</p>
+                                    <p>10,000</p>
+                                    <p>20,000</p>
+                                    <p>40,000</p>
+                                </td>
+                                <td>
+                                    <p>5</p>
+                                    <p>20</p>
+                                    <p>50</p>
+                                    <p>150</p>
+                                    <p>400</p>
+                                    <p>1,000</p>
+                                    <p>2,000</p>
+                                    <p>4,000</p>
+                                    <p>8,000</p>
+                                    <p>20,000</p>
+                                    <p>50,000</p>
+                                    <p>100,000</p>
+                                    <p>200,000</p>
+                                    <p>400,000</p>
+                                </td>
+                                <td>
+                                    <p>1%</p>
+                                    <p>2%</p>
+                                    <p>2%</p>
+                                    <p>3%</p>
+                                    <p>3%</p>
+                                    <p>3%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                </td>
+                            </tr>
+                            <tr className='rare'>
+                                <td>
+                                    <p>Rare</p>
+                                </td>
+                                <td>
+                                    <p>3 &gt; 4</p>
+                                    <p>4 &gt; 5</p>
+                                    <p>5 &gt; 6</p>
+                                    <p>6 &gt; 7</p>
+                                    <p>7 &gt; 8</p>
+                                    <p>8 &gt; 9</p>
+                                    <p>9 &gt; 10</p>
+                                    <p>10 &gt; 11</p>
+                                    <p>11 &gt; 12</p>
+                                    <p>12 &gt; 13</p>
+                                    <p>13 &gt; 14</p>
+                                    <p>14 &gt; 15</p>
+                                </td>
+                                <td>
+                                    <p>2</p>
+                                    <p>4</p>
+                                    <p>10</p>
+                                    <p>20</p>
+                                    <p>50</p>
+                                    <p>100</p>
+                                    <p>200</p>
+                                    <p>500</p>
+                                    <p>1,000</p>
+                                    <p>2,000</p>
+                                    <p>4,000</p>
+                                    <p>10,000</p>
+                                </td>
+                                <td>
+                                    <p>50</p>
+                                    <p>150</p>
+                                    <p>400</p>
+                                    <p>1,000</p>
+                                    <p>2,000</p>
+                                    <p>4,000</p>
+                                    <p>8,000</p>
+                                    <p>20,000</p>
+                                    <p>50,000</p>
+                                    <p>100,000</p>
+                                    <p>200,000</p>
+                                    <p>400,000</p>
+                                </td>
+                                <td>
+                                    <p>2%</p>
+                                    <p>2%</p>
+                                    <p>3%</p>
+                                    <p>3%</p>
+                                    <p>3%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                </td>
+                            </tr>
+                            <tr className='unique'>
+                                <td>
+                                    <p>Unique</p>
+                                </td>
+                                <td>
+                                    <p>5 &gt; 6</p>
+                                    <p>6 &gt; 7</p>
+                                    <p>7 &gt; 8</p>
+                                    <p>8 &gt; 9</p>
+                                    <p>9 &gt; 10</p>
+                                    <p>10 &gt; 11</p>
+                                    <p>11 &gt; 12</p>
+                                    <p>12 &gt; 13</p>
+                                    <p>13 &gt; 14</p>
+                                    <p>14 &gt; 15</p>
+                                </td>
+                                <td>
+                                    <p>2</p>
+                                    <p>4</p>
+                                    <p>10</p>
+                                    <p>20</p>
+                                    <p>50</p>
+                                    <p>100</p>
+                                    <p>300</p>
+                                    <p>600</p>
+                                    <p>1,000</p>
+                                    <p>2,000</p>
+                                </td>
+                                <td>
+                                    <p>400</p>
+                                    <p>1,000</p>
+                                    <p>2,000</p>
+                                    <p>4,000</p>
+                                    <p>8,000</p>
+                                    <p>20,000</p>
+                                    <p>50,000</p>
+                                    <p>100,000</p>
+                                    <p>200,000</p>
+                                    <p>400,000</p>
+                                </td>
+                                <td>
+                                    <p>3%</p>
+                                    <p>3%</p>
+                                    <p>3%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                </td>
+                            </tr>
+                            <tr className='legendary'>
+                                <td>
+                                    <p>Legendary</p>
+                                </td>
+                                <td>
+                                    <p>7 &gt; 8</p>
+                                    <p>8 &gt; 9</p>
+                                    <p>9 &gt; 10</p>
+                                    <p>10 &gt; 11</p>
+                                    <p>11 &gt; 12</p>
+                                    <p>12 &gt; 13</p>
+                                    <p>13 &gt; 14</p>
+                                    <p>14 &gt; 15</p>
+                                </td>
+                                <td>
+                                    <p>2</p>
+                                    <p>4</p>
+                                    <p>10</p>
+                                    <p>20</p>
+                                    <p>50</p>
+                                    <p>100</p>
+                                    <p>150</p>
+                                    <p>200</p>
+                                </td>
+                                <td>
+                                    <p>4,000</p>
+                                    <p>8,000</p>
+                                    <p>16,000</p>
+                                    <p>100,000</p>
+                                    <p>200,000</p>
+                                    <p>400,000</p>
+                                    <p>600,000</p>
+                                    <p>800,000</p>
+                                </td>
+                                <td>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>4%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                    <p>5%</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </>
         );
     } else if (error) {
