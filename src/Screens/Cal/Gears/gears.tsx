@@ -26,7 +26,7 @@ export default function GearsCaculator(): JSX.Element {
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
-        filter.crit > 2036;
+        filter.crit > 2108;
     const isInvalidPip =
         !Number.isInteger(filter.pip) || filter.pip < 1 || filter.pip > 7 * 15;
     const isInvalidChain =

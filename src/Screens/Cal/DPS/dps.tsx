@@ -63,7 +63,7 @@ export default function DpsCalculator(): JSX.Element {
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
-        filter.crit > 2036;
+        filter.crit > 2108;
     const invalidInput = isInvalidCrit;
 
     const data = {

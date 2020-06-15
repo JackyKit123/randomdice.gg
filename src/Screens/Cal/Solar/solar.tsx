@@ -58,7 +58,7 @@ export default function SolarCalculator(): JSX.Element {
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
-        filter.crit > 2036;
+        filter.crit > 2108;
     const isInvalidDuration =
         !Number.isInteger(filter.duration) || filter.duration <= 0;
     const invalidInput = isInvalidCrit || isInvalidDuration;

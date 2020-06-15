@@ -107,7 +107,7 @@ export default function critData(): JSX.Element {
                         theme={VictoryTheme.material}
                         domain={{
                             x: [1, 20],
-                            y: [0, 2036],
+                            y: [0, 2108],
                         }}
                         domainPadding={{ x: [0, 5] }}
                     >
@@ -172,7 +172,7 @@ export default function critData(): JSX.Element {
                         theme={VictoryTheme.material}
                         domain={{
                             x: [0, 40000],
-                            y: [0, 2036],
+                            y: [0, 2108],
                         }}
                         domainPadding={{ x: [0, 5] }}
                     >

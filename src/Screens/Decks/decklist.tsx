@@ -9,6 +9,7 @@ import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
+import AdUnit from '../../Components/Ad Unit/ad';
 import {
     fetchDecks,
     fetchDices,
@@ -42,6 +43,13 @@ export default function DeckList({
         list: [] as number[],
         open: false,
     });
+
+    useEffect(() => {
+        if (findAlt.open) {
+            // eslint-disable-next-line no-unused-expressions
+            overlayRef.current?.focus();
+        }
+    }, [findAlt.open]);
 
     if (dicelist.common.length > 0 && filter.legendary.length === 0) {
         dispatch({
@@ -171,13 +179,6 @@ export default function DeckList({
                 updated: '-',
             });
         }
-
-        useEffect(() => {
-            if (findAlt.open) {
-                // eslint-disable-next-line no-unused-expressions
-                overlayRef.current?.focus();
-            }
-        }, [findAlt.open]);
 
         jsx = (
             <>
@@ -358,6 +359,8 @@ export default function DeckList({
                         </label>
                     </div>
                 </form>
+                <div className='divisor' />
+                <AdUnit unitId='219055766' />
                 <div className='divisor' />
                 <div className='table-container'>
                     <table>

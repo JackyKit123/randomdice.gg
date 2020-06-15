@@ -57,7 +57,7 @@ export default function ComboCalculator(): JSX.Element {
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
-        filter.crit > 2036;
+        filter.crit > 2108;
     const isInvalidCombo =
         !Number.isInteger(filter.combo.count) || filter.combo.count < 1;
     const invalidInput = isInvalidCombo || isInvalidCrit;
