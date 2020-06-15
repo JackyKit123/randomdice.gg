@@ -17,7 +17,6 @@ import {
     clearError,
 } from '../../Misc/fetchData';
 import Dice from '../../Components/Dice/dice';
-import Dicelist from '../../Components/Dice/dicelist';
 import './decklist.less';
 import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
 
@@ -38,7 +37,10 @@ export default function DeckList({
     const { dices } = selection.fetchDicesReducer;
     const { filter } = selection.filterReducer;
     const { alts } = selection.fetchAltsReducer;
-    const dicelist = Dicelist(dices);
+    const legendaryList =
+        dices
+            ?.filter(dice => dice.rarity === 'Legendary')
+            .map(dice => dice.name) || [];
     const [findAlt, setFindAlt] = useState({
         list: [] as number[],
         open: false,
@@ -51,11 +53,11 @@ export default function DeckList({
         }
     }, [findAlt.open]);
 
-    if (dicelist.common.length > 0 && filter.legendary.length === 0) {
+    if (legendaryList.length > 0 && filter.legendary.length === 0) {
         dispatch({
             type: FILTER_ACTION,
             payload: {
-                legendary: dicelist.legendary.map(legendary => ({
+                legendary: legendaryList.map(legendary => ({
                     name: legendary,
                     checked: true,
                 })),
@@ -72,12 +74,7 @@ export default function DeckList({
         dices?.find(dice => dice.name === filter.customSearch)?.id || 0;
 
     let jsx;
-    if (
-        decks &&
-        dicelist.common.length > 0 &&
-        decks.length > 0 &&
-        filter.legendary.length > 0
-    ) {
+    if (dices && decks && decks.length > 0 && filter.legendary.length > 0) {
         const Checkbox = ({
             legendary,
             i,
@@ -294,6 +291,7 @@ export default function DeckList({
                             <span>Custom Search :</span>
                             <select
                                 name='Custom Search'
+                                defaultValue={filter.customSearch}
                                 onChange={(evt): void => {
                                     filter.customSearch = evt.target.value;
                                     dispatch({
@@ -304,13 +302,11 @@ export default function DeckList({
                                 data-value={filter.customSearch}
                             >
                                 <option value='?'>?</option>
-                                {Object.values(dicelist)
-                                    .flat()
-                                    .map(dice => (
-                                        <option value={dice} key={dice}>
-                                            {dice}
-                                        </option>
-                                    ))}
+                                {dices.map(dice => (
+                                    <option value={dice.name} key={dice.name}>
+                                        {dice.name}
+                                    </option>
+                                ))}
                             </select>
                             <Dice dice={filter.customSearch} />
                         </label>
@@ -344,7 +340,7 @@ export default function DeckList({
                                         : 'Select All'}
                                 </button>
                             </div>
-                            {dicelist.legendary.map((legendary: string, i) => (
+                            {legendaryList.map((legendary: string, i) => (
                                 <div
                                     className='legendary-filter'
                                     key={legendary}
