@@ -19,9 +19,15 @@ import {
     Alts,
 } from './Redux Storage/Fetch Alt/types';
 import {
+    FETCH_ARENA_SUCCESS,
+    FETCH_ARENA_FAIL,
+    CLEAR_ERRORS as CLEAR_ERRORS_4,
+    DicesValue,
+} from './Redux Storage/Fetch Arena/types';
+import {
     FETCH_GAPI_RESPONSE_FORM_FAIL,
     FETCH_GAPI_RESPONSE_FORM_SUCCESS,
-    CLEAR_ERRORS as CLEAR_ERRORS_4,
+    CLEAR_ERRORS as CLEAR_ERRORS_5,
 } from './Redux Storage/Google API Fetch Response Form/types';
 
 interface DeckApiResponseData {
@@ -73,6 +79,16 @@ interface AltsApiResponseData {
     bad: string | null;
     worst: string | null;
     description: string | null;
+}
+
+interface DraftApiResponseData {
+    id: string;
+    dice: string;
+    type: string;
+    dps: string;
+    assist: string;
+    slow: string;
+    value: string;
 }
 
 function corruptedStorage(item: string): boolean {
@@ -199,6 +215,38 @@ export async function fetchAlts(dispatch: Dispatch<{}>): Promise<void> {
     }
 }
 
+export async function fetchArena(dispatch: Dispatch<{}>): Promise<void> {
+    const localCache = localStorage.getItem('arena');
+    if (localCache) {
+        if (corruptedStorage(localCache)) {
+            localStorage.removeItem('arena');
+        } else {
+            dispatch({
+                type: FETCH_ARENA_SUCCESS,
+                payload: JSON.parse(localCache),
+            });
+        }
+    }
+    const apiUrl = '' || process.env.REACT_APP_API_HOST;
+    try {
+        const res = await axios.get(`${apiUrl}/api/drafts`);
+        const draft: DicesValue = res.data.drafts.map(
+            (each: DraftApiResponseData) => ({
+                id: Number(each.dice),
+                type: each.type,
+                dps: Number(each.dps),
+                assists: Number(each.assist),
+                slow: Number(each.slow),
+                value: Number(each.value),
+            })
+        );
+        dispatch({ type: FETCH_ARENA_SUCCESS, payload: draft });
+        localStorage.setItem('arena', JSON.stringify(draft));
+    } catch (err) {
+        dispatch({ type: FETCH_ARENA_FAIL, payload: err });
+    }
+}
+
 export async function fetchResponseForm(
     dispatch: Dispatch<{}>,
     init?: boolean
@@ -280,4 +328,5 @@ export async function clearError(dispatch: Dispatch<{}>): Promise<void> {
     dispatch({ type: CLEAR_ERRORS_2 });
     dispatch({ type: CLEAR_ERRORS_3 });
     dispatch({ type: CLEAR_ERRORS_4 });
+    dispatch({ type: CLEAR_ERRORS_5 });
 }

@@ -11,6 +11,7 @@ import {
     fetchAlts,
     fetchDecks,
     fetchDices,
+    fetchArena,
 } from '../Misc/fetchData';
 import { menu } from '../Misc/menuConfig';
 import './App.less';
@@ -24,6 +25,7 @@ export default function App(): JSX.Element {
         fetchAlts(dispatch);
         fetchDecks(dispatch);
         fetchDices(dispatch);
+        fetchArena(dispatch);
         installEvent.mountListener();
     }, []);
 

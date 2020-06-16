@@ -41,6 +41,11 @@ export const menu: Menu[] = [
                 ),
             },
             {
+                name: 'Arena Draft Tool',
+                path: '/arenadraft',
+                component: lazy(() => import('../Screens/Arena/arenadraft')),
+            },
+            {
                 path: '/decks/guide/:name',
                 excludeFromMenu: true,
                 component: lazy(() => import('../Screens/Deck Guide/guide')),

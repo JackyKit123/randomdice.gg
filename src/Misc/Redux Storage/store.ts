@@ -3,10 +3,12 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import fetchDecksReducer from './Fetch Decks/reducer';
 import fetchDicesReducer from './Fetch Dices/reducer';
 import fetchAltsReducer from './Fetch Alt/reducer';
+import fetchArenaReducer from './Fetch Arena/reducer';
 import filterReducer from './Deck Filter/reducer';
 import fetchGAPIresponseFormReducer from './Google API Fetch Response Form/reducers';
 
 const rootReducer = combineReducers({
+    fetchArenaReducer,
     fetchDecksReducer,
     fetchDicesReducer,
     filterReducer,

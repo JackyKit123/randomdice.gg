@@ -1,0 +1,139 @@
+@import '../../cross_import_lesshat.less';
+
+.arena-draft {
+    section {
+        text-align: center;
+
+        input {
+            margin: 0 auto 10px;
+            height: 35px;
+            width: 100%;
+            max-width: 200px;
+            text-align: center;
+            font-size: 25px;
+            line-height: 25px;
+            font-weight: 500;
+            color: #6ba4a5;
+            background: #ffffff;
+            -webkit-text-fill-color: #6ba4a5;
+
+            &.invalid {
+                color: #ff7777;
+                -webkit-text-fill-color: #ff7777;
+            }
+        }
+
+        &.pick {
+            button {
+                display: inline-block;
+                text-align: center;
+                margin: 20px;
+                text-decoration: none;
+                cursor: pointer;
+                font-size: 20px;
+                background-color: #05292e;
+                padding: 10px;
+                border-radius: 5px;
+                color: #ffffff;
+                .transition(all 0.2s ease-in-out);
+
+                &:disabled {
+                    background-color: #aaaaaa;
+
+                    &:hover,
+                    &:focus {
+                        cursor: initial;
+                        color: #ffffff;
+                        background-color: #aaaaaa;
+                    }
+                }
+
+                &:hover,
+                &:focus {
+                    color: #05292e;
+                    background-color: #eeeeee;
+                }
+            }
+        }
+
+        &.deck {
+            img {
+                max-width: 20%;
+            }
+        }
+
+        &.winrate {
+            max-height: 0;
+            overflow: hidden;
+            .transition(max-height 1s ease-out);
+
+            &.show {
+                max-height: 1000px;
+            }
+        }
+    }
+
+    .table-container {
+        text-align: center;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        & > table {
+            margin: 0 auto;
+
+            tr {
+                &:nth-of-type(n + 3) td {
+                    border: 2px ridge #ffffff;
+                }
+
+                td {
+                    padding: 5px;
+                    max-width: calc(40vw - 60px);
+
+                    &.dice-container {
+                        img {
+                            width: 100%;
+                        }
+
+                        &.active img {
+                            cursor: pointer;
+                            border: 3px outset #ffffff;
+                        }
+                    }
+
+                    &:hover,
+                    &:focus {
+                        &.dice-container.active img {
+                            border-style: inset;
+                        }
+                    }
+
+                    &.value {
+                        font-size: 24px;
+                        font-weight: 400;
+                    }
+
+                    h4 {
+                        margin: 0;
+                    }
+                }
+            }
+
+            select {
+                margin: 10px 0;
+                max-width: 100%;
+                font-size: inherit;
+                font-weight: 200;
+                background-color: #6ba4a5;
+                .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+                border: 0;
+                border-radius: 3px;
+                padding: 2px 4px;
+
+                &[data-value='?'] {
+                    background: #eeeeee;
+                }
+            }
+        }
+    }
+}

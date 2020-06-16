@@ -52,15 +52,17 @@ export default function Homepage(): JSX.Element {
                 and updating content on this website.
             </p>
             <p>
-                Added moon dice buff to{' '}
-                <Link to='/calculator/solar'>Solar Calculator</Link>. Replacing
-                the old double buffed by light and crit. Moon buff is also added
-                to <Link to='/calculator/combo'>Combo Damage Calculator</Link>.
+                Dice class up stat is added to{' '}
+                <Link to='/calculator/stat'>Dice Stat Calculator</Link>. It
+                shows the information for the cost and benefit of level a dice
+                class.
             </p>
             <p>
-                A detailed deck guide for meta decks has been written and added
-                to the Resources Tab. We are still actively trying to work out
-                the synergy of moon and flow dice and create decks with them.
+                <Link to='/arenadraft'>Arena Draft Tool</Link> is added. You may
+                now use this tool to assist yourself when drafting an arena
+                deck. At the moment we do not have the most updated dice value
+                for moon and flow dice. But you can treat them as the same value
+                as light and blizzard.
             </p>
             <br />
             <br />
