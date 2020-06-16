@@ -3,12 +3,18 @@ import React, { useEffect } from 'react';
 import { detected } from 'adblockdetect';
 import './ad.less';
 
-export default function AdUnit({ unitId }: { unitId: string }): JSX.Element {
+export default function AdUnit({
+    unitId,
+    dimension,
+}: {
+    unitId: string;
+    dimension: string;
+}): JSX.Element {
     useEffect(() => {
         try {
             // eslint-disable-next-line func-names
             window._mNHandle.queue.push(function() {
-                window._mNDetails.loadTag(unitId, '970x90', unitId);
+                window._mNDetails.loadTag(unitId, dimension, unitId);
             });
         } catch (err) {
             //
@@ -16,7 +22,7 @@ export default function AdUnit({ unitId }: { unitId: string }): JSX.Element {
     }, []);
 
     return (
-        <div className='ad-container'>
+        <div className='ad-container' data-dimension={dimension}>
             {detected() ? (
                 <div className='ad-block-warning'>
                     <span>

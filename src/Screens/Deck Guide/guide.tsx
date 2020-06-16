@@ -3,6 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { sanitize } from 'dompurify';
 import Main from '../../Components/Main/main';
 import Dice from '../../Components/Dice/dice';
+import AdUnit from '../../Components/Ad Unit/ad';
 import decksGuide from './guide.content.json';
 import './guide.less';
 
@@ -41,6 +42,10 @@ export default function DeckGuideMenu(): JSX.Element {
                         ))}
                     </div>
                 ))}
+                <div className='divisor' />
+                <AdUnit unitId='227378933' dimension='300x250' />
+                <AdUnit unitId='219055766' dimension='970x90' />
+                <div className='divisor' />
                 <div
                     /* eslint-disable react/no-danger */
                     dangerouslySetInnerHTML={{

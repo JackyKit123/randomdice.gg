@@ -356,7 +356,8 @@ export default function DeckList({
                     </div>
                 </form>
                 <div className='divisor' />
-                <AdUnit unitId='219055766' />
+                <AdUnit unitId='227378933' dimension='300x250' />
+                <AdUnit unitId='219055766' dimension='970x90' />
                 <div className='divisor' />
                 <div className='table-container'>
                     <table>
