@@ -1,11 +1,33 @@
+/* eslint-disable react/jsx-indent */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Dice from '../../../Components/Dice/dice';
 import Main from '../../../Components/Main/main';
+import AdUnit from '../../../Components/Ad Unit/ad';
 import diceConfig from './dice.content.json';
 import './dice.less';
 
 export default function DiceMechanic(): JSX.Element {
+    const paragraph = diceConfig.dice.map(dice => (
+        <li key={dice.name}>
+            <div className='divisor' />
+            <h3>{dice.name}</h3>
+            <div className='dice-container'>
+                <Dice dice={dice.name || ''} />
+            </div>
+            <p>{dice.desc}</p>
+        </li>
+    ));
+    paragraph.splice(
+        25,
+        0,
+        <li key='ad'>
+            <div className='divisor' />
+            <AdUnit unitId='227378933' dimension='300x250' />
+            <AdUnit unitId='219055766' dimension='970x90' />
+        </li>
+    );
+
     return (
         <Main title='Dice Mechanics' className='wiki dice-mechanics'>
             <p className='intro'>
@@ -23,18 +45,7 @@ export default function DiceMechanic(): JSX.Element {
                 refer to <Link to='/calculator/dice'>Dice Stat Calculator</Link>
                 .
             </p>
-            <ul>
-                {diceConfig.dice.map(dice => (
-                    <li key={dice.name}>
-                        <div className='divisor' />
-                        <h3>{dice.name}</h3>
-                        <div className='dice-container'>
-                            <Dice dice={dice.name || ''} />
-                        </div>
-                        <p>{dice.desc}</p>
-                    </li>
-                ))}
-            </ul>
+            <ul>{paragraph}</ul>
         </Main>
     );
 }

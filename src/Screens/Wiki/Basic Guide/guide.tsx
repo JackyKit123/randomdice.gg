@@ -1,6 +1,7 @@
 import React from 'react';
 import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
+import AdUnit from '../../../Components/Ad Unit/ad';
 import PipDpsWebp from './Image/PipDps.webp';
 import saveGoldWebp from './Image/saveGold.webp';
 import KnightTransformWebp from './Image/KnightTransform.webp';
@@ -137,6 +138,9 @@ export default function Basic(): JSX.Element {
                         than Blizzard in PVE.
                     </span>
                 </li>
+                <div className='divisor' />
+                <AdUnit unitId='227378933' dimension='300x250' />
+                <AdUnit unitId='219055766' dimension='970x90' />
                 <div className='divisor' />
                 <li>
                     <div className='img-container'>

@@ -14,6 +14,7 @@ import MagicianPng from './Image/magician.png';
 import LeonPng from './Image/leon.png';
 import Main from '../../../Components/Main/main';
 import Dice from '../../../Components/Dice/dice';
+import AdUnit from '../../../Components/Ad Unit/ad';
 import './boss.less';
 
 export default function BossGuide(): JSX.Element {
@@ -100,13 +101,16 @@ export default function BossGuide(): JSX.Element {
                     </span>
                 </li>
             </ul>
+            <div className='divisor' />
+            <AdUnit unitId='227378933' dimension='300x250' />
+            <AdUnit unitId='219055766' dimension='970x90' />
+            <div className='divisor' />
             <p>
                 The following is a list of boss you will find in game. Boss can
                 cast special abilities. It will be explained below.
             </p>
             <ul className='boss-list'>
                 <li>
-                    <div className='divisor' />
                     <div className='boss-container'>
                         <img
                             src={isWebpSupported() ? MiniWebp : MiniPng}

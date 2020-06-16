@@ -188,6 +188,14 @@
         {
             "name": "Combo",
             "desc": "Best Late game Dice on PvE in the Game. Combo Dice targets the first enemy dealing base Attack Damage. Every time you merge a Combo with itself or a Mimic Dice it will gain a counter dealing +8 damage per count at Class 7. Leveling up will gain +1 damage per count. The formula is (dmgPerCombo * Combo) * (combo count - 1) / 2 "
+        },
+        {
+            "name": "Moon",
+            "desc": "Moon Dice does not have an attack ability. Rather it has three buff abilities two of which are only activated when it achieves a Solar Dice mechanic. Moon Dice increases the attack speed of all neighboring dice by a base 8% per pip. When Moon Dice Mechanics have been achieved by obtaining either 3, 5, or 7 Moon Dice the critical chance increases by a base 2% and the attack damage increases by a base 5% per pip. In game level ups increase the attack speed by 1% each."
+        },
+        {
+            "name": "Flow",
+            "desc": "Flow Dice will speed up the mobs on your opponents board when in PVP mode. While in Co-Op it slows down the mobs on your board. Flow Dice has no attack ability and the maximum movement effect is 40%, whether that be slowing or quickening the mobs is dependant on your game mode. Flow Dice also stacks abilities, so the more high pip Flow Dice on your field the slower or faster the mobs will move."
         }
     ]
 }

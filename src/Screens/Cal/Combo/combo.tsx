@@ -19,6 +19,7 @@ import { Dice as DiceType } from '../../../Misc/Redux Storage/Fetch Dices/types'
 import { clearError, fetchDices } from '../../../Misc/fetchData';
 import '../cal.less';
 import './combo.less';
+import AdUnit from '../../../Components/Ad Unit/ad';
 
 export default function ComboCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -451,6 +452,9 @@ export default function ComboCalculator(): JSX.Element {
                 ) : (
                     ''
                 )}
+                <div className='divisor' />
+                <AdUnit unitId='227378933' dimension='300x250' />
+                <AdUnit unitId='219055766' dimension='970x90' />
                 <div className='divisor' />
                 <div className='result'>
                     <div className='dmg'>

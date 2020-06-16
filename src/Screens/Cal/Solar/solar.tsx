@@ -18,6 +18,7 @@ import { RootState } from '../../../Misc/Redux Storage/store';
 import { clearError, fetchDices } from '../../../Misc/fetchData';
 import '../cal.less';
 import './solar.less';
+import AdUnit from '../../../Components/Ad Unit/ad';
 
 export default function SolarCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -649,6 +650,9 @@ export default function SolarCalculator(): JSX.Element {
                 ) : (
                     ''
                 )}
+                <div className='divisor' />
+                <AdUnit unitId='227378933' dimension='300x250' />
+                <AdUnit unitId='219055766' dimension='970x90' />
                 <div className='divisor' />
                 <div className='chart-container'>
                     <VictoryChart

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
+import AdUnit from '../../../Components/Ad Unit/ad';
 import GoldPng from '../../Cal/Gold/gold.png';
 import GoldWebp from '../../Cal/Gold/gold.webp';
 import Dice from '../../../Components/Dice/dice';
@@ -272,6 +273,9 @@ export default function BoxGuide(): JSX.Element {
                         Contains: <Dice dice='Element' />
                     </p>
                 </li>
+                <div className='divisor' />
+                <AdUnit unitId='227378933' dimension='300x250' />
+                <AdUnit unitId='219055766' dimension='970x90' />
                 <div className='divisor' />
                 <li>
                     <h3>King&apos;s Legacy</h3>
