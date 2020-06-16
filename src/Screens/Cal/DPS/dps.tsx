@@ -105,8 +105,6 @@ export default function DpsCalculator(): JSX.Element {
                 : 0;
         const critBuffSum = critBuff + moonCritBuff + 0.05;
 
-        const atkSpdMultiplier =
-            (1 - lightBuff / 100) * (1 - moonSpdBuff / 100);
         const critMultiplier =
             1 - critBuffSum + critBuffSum * (filter.crit / 100);
 
@@ -145,6 +143,36 @@ export default function DpsCalculator(): JSX.Element {
             return atk * moonAtkBuffMultiplier;
         };
 
+        const atkSpd = (dice: DiceType, diceClass = 0): number => {
+            const atkSpdMultiplier = Math.min(
+                1 - lightBuff / 100,
+                1 - moonSpdBuff / 100
+            );
+            let minClass = 1;
+            switch (dice.rarity) {
+                case 'Common':
+                    minClass = 1;
+                    break;
+                case 'Rare':
+                    minClass = 3;
+                    break;
+                case 'Unique':
+                    minClass = 5;
+                    break;
+                case 'Legendary':
+                    minClass = 7;
+                    break;
+                default:
+                    minClass = 1;
+            }
+            const baseAtkSpd = dice.spd;
+            const cupAtkSpd = diceClass
+                ? dice.cupSpd * (diceClass - minClass)
+                : 0;
+            const buffedSpd = (baseAtkSpd + cupAtkSpd) * atkSpdMultiplier;
+            return buffedSpd <= 0.1 ? 0.1 : buffedSpd;
+        };
+
         const windDps = (level = filter.level): number => {
             const windSpdBuff =
                 1 +
@@ -154,7 +182,7 @@ export default function DpsCalculator(): JSX.Element {
                     100;
             const dpsPerPip =
                 (baseAtkDmg(data.wind, filter.windClass, level) /
-                    ((data.wind.spd * atkSpdMultiplier) / windSpdBuff)) *
+                    (atkSpd(data.wind) / windSpdBuff)) *
                 critMultiplier;
             const dps = dpsPerPip * filter.pip;
             return roundTo3Sf(dps);
@@ -163,7 +191,7 @@ export default function DpsCalculator(): JSX.Element {
         const ironDps = (boss = false, level = filter.level): number => {
             const dpsPerPip =
                 (baseAtkDmg(data.iron, filter.ironClass, level) /
-                    (data.iron.spd * atkSpdMultiplier)) *
+                    atkSpd(data.iron)) *
                 critMultiplier;
             const dps = dpsPerPip * filter.pip;
             return roundTo3Sf(boss ? dps * 2 : dps);
@@ -173,10 +201,9 @@ export default function DpsCalculator(): JSX.Element {
             data.gamble.atk = 7;
             const dpsPerPip =
                 (baseAtkDmg(data.gamble, filter.gambleClass, level) *
-                    atkSpdMultiplier +
+                    critMultiplier +
                     (1 + filter.crit) / 2) /
-                (data.gamble.spd +
-                    data.gamble.cupSpd * (filter.gambleClass - 1));
+                atkSpd(data.gamble, filter.gambleClass);
             const dps = dpsPerPip * filter.pip;
             return roundTo3Sf(dps);
         };
@@ -188,9 +215,7 @@ export default function DpsCalculator(): JSX.Element {
                         data.crossbow.pupEff1 * (level - 1) +
                         data.crossbow.cupEff1 * (filter.crossbowClass - 3)) /
                         5) /
-                    ((data.crossbow.spd +
-                        data.crossbow.cupSpd * (filter.crossbowClass - 3)) *
-                        atkSpdMultiplier)) *
+                    atkSpd(data.crossbow, filter.crossbowClass)) *
                 critMultiplier;
             const dps = dpsPerPip * filter.pip;
             return roundTo3Sf(dps);
@@ -203,10 +228,8 @@ export default function DpsCalculator(): JSX.Element {
                 level
             );
             const phase1Dps =
-                (baseDmgPerPip / (data.mwind.spd * atkSpdMultiplier)) *
-                critMultiplier;
-            const phase2Dps =
-                (baseDmgPerPip / (0.1 * atkSpdMultiplier)) * critMultiplier;
+                (baseDmgPerPip / atkSpd(data.mwind)) * critMultiplier;
+            const phase2Dps = (baseDmgPerPip / 0.1) * critMultiplier;
             const phase1Time = data.mwind.eff2;
             const phase2Time =
                 data.mwind.eff1 +
@@ -222,13 +245,13 @@ export default function DpsCalculator(): JSX.Element {
         const melecDps = (boss = false, level = filter.level): number => {
             const basicDpsPerPip =
                 (baseAtkDmg(data.melec, filter.melecClass, level) /
-                    (data.melec.spd * atkSpdMultiplier)) *
+                    atkSpd(data.melec)) *
                 critMultiplier;
             const lightingDPSPerPip =
                 ((data.melec.eff1 +
                     data.melec.pupEff1 * (level - 1) +
                     data.melec.cupEff1 * (filter.melecClass - 5)) /
-                    (data.melec.spd * atkSpdMultiplier)) *
+                    atkSpd(data.melec)) *
                 critMultiplier;
             const dps = boss
                 ? basicDpsPerPip * filter.pip + lightingDPSPerPip
@@ -243,13 +266,9 @@ export default function DpsCalculator(): JSX.Element {
                 level
             );
             const phase1Dps =
-                (baseDmgPerPip / (data.typhoon.spd * atkSpdMultiplier)) *
-                critMultiplier;
-            const phase2Dps =
-                (baseDmgPerPip / (0.1 * atkSpdMultiplier)) * critMultiplier;
-            const phase3Dps =
-                (baseDmgPerPip / (0.1 * atkSpdMultiplier)) *
-                (filter.crit / 100);
+                (baseDmgPerPip / atkSpd(data.typhoon)) * critMultiplier;
+            const phase2Dps = (baseDmgPerPip / 0.1) * critMultiplier;
+            const phase3Dps = (baseDmgPerPip / 0.1) * (filter.crit / 100);
             const phase1Time = data.typhoon.eff1;
             const phase2Time = data.typhoon.eff2;
             const phase3Time = 1;

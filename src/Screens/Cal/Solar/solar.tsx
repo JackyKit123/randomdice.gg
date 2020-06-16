@@ -138,6 +138,10 @@ export default function SolarCalculator(): JSX.Element {
             1 - critMultiplier + critMultiplier * (filter.crit / 100);
         const moonBuffedCrit =
             1 - moonCritMultiplier + moonCritMultiplier * (filter.crit / 100);
+        const moonCritDoubleBuffedCrit =
+            1 -
+            (critMultiplier + moonCritMultiplier) +
+            (critMultiplier + moonCritMultiplier) * (filter.crit / 100);
 
         const dps = (
             sourceDmgPerHit: number,
@@ -658,15 +662,9 @@ export default function SolarCalculator(): JSX.Element {
                                     filter.duration
                                 ),
                                 dps(
-                                    basicDmgPerHit,
-                                    buffedAtkSpd,
-                                    basicCrit,
-                                    filter.duration
-                                ),
-                                dps(
                                     moonBuffedDmgPerHit,
                                     moonBuffedAtkSpd,
-                                    moonBuffedCrit,
+                                    moonCritDoubleBuffedCrit,
                                     filter.duration
                                 )
                             ),
@@ -724,12 +722,16 @@ export default function SolarCalculator(): JSX.Element {
                             orientation='vertical'
                             gutter={20}
                             colorScale={[
+                                '#d178ff',
+                                '#ff6a00',
                                 '#197cf0',
                                 '#ffff00',
                                 '#ff0000',
                                 '#111111',
                             ]}
                             data={[
+                                { name: 'Moon + Crit' },
+                                { name: 'Light + Crit' },
                                 { name: 'Moon Buffed' },
                                 { name: 'Light Buffed' },
                                 { name: 'Crit Buffed' },
@@ -791,27 +793,51 @@ export default function SolarCalculator(): JSX.Element {
                                 )
                             }
                         />
+                        <VictoryLine
+                            name='Light + Crit'
+                            samples={100}
+                            style={{
+                                data: { stroke: '#ff6a00', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number =>
+                                dps(
+                                    basicDmgPerHit,
+                                    buffedAtkSpd,
+                                    buffedCrit,
+                                    d.x
+                                )
+                            }
+                        />
+                        <VictoryLine
+                            name='Moon + Crit'
+                            samples={100}
+                            style={{
+                                data: { stroke: '#d178ff', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number =>
+                                dps(
+                                    moonBuffedDmgPerHit,
+                                    moonBuffedAtkSpd,
+                                    moonCritDoubleBuffedCrit,
+                                    d.x
+                                )
+                            }
+                        />
                     </VictoryChart>
                     <VictoryChart
                         maxDomain={{
                             x: filter.duration || 0,
                             y: Math.max(
                                 dps(
-                                    basicDmgPerSplash,
+                                    basicDmgPerHit,
                                     buffedAtkSpd,
                                     buffedCrit,
                                     filter.duration
                                 ),
                                 dps(
-                                    basicDmgPerSplash,
-                                    buffedAtkSpd,
-                                    basicCrit,
-                                    filter.duration
-                                ),
-                                dps(
-                                    moonBuffedDmgPerSplash,
+                                    moonBuffedDmgPerHit,
                                     moonBuffedAtkSpd,
-                                    moonBuffedCrit,
+                                    moonCritDoubleBuffedCrit,
                                     filter.duration
                                 )
                             ),
@@ -923,18 +949,52 @@ export default function SolarCalculator(): JSX.Element {
                                 )
                             }
                         />
+                        <VictoryLine
+                            name='Light + Crit'
+                            samples={100}
+                            style={{
+                                data: { stroke: '#ff6a00', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number =>
+                                dps(
+                                    basicDmgPerSplash,
+                                    buffedAtkSpd,
+                                    buffedCrit,
+                                    d.x
+                                )
+                            }
+                        />
+                        <VictoryLine
+                            name='Moon + Crit'
+                            samples={100}
+                            style={{
+                                data: { stroke: '#d178ff', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number =>
+                                dps(
+                                    moonBuffedDmgPerSplash,
+                                    moonBuffedAtkSpd,
+                                    moonCritDoubleBuffedCrit,
+                                    d.x
+                                )
+                            }
+                        />
                         <VictoryLegend
                             x={50}
                             y={70}
                             orientation='vertical'
                             gutter={20}
                             colorScale={[
+                                '#d178ff',
+                                '#ff6a00',
                                 '#197cf0',
                                 '#ffff00',
                                 '#ff0000',
                                 '#111111',
                             ]}
                             data={[
+                                { name: 'Moon + Crit' },
+                                { name: 'Light + Crit' },
                                 { name: 'Moon Buffed' },
                                 { name: 'Light Buffed' },
                                 { name: 'Crit Buffed' },
