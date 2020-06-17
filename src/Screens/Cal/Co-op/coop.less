@@ -1,0 +1,38 @@
+@import '../../../cross_import_lesshat.less';
+
+.cal.coop-cal {
+    img {
+        margin: 0 auto 20px;
+        display: block;
+    }
+
+    section.filter {
+        .display(flex);
+        .flex-wrap(wrap);
+        .justify-content(space-around);
+
+        form {
+            .display(flex);
+            .flex-direction(column);
+            .align-items(center);
+            margin: 0 10px 20px;
+            width: 350px;
+
+            &:last-of-type {
+                .flex-basis(100%);
+            }
+
+            img {
+                display: block;
+            }
+
+            input {
+                width: 70px;
+            }
+
+            select {
+                width: auto;
+            }
+        }
+    }
+}

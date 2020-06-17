@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Suspense } from 'react';
+import React, { FunctionComponent, Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Menu } from '../../Misc/menuConfig';
 import Main from '../../Components/Main/main';
@@ -31,7 +31,13 @@ const mapRouter = (
                 return null;
             })
             .flat();
-    return mapThis(rootMenu);
+    return mapThis(rootMenu).concat(
+        <Route
+            key='Route-path-404'
+            component={lazy(() => import('../NoMatch/NoMatch'))}
+            status={404}
+        />
+    );
 };
 
 export default function router(menu: Menu[]): JSX.Element {

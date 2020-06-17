@@ -78,9 +78,9 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Cal/Gears/gears')),
             },
             {
-                name: 'Gold Grind Calculator',
-                path: '/calculator/gold',
-                component: lazy(() => import('../Screens/Cal/Gold/gold')),
+                name: 'Co-op Grind Calculator',
+                path: '/calculator/coop',
+                component: lazy(() => import('../Screens/Cal/Co-op/coop')),
             },
             {
                 name: 'General DPS Calculator',
@@ -174,9 +174,5 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Legal/terms')),
             },
         ],
-    },
-    {
-        excludeFromMenu: true,
-        component: lazy(() => import('../Screens/NoMatch/NoMatch')),
     },
 ];

@@ -48,21 +48,42 @@ export default function Homepage(): JSX.Element {
             <br />
             <h3 className='news'>What&apos;s New?</h3>
             <p>
-                As update 4.0.0 is released. We are actively inventing new decks
-                and updating content on this website.
+                Gold Calculator is updated into{' '}
+                <Link to='/calculator/coop'>Co-op Grind calculator</Link>.
+                Instead of calculating gold only, you can now also calculate the
+                target diamond and legendary from card box.
             </p>
             <p>
-                Dice class up stat is added to{' '}
-                <Link to='/calculator/stat'>Dice Stat Calculator</Link>. It
-                shows the information for the cost and benefit of level a dice
-                class.
+                All calculators, wiki, resources are all now implemented on this
+                website. You can request for more features, raise suggestions
+                and report website glitches on{' '}
+                <a
+                    href='https://discord.gg/zQj6tCM'
+                    target='_blank'
+                    rel='noreferrer noopener'
+                >
+                    Discord
+                </a>{' '}
+                or by{' '}
+                <a href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}>
+                    Email
+                </a>
+                .
             </p>
             <p>
-                <Link to='/arenadraft'>Arena Draft Tool</Link> is added. You may
-                now use this tool to assist yourself when drafting an arena
-                deck. At the moment we do not have the most updated dice value
-                for moon and flow dice. But you can treat them as the same value
-                as light and blizzard.
+                A{' '}
+                <a
+                    href='https://www.patreon.com/RandomDiceCommunityWebsite'
+                    target='_blank'
+                    rel='noreferrer noopener'
+                >
+                    Patreon Page
+                </a>{' '}
+                is also set up for supporting this website. This website is
+                served for free to the community but it does not run for free.
+                If you appreciate what we are doing, feel free to drop a
+                support. In return, you can enjoy benefits like ad free
+                browsing.
             </p>
             <br />
             <br />
