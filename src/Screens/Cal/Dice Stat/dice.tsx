@@ -193,11 +193,13 @@ export default function DiceStat(): JSX.Element {
                 <div className='table-container'>
                     <table>
                         <thead>
-                            <th>Rarity</th>
-                            <th>Class Up</th>
-                            <th>Copies Needed</th>
-                            <th>Gold Need</th>
-                            <th>Contribution to Crit% dmg</th>
+                            <tr>
+                                <th>Rarity</th>
+                                <th>Class Up</th>
+                                <th>Copies Needed</th>
+                                <th>Gold Need</th>
+                                <th>Contribution to Crit% dmg</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr className='common'>
