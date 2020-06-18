@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Main from '../../Components/Main/main';
 import Menu from '../../Components/Menu/menu';
 import './homepage.less';
@@ -48,29 +47,6 @@ export default function Homepage(): JSX.Element {
             <br />
             <h3 className='news'>What&apos;s New?</h3>
             <p>
-                Gold Calculator is updated into{' '}
-                <Link to='/calculator/coop'>Co-op Grind calculator</Link>.
-                Instead of calculating gold only, you can now also calculate the
-                target diamond and legendary from card box.
-            </p>
-            <p>
-                All calculators, wiki, resources are all now implemented on this
-                website. You can request for more features, raise suggestions
-                and report website glitches on{' '}
-                <a
-                    href='https://discord.gg/zQj6tCM'
-                    target='_blank'
-                    rel='noreferrer noopener'
-                >
-                    Discord
-                </a>{' '}
-                or by{' '}
-                <a href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}>
-                    Email
-                </a>
-                .
-            </p>
-            <p>
                 A{' '}
                 <a
                     href='https://www.patreon.com/RandomDiceCommunityWebsite'
@@ -85,6 +61,7 @@ export default function Homepage(): JSX.Element {
                 support. In return, you can enjoy benefits like ad free
                 browsing.
             </p>
+            <p>Some minor bug fixes are done.</p>
             <br />
             <br />
             <br />
