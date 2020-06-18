@@ -71,8 +71,8 @@ export default function GoldCalculator(): JSX.Element {
         isInvalidWave;
 
     const minutesPerRun =
-        filter.targetWave > 50
-            ? filter.targetWave / 2 + 20 + 1
+        filter.targetWave > 60
+            ? (filter.targetWave - 60) / 2 + 20 + 1
             : filter.targetWave / 3 + 1;
     const cardsPerRun =
         filter.targetWave > 50
@@ -106,7 +106,7 @@ export default function GoldCalculator(): JSX.Element {
     const timeNeeded =
         minutesNeeded >= 60
             ? `${Math.round((minutesNeeded / 60) * 100) / 100} Hour(s)`
-            : `${minutesNeeded} Minute(s)`;
+            : `${Math.round(minutesNeeded * 100) / 100} Minute(s)`;
 
     return (
         <Main title='Card Box Grind Time Calculator' className='cal coop-cal'>
