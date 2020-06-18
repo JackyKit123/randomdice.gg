@@ -637,7 +637,7 @@ export default function SolarCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2036</strong>.
+                        <strong>111-2108</strong>.
                     </span>
                 ) : (
                     ''

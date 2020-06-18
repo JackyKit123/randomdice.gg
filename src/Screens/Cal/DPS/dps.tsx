@@ -185,7 +185,7 @@ export default function DpsCalculator(): JSX.Element {
                     (atkSpd(data.wind) / windSpdBuff)) *
                 critMultiplier;
             const dps = dpsPerPip * filter.pip;
-            return roundTo3Sf(dps);
+            return invalidInput ? 0 : roundTo3Sf(dps);
         };
 
         const ironDps = (boss = false, level = filter.level): number => {
@@ -194,7 +194,7 @@ export default function DpsCalculator(): JSX.Element {
                     atkSpd(data.iron)) *
                 critMultiplier;
             const dps = dpsPerPip * filter.pip;
-            return roundTo3Sf(boss ? dps * 2 : dps);
+            return invalidInput ? 0 : roundTo3Sf(boss ? dps * 2 : dps);
         };
 
         const gambleDps = (level = filter.level): number => {
@@ -205,7 +205,7 @@ export default function DpsCalculator(): JSX.Element {
                     (1 + filter.crit) / 2) /
                 atkSpd(data.gamble, filter.gambleClass);
             const dps = dpsPerPip * filter.pip;
-            return roundTo3Sf(dps);
+            return invalidInput ? 0 : roundTo3Sf(dps);
         };
 
         const crossbowDps = (level = filter.level): number => {
@@ -218,7 +218,7 @@ export default function DpsCalculator(): JSX.Element {
                     atkSpd(data.crossbow, filter.crossbowClass)) *
                 critMultiplier;
             const dps = dpsPerPip * filter.pip;
-            return roundTo3Sf(dps);
+            return invalidInput ? 0 : roundTo3Sf(dps);
         };
 
         const mwindDps = (level = filter.level): number => {
@@ -239,7 +239,7 @@ export default function DpsCalculator(): JSX.Element {
                 (phase1Dps * phase1Time + phase2Dps * phase2Time) /
                 (phase1Time + phase2Time);
             const dps = dpsPerPip * filter.pip;
-            return roundTo3Sf(dps);
+            return invalidInput ? 0 : roundTo3Sf(dps);
         };
 
         const melecDps = (boss = false, level = filter.level): number => {
@@ -256,7 +256,7 @@ export default function DpsCalculator(): JSX.Element {
             const dps = boss
                 ? basicDpsPerPip * filter.pip + lightingDPSPerPip
                 : (basicDpsPerPip + lightingDPSPerPip) * filter.pip;
-            return roundTo3Sf(dps);
+            return invalidInput ? 0 : roundTo3Sf(dps);
         };
 
         const typhoonDps = (level = filter.level): number => {
@@ -278,18 +278,20 @@ export default function DpsCalculator(): JSX.Element {
                     phase3Dps * phase3Time) /
                 (phase1Time + phase2Time + phase3Time);
             const dps = dpsPerPip * filter.pip;
-            return roundTo3Sf(dps);
+            return invalidInput ? 0 : roundTo3Sf(dps);
         };
 
-        const maxDps = Math.max(
-            windDps(5),
-            ironDps(true, 5),
-            gambleDps(5),
-            crossbowDps(5),
-            mwindDps(5),
-            melecDps(false, 5),
-            typhoonDps(5)
-        );
+        const maxDps = invalidInput
+            ? 1000
+            : Math.max(
+                  windDps(5),
+                  ironDps(true, 5),
+                  gambleDps(5),
+                  crossbowDps(5),
+                  mwindDps(5),
+                  melecDps(false, 5),
+                  typhoonDps(5)
+              );
 
         jsx = (
             <>
@@ -536,7 +538,7 @@ export default function DpsCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2036</strong>.
+                        <strong>111-2108</strong>.
                     </span>
                 ) : (
                     ''
@@ -1052,6 +1054,7 @@ export default function DpsCalculator(): JSX.Element {
                         <VictoryAxis
                             label='Level'
                             fixLabelOverlap
+                            tickValues={[1, 2, 3, 4, 5]}
                             style={{
                                 axisLabel: {
                                     padding: 30,
@@ -1162,6 +1165,7 @@ export default function DpsCalculator(): JSX.Element {
                         <VictoryAxis
                             label='Level'
                             fixLabelOverlap
+                            tickValues={[1, 2, 3, 4, 5]}
                             style={{
                                 axisLabel: {
                                     padding: 30,
