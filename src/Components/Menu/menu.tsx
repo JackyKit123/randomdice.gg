@@ -20,10 +20,11 @@ export default function Menu(props: {
 
     useEffect(() => {
         document.addEventListener('keyup', keyup);
-        history.listen(() => {
-            setFocusedTab(-1);
-        });
-        return (): void => document.removeEventListener('keyup', keyup);
+        const unlisten = history.listen(() => setFocusedTab(-1));
+        return (): void => {
+            unlisten();
+            document.removeEventListener('keyup', keyup);
+        };
     });
     const createMenu = (
         menulist: MenuProp[],
