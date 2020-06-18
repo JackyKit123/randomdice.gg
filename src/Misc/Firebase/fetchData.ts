@@ -44,3 +44,8 @@ export function fetchDecks(dispatch: Dispatch<FETCH_DICES.Action>): void {
 export function fetchDices(dispatch: Dispatch<FETCH_DECKS.Action>): void {
     fetch(dispatch, FETCH_DICES.SUCCESS, FETCH_DICES.FAIL, '/dice', 'dices');
 }
+
+export default function fetchAll(dispatch: Dispatch): void {
+    fetchDecks(dispatch);
+    fetchDices(dispatch);
+}

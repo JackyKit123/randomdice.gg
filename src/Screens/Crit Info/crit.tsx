@@ -13,7 +13,8 @@ import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
-import { fetchResponseForm, clearError } from '../../Misc/fetchData';
+import fetchResponseForm from '../../Misc/Redux Storage/Google API Fetch Response Form/fetchData';
+import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Google API Fetch Response Form/types';
 import './crit.less';
 
 export default function critData(): JSX.Element {
@@ -367,7 +368,7 @@ export default function critData(): JSX.Element {
             <Error
                 error={error}
                 retryFn={(): void => {
-                    clearError(dispatch);
+                    dispatch({ type: CLEAR_ERRORS });
                     fetchResponseForm(dispatch);
                 }}
             />

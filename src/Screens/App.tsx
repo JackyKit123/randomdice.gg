@@ -5,14 +5,9 @@ import Analytics from 'react-router-ga';
 import Header from './Header & Footer/header';
 import Footer from './Header & Footer/footer';
 import mapRouter from './Router/router';
-import { installEvent } from '../Misc/customGaEvent';
-import {
-    fetchResponseForm,
-    fetchAlts,
-    fetchDecks,
-    fetchDices,
-    fetchArena,
-} from '../Misc/fetchData';
+import * as ga from '../Misc/customGaEvent';
+import fetchResponseForm from '../Misc/Redux Storage/Google API Fetch Response Form/fetchData';
+import fetchFirebase from '../Misc/Firebase/fetchData';
 import { menu } from '../Misc/menuConfig';
 import './App.less';
 import ToTop from '../Components/To Top/btn';
@@ -22,11 +17,8 @@ export default function App(): JSX.Element {
 
     useEffect(() => {
         fetchResponseForm(dispatch, true);
-        fetchAlts(dispatch);
-        fetchDecks(dispatch);
-        fetchDices(dispatch);
-        fetchArena(dispatch);
-        installEvent.mountListener();
+        fetchFirebase(dispatch);
+        ga.installEvent.mountListener();
     }, []);
 
     return (

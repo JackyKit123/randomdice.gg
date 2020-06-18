@@ -10,15 +10,12 @@ import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
 import AdUnit from '../../Components/Ad Unit/ad';
-import {
-    fetchDecks,
-    fetchDices,
-    fetchAlts,
-    clearError,
-} from '../../Misc/fetchData';
 import Dice from '../../Components/Dice/dice';
 import './decklist.less';
 import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
+import { fetchDecks, fetchDices } from '../../Misc/Firebase/fetchData';
+import { CLEAR_ERRORS as CLEAR_DICES_ERRORS } from '../../Misc/Redux Storage/Fetch Dices/types';
+import { CLEAR_ERRORS as CLEAR_DECKS_ERRORS } from '../../Misc/Redux Storage/Fetch Decks/types';
 
 export default function DeckList({
     deckType,
@@ -30,13 +27,11 @@ export default function DeckList({
     const overlayRef = useRef(null as HTMLDivElement | null);
     const selection = useSelector((state: RootState) => state);
     const { error } =
-        selection.fetchDecksReducer ||
-        selection.fetchDicesReducer ||
-        selection.fetchAltsReducer;
+        selection.fetchDecksReducer || selection.fetchDicesReducer;
     const { decks } = selection.fetchDecksReducer;
     const { dices } = selection.fetchDicesReducer;
     const { filter } = selection.filterReducer;
-    const { alts } = selection.fetchAltsReducer;
+
     const legendaryList =
         dices
             ?.filter(dice => dice.rarity === 'Legendary')
@@ -97,11 +92,11 @@ export default function DeckList({
         );
 
         const options = [
-            alts?.find(alt => alt.id === findAlt.list[0]),
-            alts?.find(alt => alt.id === findAlt.list[1]),
-            alts?.find(alt => alt.id === findAlt.list[2]),
-            alts?.find(alt => alt.id === findAlt.list[3]),
-            alts?.find(alt => alt.id === findAlt.list[4]),
+            dices.find(alt => alt.id === findAlt.list[0]),
+            dices.find(alt => alt.id === findAlt.list[1]),
+            dices.find(alt => alt.id === findAlt.list[2]),
+            dices.find(alt => alt.id === findAlt.list[3]),
+            dices.find(alt => alt.id === findAlt.list[4]),
         ];
         if (findAlt.open) {
             document.body.classList.add('popup-opened');
@@ -244,13 +239,14 @@ export default function DeckList({
                                     <div className='replacement'>
                                         {options[
                                             i
-                                        ]?.list?.map((altDice: number) =>
-                                            altDice ? (
-                                                <Dice
-                                                    dice={altDice}
-                                                    key={altDice}
-                                                />
-                                            ) : null
+                                        ]?.alternatives?.list.map(
+                                            (altDice: string) =>
+                                                altDice ? (
+                                                    <Dice
+                                                        dice={altDice}
+                                                        key={altDice}
+                                                    />
+                                                ) : null
                                         )}
                                     </div>
                                 </div>
@@ -419,10 +415,10 @@ export default function DeckList({
             <Error
                 error={error}
                 retryFn={(): void => {
-                    clearError(dispatch);
+                    dispatch({ type: CLEAR_DICES_ERRORS });
+                    dispatch({ type: CLEAR_DECKS_ERRORS });
                     fetchDecks(dispatch);
                     fetchDices(dispatch);
-                    fetchAlts(dispatch);
                 }}
             />
         );

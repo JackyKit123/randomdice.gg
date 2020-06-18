@@ -8,17 +8,18 @@ import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
-import { fetchDices, clearError, fetchArena } from '../../Misc/fetchData';
 import Dice from '../../Components/Dice/dice';
+import { fetchDices } from '../../Misc/Firebase/fetchData';
+import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Dices/types';
 import './arenadraft.less';
 
 export default function ArenaDraft(): JSX.Element {
     const dispatch = useDispatch();
-    const selection = useSelector((state: RootState) => state);
-    const { error } =
-        selection.fetchDicesReducer || selection.fetchArenaReducer;
-    const { dices } = selection.fetchDicesReducer;
-    const dicesValue = selection.fetchArenaReducer.dices;
+    const selection = useSelector(
+        (state: RootState) => state.fetchDicesReducer
+    );
+    const { error } = selection;
+    const { dices } = selection;
 
     const [currentPick, setCurrentPick] = useState(1);
     const emptyPick = {
@@ -38,22 +39,21 @@ export default function ArenaDraft(): JSX.Element {
     const [deck, setDeck] = useState<{ [key: number]: string }>(emptyDeck);
 
     let jsx;
-    if (dices && dicesValue && dices.length > 0) {
+    if (dices && dices.length > 0) {
         interface DiceValue {
             dps: number;
-            assists: number;
+            assist: number;
             slow: number;
             value: number;
         }
 
-        const findDiceValue = (dice: string): DiceValue => {
-            const diceId = dices.find(d => d.name === dice)?.id || 0;
-            const diceValue = dicesValue.find(d => d.id === diceId);
+        const findDiceValue = (diceName: string): DiceValue => {
+            const dice = dices.find(d => d.name === diceName);
             return {
-                dps: diceValue?.dps || 0,
-                assists: diceValue?.assists || 0,
-                slow: diceValue?.slow || 0,
-                value: diceValue?.value || 0,
+                dps: dice?.arenaValue.dps || 0,
+                assist: dice?.arenaValue.assist || 0,
+                slow: dice?.arenaValue.slow || 0,
+                value: dice?.arenaValue.value || 0,
             };
         };
 
@@ -76,11 +76,11 @@ export default function ArenaDraft(): JSX.Element {
                 .reduce((acc, curr) => acc + curr);
         };
 
-        const calSynergy = (dice: string): number => {
-            if (!dices.find(d => d.name === dice)) {
+        const calSynergy = (diceName: string): number => {
+            if (!dices.find(d => d.name === diceName)) {
                 return 0;
             }
-            const value = findDiceValue(dice);
+            const value = findDiceValue(diceName);
             const maxValue = Object.entries(value).find(
                 entry => entry[1] === Math.max(...Object.values(value))
             );
@@ -98,7 +98,7 @@ export default function ArenaDraft(): JSX.Element {
                     case 'dps':
                         return synergy(15, 'dps');
                     case 'assists':
-                        return synergy(15, 'assists');
+                        return synergy(15, 'assist');
                     case 'slow':
                         return synergy(10, 'slow');
                     case 'value':
@@ -120,7 +120,7 @@ export default function ArenaDraft(): JSX.Element {
                     Math.exp(
                         -(
                             deckScore('dps') +
-                            deckScore('assists') +
+                            deckScore('assist') +
                             deckScore('slow') +
                             deckScore('value') -
                             60
@@ -334,7 +334,7 @@ export default function ArenaDraft(): JSX.Element {
                     <h4>Assist DPS (target score: 15)</h4>
                     <input
                         type='textbox'
-                        value={deckScore('assists')}
+                        value={deckScore('assist')}
                         disabled
                     />
                     <h4>Slow (target score: 10)</h4>
@@ -375,9 +375,8 @@ export default function ArenaDraft(): JSX.Element {
             <Error
                 error={error}
                 retryFn={(): void => {
-                    clearError(dispatch);
+                    dispatch({ type: CLEAR_ERRORS });
                     fetchDices(dispatch);
-                    fetchArena(dispatch);
                 }}
             />
         );

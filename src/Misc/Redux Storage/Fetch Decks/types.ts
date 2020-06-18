@@ -1,12 +1,13 @@
 import { AxiosError } from 'axios';
 
-export const FETCH_DECKS_SUCCESS = 'FETCH_DECKS_SUCCESS';
-export const FETCH_DECKS_FAIL = 'FETCH_DECKS_FAIL';
+export const SUCCESS = 'FETCH_DECKS_SUCCESS';
+export const FAIL = 'FETCH_DECKS_FAIL';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
+export type ActionType = typeof SUCCESS | typeof FAIL | typeof CLEAR_ERRORS;
 
 export type Decks = {
     id: number;
-    type: string;
+    type: 'PvP' | 'PvE' | '-';
     rating: number;
     slot1: number;
     slot2: number;
@@ -23,12 +24,12 @@ export interface FetchState {
 }
 
 interface FetchDecksSuccessAction {
-    type: typeof FETCH_DECKS_SUCCESS;
+    type: typeof SUCCESS;
     payload: Decks;
 }
 
 interface FetchDecksFailureAction {
-    type: typeof FETCH_DECKS_FAIL;
+    type: typeof FAIL;
     payload: AxiosError;
 }
 

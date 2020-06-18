@@ -14,12 +14,15 @@ import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
 import Dice from '../../../Components/Dice/dice';
+import AdUnit from '../../../Components/Ad Unit/ad';
 import { RootState } from '../../../Misc/Redux Storage/store';
-import { Dice as DiceType } from '../../../Misc/Redux Storage/Fetch Dices/types';
-import { clearError, fetchDices } from '../../../Misc/fetchData';
+import {
+    Dice as DiceType,
+    CLEAR_ERRORS,
+} from '../../../Misc/Redux Storage/Fetch Dices/types';
+import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import '../cal.less';
 import './combo.less';
-import AdUnit from '../../../Components/Ad Unit/ad';
 
 export default function ComboCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -644,7 +647,7 @@ export default function ComboCalculator(): JSX.Element {
             <Error
                 error={error}
                 retryFn={(): void => {
-                    clearError(dispatch);
+                    dispatch({ type: CLEAR_ERRORS });
                     fetchDices(dispatch);
                 }}
             />

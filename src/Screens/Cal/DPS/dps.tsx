@@ -13,10 +13,13 @@ import {
 import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
-import { Dice as DiceType } from '../../../Misc/Redux Storage/Fetch Dices/types';
+import {
+    Dice as DiceType,
+    CLEAR_ERRORS,
+} from '../../../Misc/Redux Storage/Fetch Dices/types';
 import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Misc/Redux Storage/store';
-import { clearError, fetchDices } from '../../../Misc/fetchData';
+import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import '../cal.less';
 import './dps.less';
 
@@ -1266,7 +1269,7 @@ export default function DpsCalculator(): JSX.Element {
             <Error
                 error={error}
                 retryFn={(): void => {
-                    clearError(dispatch);
+                    dispatch({ type: CLEAR_ERRORS });
                     fetchDices(dispatch);
                 }}
             />

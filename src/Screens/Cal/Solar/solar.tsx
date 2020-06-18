@@ -15,7 +15,8 @@ import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
 import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Misc/Redux Storage/store';
-import { clearError, fetchDices } from '../../../Misc/fetchData';
+import { fetchDices } from '../../../Misc/Firebase/fetchData';
+import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Dices/types';
 import '../cal.less';
 import './solar.less';
 import AdUnit from '../../../Components/Ad Unit/ad';
@@ -1114,7 +1115,7 @@ export default function SolarCalculator(): JSX.Element {
             <Error
                 error={error}
                 retryFn={(): void => {
-                    clearError(dispatch);
+                    dispatch({ type: CLEAR_ERRORS });
                     fetchDices(dispatch);
                 }}
             />
