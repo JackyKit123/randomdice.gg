@@ -14,8 +14,7 @@ import Dice from '../../Components/Dice/dice';
 import './decklist.less';
 import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
 import { fetchDecks, fetchDices } from '../../Misc/Firebase/fetchData';
-import { CLEAR_ERRORS as CLEAR_DICES_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/Dices/types';
-import { CLEAR_ERRORS as CLEAR_DECKS_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/Decks/types';
+import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 
 export default function DeckList({
     deckType,
@@ -415,8 +414,7 @@ export default function DeckList({
             <Error
                 error={error}
                 retryFn={(): void => {
-                    dispatch({ type: CLEAR_DICES_ERRORS });
-                    dispatch({ type: CLEAR_DECKS_ERRORS });
+                    dispatch({ type: CLEAR_ERRORS });
                     fetchDecks(dispatch);
                     fetchDices(dispatch);
                 }}

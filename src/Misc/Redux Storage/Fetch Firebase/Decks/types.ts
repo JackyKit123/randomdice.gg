@@ -1,9 +1,9 @@
-import { AxiosError } from 'axios';
+import { CLEAR_ERRORS, ClearErrorAction } from '../types';
 
 export const SUCCESS = 'FETCH_DECKS_SUCCESS';
 export const FAIL = 'FETCH_DECKS_FAIL';
-export const CLEAR_ERRORS = 'CLEAR_ERRORS';
-export type ActionType = typeof SUCCESS | typeof FAIL | typeof CLEAR_ERRORS;
+
+export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
 export type Decks = {
     id: number;
@@ -20,7 +20,7 @@ export type Decks = {
 
 export interface FetchState {
     decks: Decks | undefined;
-    error: AxiosError | undefined;
+    error: firebase.FirebaseError | undefined;
 }
 
 interface FetchDecksSuccessAction {
@@ -30,11 +30,7 @@ interface FetchDecksSuccessAction {
 
 interface FetchDecksFailureAction {
     type: typeof FAIL;
-    payload: AxiosError;
-}
-
-interface ClearErrorAction {
-    type: typeof CLEAR_ERRORS;
+    payload: firebase.FirebaseError;
 }
 
 export type Action =

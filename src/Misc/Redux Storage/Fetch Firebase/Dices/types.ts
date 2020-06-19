@@ -1,9 +1,14 @@
-import { AxiosError } from 'axios';
+import {
+    CLEAR_ERRORS,
+    SuccessAction,
+    FailureAction,
+    ClearErrorAction,
+} from '../types';
 
 export const SUCCESS = 'FETCH_DICES_SUCCESS';
 export const FAIL = 'FETCH_DICES_FAIL';
-export const CLEAR_ERRORS = 'CLEAR_ERRORS';
-export type ActionType = typeof SUCCESS | typeof FAIL | typeof CLEAR_ERRORS;
+
+export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
 interface Alternatives {
     desc: string;
@@ -49,21 +54,10 @@ export type Dices = Dice[];
 
 export interface FetchState {
     dices: Dices | undefined;
-    error: AxiosError | undefined;
+    error: firebase.FirebaseError | undefined;
 }
 
-interface SuccessAction {
-    type: typeof SUCCESS;
-    payload: Dices;
-}
-
-interface FailureAction {
-    type: typeof FAIL;
-    payload: AxiosError;
-}
-
-interface ClearErrorAction {
-    type: typeof CLEAR_ERRORS;
-}
-
-export type Action = SuccessAction | FailureAction | ClearErrorAction;
+export type Action =
+    | SuccessAction<typeof SUCCESS, Dices>
+    | FailureAction<typeof FAIL>
+    | ClearErrorAction;

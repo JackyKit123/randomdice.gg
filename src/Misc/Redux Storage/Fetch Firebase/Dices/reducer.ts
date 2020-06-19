@@ -1,5 +1,5 @@
 import { SUCCESS, FAIL, Action, FetchState } from './types';
-import { CLEAR_ERRORS } from '../Decks/types';
+import { CLEAR_ERRORS } from '../types';
 
 const initialState: FetchState = { dices: [], error: undefined };
 

@@ -1,4 +1,5 @@
-import { SUCCESS, FAIL, Action, FetchState, CLEAR_ERRORS } from './types';
+import { SUCCESS, FAIL, Action, FetchState } from './types';
+import { CLEAR_ERRORS } from '../types';
 
 const initialState: FetchState = { decks: [], error: undefined };
 

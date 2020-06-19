@@ -10,7 +10,7 @@ import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
 import Dice from '../../Components/Dice/dice';
 import { fetchDices } from '../../Misc/Firebase/fetchData';
-import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/Dices/types';
+import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import './arenadraft.less';
 
 export default function ArenaDraft(): JSX.Element {
