@@ -7,7 +7,7 @@ import LoadingScreen from '../../../Components/Loading/loading';
 import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Misc/Redux Storage/store';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
-import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Dices/types';
+import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/Dices/types';
 import '../cal.less';
 import './dice.less';
 

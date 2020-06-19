@@ -2,8 +2,8 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 import { Dispatch } from 'redux';
 import initApp from './init';
-import * as FETCH_DICES from '../Redux Storage/Fetch Dices/types';
-import * as FETCH_DECKS from '../Redux Storage/Fetch Decks/types';
+import * as FETCH_DICES from '../Redux Storage/Fetch Firebase/Dices/types';
+import * as FETCH_DECKS from '../Redux Storage/Fetch Firebase/Decks/types';
 
 const app = initApp();
 const database = firebase.database(app);

@@ -16,7 +16,7 @@ import LoadingScreen from '../../../Components/Loading/loading';
 import {
     Dice as DiceType,
     CLEAR_ERRORS,
-} from '../../../Misc/Redux Storage/Fetch Dices/types';
+} from '../../../Misc/Redux Storage/Fetch Firebase/Dices/types';
 import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Misc/Redux Storage/store';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';

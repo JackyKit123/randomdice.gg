@@ -19,7 +19,7 @@ import { RootState } from '../../../Misc/Redux Storage/store';
 import {
     Dice as DiceType,
     CLEAR_ERRORS,
-} from '../../../Misc/Redux Storage/Fetch Dices/types';
+} from '../../../Misc/Redux Storage/Fetch Firebase/Dices/types';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import '../cal.less';
 import './combo.less';
