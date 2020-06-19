@@ -4,10 +4,14 @@ import { Dispatch } from 'redux';
 import initApp from './init';
 import * as FETCH_DICES from '../Redux Storage/Fetch Firebase/Dices/types';
 import * as FETCH_DECKS from '../Redux Storage/Fetch Firebase/Decks/types';
+import * as FETCH_WIKI from '../Redux Storage/Fetch Firebase/Wiki/types';
 
 const app = initApp();
 const database = firebase.database(app);
-type ActionType = FETCH_DICES.ActionType | FETCH_DECKS.ActionType;
+type ActionType =
+    | FETCH_DICES.ActionType
+    | FETCH_DECKS.ActionType
+    | FETCH_WIKI.ActionType;
 
 async function fetch(
     dispatch: Dispatch,
@@ -45,7 +49,12 @@ export function fetchDices(dispatch: Dispatch<FETCH_DECKS.Action>): void {
     fetch(dispatch, FETCH_DICES.SUCCESS, FETCH_DICES.FAIL, '/dice', 'dices');
 }
 
+export function fetchWiki(dispatch: Dispatch<FETCH_WIKI.Action>): void {
+    fetch(dispatch, FETCH_WIKI.SUCCESS, FETCH_WIKI.FAIL, '/wiki', 'wiki');
+}
+
 export default function fetchAll(dispatch: Dispatch): void {
     fetchDecks(dispatch);
     fetchDices(dispatch);
+    fetchWiki(dispatch);
 }
