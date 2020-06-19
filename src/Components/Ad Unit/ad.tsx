@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import publicIp from 'public-ip';
 import { detected } from 'adblockdetect';
+import filter from './adFilter.json';
 import './ad.less';
 
 export default function AdUnit({
@@ -10,8 +12,26 @@ export default function AdUnit({
     unitId: string;
     dimension: string;
 }): JSX.Element {
+    const [userIP, setUserIP] = useState('');
+
     useEffect(() => {
         try {
+            (async (): Promise<void> => {
+                try {
+                    const ip = await publicIp.v4();
+                    setUserIP(ip);
+                } catch (err) {
+                    //
+                }
+
+                try {
+                    const ip = await publicIp.v4();
+                    setUserIP(ip);
+                } catch (err) {
+                    //
+                }
+            })();
+
             // eslint-disable-next-line func-names
             window._mNHandle.queue.push(function() {
                 window._mNDetails.loadTag(unitId, dimension, unitId);
@@ -22,7 +42,10 @@ export default function AdUnit({
     }, []);
 
     return (
-        <div className='ad-container' data-dimension={dimension}>
+        <div
+            className={`ad-container ${filter.includes(userIP) ? 'hide' : ''}`}
+            data-dimension={dimension}
+        >
             {detected() ? (
                 <div className='ad-block-warning'>
                     <span>
