@@ -169,6 +169,20 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Legal/privacyPolicy')),
             },
             {
+                name: 'Support Us',
+                path: '/about/patreon',
+                component: lazy(() =>
+                    import('../Screens/About/Patreon/patreon')
+                ),
+            },
+            {
+                path: '/about/patreon/:name',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/About/Patreon/profile')
+                ),
+            },
+            {
                 path: '/about/terms',
                 excludeFromMenu: true,
                 component: lazy(() => import('../Screens/Legal/terms')),

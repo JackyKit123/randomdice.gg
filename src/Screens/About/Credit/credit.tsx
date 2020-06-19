@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
 import './credit.less';
@@ -116,22 +117,9 @@ export default function Credit(): JSX.Element {
                     </div>
                 </li>
             </ul>
-            <h3>Patreon Supporter</h3>
-            <ul>
-                <li>
-                    Oh, it looks like we don&apos;t have any supporter yet. You
-                    can be the first one to support this website by joining our
-                    patreon at{' '}
-                    <a
-                        target='_blank'
-                        href='https://www.patreon.com/RandomDiceCommunityWebsite'
-                        rel='noopener noreferrer'
-                    >
-                        https://www.patreon.com/RandomDiceCommunityWebsite
-                    </a>
-                    .
-                </li>
-            </ul>
+            <h3>
+                <Link to='/about/patreon'>Patreon Supporters</Link>
+            </h3>
             <h3>The Community</h3>
             <ul>
                 <li>Last but not least, everyone of you.</li>

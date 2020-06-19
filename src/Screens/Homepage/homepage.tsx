@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Main from '../../Components/Main/main';
 import Menu from '../../Components/Menu/menu';
 import './homepage.less';
@@ -47,21 +48,20 @@ export default function Homepage(): JSX.Element {
             <br />
             <h3 className='news'>What&apos;s New?</h3>
             <p>
-                A{' '}
-                <a
-                    href='https://www.patreon.com/RandomDiceCommunityWebsite'
-                    target='_blank'
-                    rel='noreferrer noopener'
-                >
-                    Patreon Page
-                </a>{' '}
-                is also set up for supporting this website. This website is
-                served for free to the community but it does not run for free.
-                If you appreciate what we are doing, feel free to drop a
-                support. In return, you can enjoy benefits like ad free
-                browsing.
+                We have switched over to a new hosting provider to enhance site
+                performance once again.
             </p>
-            <p>Some minor bug fixes are done.</p>
+            <p>
+                Growth dice is removed from Arena Draft Tool, which was causing
+                error earlier.
+            </p>
+            <p>
+                We welcome our{' '}
+                <Link to='/about/patreon/Breakky'>
+                    first patreon supporter - Breakky
+                </Link>
+                .
+            </p>
             <br />
             <br />
             <br />
