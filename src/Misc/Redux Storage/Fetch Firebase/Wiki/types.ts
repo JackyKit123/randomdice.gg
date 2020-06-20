@@ -10,9 +10,18 @@ export const FAIL = 'FETCH_WIKI_FAIL';
 
 export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
+interface Dice {
+    version: string;
+    list: {
+        name: string;
+        desc: string;
+    }[];
+}
+
 interface WikiContent {
     pvp: string;
     pve: string;
+    dice: Dice;
 }
 
 export interface FetchState {
