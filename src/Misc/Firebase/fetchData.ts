@@ -6,8 +6,9 @@ import * as FETCH_DICES from '../Redux Storage/Fetch Firebase/Dices/types';
 import * as FETCH_DECKS from '../Redux Storage/Fetch Firebase/Decks/types';
 import * as FETCH_WIKI from '../Redux Storage/Fetch Firebase/Wiki/types';
 
-const app = initApp();
-const database = firebase.database(app);
+const database = firebase.apps.length
+    ? firebase.database()
+    : firebase.database(initApp());
 type ActionType =
     | FETCH_DICES.ActionType
     | FETCH_DECKS.ActionType

@@ -188,7 +188,7 @@ export default function DeckList({
                 </p>
                 <div className='divisor' />
                 <div
-                    className='popup-overlay'
+                    className={`popup-overlay ${findAlt.open ? 'active' : ''}`}
                     role='button'
                     tabIndex={0}
                     onClick={(evt): void => {

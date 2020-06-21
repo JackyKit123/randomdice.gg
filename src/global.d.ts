@@ -5,6 +5,10 @@ interface Window {
     _mNDetails: _mNDetails;
 }
 
+interface WindowEventMap {
+    discord_login_callback: CustomEvent;
+}
+
 declare module 'react-router-ga' {
     export default function Analytics({ children }: ReactNode): JSX.Element;
 }

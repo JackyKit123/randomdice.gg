@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const installEvent = {
     handler: (): void =>
         window.ga('send', 'event', 'PWA Install', 'appinstalled'),
@@ -6,4 +5,12 @@ export const installEvent = {
         window.addEventListener('appinstalled', installEvent.handler),
     unmountListener: (): void =>
         window.removeEventListener('appinstalled', installEvent.handler),
+};
+
+export const auth = {
+    login: (uid: string): void => {
+        window.ga('set', 'userId', uid);
+        window.ga('send', 'event', 'User Login', 'login');
+    },
+    signup: (): void => window.ga('send', 'event', 'User SignUp', 'signup'),
 };

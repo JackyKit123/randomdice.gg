@@ -48,19 +48,12 @@ export default function Homepage(): JSX.Element {
             <br />
             <h3 className='news'>What&apos;s New?</h3>
             <p>
-                We have switched over to a new hosting provider to enhance site
-                performance once again.
-            </p>
-            <p>
-                Growth dice is removed from Arena Draft Tool, which was causing
-                error earlier.
-            </p>
-            <p>
-                We welcome our{' '}
-                <Link to='/about/patreon/Breakky'>
-                    first patreon supporter - Breakky
-                </Link>
-                .
+                A login system is now implemented, you may not need to login to
+                use this website, there is no hidden content. For now it is for
+                content writers and{' '}
+                <Link to='/about/patreon'>patreon supporters</Link> to enjoying
+                ad free browsing. Later we may implement system to find co-op
+                games.
             </p>
             <br />
             <br />

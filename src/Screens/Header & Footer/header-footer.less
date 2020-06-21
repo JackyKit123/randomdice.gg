@@ -13,6 +13,44 @@ body {
     }
 
     header {
+        .popup-overlay > .popup > .container {
+            text-align: center;
+            line-height: 20px;
+
+            a {
+                font-size: inherit;
+            }
+
+            span {
+                display: block;
+
+                &.error {
+                    color: #ff0000;
+                    font-style: italic;
+                    margin-bottom: 5px;
+                }
+            }
+
+            .oauth {
+                margin: 10px auto;
+
+                button {
+                    padding: 0;
+                    border: 0;
+                    background: none;
+                    cursor: pointer;
+                    font-size: 40px;
+
+                    &.discord {
+                        background: #ffffff;
+                        border-radius: 5px;
+                        padding: 4px 5px 0;
+                        color: #7289da;
+                    }
+                }
+            }
+        }
+
         & > .container {
             position: fixed;
 
@@ -29,12 +67,34 @@ body {
                     & > .container {
                         text-align: right;
 
-                        & > .login {
+                        & > .img-container {
+                            display: inline-block;
+                            height: 25px;
+                            border-radius: 50%;
+                            vertical-align: text-top;
+                            overflow: hidden;
+                            margin-right: 5px;
+
+                            & > img {
+                                height: 100%;
+                            }
+                        }
+
+                        & > .login,
+                        & > .user,
+                        & > .logout {
                             display: inline-block;
                             vertical-align: middle;
+                            background: none;
+                            border: 0;
                             color: #ffffff;
                             line-height: 30px;
-                            cursor: not-allowed;
+                        }
+
+                        & > .login,
+                        & > .logout {
+                            margin-left: 5px;
+                            cursor: pointer;
                             .transition(color 0.2s ease-in-out);
 
                             &:hover,
