@@ -61,7 +61,7 @@ export function discord(dispatch: Dispatch<Action>): void {
                     const user = auth.currentUser as firebase.User;
 
                     if (loginRes.additionalUserInfo?.isNewUser) {
-                        ga.auth.signup();
+                        ga.auth.signup.discord();
                         await user.updateProfile({
                             displayName: userData.username,
                         });

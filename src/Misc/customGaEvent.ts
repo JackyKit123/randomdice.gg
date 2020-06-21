@@ -12,5 +12,8 @@ export const auth = {
         window.ga('set', 'userId', uid);
         window.ga('send', 'event', 'User Login', 'login');
     },
-    signup: (): void => window.ga('send', 'event', 'User SignUp', 'signup'),
+    signup: {
+        discord: (): void =>
+            window.ga('send', 'event', 'Discord User SignUp', 'signup'),
+    },
 };
