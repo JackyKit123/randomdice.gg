@@ -104,11 +104,11 @@ export default function SolarCalculator(): JSX.Element {
             diceData.solar.splashDmg +
             diceData.solar.splashDmgPerLevel * (filter.solar.level - 1);
         const moonBuffedDmgPerHit = filter.moon.active
-            ? (filter.moon.pip * diceData.moon.activeAtkBuff + 1) *
+            ? ((filter.moon.pip * diceData.moon.activeAtkBuff) / 100 + 1) *
               basicDmgPerHit
             : basicDmgPerHit;
         const moonBuffedDmgPerSplash = filter.moon.active
-            ? (filter.moon.pip * diceData.moon.activeAtkBuff + 1) *
+            ? ((filter.moon.pip * diceData.moon.activeAtkBuff) / 100 + 1) *
               basicDmgPerSplash
             : basicDmgPerSplash;
 
