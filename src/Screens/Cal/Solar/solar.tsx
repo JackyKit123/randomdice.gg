@@ -90,8 +90,8 @@ export default function SolarCalculator(): JSX.Element {
                 baseBuff: moonData.eff1,
                 buffPerClass: moonData.cupEff1,
                 buffPerLevel: moonData.pupEff1,
-                activeAtkBuff: 5,
-                activeCritBuff: 2,
+                activeAtkBuff: 10,
+                activeCritBuff: 5,
             },
         };
 
@@ -104,10 +104,12 @@ export default function SolarCalculator(): JSX.Element {
             diceData.solar.splashDmg +
             diceData.solar.splashDmgPerLevel * (filter.solar.level - 1);
         const moonBuffedDmgPerHit = filter.moon.active
-            ? (filter.moon.pip * 0.05 + 1) * basicDmgPerHit
+            ? (filter.moon.pip * diceData.moon.activeAtkBuff + 1) *
+              basicDmgPerHit
             : basicDmgPerHit;
         const moonBuffedDmgPerSplash = filter.moon.active
-            ? (filter.moon.pip * 0.05 + 1) * basicDmgPerSplash
+            ? (filter.moon.pip * diceData.moon.activeAtkBuff + 1) *
+              basicDmgPerSplash
             : basicDmgPerSplash;
 
         const lightBuff =
@@ -125,7 +127,9 @@ export default function SolarCalculator(): JSX.Element {
                 diceData.crit.baseBuff) *
                 filter.critical.pip +
             diceData.crit.buffPerLevel * (filter.critical.level - 1);
-        const moonCritBuff = filter.moon.active ? filter.moon.pip * 2 : 0;
+        const moonCritBuff = filter.moon.active
+            ? filter.moon.pip * diceData.moon.activeCritBuff
+            : 0;
 
         const atkSpdMultiplier = 1 - lightBuff / 100;
         const moonAtkSpdMultiplier = 1 - moonSpdBuff / 100;

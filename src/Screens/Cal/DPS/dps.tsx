@@ -102,9 +102,10 @@ export default function DpsCalculator(): JSX.Element {
             : 0;
         const moonCritBuff =
             filter.moon.enable && filter.moon.active
-                ? (2 * filter.moon.pip) / 100
+                ? (5 * filter.moon.pip) / 100
                 : 0;
-        const critBuffSum = critBuff + moonCritBuff + 0.05;
+        let critBuffSum = critBuff + moonCritBuff + 0.05;
+        critBuffSum = critBuffSum > 100 ? 100 : critBuffSum;
 
         const critMultiplier =
             1 - critBuffSum + critBuffSum * (filter.crit / 100);
@@ -139,7 +140,7 @@ export default function DpsCalculator(): JSX.Element {
                 dice.pupAtk * (level - 1);
             const moonAtkBuffMultiplier =
                 filter.moon.enable && filter.moon.active
-                    ? (5 * filter.moon.pip) / 100 + 1
+                    ? (10 * filter.moon.pip) / 100 + 1
                     : 1;
             return atk * moonAtkBuffMultiplier;
         };

@@ -55,6 +55,14 @@ export default function Homepage(): JSX.Element {
                 ad free browsing. Later we may implement system to find co-op
                 games.
             </p>
+            <p>
+                Update for v4.1.0 is live with the game. Updated{' '}
+                <Link to='/calculator/solar'>Solar Calculator</Link>,{' '}
+                <Link to='/calculator/combo'>Combo Calculator</Link>,{' '}
+                <Link to='/calculator/dps'>DPS Calculator</Link> in accordance
+                to moon dice buff.{' '}
+                <Link to='/calculator/stat'>Stat Calculator</Link> is also live.
+            </p>
             <br />
             <br />
             <br />

@@ -118,7 +118,7 @@ export default function ComboCalculator(): JSX.Element {
                 }
                 case 'moon': {
                     const critMultiplier =
-                        (5 + (filter.moon.active ? filter.moon.pip * 2 : 0)) /
+                        (5 + (filter.moon.active ? filter.moon.pip * 5 : 0)) /
                         100;
                     const spdBuff =
                         1 -
@@ -128,7 +128,7 @@ export default function ComboCalculator(): JSX.Element {
                             data.moon.pupEff1 * (filter.moon.level - 1)) /
                             100;
                     const buffedDmg = filter.moon.active
-                        ? (filter.moon.pip * 0.05 + 1) * dmg
+                        ? (filter.moon.pip * 0.1 + 1) * dmg
                         : dmg;
                     return {
                         dmg: roundTo3Sf(buffedDmg),
