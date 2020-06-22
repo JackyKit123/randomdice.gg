@@ -29,6 +29,8 @@ export function authStateDispatch(dispatch: Dispatch<Action>): void {
                 userAuth.sendEmailVerification();
                 logout();
             }
+        } else {
+            dispatch({ type: AUTH, payload: null });
         }
     });
 }
