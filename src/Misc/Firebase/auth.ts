@@ -24,7 +24,7 @@ export function logout(): void {
     firebase.auth().signOut();
 }
 
-export function discord(dispatch: Dispatch<Action>): void {
+export async function discord(dispatch: Dispatch<Action>): Promise<void> {
     const authUrl = 'https://discord.com/api/oauth2/authorize';
     const clientId = process.env.REACT_APP_DISCORD_CLIENT_ID;
     const redirectUri = `${window.location.origin}/discord_login`;
@@ -37,46 +37,49 @@ export function discord(dispatch: Dispatch<Action>): void {
 
     if (LoginWindow) {
         LoginWindow.focus();
-        const callbackHandler = async (
-            evt: CustomEvent<'discord_login_callback'>
-        ): Promise<void> => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const detail = evt.detail as any;
-            window.removeEventListener(
-                'discord_login_callback',
-                callbackHandler
+
+        try {
+            const callback = (await new Promise((resolve, reject) => {
+                const interval = setInterval(() => {
+                    const storage = JSON.parse(
+                        localStorage.getItem('discord_oauth') || '{}'
+                    );
+                    if (storage.code) {
+                        clearInterval(interval);
+                        localStorage.removeItem('discord_oauth');
+                        resolve(storage);
+                    }
+                    if (storage.error) {
+                        clearInterval(interval);
+                        localStorage.removeItem('discord_oauth');
+                        reject(new Error(storage.error));
+                    }
+                }, 1000);
+            })) as { code: string | null; error: string | null };
+
+            const res = await axios.post(
+                `https://us-central1-random-dice-web.cloudfunctions.net/discord_login?code=${callback.code}`
             );
 
-            if (detail.code) {
-                try {
-                    const res = await axios.post(
-                        `https://us-central1-random-dice-web.cloudfunctions.net/discord_login?code=${detail.code}`
-                    );
+            const loginRes = await auth.signInWithCustomToken(
+                res.data.authToken
+            );
 
-                    const loginRes = await auth.signInWithCustomToken(
-                        res.data.authToken
-                    );
+            const { userData } = res.data;
+            const user = auth.currentUser as firebase.User;
 
-                    const { userData } = res.data;
-                    const user = auth.currentUser as firebase.User;
-
-                    if (loginRes.additionalUserInfo?.isNewUser) {
-                        ga.auth.signup.discord();
-                        await user.updateProfile({
-                            displayName: userData.username,
-                        });
-                        await user.updateEmail(userData.email);
-                    }
-                    await user.updateProfile({
-                        photoURL: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
-                    });
-                } catch (err) {
-                    dispatch({ type: ERROR, payload: err.message });
-                }
-            } else {
-                dispatch({ type: ERROR, payload: detail.errorDesc });
+            if (loginRes.additionalUserInfo?.isNewUser) {
+                ga.auth.signup.discord();
+                await user.updateProfile({
+                    displayName: userData.username,
+                });
+                await user.updateEmail(userData.email);
             }
-        };
-        window.addEventListener('discord_login_callback', callbackHandler);
+            await user.updateProfile({
+                photoURL: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
+            });
+        } catch (err) {
+            dispatch({ type: ERROR, payload: err.message });
+        }
     }
 }

@@ -43,17 +43,21 @@ export default function Header(): JSX.Element {
         return (): void => window.removeEventListener('scroll', handler);
     }, []);
 
-    if (overlayOpen) {
+    useEffect(() => {
+        if (overlayOpen) {
+            document.body.classList.add('popup-opened');
+            // eslint-disable-next-line no-unused-expressions
+            overlayRef.current?.focus();
+        } else {
+            document.body.classList.remove('popup-opened');
+        }
+    }, [overlayOpen]);
+
+    useEffect(() => {
         if (user) {
             setOverlayOpen(false);
         }
-
-        document.body.classList.add('popup-opened');
-        // eslint-disable-next-line no-unused-expressions
-        overlayRef.current?.focus();
-    } else {
-        document.body.classList.remove('popup-opened');
-    }
+    }, [user]);
 
     return (
         <header className={scrolled ? 'scroll' : ''}>
@@ -103,7 +107,9 @@ export default function Header(): JSX.Element {
                             <button
                                 className='discord'
                                 type='button'
-                                onClick={(): void => auth.discord(dispatch)}
+                                onClick={(): Promise<void> =>
+                                    auth.discord(dispatch)
+                                }
                             >
                                 <FontAwesomeIcon icon={faDiscord} />
                             </button>
