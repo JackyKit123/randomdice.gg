@@ -11,17 +11,26 @@ import * as ga from '../customGaEvent';
 const auth = firebase.apps.length ? firebase.auth() : firebase.auth(initApp());
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
-export function authStateDispatch(dispatch: Dispatch<Action>): void {
-    auth.onAuthStateChanged(userAuth => {
-        dispatch({ type: AUTH, payload: userAuth });
-        if (userAuth) {
-            ga.auth.login(userAuth.uid);
-        }
-    });
-}
-
 export function logout(): void {
     firebase.auth().signOut();
+}
+
+export function authStateDispatch(dispatch: Dispatch<Action>): void {
+    auth.onAuthStateChanged(userAuth => {
+        if (userAuth) {
+            if (userAuth.emailVerified) {
+                dispatch({ type: AUTH, payload: userAuth });
+                ga.auth.login(userAuth.uid);
+            } else {
+                dispatch({
+                    type: ERROR,
+                    payload: `Your email address has not been verified, we cannot authenticate you at the moment. We have sent you a verification email, please verify your associated email address ${userAuth.email} before you proceed to login again.`,
+                });
+                userAuth.sendEmailVerification();
+                logout();
+            }
+        }
+    });
 }
 
 export async function discord(dispatch: Dispatch<Action>): Promise<void> {

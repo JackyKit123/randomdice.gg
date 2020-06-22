@@ -49,6 +49,17 @@ export const discord_login = functions.https.onRequest((req, res) => {
                     userData,
                     authToken,
                 });
+
+                const {
+                    email_verified,
+                    uid,
+                } = await admin.auth().verifyIdToken(authToken);
+
+                if (!email_verified && userData.verified) {
+                    await admin.auth().updateUser(uid, {
+                        emailVerified: true,
+                    });
+                }
             } catch (err) {
                 res.status(500);
             }
