@@ -63,6 +63,13 @@ export default function Homepage(): JSX.Element {
                 to moon dice buff.{' '}
                 <Link to='/calculator/stat'>Stat Calculator</Link> is also live.
             </p>
+            <p>
+                Login system is updated, you may now skip verifying email if
+                your Discord or Patreon is account is verified by them, once
+                again, as of now you do not need to login to use this website.
+                This is mainly for Patreon Ad-Free browsing and editors editing
+                only.
+            </p>
             <br />
             <br />
             <br />
