@@ -75,7 +75,6 @@
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
-    "public-ip": "^4.0.1",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
     "react-detect-offline": "^2.4.0",
