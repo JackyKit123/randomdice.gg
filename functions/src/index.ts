@@ -300,7 +300,7 @@ export const patreon_login = functions.https.onRequest((req, res) => {
 });
 
 export const fetchPatreon = functions.pubsub
-    .schedule('0 * * * *')
+    .schedule('*/5 * * * *')
     .onRun(async () => {
         const url = 'https://www.patreon.com';
         try {

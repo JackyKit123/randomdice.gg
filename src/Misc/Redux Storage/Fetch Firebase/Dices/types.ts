@@ -28,6 +28,7 @@ export interface Dice {
     name: string;
     type: string;
     desc: string;
+    img: string;
     target: string;
     rarity: 'Common' | 'Rare' | 'Unique' | 'Legendary';
     atk: number;
