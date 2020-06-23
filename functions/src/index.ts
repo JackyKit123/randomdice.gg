@@ -49,11 +49,48 @@ export const discord_login = functions.https.onRequest((req, res) => {
                 const authToken = await auth.createCustomToken(uid);
 
                 try {
-                    console.log(uid, userData);
+                    const userExist = await auth.getUserByEmail(userData.email);
+                    if (userExist.emailVerified) {
+                        if (userData.verified || uid === userExist.uid) {
+                            res.send({
+                                authToken: await auth.createCustomToken(
+                                    userExist.uid
+                                ),
+                            });
+                            await database
+                                .ref(
+                                    `/users/${userExist.uid}/linked-account/discord`
+                                )
+                                .set(userData.id);
+                        } else {
+                            res.send({ error: 'provider-email-not-verified' });
+                        }
+                    } else {
+                        if (userData.verified) {
+                            await auth.deleteUser(userExist.uid);
+                            await auth.createUser({
+                                uid,
+                                email: userData.email,
+                                displayName: userData.username,
+                                photoURL: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
+                                emailVerified: true,
+                            });
+                            res.send({ authToken });
+                            await database
+                                .ref(
+                                    `/users/${userExist.uid}/linked-account/discord`
+                                )
+                                .set(userData.id);
+                        } else {
+                            res.send({
+                                authToken,
+                                error: 'email-not-verified',
+                            });
+                        }
+                    }
+                } catch (err) {
                     await auth.createUser({
                         uid,
-                    });
-                    await auth.updateUser(uid, {
                         email: userData.email,
                         displayName: userData.username,
                         photoURL: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
@@ -62,50 +99,23 @@ export const discord_login = functions.https.onRequest((req, res) => {
                         await auth.updateUser(uid, {
                             emailVerified: true,
                         });
+                        res.send({
+                            authToken,
+                        });
+                        await database
+                            .ref(`/users/${uid}/linked-account/discord`)
+                            .set(userData.id);
                     } else {
-                        throw {
-                            code: 'auth/email-not-verified',
-                        };
-                    }
-                } catch (error) {
-                    switch (error.code) {
-                        case 'auth/uid-already-exists':
-                            if ((await auth.getUser(uid)).emailVerified) {
-                                res.send({
-                                    authToken,
-                                });
-                            } else {
-                                res.send({
-                                    authToken,
-                                    error: {
-                                        code: 'auth/email-not-verified',
-                                    },
-                                });
-                            }
-                            break;
-                        case 'auth/email-not-verified':
-                            res.send({
-                                authToken,
-                                error,
-                            });
-                            break;
-                        case 'auth/email-already-exists':
-                            await auth.deleteUser(uid);
-                            res.send({
-                                error,
-                            });
-                            break;
-                        default:
-                            res.send({
-                                error,
-                            });
+                        res.send({
+                            authToken,
+                            error: 'email-not-verified',
+                        });
                     }
                 }
+            } catch (error) {
                 res.send({
-                    authToken,
+                    error,
                 });
-            } catch (err) {
-                res.status(500).send(err);
             }
         } else {
             res.status(400).send('Invalid Token');
@@ -144,11 +154,55 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                 const userData = getUserData.data;
                 const uid = `patreon-${userData.data.id}`;
                 const authToken = await auth.createCustomToken(uid);
+
                 try {
+                    const userExist = await auth.getUserByEmail(
+                        userData.data.attributes.email
+                    );
+                    if (userExist.emailVerified) {
+                        if (
+                            userData.data.attributes.is_email_verified ||
+                            uid === userExist.uid
+                        ) {
+                            res.send({
+                                authToken: await auth.createCustomToken(
+                                    userExist.uid
+                                ),
+                            });
+                            await database
+                                .ref(
+                                    `/users/${userExist.uid}/linked-account/patreon`
+                                )
+                                .set(userData.data.id);
+                        } else {
+                            res.send({ error: 'provider-email-not-verified' });
+                        }
+                    } else {
+                        if (userData.data.attributes.is_email_verified) {
+                            await auth.deleteUser(userExist.uid);
+                            await auth.createUser({
+                                uid,
+                                email: userData.data.attributes.email,
+                                displayName: userData.data.attributes.full_name,
+                                photoURL: userData.data.attributes.image_url,
+                                emailVerified: true,
+                            });
+                            res.send({ authToken });
+                            await database
+                                .ref(
+                                    `/users/${userExist.uid}/linked-account/patreon`
+                                )
+                                .set(userData.data.id);
+                        } else {
+                            res.send({
+                                authToken,
+                                error: 'email-not-verified',
+                            });
+                        }
+                    }
+                } catch (err) {
                     await auth.createUser({
                         uid,
-                    });
-                    await auth.updateUser(uid, {
                         email: userData.data.attributes.email,
                         displayName: userData.data.attributes.full_name,
                         photoURL: userData.data.attributes.image_url,
@@ -157,50 +211,23 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                         await auth.updateUser(uid, {
                             emailVerified: true,
                         });
+                        res.send({
+                            authToken,
+                        });
+                        await database
+                            .ref(`/users/${uid}/linked-account/patreon`)
+                            .set(userData.data.id);
                     } else {
-                        throw {
-                            code: 'auth/email-not-verified',
-                        };
-                    }
-                } catch (error) {
-                    switch (error.code) {
-                        case 'auth/uid-already-exists':
-                            if ((await auth.getUser(uid)).emailVerified) {
-                                res.send({
-                                    authToken,
-                                });
-                            } else {
-                                res.send({
-                                    authToken,
-                                    error: {
-                                        code: 'auth/email-not-verified',
-                                    },
-                                });
-                            }
-                            break;
-                        case 'auth/email-not-verified':
-                            res.send({
-                                authToken,
-                                error,
-                            });
-                            break;
-                        case 'auth/email-already-exists':
-                            await auth.deleteUser(uid);
-                            res.send({
-                                error,
-                            });
-                            break;
-                        default:
-                            res.send({
-                                error,
-                            });
+                        res.send({
+                            authToken,
+                            error: 'email-not-verified',
+                        });
                     }
                 }
+            } catch (error) {
                 res.send({
-                    authToken,
+                    error,
                 });
-            } catch (err) {
-                res.status(500);
             }
         } else {
             res.status(400).send('Invalid Token');
@@ -230,7 +257,6 @@ export const fetchPatreon = functions.pubsub
             );
 
             const { access_token } = res.data;
-            console.log(res.data.refresh_token);
 
             const getMemberData = await axios.get(
                 `${url}/api/oauth2/v2/campaigns/4696297/members?include=currently_entitled_tiers,user`,
@@ -284,9 +310,25 @@ export const fetchPatreon = functions.pubsub
                     id: member.relationships.user.data.id,
                     tier,
                 };
-            });
+            }) as { id: string; tier: number }[];
             await token_store.set(res.data.refresh_token);
-            await database.ref('/patreon_list').set(patreonList);
+            const users = (
+                await database.ref('/users').once('value')
+            ).val() as {
+                [key: string]: {
+                    'linked-account': { patreon: string | undefined };
+                };
+            };
+            const usersData = Object.entries(users);
+            usersData.forEach(async ([uid, userData]) => {
+                const patreonId = userData['linked-account'].patreon;
+                const isPatreon = patreonList.find(
+                    patreon => patreon.id === patreonId
+                );
+                await database
+                    .ref(`/users/${uid}/patreon-tier`)
+                    .set(isPatreon?.tier || 0);
+            });
         } catch (err) {
             console.log(err.message);
         }

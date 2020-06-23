@@ -1,15 +1,27 @@
 {
-  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
-  "rules": {
-    ".read": true,
-    ".write": false,
-    "token_storage": {
-      ".read": "auth.uid === 'my-service-worker'",
-      ".write": "auth.uid === 'my-service-worker'"
-    },
-    "patreon_list": {
-      ".read": "auth.uid === 'my-service-worker'",
-      ".write": "auth.uid === 'my-service-worker'"
+    /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+    "rules": {
+        ".read": true,
+        ".write": false,
+        "token_storage": {
+            ".read": "auth.uid === 'my-service-worker'",
+            ".write": "auth.uid === 'my-service-worker'"
+        },
+        "patreon_list": {
+            ".read": "auth.uid === 'my-service-worker'",
+            ".write": "auth.uid === 'my-service-worker'"
+        },
+        "users": {
+            "$uid": {
+                ".read": "auth != null && (auth.uid === $uid || auth.uid === 'my-service-worker')",
+                ".write": "auth != null && auth.uid === $uid",
+                "linked-account": {
+                    ".write": "auth.uid === 'my-service-worker'"
+                },
+                "patreon-tier": {
+                    ".write": "auth.uid === 'my-service-worker'"
+                }
+            }
+        }
     }
-  }
 }

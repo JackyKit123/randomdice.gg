@@ -35,7 +35,6 @@ async function oauth(
     dispatch: Dispatch<Action>,
     provider: string
 ): Promise<void> {
-    console.log(encodeURI(scope.join(' ')));
     const LoginWindow = window.open(
         `${authUrl}?client_id=${clientId}&redirect_uri=${
             window.location.origin
@@ -77,15 +76,14 @@ async function oauth(
             const { authToken, error } = res.data;
 
             if (error) {
-                switch (error.code) {
-                    case 'auth/email-already-exists':
+                switch (error) {
+                    case 'provider-email-not-verified':
                         dispatch({
                             type: ERROR,
-                            payload:
-                                'The email address is already in use by another account. Please login first before you link this account.',
+                            payload: `The email address has been associated with an account and your email address is not verified by ${provider}, for security reason, you are not allowed to login with ${provider}. If you wish to login with ${provider}, you can enable it in setting after login or verify your account with ${provider}.`,
                         });
                         break;
-                    case 'auth/email-not-verified':
+                    case 'email-not-verified':
                         {
                             await auth.signInWithCustomToken(authToken);
                             const user = auth.currentUser as firebase.User;
