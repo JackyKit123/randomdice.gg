@@ -1,14 +1,9 @@
 import React from 'react';
-import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
 import ArenaBox0Png from './Image/arena_box_0.png';
 import ArenaBox1Png from './Image/arena_box_1.png';
 import ArenaBox2Png from './Image/arena_box_2.png';
 import ArenaBox3Png from './Image/arena_box_3.png';
-import ArenaBox0Webp from './Image/arena_box_0.webp';
-import ArenaBox1Webp from './Image/arena_box_1.webp';
-import ArenaBox2Webp from './Image/arena_box_2.webp';
-import ArenaBox3Webp from './Image/arena_box_3.webp';
 import './arena.less';
 
 export default function Arena(): JSX.Element {
@@ -33,7 +28,7 @@ export default function Arena(): JSX.Element {
                 <li>
                     <img
                         className='box'
-                        src={isWebpSupported() ? ArenaBox0Webp : ArenaBox0Png}
+                        src={ArenaBox0Png}
                         alt='arena rookie box'
                     />{' '}
                     Arena Rookie Box: Gold, common, rare, unique dice
@@ -42,7 +37,7 @@ export default function Arena(): JSX.Element {
                 <li>
                     <img
                         className='box'
-                        src={isWebpSupported() ? ArenaBox1Webp : ArenaBox1Png}
+                        src={ArenaBox1Png}
                         alt='arena challenger box'
                     />{' '}
                     Arena Challenger Box: Gold, common, rare, unique and chance
@@ -53,7 +48,7 @@ export default function Arena(): JSX.Element {
                 <li>
                     <img
                         className='box'
-                        src={isWebpSupported() ? ArenaBox2Webp : ArenaBox2Png}
+                        src={ArenaBox2Png}
                         alt='arena gladiator box'
                     />{' '}
                     Arena Gladiator Box: Gold, common, rare, unique and chance
@@ -65,7 +60,7 @@ export default function Arena(): JSX.Element {
                 <li>
                     <img
                         className='box'
-                        src={isWebpSupported() ? ArenaBox3Webp : ArenaBox3Png}
+                        src={ArenaBox3Png}
                         alt='arena conqueror box'
                     />{' '}
                     Arena Conqueror Box: Gold, common, rare, unique and

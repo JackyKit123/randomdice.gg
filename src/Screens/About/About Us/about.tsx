@@ -1,7 +1,5 @@
 import React from 'react';
-import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
-import IconWebp from './JackyKit.webp';
 import IconJpg from './JackyKit.jpg';
 import './about.less';
 
@@ -26,10 +24,7 @@ export default function AboutUs(): JSX.Element {
             <div className='divisor' />
             <h3>Webmaster Information</h3>
             <div className='img-container'>
-                <img
-                    src={isWebpSupported() ? IconWebp : IconJpg}
-                    alt='Icon of JackyKit'
-                />
+                <img src={IconJpg} alt='Icon of JackyKit' />
             </div>
             <p>Hi, I am the developer of this website.</p>
             <p>

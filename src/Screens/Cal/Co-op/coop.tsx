@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import * as math from 'mathjs';
-import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
-import GoldWebp from './Image/gold.webp';
 import GoldPng from './Image/gold.png';
-import DiamondWebp from './Image/diamond.webp';
 import DiamondPng from './Image/diamond.png';
-import LegendaryWebp from './Image/legendary_dice.webp';
 import LegendaryPng from './Image/legendary_dice.png';
 import '../cal.less';
 import './coop.less';
@@ -138,10 +134,7 @@ export default function GoldCalculator(): JSX.Element {
             <div className='divisor' />
             <section className='filter'>
                 <form className='filter'>
-                    <img
-                        src={isWebpSupported() ? GoldWebp : GoldPng}
-                        alt='gold'
-                    />
+                    <img src={GoldPng} alt='gold' />
                     <label htmlFor='class'>
                         <span>PVP Rank :</span>
                         <select
@@ -234,10 +227,7 @@ export default function GoldCalculator(): JSX.Element {
                     )}
                 </form>
                 <form className='filter'>
-                    <img
-                        src={isWebpSupported() ? DiamondWebp : DiamondPng}
-                        alt='diamond'
-                    />
+                    <img src={DiamondPng} alt='diamond' />
                     <label htmlFor='current-diamond'>
                         <span>Current Diamond :</span>
                         <input
@@ -298,10 +288,7 @@ export default function GoldCalculator(): JSX.Element {
                     )}
                 </form>
                 <form className='filter'>
-                    <img
-                        src={isWebpSupported() ? LegendaryWebp : LegendaryPng}
-                        alt='legendary'
-                    />
+                    <img src={LegendaryPng} alt='legendary' />
                     <label htmlFor='target-legendary'>
                         <span>Target Legendary :</span>
                         <select

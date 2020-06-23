@@ -1,11 +1,4 @@
 import React from 'react';
-import { isWebpSupported } from 'react-image-webp/dist/utils';
-import MiniWebp from './Image/mini.webp';
-import SnakeWebp from './Image/snake.webp';
-import SilencerWebp from './Image/silencer.webp';
-import KnightWebp from './Image/knight.webp';
-import MagicianWebp from './Image/magician.webp';
-import LeonWebp from './Image/leon.webp';
 import MiniPng from './Image/mini.png';
 import SnakePng from './Image/snake.png';
 import SilencerPng from './Image/silencer.png';
@@ -112,10 +105,7 @@ export default function BossGuide(): JSX.Element {
             <ul className='boss-list'>
                 <li>
                     <div className='boss-container'>
-                        <img
-                            src={isWebpSupported() ? MiniWebp : MiniPng}
-                            alt='Mini Boss'
-                        />
+                        <img src={MiniPng} alt='Mini Boss' />
                     </div>
                     <h3>Mini Boss</h3>
                     <p>
@@ -129,10 +119,7 @@ export default function BossGuide(): JSX.Element {
                     <div className='divisor' />
 
                     <div className='boss-container'>
-                        <img
-                            src={isWebpSupported() ? SnakeWebp : SnakePng}
-                            alt='Snake Boss'
-                        />
+                        <img src={SnakePng} alt='Snake Boss' />
                     </div>
                     <h3>Snake Boss</h3>
                     <p>
@@ -153,10 +140,7 @@ export default function BossGuide(): JSX.Element {
                     <div className='divisor' />
 
                     <div className='boss-container'>
-                        <img
-                            src={isWebpSupported() ? SilencerWebp : SilencerPng}
-                            alt='Silencer Boss'
-                        />
+                        <img src={SilencerPng} alt='Silencer Boss' />
                     </div>
                     <h3>Silencer Boss</h3>
                     <p>
@@ -179,10 +163,7 @@ export default function BossGuide(): JSX.Element {
                 <li>
                     <div className='divisor' />
                     <div className='boss-container'>
-                        <img
-                            src={isWebpSupported() ? KnightWebp : KnightPng}
-                            alt='Knight Boss'
-                        />
+                        <img src={KnightPng} alt='Knight Boss' />
                     </div>
                     <h3>Knight Boss</h3>
                     <p>
@@ -202,10 +183,7 @@ export default function BossGuide(): JSX.Element {
                     <div className='divisor' />
 
                     <div className='boss-container'>
-                        <img
-                            src={isWebpSupported() ? MagicianWebp : MagicianPng}
-                            alt='Magician Boss'
-                        />
+                        <img src={MagicianPng} alt='Magician Boss' />
                     </div>
                     <h3>Magician Boss</h3>
                     <p>
@@ -239,10 +217,7 @@ export default function BossGuide(): JSX.Element {
                     <div className='divisor' />
 
                     <div className='boss-container'>
-                        <img
-                            src={isWebpSupported() ? LeonWebp : LeonPng}
-                            alt='Leon Boss'
-                        />
+                        <img src={LeonPng} alt='Leon Boss' />
                     </div>
                     <h3>Leon Boss</h3>
                     <p>

@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import { Offline, Online } from 'react-detect-offline';
-import { isWebpSupported } from 'react-image-webp/dist/utils';
 import AdUnit from '../Ad Unit/ad';
 import './main.less';
 
@@ -14,11 +13,7 @@ export default function Main(props: {
     return (
         <main>
             <Offline>
-                <div
-                    className={`banner offline ${
-                        isWebpSupported() ? '' : 'noWebp'
-                    }`}
-                >
+                <div className='banner offline'>
                     <div className='title-container'>
                         <h2 className='title'>{title}</h2>
                     </div>
@@ -29,7 +24,7 @@ export default function Main(props: {
                 </div>
             </Offline>
             <Online>
-                <div className={`banner ${isWebpSupported() ? '' : 'noWebp'}`}>
+                <div className='banner'>
                     <div className='title-container'>
                         <h2 className='title'>{title}</h2>
                     </div>

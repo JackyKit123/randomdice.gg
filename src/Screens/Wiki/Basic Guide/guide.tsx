@@ -1,18 +1,6 @@
 import React from 'react';
-import { isWebpSupported } from 'react-image-webp/dist/utils';
 import Main from '../../../Components/Main/main';
 import AdUnit from '../../../Components/Ad Unit/ad';
-import PipDpsWebp from './Image/PipDps.webp';
-import saveGoldWebp from './Image/saveGold.webp';
-import KnightTransformWebp from './Image/KnightTransform.webp';
-import sacrificeSpWebp from './Image/sacrificeSp.webp';
-import ShopRefreshesWebp from './Image/ShopRefreshes.webp';
-import IceVsBlizzardWebp from './Image/IceVsBlizzard.webp';
-import summonerMergeWebp from './Image/summonerMerge.webp';
-import supportDiceBoardWebp from './Image/supportDiceBoard.webp';
-import duplicateSupportDiceWebp from './Image/duplicateSupportDice.webp';
-import elementBoardWebp from './Image/elementBoard.webp';
-import arenaCheatSheetWebp from './Image/arenaCheatSheet.webp';
 import PipDpsPng from './Image/PipDps.png';
 import saveGoldPng from './Image/saveGold.png';
 import KnightTransformPng from './Image/KnightTransform.png';
@@ -47,7 +35,7 @@ export default function Basic(): JSX.Element {
                 <li>
                     <div className='img-container'>
                         <img
-                            src={isWebpSupported() ? PipDpsWebp : PipDpsPng}
+                            src={PipDpsPng}
                             alt='15 1pip has more value than 1 5pip'
                         />
                     </div>
@@ -65,7 +53,7 @@ export default function Basic(): JSX.Element {
                 <li>
                     <div className='img-container'>
                         <img
-                            src={isWebpSupported() ? saveGoldWebp : saveGoldPng}
+                            src={saveGoldPng}
                             alt='always save 40k gold or 500 gems'
                         />
                     </div>
@@ -83,11 +71,7 @@ export default function Basic(): JSX.Element {
                 <li>
                     <div className='img-container'>
                         <img
-                            src={
-                                isWebpSupported()
-                                    ? KnightTransformWebp
-                                    : KnightTransformPng
-                            }
+                            src={KnightTransformPng}
                             alt='The Knight will trigger sacrifice dice and give sp when they transform'
                         />
                     </div>
@@ -102,11 +86,7 @@ export default function Basic(): JSX.Element {
                 <li>
                     <div className='img-container'>
                         <img
-                            src={
-                                isWebpSupported()
-                                    ? sacrificeSpWebp
-                                    : sacrificeSpPng
-                            }
+                            src={sacrificeSpPng}
                             alt='Sacrifice dice only give sp per sacrifice pip'
                         />
                     </div>
@@ -124,11 +104,7 @@ export default function Basic(): JSX.Element {
                 <li>
                     <div className='img-container'>
                         <img
-                            src={
-                                isWebpSupported()
-                                    ? IceVsBlizzardWebp
-                                    : IceVsBlizzardPng
-                            }
+                            src={IceVsBlizzardPng}
                             alt='Ice is better than Blizzard'
                         />
                     </div>
@@ -145,11 +121,7 @@ export default function Basic(): JSX.Element {
                 <li>
                     <div className='img-container'>
                         <img
-                            src={
-                                isWebpSupported()
-                                    ? ShopRefreshesWebp
-                                    : ShopRefreshesPng
-                            }
+                            src={ShopRefreshesPng}
                             alt='Shop refreshes every 6 hours and ad pvp show up every 1 hour'
                         />
                     </div>
@@ -166,11 +138,7 @@ export default function Basic(): JSX.Element {
                 <li>
                     <div className='img-container'>
                         <img
-                            src={
-                                isWebpSupported()
-                                    ? summonerMergeWebp
-                                    : summonerMergePng
-                            }
+                            src={summonerMergePng}
                             alt='summoner merge only gives fewer pip dice'
                         />
                     </div>
@@ -184,11 +152,7 @@ export default function Basic(): JSX.Element {
                 <li>
                     <div className='img-container'>
                         <img
-                            src={
-                                isWebpSupported()
-                                    ? supportDiceBoardWebp
-                                    : supportDiceBoardPng
-                            }
+                            src={supportDiceBoardPng}
                             alt='position of support dice'
                         />
                     </div>
@@ -203,11 +167,7 @@ export default function Basic(): JSX.Element {
                 <li>
                     <div className='img-container'>
                         <img
-                            src={
-                                isWebpSupported()
-                                    ? duplicateSupportDiceWebp
-                                    : duplicateSupportDicePng
-                            }
+                            src={duplicateSupportDicePng}
                             alt='duplicates of support dice do not give extra buff'
                         />
                     </div>
@@ -220,14 +180,7 @@ export default function Basic(): JSX.Element {
                 <div className='divisor' />
                 <li>
                     <div className='img-container'>
-                        <img
-                            src={
-                                isWebpSupported()
-                                    ? elementBoardWebp
-                                    : elementBoardPng
-                            }
-                            alt='placement of element'
-                        />
+                        <img src={elementBoardPng} alt='placement of element' />
                     </div>
                     <span>
                         This is the suggested ranked of the position of element
@@ -242,14 +195,7 @@ export default function Basic(): JSX.Element {
                 <div className='divisor' />
                 <li>
                     <div className='img-container'>
-                        <img
-                            src={
-                                isWebpSupported()
-                                    ? arenaCheatSheetWebp
-                                    : arenaCheatSheetPng
-                            }
-                            alt='arena cheat sheet'
-                        />
+                        <img src={arenaCheatSheetPng} alt='arena cheat sheet' />
                     </div>
                     <span>
                         This is a cheat sheet for those who want to have a try

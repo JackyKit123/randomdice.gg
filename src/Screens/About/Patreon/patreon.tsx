@@ -1,11 +1,9 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPatreon } from '@fortawesome/free-brands-svg-icons';
-import { isWebpSupported } from 'react-image-webp/dist/utils';
 import { Link } from 'react-router-dom';
 import Main from '../../../Components/Main/main';
 import BreakkyPng from './Breakky.png';
-import BreakkyWebp from './Breakky.webp';
 import './patreon.less';
 
 export default function PatreonIntro(): JSX.Element {
@@ -40,10 +38,7 @@ export default function PatreonIntro(): JSX.Element {
                 <li>
                     <span>Breakky</span>
                     <div className='img-container'>
-                        <img
-                            src={isWebpSupported() ? BreakkyWebp : BreakkyPng}
-                            alt='icon of Breakky'
-                        />
+                        <img src={BreakkyPng} alt='icon of Breakky' />
                     </div>
                     <div>
                         <Link to='/about/patreon/Breakky/'>

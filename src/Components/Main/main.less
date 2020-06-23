@@ -4,14 +4,10 @@ body {
     .banner {
         width: 100%;
         height: 500px;
-        background-image: url('banner.webp');
+        background-image: url('banner.jpg');
         background-repeat: no-repeat;
         background-size: cover;
         position: relative;
-
-        &.noWebp {
-            background-image: url('banner.jpg');
-        }
 
         &.offline {
             .filter(grayscale(100%));
