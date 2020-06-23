@@ -101,6 +101,12 @@ async function oauth(
                             });
                         }
                         break;
+                    case 'email-not-match':
+                        dispatch({
+                            type: ERROR,
+                            payload: `The email address from your ${provider} does not match the current account.`,
+                        });
+                        break;
                     default:
                         dispatch({
                             type: ERROR,

@@ -119,9 +119,6 @@ export const discord_login = functions.https.onRequest((req, res) => {
                         res.send({
                             error: 'email-not-match',
                         });
-                        res.send({
-                            accountLinked: true
-                        });
                         return;
                     }
                     await auth.createUser({
