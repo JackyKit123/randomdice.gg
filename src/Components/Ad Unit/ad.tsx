@@ -1,9 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from 'react';
-import publicIp from 'public-ip';
+import { useSelector } from 'react-redux';
+import firebase from 'firebase/app';
+import 'firebase/database';
 import { detected } from 'adblockdetect';
-import filter from './adFilter.json';
 import './ad.less';
+import { RootState } from '../../Misc/Redux Storage/store';
 
 export default function AdUnit({
     unitId,
@@ -12,26 +14,23 @@ export default function AdUnit({
     unitId: string;
     dimension: string;
 }): JSX.Element {
-    const [userIP, setUserIP] = useState('');
+    const { user } = useSelector((state: RootState) => state.authReducer);
+    const [adFree, setAdFree] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            const ref = firebase.database().ref(`/users/${user.uid}`);
+            (async (): Promise<void> => {
+                const data = (await ref.once('value')).val();
+                if (data && data['patreon-tier']) {
+                    setAdFree(true);
+                }
+            })();
+        }
+    }, [user]);
 
     useEffect(() => {
         try {
-            (async (): Promise<void> => {
-                try {
-                    const ip = await publicIp.v4();
-                    setUserIP(ip);
-                } catch (err) {
-                    //
-                }
-
-                try {
-                    const ip = await publicIp.v4();
-                    setUserIP(ip);
-                } catch (err) {
-                    //
-                }
-            })();
-
             // eslint-disable-next-line func-names
             window._mNHandle.queue.push(function() {
                 window._mNDetails.loadTag(unitId, dimension, unitId);
@@ -43,7 +42,7 @@ export default function AdUnit({
 
     return (
         <div
-            className={`ad-container ${filter.includes(userIP) ? 'hide' : ''}`}
+            className={`ad-container ${adFree ? 'hide' : ''}`}
             data-dimension={dimension}
         >
             {detected() ? (
