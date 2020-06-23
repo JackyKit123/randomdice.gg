@@ -12,37 +12,35 @@ const auth = firebase.apps.length ? firebase.auth() : firebase.auth(initApp());
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 export function logout(): void {
-    firebase.auth().signOut();
+    auth.signOut();
 }
 
 export function authStateDispatch(dispatch: Dispatch<Action>): void {
     auth.onAuthStateChanged(userAuth => {
-        if (userAuth) {
-            if (userAuth.emailVerified) {
-                dispatch({ type: AUTH, payload: userAuth });
-                ga.auth.login(userAuth.uid);
-            } else {
-                dispatch({
-                    type: ERROR,
-                    payload: `Your email address has not been verified, we cannot authenticate you at the moment. We have sent you a verification email, please verify your associated email address ${userAuth.email} before you proceed to login again.`,
-                });
-                userAuth.sendEmailVerification();
-                logout();
-            }
+        if (userAuth && userAuth.emailVerified) {
+            dispatch({ type: AUTH, payload: userAuth });
+            ga.auth.login(userAuth.uid);
         } else {
             dispatch({ type: AUTH, payload: null });
         }
     });
 }
 
-export async function discord(dispatch: Dispatch<Action>): Promise<void> {
-    const authUrl = 'https://discord.com/api/oauth2/authorize';
-    const clientId = process.env.REACT_APP_DISCORD_CLIENT_ID;
-    const redirectUri = `${window.location.origin}/discord_login`;
-    const scope = ['email', 'identify'].join('%20');
+async function oauth(
+    authUrl: string,
+    clientId: string,
+    endPoint: string,
+    scope: string[],
+    callbackStorage: string,
+    dispatch: Dispatch<Action>,
+    provider: string
+): Promise<void> {
+    console.log(encodeURI(scope.join(' ')));
     const LoginWindow = window.open(
-        `${authUrl}?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`,
-        'Discord Login',
+        `${authUrl}?client_id=${clientId}&redirect_uri=${
+            window.location.origin
+        }/${endPoint}&response_type=code&scope=${encodeURI(scope.join(' '))}`,
+        `${provider} Login`,
         'toolbar=no, menubar=no, width=600, height=700'
     );
 
@@ -50,47 +48,90 @@ export async function discord(dispatch: Dispatch<Action>): Promise<void> {
         LoginWindow.focus();
 
         try {
-            const callback = (await new Promise((resolve, reject) => {
+            const code = (await new Promise((resolve, reject) => {
                 const interval = setInterval(() => {
                     const storage = JSON.parse(
-                        localStorage.getItem('discord_oauth') || '{}'
+                        localStorage.getItem(callbackStorage) || '{}'
                     );
                     if (storage.code) {
                         clearInterval(interval);
-                        localStorage.removeItem('discord_oauth');
-                        resolve(storage);
+                        localStorage.removeItem(callbackStorage);
+                        resolve(storage.code);
                     }
                     if (storage.error) {
                         clearInterval(interval);
-                        localStorage.removeItem('discord_oauth');
+                        localStorage.removeItem(callbackStorage);
                         reject(new Error(storage.error));
                     }
                 }, 1000);
             })) as { code: string | null; error: string | null };
 
-            const res = await axios.post(
-                `https://us-central1-random-dice-web.cloudfunctions.net/discord_login?code=${callback.code}`
-            );
-
-            const loginRes = await auth.signInWithCustomToken(
-                res.data.authToken
-            );
-
-            const { userData } = res.data;
-            const user = auth.currentUser as firebase.User;
-
-            if (loginRes.additionalUserInfo?.isNewUser) {
-                ga.auth.signup.discord();
-                await user.updateProfile({
-                    displayName: userData.username,
-                });
-                await user.updateEmail(userData.email);
-            }
-            await user.updateProfile({
-                photoURL: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
+            dispatch({
+                type: ERROR,
+                payload: 'Loading',
             });
+
+            const res = await axios.post(
+                `https://us-central1-random-dice-web.cloudfunctions.net/${endPoint}?code=${code}`
+            );
+            const { authToken, error } = res.data;
+
+            if (error) {
+                switch (error.code) {
+                    case 'auth/email-already-exists':
+                        dispatch({
+                            type: ERROR,
+                            payload:
+                                'The email address is already in use by another account. Please login first before you link this account.',
+                        });
+                        break;
+                    case 'auth/email-not-verified':
+                        {
+                            await auth.signInWithCustomToken(authToken);
+                            const user = auth.currentUser as firebase.User;
+                            user.sendEmailVerification();
+                            logout();
+                            dispatch({
+                                type: ERROR,
+                                payload: `This email address is not verified by ${provider}. We have sent you a verification email, please verify your email.`,
+                            });
+                        }
+                        break;
+                    default:
+                        dispatch({
+                            type: ERROR,
+                            payload: error.message,
+                        });
+                }
+            } else {
+                await auth.signInWithCustomToken(authToken);
+            }
         } catch (err) {
             dispatch({ type: ERROR, payload: err.message });
         }
     }
+}
+
+export function discord(dispatch: Dispatch<Action>): void {
+    oauth(
+        'https://discord.com/api/oauth2/authorize',
+        process.env.REACT_APP_DISCORD_CLIENT_ID as string,
+        'discord_login',
+        ['email', 'identify'],
+        'discord_oauth',
+        dispatch,
+        'Discord'
+    );
+}
+
+export async function patreon(dispatch: Dispatch<Action>): Promise<void> {
+    oauth(
+        'https://www.patreon.com/oauth2/authorize',
+        process.env.REACT_APP_PATREON_CLIENT_ID as string,
+        'patreon_login',
+        ['identity[email]', 'identity'],
+        'patreon_oauth',
+        dispatch,
+        'Patreon'
+    );
 }

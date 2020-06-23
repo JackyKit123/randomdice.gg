@@ -9,8 +9,9 @@ import {
     faUserCircle,
     faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { faDiscord } from '@fortawesome/free-brands-svg-icons';
+import { faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
 import Menu from '../../Components/Menu/menu';
+import LoadingGif from '../../Components/Loading/loading.gif';
 import * as auth from '../../Misc/Firebase/auth';
 import { menu } from '../../Misc/menuConfig';
 import { RootState } from '../../Misc/Redux Storage/store';
@@ -107,14 +108,25 @@ export default function Header(): JSX.Element {
                             <button
                                 className='discord'
                                 type='button'
-                                onClick={(): Promise<void> =>
-                                    auth.discord(dispatch)
-                                }
+                                onClick={(): void => auth.discord(dispatch)}
                             >
                                 <FontAwesomeIcon icon={faDiscord} />
                             </button>
+                            <button
+                                className='patreon'
+                                type='button'
+                                onClick={(): Promise<void> =>
+                                    auth.patreon(dispatch)
+                                }
+                            >
+                                <FontAwesomeIcon icon={faPatreon} />
+                            </button>
                         </div>
-                        <span className='error'>{error}</span>
+                        {error === 'Loading' ? (
+                            <img src={LoadingGif} alt='loading' />
+                        ) : (
+                            <span className='error'>{error}</span>
+                        )}
                         <button
                             type='button'
                             className='close'

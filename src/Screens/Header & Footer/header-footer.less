@@ -21,6 +21,10 @@ body {
                 font-size: inherit;
             }
 
+            img {
+                height: 50px;
+            }
+
             span {
                 display: block;
 
@@ -41,11 +45,22 @@ body {
                     cursor: pointer;
                     font-size: 40px;
 
+                    &:not(:last-of-type) {
+                        margin-right: 10px;
+                    }
+
                     &.discord {
                         background: #ffffff;
                         border-radius: 5px;
                         padding: 4px 5px 0;
                         color: #7289da;
+                    }
+
+                    &.patreon {
+                        background: #f96854;
+                        border-radius: 5px;
+                        padding: 4px 5px 0;
+                        color: #052d49;
                     }
                 }
             }

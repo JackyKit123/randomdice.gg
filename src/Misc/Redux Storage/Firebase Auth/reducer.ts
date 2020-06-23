@@ -5,10 +5,15 @@ const initialState: AuthState = { user: null, error: undefined };
 export default function(state = initialState, action: Action): AuthState {
     switch (action.type) {
         case AUTH:
-            return {
-                user: action.payload,
-                error: undefined,
-            };
+            return action.payload
+                ? {
+                      user: action.payload,
+                      error: undefined,
+                  }
+                : {
+                      user: action.payload,
+                      error: state.error,
+                  };
         case ERROR:
             return {
                 user: state.user,

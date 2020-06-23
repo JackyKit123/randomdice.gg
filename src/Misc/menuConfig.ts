@@ -1,6 +1,6 @@
 import { FunctionComponent, lazy } from 'react';
 import Homepage from '../Screens/Homepage/homepage';
-import DiscordLoginCallback from '../Components/Login/discord';
+import DiscordLoginCallback from '../Components/Login/login';
 
 export type Menu = {
     name?: string;
@@ -192,6 +192,11 @@ export const menu: Menu[] = [
     },
     {
         path: '/discord_login',
+        excludeFromMenu: true,
+        component: DiscordLoginCallback,
+    },
+    {
+        path: '/patreon_login',
         excludeFromMenu: true,
         component: DiscordLoginCallback,
     },
