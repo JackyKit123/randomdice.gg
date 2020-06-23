@@ -21,7 +21,7 @@ body {
                 font-size: inherit;
             }
 
-            img {
+            img.loading {
                 height: 50px;
             }
 
@@ -35,33 +35,83 @@ body {
                 }
             }
 
+            .profile-and-name {
+                text-align: left;
+                margin: 10px 40px;
+                .display(flex);
+                .flex-direction(row);
+                .justify-content(space-around);
+                .align-items(center);
+                .flex-wrap(wrap);
+
+                & > .img-container {
+                    border: 3px inset #05292e;
+                    border-radius: 5px;
+                    height: 100px;
+                    overflow: hidden;
+                    margin: 5px;
+
+                    & > img {
+                        height: 100%;
+                    }
+                }
+
+                & > label {
+                    span {
+                        font-size: 18px;
+                        margin-bottom: 3px;
+                    }
+
+                    input {
+                        height: 30px;
+                        font-size: 18px;
+                        font-weight: 200;
+                        background-color: #6ba4a5;
+                        .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+                        border: 0;
+                        border-radius: 3px;
+                        padding: 2px 4px;
+                        vertical-align: middle;
+                    }
+                }
+            }
+
             .oauth {
                 margin: 10px auto;
 
-                button {
+                button,
+                span {
+                    display: inline-block;
                     padding: 0;
                     border: 0;
                     background: none;
-                    cursor: pointer;
-                    font-size: 40px;
 
                     &:not(:last-of-type) {
                         margin-right: 10px;
                     }
+                }
 
-                    &.discord {
-                        background: #ffffff;
-                        border-radius: 5px;
-                        padding: 4px 5px 0;
-                        color: #7289da;
-                    }
+                span {
+                    font-size: 48px;
+                }
 
-                    &.patreon {
-                        background: #f96854;
-                        border-radius: 5px;
-                        padding: 4px 5px 0;
-                        color: #052d49;
-                    }
+                button {
+                    font-size: 40px;
+                    cursor: pointer;
+                }
+
+                .discord {
+                    background: #ffffff;
+                    border-radius: 5px;
+                    padding: 4px 5px 0;
+                    color: #7289da;
+                }
+
+                .patreon {
+                    background: #f96854;
+                    border-radius: 5px;
+                    padding: 4px 5px 0;
+                    color: #052d49;
                 }
             }
         }
@@ -97,6 +147,7 @@ body {
 
                         & > .login,
                         & > .user,
+                        & > .update,
                         & > .logout {
                             display: inline-block;
                             vertical-align: middle;
@@ -106,7 +157,17 @@ body {
                             line-height: 30px;
                         }
 
+                        @media @mobile {
+                            & > .update,
+                            & > .logout {
+                                span {
+                                    display: none;
+                                }
+                            }
+                        }
+
                         & > .login,
+                        & > .update,
                         & > .logout {
                             margin-left: 5px;
                             cursor: pointer;

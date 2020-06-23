@@ -33,7 +33,8 @@ async function oauth(
     scope: string[],
     callbackStorage: string,
     dispatch: Dispatch<Action>,
-    provider: string
+    provider: string,
+    linkAccount: boolean
 ): Promise<void> {
     const LoginWindow = window.open(
         `${authUrl}?client_id=${clientId}&redirect_uri=${
@@ -71,9 +72,14 @@ async function oauth(
             });
 
             const res = await axios.post(
-                `https://us-central1-random-dice-web.cloudfunctions.net/${endPoint}?code=${code}`
+                `https://us-central1-random-dice-web.cloudfunctions.net/${endPoint}?code=${code}&linkAccount=${linkAccount}`
             );
-            const { authToken, error } = res.data;
+            const { authToken, error, accountLinked } = res.data;
+
+            if (accountLinked) {
+                dispatch({ type: ERROR, payload: undefined });
+                return;
+            }
 
             if (error) {
                 switch (error) {
@@ -110,7 +116,7 @@ async function oauth(
     }
 }
 
-export function discord(dispatch: Dispatch<Action>): void {
+export function discord(dispatch: Dispatch<Action>, linkAccount = false): void {
     oauth(
         'https://discord.com/api/oauth2/authorize',
         process.env.REACT_APP_DISCORD_CLIENT_ID as string,
@@ -118,11 +124,15 @@ export function discord(dispatch: Dispatch<Action>): void {
         ['email', 'identify'],
         'discord_oauth',
         dispatch,
-        'Discord'
+        'Discord',
+        linkAccount
     );
 }
 
-export async function patreon(dispatch: Dispatch<Action>): Promise<void> {
+export async function patreon(
+    dispatch: Dispatch<Action>,
+    linkAccount = false
+): Promise<void> {
     oauth(
         'https://www.patreon.com/oauth2/authorize',
         process.env.REACT_APP_PATREON_CLIENT_ID as string,
@@ -130,6 +140,7 @@ export async function patreon(dispatch: Dispatch<Action>): Promise<void> {
         ['identity[email]', 'identity'],
         'patreon_oauth',
         dispatch,
-        'Patreon'
+        'Patreon',
+        linkAccount
     );
 }

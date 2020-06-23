@@ -21,6 +21,7 @@ const database = admin.database();
 export const discord_login = functions.https.onRequest((req, res) => {
     corsHandler(req, res, async () => {
         const code = req.query.code;
+        const linkAccount = req.query.linkAccount;
         if (typeof code === 'string') {
             try {
                 const tokenExchange = await axios.post(
@@ -50,6 +51,17 @@ export const discord_login = functions.https.onRequest((req, res) => {
 
                 try {
                     const userExist = await auth.getUserByEmail(userData.email);
+                    if (linkAccount === 'true') {
+                        await database
+                            .ref(
+                                `/users/${userExist.uid}/linked-account/discord`
+                            )
+                            .set(userData.data.id);
+                        res.send({
+                            accountLinked: true,
+                        });
+                        return;
+                    }
                     if (userExist.emailVerified) {
                         if (userData.verified || uid === userExist.uid) {
                             res.send({
@@ -62,6 +74,20 @@ export const discord_login = functions.https.onRequest((req, res) => {
                                     `/users/${userExist.uid}/linked-account/discord`
                                 )
                                 .set(userData.id);
+                        } else if (
+                            (
+                                await database
+                                    .ref(
+                                        `/users/${userExist.uid}/linked-account/`
+                                    )
+                                    .once('value')
+                            ).val().discord
+                        ) {
+                            res.send({
+                                authToken: await auth.createCustomToken(
+                                    userExist.uid
+                                ),
+                            });
                         } else {
                             res.send({ error: 'provider-email-not-verified' });
                         }
@@ -78,7 +104,7 @@ export const discord_login = functions.https.onRequest((req, res) => {
                             res.send({ authToken });
                             await database
                                 .ref(
-                                    `/users/${userExist.uid}/linked-account/discord`
+                                    `/users/${uid}/linked-account/discord`
                                 )
                                 .set(userData.id);
                         } else {
@@ -89,6 +115,15 @@ export const discord_login = functions.https.onRequest((req, res) => {
                         }
                     }
                 } catch (err) {
+                    if (linkAccount === 'true') {
+                        res.send({
+                            error: 'email-not-match',
+                        });
+                        res.send({
+                            accountLinked: true
+                        });
+                        return;
+                    }
                     await auth.createUser({
                         uid,
                         email: userData.email,
@@ -126,6 +161,7 @@ export const discord_login = functions.https.onRequest((req, res) => {
 export const patreon_login = functions.https.onRequest((req, res) => {
     corsHandler(req, res, async () => {
         const code = req.query.code;
+        const linkAccount = req.query.linkAccount;
         if (typeof code === 'string') {
             try {
                 const tokenExchange = await axios.post(
@@ -159,6 +195,17 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                     const userExist = await auth.getUserByEmail(
                         userData.data.attributes.email
                     );
+                    if (linkAccount === 'true') {
+                        await database
+                            .ref(
+                                `/users/${userExist.uid}/linked-account/patreon`
+                            )
+                            .set(userData.data.id);
+                        res.send({
+                            accountLinked: true
+                        });
+                        return;
+                    }
                     if (userExist.emailVerified) {
                         if (
                             userData.data.attributes.is_email_verified ||
@@ -174,6 +221,20 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                                     `/users/${userExist.uid}/linked-account/patreon`
                                 )
                                 .set(userData.data.id);
+                        } else if (
+                            (
+                                await database
+                                    .ref(
+                                        `/users/${userExist.uid}/linked-account/`
+                                    )
+                                    .once('value')
+                            ).val().patreon
+                        ) {
+                            res.send({
+                                authToken: await auth.createCustomToken(
+                                    userExist.uid
+                                ),
+                            });
                         } else {
                             res.send({ error: 'provider-email-not-verified' });
                         }
@@ -190,7 +251,7 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                             res.send({ authToken });
                             await database
                                 .ref(
-                                    `/users/${userExist.uid}/linked-account/patreon`
+                                    `/users/${uid}/linked-account/patreon`
                                 )
                                 .set(userData.data.id);
                         } else {
@@ -201,6 +262,12 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                         }
                     }
                 } catch (err) {
+                    if (linkAccount === 'true') {
+                        res.send({
+                            error: 'email-not-match',
+                        });
+                        return;
+                    }
                     await auth.createUser({
                         uid,
                         email: userData.data.attributes.email,

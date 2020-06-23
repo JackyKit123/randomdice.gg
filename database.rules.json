@@ -7,10 +7,6 @@
             ".read": "auth.uid === 'my-service-worker'",
             ".write": "auth.uid === 'my-service-worker'"
         },
-        "patreon_list": {
-            ".read": "auth.uid === 'my-service-worker'",
-            ".write": "auth.uid === 'my-service-worker'"
-        },
         "users": {
             "$uid": {
                 ".read": "auth != null && (auth.uid === $uid || auth.uid === 'my-service-worker')",
