@@ -61,11 +61,7 @@ export default function DeckList({
     }
     const legendaryMissing = filter.legendary
         .filter(legendary => !legendary.checked)
-        .map(
-            legendary => dices?.find(dice => dice.name === legendary.name)?.name
-        );
-    const customSearch =
-        dices?.find(dice => dice.name === filter.customSearch)?.name || '?';
+        .map(legendary => legendary.name);
 
     let jsx;
     if (dices && decks && decks.length > 0 && filter.legendary.length > 0) {
@@ -131,7 +127,7 @@ export default function DeckList({
                     deckData.type === deckType &&
                     (filter.customSearch === '?'
                         ? true
-                        : deck.includes(customSearch))
+                        : deck.includes(filter.customSearch))
                 );
             })
             .map(deck => {
@@ -230,11 +226,13 @@ export default function DeckList({
                                 >
                                     <Dice dice={findAlt.list[i]} />
                                     <h4>
-                                        {alt?.desc
-                                            ? alt.desc
+                                        {alt?.alternatives?.desc
+                                            ? alt?.alternatives?.desc
                                             : 'You should not need to replace this.'}
                                     </h4>
-                                    {alt?.desc ? <h5>Alternatives :</h5> : null}
+                                    {alt?.alternatives?.desc ? (
+                                        <h5>Alternatives :</h5>
+                                    ) : null}
                                     <div className='replacement'>
                                         {options[
                                             i
