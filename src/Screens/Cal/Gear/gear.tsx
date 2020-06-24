@@ -9,7 +9,7 @@ import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import '../cal.less';
 
-export default function GearsCalculator(): JSX.Element {
+export default function GearCalculator(): JSX.Element {
     const dispatch = useDispatch();
     const selection = useSelector(
         (state: RootState) => state.fetchDicesReducer
@@ -23,7 +23,7 @@ export default function GearsCalculator(): JSX.Element {
         crit: 111,
     });
     let jsx = <div />;
-    const data = dices?.find(dice => dice.name === 'Gears');
+    const data = dices?.find(dice => dice.name === 'Gear');
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
@@ -35,7 +35,7 @@ export default function GearsCalculator(): JSX.Element {
     const invalidInput = isInvalidCrit || isInvalidChain || isInvalidPip;
 
     if (data) {
-        const gearsDiceData = {
+        const gearDiceData = {
             baseAtk: data.atk,
             baseAtkPerClass: data.cupAtk,
             baseAtkPerLevel: data.pupAtk,
@@ -46,13 +46,13 @@ export default function GearsCalculator(): JSX.Element {
         };
 
         const atkDmg =
-            gearsDiceData.baseAtk +
-            gearsDiceData.baseAtkPerClass * (filter.class - 5) +
-            gearsDiceData.baseAtkPerLevel * (filter.level - 1);
+            gearDiceData.baseAtk +
+            gearDiceData.baseAtkPerClass * (filter.class - 5) +
+            gearDiceData.baseAtkPerLevel * (filter.level - 1);
         const rawBuff =
-            gearsDiceData.baseChainBuff +
-            gearsDiceData.chainBuffPerClass * (filter.class - 5) +
-            gearsDiceData.chainBuffPerLevel * (filter.level - 1);
+            gearDiceData.baseChainBuff +
+            gearDiceData.chainBuffPerClass * (filter.class - 5) +
+            gearDiceData.chainBuffPerLevel * (filter.level - 1);
         const dmgPerPip = atkDmg * (1 + (rawBuff / 100) * filter.chain);
         const dps =
             Math.round(
@@ -73,7 +73,7 @@ export default function GearsCalculator(): JSX.Element {
                 <div className='divisor' />
                 <div className='dice-container'>
                     <div>
-                        <Dice dice='Gears' />
+                        <Dice dice='Gear' />
                         <h3 className='desc'>{data.desc}</h3>
                     </div>
                 </div>
@@ -150,7 +150,7 @@ export default function GearsCalculator(): JSX.Element {
                         </select>
                     </label>
                     <label htmlFor='pip'>
-                        <span>Total Gears Pip:</span>
+                        <span>Total Gear Pip:</span>
                         <input
                             type='textbox'
                             name='pip'
@@ -188,8 +188,8 @@ export default function GearsCalculator(): JSX.Element {
                     <span className='invalid-warning'>
                         {`Invalid pip amount, ${
                             filter.pip > filter.chain
-                                ? 'too many gears pips comparing to the chain length.'
-                                : 'chain length should be smaller than total gears pip.'
+                                ? 'too many gear pips comparing to the chain length.'
+                                : 'chain length should be smaller than total gear pip.'
                         }`}
                     </span>
                 ) : (
@@ -214,7 +214,7 @@ export default function GearsCalculator(): JSX.Element {
                 <div className='divisor' />
                 <div className='result'>
                     <div className='dmg'>
-                        <span>Damage per Gears pip :</span>
+                        <span>Damage per Gear pip :</span>
                         <input
                             type='textbox'
                             className={invalidInput ? 'invalid' : ''}
@@ -248,7 +248,7 @@ export default function GearsCalculator(): JSX.Element {
         jsx = <LoadingScreen />;
     }
     return (
-        <Main title='Gears DPS Calculator' className='gears-dmg-cal cal'>
+        <Main title='Gear DPS Calculator' className='gear-dmg-cal cal'>
             {jsx}
         </Main>
     );

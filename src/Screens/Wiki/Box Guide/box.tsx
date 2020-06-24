@@ -153,7 +153,7 @@ export default function BoxGuide(): JSX.Element {
                     </div>
                     <p>Obtained from: Sales Bundle, PvP Reward</p>
                     <p>
-                        Contains: <Dice dice='Iron' /> + <Dice dice='Gears' /> +{' '}
+                        Contains: <Dice dice='Iron' /> + <Dice dice='Gear' /> +{' '}
                         <Dice dice='Gun' />
                     </p>
                 </li>

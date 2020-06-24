@@ -74,9 +74,9 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Cal/Solar/solar')),
             },
             {
-                name: 'Gears DPS Calculator',
-                path: '/calculator/gears',
-                component: lazy(() => import('../Screens/Cal/Gears/gears')),
+                name: 'Gear DPS Calculator',
+                path: '/calculator/gear',
+                component: lazy(() => import('../Screens/Cal/Gear/gear')),
             },
             {
                 name: 'Co-op Grind Calculator',

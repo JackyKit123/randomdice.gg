@@ -154,8 +154,8 @@ export default function BossGuide(): JSX.Element {
                     <p>
                         If Element Dice is Silenced, he will no longer attack
                         but the spinning spheres will still spin around it and
-                        damage the Silencer Boss. If Gears Dice is silenced, it
-                        cannot attack but the chain buff to the chained gears
+                        damage the Silencer Boss. If Gear Dice is silenced, it
+                        cannot attack but the chain buff to the chained gear
                         dice retains. If a support dice is silenced, it will no
                         longer buff the neighbor dice.
                     </p>

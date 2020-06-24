@@ -18,7 +18,7 @@ https://randomdice.gg/critData
 https://randomdice.gg/calculator/blizzard
 https://randomdice.gg/calculator/combo
 https://randomdice.gg/calculator/solar
-https://randomdice.gg/calculator/gears
+https://randomdice.gg/calculator/gear
 https://randomdice.gg/calculator/coop
 https://randomdice.gg/calculator/stat
 https://randomdice.gg/calculator/dps

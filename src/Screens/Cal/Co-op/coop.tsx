@@ -352,7 +352,7 @@ export default function GoldCalculator(): JSX.Element {
                                 setFilter({ ...filter });
                             }}
                         >
-                            <option value={30}>Gears 30s</option>
+                            <option value={30}>Gear 30s</option>
                             <option value={56}>Solar / Time 56s</option>
                             <option value={76}>Combo Mirror 76s</option>
                             <option>Custom</option>
