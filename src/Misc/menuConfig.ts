@@ -191,9 +191,24 @@ export const menu: Menu[] = [
         ],
     },
     {
-        path: '/dashboard',
+        name: 'Dashboard',
         excludeFromMenu: true,
-        component: lazy(() => import('../Components/Dashboard/dashboard')),
+        childNode: [
+            {
+                path: '/dashboard',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Components/Dashboard/dashboard')
+                ),
+            },
+            {
+                path: '/dashboard/deck',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Dashboard/Decks/deck')
+                ),
+            },
+        ],
     },
     {
         path: '/discord_login',

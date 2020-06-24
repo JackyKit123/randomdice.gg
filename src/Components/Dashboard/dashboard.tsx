@@ -40,7 +40,7 @@ export default function Dashboard(props: {
             <main>
                 <div className={`dashboard ${className}`}>
                     <div className='content'>
-                        <Link to='/dashboard/decks'>Update Decks</Link>
+                        <Link to='/dashboard/deck'>Update Decks</Link>
                         <div className='divisor' />
                         {children}
                     </div>
