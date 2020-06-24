@@ -11,6 +11,7 @@ import {
     faUserCircle,
     faSignOutAlt,
     faUserEdit,
+    faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
 import Menu from '../../Components/Menu/menu';
@@ -22,13 +23,15 @@ import { RootState } from '../../Misc/Redux Storage/store';
 export default function Header(): JSX.Element {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { user, error } = useSelector(
-        (state: RootState) => state.authReducer
-    );
+    const selector = useSelector((state: RootState) => state);
+    const { user, error } = selector.authReducer;
+    const { data } = selector.fetchUserDataReducer;
     const [scrolled, setScrolled] = useState(true);
     const [menuToggle, setMenuToggle] = useState(false);
     const [overlayOpen, setOverlayOpen] = useState<string | false>(false);
-    const [accountLinked, setAccountLinked] = useState(['']);
+    const [accountLinked, setAccountLinked] = useState(
+        Object.keys(data ? data['linked-account'] : [''])
+    );
     const overlayRef = useRef(null as HTMLDivElement | null);
     history.listen(() => setMenuToggle(false));
     useEffect(() => {
@@ -64,9 +67,9 @@ export default function Header(): JSX.Element {
             setOverlayOpen(false);
             const userData = firebase.database().ref(`users/${user.uid}`);
             const listener = userData.on('value', snapshot => {
-                const data = snapshot.val();
-                if (data) {
-                    setAccountLinked(Object.keys(data['linked-account']));
+                const val = snapshot.val();
+                if (val) {
+                    setAccountLinked(Object.keys(val['linked-account']));
                 }
             });
             return (): void => userData.off('value', listener);
@@ -275,6 +278,16 @@ export default function Header(): JSX.Element {
                     <div className='container'>
                         {user ? (
                             <>
+                                {data?.editor ? (
+                                    <span className='dashboard'>
+                                        <Link to='/dashboard'>
+                                            <FontAwesomeIcon icon={faEdit} />{' '}
+                                            <span className='text'>
+                                                Dashboard
+                                            </span>
+                                        </Link>
+                                    </span>
+                                ) : null}
                                 {user.photoURL ? (
                                     <div className='img-container'>
                                         <img
@@ -294,7 +307,7 @@ export default function Header(): JSX.Element {
                                     }
                                 >
                                     <FontAwesomeIcon icon={faUserEdit} />
-                                    <span>Edit Profile</span>
+                                    <span className='text'>Edit Profile</span>
                                 </button>
                                 <button
                                     type='button'
@@ -302,7 +315,7 @@ export default function Header(): JSX.Element {
                                     onClick={auth.logout}
                                 >
                                     <FontAwesomeIcon icon={faSignOutAlt} />{' '}
-                                    <span>LOGOUT</span>
+                                    <span className='text'>LOGOUT</span>
                                 </button>
                             </>
                         ) : (

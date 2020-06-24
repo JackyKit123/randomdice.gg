@@ -7,6 +7,7 @@ import { Dispatch } from 'react';
 import initApp from './init';
 import { AUTH, Action, ERROR } from '../Redux Storage/Firebase Auth/types';
 import * as ga from '../customGaEvent';
+import { fetchUser } from './fetchData';
 
 const auth = firebase.apps.length ? firebase.auth() : firebase.auth(initApp());
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
@@ -18,6 +19,7 @@ export function logout(): void {
 export function authStateDispatch(dispatch: Dispatch<Action>): void {
     auth.onAuthStateChanged(userAuth => {
         if (userAuth && userAuth.emailVerified) {
+            fetchUser(dispatch as never, userAuth.uid);
             dispatch({ type: AUTH, payload: userAuth });
             ga.auth.login(userAuth.uid);
         } else {

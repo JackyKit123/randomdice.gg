@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import firebase from 'firebase/app';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../Main/main';
@@ -13,26 +12,20 @@ export default function Dashboard(props: {
     children?: ReactNode;
 }): JSX.Element {
     const { className, children } = props;
-    const { user } = useSelector((state: RootState) => state.authReducer);
+    const selector = useSelector((state: RootState) => state);
+    const { user } = selector.authReducer;
+    const { data } = selector.fetchUserDataReducer;
     const [authorized, setAuthorized] = useState<'loading' | boolean>(
         'loading'
     );
-    const database = firebase.database();
 
     useEffect(() => {
-        if (user) {
-            (async (): Promise<void> => {
-                const userData = (
-                    await database.ref(`/users/${user.uid}`).once('value')
-                ).val();
-                if (userData.editor) {
-                    setAuthorized(true);
-                } else {
-                    setAuthorized(false);
-                }
-            })();
+        if (user && data?.editor) {
+            setAuthorized(true);
+        } else {
+            setAuthorized(false);
         }
-    }, [user]);
+    });
 
     if (authorized === 'loading') {
         return (

@@ -5,6 +5,7 @@ import initApp from './init';
 import * as FETCH_DICES from '../Redux Storage/Fetch Firebase/Dices/types';
 import * as FETCH_DECKS from '../Redux Storage/Fetch Firebase/Decks/types';
 import * as FETCH_WIKI from '../Redux Storage/Fetch Firebase/Wiki/types';
+import * as FETCH_USER from '../Redux Storage/Fetch Firebase/User/types';
 
 const database = firebase.apps.length
     ? firebase.database()
@@ -12,15 +13,22 @@ const database = firebase.apps.length
 type ActionType =
     | FETCH_DICES.ActionType
     | FETCH_DECKS.ActionType
-    | FETCH_WIKI.ActionType;
+    | FETCH_WIKI.ActionType
+    | FETCH_USER.ActionType;
 
 async function fetch(
     dispatch: Dispatch,
     successAction: ActionType,
     errorAction: ActionType,
     dbPath: string,
-    localStorageKey: string
+    localStorageKey?: string
 ): Promise<void> {
+    if (!localStorageKey) {
+        const res = await database.ref(dbPath).once('value');
+        dispatch({ type: successAction, payload: res.val() });
+        return;
+    }
+
     const localCache = localStorage.getItem(localStorageKey);
     if (localCache) {
         try {
@@ -52,6 +60,13 @@ export function fetchDices(dispatch: Dispatch<FETCH_DECKS.Action>): void {
 
 export function fetchWiki(dispatch: Dispatch<FETCH_WIKI.Action>): void {
     fetch(dispatch, FETCH_WIKI.SUCCESS, FETCH_WIKI.FAIL, '/wiki', 'wiki');
+}
+
+export function fetchUser(
+    dispatch: Dispatch<FETCH_USER.Action>,
+    uid: string
+): void {
+    fetch(dispatch, FETCH_USER.SUCCESS, FETCH_USER.FAIL, `/users/${uid}`);
 }
 
 export default function fetchAll(dispatch: Dispatch): void {

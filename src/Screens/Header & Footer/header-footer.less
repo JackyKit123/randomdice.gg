@@ -145,30 +145,34 @@ body {
                             }
                         }
 
-                        & > .login,
-                        & > .user,
-                        & > .update,
-                        & > .logout {
+                        & > span,
+                        button {
                             display: inline-block;
                             vertical-align: middle;
                             background: none;
                             border: 0;
                             color: #ffffff;
                             line-height: 30px;
-                        }
 
-                        @media @mobile {
-                            & > .update,
-                            & > .logout {
-                                span {
-                                    display: none;
-                                }
+                            a {
+                                color: inherit;
+                                font: inherit;
+                                text-decoration: none;
                             }
                         }
 
-                        & > .login,
-                        & > .update,
-                        & > .logout {
+                        @media @mobile {
+                            span.text {
+                                display: none;
+                            }
+                        }
+
+                        & > .dashboard {
+                            float: left;
+                        }
+
+                        & > button,
+                        & > span a {
                             margin-left: 5px;
                             cursor: pointer;
                             .transition(color 0.2s ease-in-out);
