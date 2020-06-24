@@ -32,15 +32,15 @@ export default function Homepage(): JSX.Element {
                     Mobile
                 </a>
                 .
-                <p>
-                    You are welcome to join the community in discord or on
-                    Reddit. If you find any issues, please contact the webmaster
-                    through discord on JackyKit#0333 or by emailing{' '}
-                    <a href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}>
-                        {`admin@${process.env.REACT_APP_DOMAIN}`}
-                    </a>{' '}
-                    for any web related issue.
-                </p>
+            </p>
+            <p>
+                You are welcome to join the community in discord or on Reddit.
+                If you find any issues, please contact the webmaster through
+                discord on JackyKit#0333 or by emailing{' '}
+                <a href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}>
+                    {`admin@${process.env.REACT_APP_DOMAIN}`}
+                </a>{' '}
+                for any web related issue.
             </p>
             <br />
             <br />
