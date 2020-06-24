@@ -10,9 +10,49 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from '../../../Components/Dashboard/dashboard';
 import Dice from '../../../Components/Dice/dice';
-import { Decks } from '../../../Misc/Redux Storage/Fetch Firebase/Decks/types';
+import {
+    Deck,
+    Decks,
+} from '../../../Misc/Redux Storage/Fetch Firebase/Decks/types';
 import { RootState } from '../../../Misc/Redux Storage/store';
 import './deck.less';
+
+function DeckRow({
+    deck,
+    setActiveEdit,
+}: {
+    deck: Deck;
+    setActiveEdit: (deck: Deck) => void;
+}): JSX.Element {
+    return (
+        <>
+            <td>{deck.rating}</td>
+            <td>{deck.type}</td>
+            <td>
+                <Dice dice={deck.slot1} />
+            </td>
+            <td>
+                <Dice dice={deck.slot2} />
+            </td>
+            <td>
+                <Dice dice={deck.slot3} />
+            </td>
+            <td>
+                <Dice dice={deck.slot4} />
+            </td>
+            <td>
+                <Dice dice={deck.slot5} />
+            </td>
+            <td>
+                <button type='button' onClick={(): void => setActiveEdit(deck)}>
+                    <FontAwesomeIcon icon={faPencilAlt} />
+                </button>
+            </td>
+        </>
+    );
+}
+
+const MemoRow = React.memo(DeckRow);
 
 export default function updateDeck(): JSX.Element {
     const database = firebase.database();
@@ -55,12 +95,12 @@ export default function updateDeck(): JSX.Element {
     const [activeEdit, setActiveEdit] = useState({ ...initialEditState });
     const diceList = dices?.map(dice => dice.name);
     const invalidVersion = currentGameVersion
-        ? !/^[1-9][0-9]{0,}\.(0|[1-9][0-9]{0,})\.[0-9]{0,}$/.test(
+        ? !/^[1-9][0-9]{0,}\.(0|[1-9][0-9]{0,})\.[0-9]{1,}$/.test(
               currentGameVersion
           )
         : false;
     const invalidVersionToAdd = deckToAdd.added
-        ? !/^[1-9][0-9]{0,}\.(0|[1-9][0-9]{0,})\.[0-9]{0,}$/.test(
+        ? !/^[1-9][0-9]{0,}\.(0|[1-9][0-9]{0,})\.[0-9]{1,}$/.test(
               deckToAdd.added
           )
         : false;
@@ -140,9 +180,7 @@ export default function updateDeck(): JSX.Element {
         <Dashboard className='deck'>
             {overlayOpen === 'error' ? (
                 <div
-                    className={`popup-overlay ${
-                        overlayOpen === 'error' ? 'active' : ''
-                    }`}
+                    className='popup-overlay active'
                     role='button'
                     tabIndex={0}
                     onClick={(evt): void => {
@@ -197,9 +235,7 @@ export default function updateDeck(): JSX.Element {
             ) : null}
             {overlayOpen === 'delete' ? (
                 <div
-                    className={`popup-overlay delete ${
-                        overlayOpen === 'delete' ? 'active' : ''
-                    }`}
+                    className='popup-overlay delete active'
                     role='button'
                     tabIndex={0}
                     onClick={(evt): void => {
@@ -249,9 +285,7 @@ export default function updateDeck(): JSX.Element {
             ) : null}
             {overlayOpen === 'add-deck' ? (
                 <div
-                    className={`popup-overlay add-deck ${
-                        overlayOpen === 'add-deck' ? 'active' : ''
-                    }`}
+                    className='popup-overlay add-deck active'
                     role='button'
                     tabIndex={0}
                     onClick={(evt): void => {
@@ -849,37 +883,10 @@ export default function updateDeck(): JSX.Element {
                                                 </td>
                                             </>
                                         ) : (
-                                            <>
-                                                <td>{deck.rating}</td>
-                                                <td>{deck.type}</td>
-                                                <td>
-                                                    <Dice dice={deck.slot1} />
-                                                </td>
-                                                <td>
-                                                    <Dice dice={deck.slot2} />
-                                                </td>
-                                                <td>
-                                                    <Dice dice={deck.slot3} />
-                                                </td>
-                                                <td>
-                                                    <Dice dice={deck.slot4} />
-                                                </td>
-                                                <td>
-                                                    <Dice dice={deck.slot5} />
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        type='button'
-                                                        onClick={(): void =>
-                                                            setActiveEdit(deck)
-                                                        }
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={faPencilAlt}
-                                                        />
-                                                    </button>
-                                                </td>
-                                            </>
+                                            <MemoRow
+                                                deck={deck}
+                                                setActiveEdit={setActiveEdit}
+                                            />
                                         )}
                                         <td>
                                             <button

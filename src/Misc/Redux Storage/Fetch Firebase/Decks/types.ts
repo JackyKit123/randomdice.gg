@@ -6,7 +6,7 @@ export const FAIL = 'FETCH_DECKS_FAIL';
 
 export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
-export type Decks = {
+export interface Deck {
     id: number;
     type: 'PvP' | 'PvE' | '-';
     rating: number;
@@ -17,7 +17,9 @@ export type Decks = {
     slot5: Dice['name'];
     added: string;
     updated: string | null;
-}[];
+}
+
+export type Decks = Deck[];
 
 export interface FetchState {
     decks: Decks | undefined;
