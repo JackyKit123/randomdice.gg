@@ -1,16 +1,28 @@
 {
-    /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
     "rules": {
-        ".read": true,
         ".write": false,
+        "decks": {
+            ".read": true,
+            ".write": "auth.token.isEditor === true"
+        },
+        "dice": {
+            ".read": true,
+            ".write": "auth.token.isEditor === true"
+        },
+        "wiki": {
+            ".read": true,
+            ".write": "auth.token.isEditor === true"
+        },
         "token_storage": {
             ".read": "auth.uid === 'my-service-worker'",
             ".write": "auth.uid === 'my-service-worker'"
         },
         "users": {
+            ".read": "auth.uid === 'my-service-worker'",
+            ".write": "auth.uid === 'my-service-worker'",
             "$uid": {
-                ".read": "auth != null && (auth.uid === $uid || auth.uid === 'my-service-worker')",
-                ".write": "auth != null && auth.uid === $uid",
+                ".read": "auth.uid === $uid || auth.uid === 'my-service-worker'",
+                ".write": "auth.uid === $uid",
                 "linked-account": {
                     ".write": "auth.uid === 'my-service-worker'"
                 },

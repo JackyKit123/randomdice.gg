@@ -191,6 +191,11 @@ export const menu: Menu[] = [
         ],
     },
     {
+        path: '/dashboard',
+        excludeFromMenu: true,
+        component: lazy(() => import('../Components/Dashboard/dashboard')),
+    },
+    {
         path: '/discord_login',
         excludeFromMenu: true,
         component: DiscordLoginCallback,

@@ -47,7 +47,12 @@ export const discord_login = functions.https.onRequest((req, res) => {
                 );
                 const userData = getUserData.data;
                 const uid = `discord-${userData.id}`;
-                const authToken = await auth.createCustomToken(uid);
+                const isEditor = (
+                    await database
+                        .ref(`/users/${uid}/editor`)
+                        .once('value')
+                ).val();
+                const authToken = await auth.createCustomToken(uid, { isEditor });
 
                 try {
                     const userExist = await auth.getUserByEmail(userData.email);
@@ -66,7 +71,7 @@ export const discord_login = functions.https.onRequest((req, res) => {
                         if (userData.verified || uid === userExist.uid) {
                             res.send({
                                 authToken: await auth.createCustomToken(
-                                    userExist.uid
+                                    userExist.uid, { isEditor }
                                 ),
                             });
                             await database
@@ -85,7 +90,7 @@ export const discord_login = functions.https.onRequest((req, res) => {
                         ) {
                             res.send({
                                 authToken: await auth.createCustomToken(
-                                    userExist.uid
+                                    userExist.uid, { isEditor }
                                 ),
                             });
                         } else {
@@ -103,9 +108,7 @@ export const discord_login = functions.https.onRequest((req, res) => {
                             });
                             res.send({ authToken });
                             await database
-                                .ref(
-                                    `/users/${uid}/linked-account/discord`
-                                )
+                                .ref(`/users/${uid}/linked-account/discord`)
                                 .set(userData.id);
                         } else {
                             res.send({
@@ -186,7 +189,12 @@ export const patreon_login = functions.https.onRequest((req, res) => {
 
                 const userData = getUserData.data;
                 const uid = `patreon-${userData.data.id}`;
-                const authToken = await auth.createCustomToken(uid);
+                const isEditor = (
+                    await database
+                        .ref(`/users/${uid}/editor`)
+                        .once('value')
+                ).val();
+                const authToken = await auth.createCustomToken(uid, { isEditor });
 
                 try {
                     const userExist = await auth.getUserByEmail(
@@ -199,7 +207,7 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                             )
                             .set(userData.data.id);
                         res.send({
-                            accountLinked: true
+                            accountLinked: true,
                         });
                         return;
                     }
@@ -210,7 +218,7 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                         ) {
                             res.send({
                                 authToken: await auth.createCustomToken(
-                                    userExist.uid
+                                    userExist.uid, { isEditor }
                                 ),
                             });
                             await database
@@ -229,7 +237,7 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                         ) {
                             res.send({
                                 authToken: await auth.createCustomToken(
-                                    userExist.uid
+                                    userExist.uid, { isEditor }
                                 ),
                             });
                         } else {
@@ -247,9 +255,7 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                             });
                             res.send({ authToken });
                             await database
-                                .ref(
-                                    `/users/${uid}/linked-account/patreon`
-                                )
+                                .ref(`/users/${uid}/linked-account/patreon`)
                                 .set(userData.data.id);
                         } else {
                             res.send({

@@ -5,10 +5,11 @@ import Dice from '../../Components/Dice/dice';
 import EffectPng from './effect.png';
 import './nomatch.less';
 
-export default function NoMatch(): JSX.Element {
+export default function NoMatch(props: { title?: string }): JSX.Element {
     const history = useHistory();
+    const { title } = props;
     return (
-        <Main title='404 Not found' className='NoMatch'>
+        <Main title={title || '404 Not found'} className='NoMatch'>
             <img id='assassin-cross' alt='assassinate effect' src={EffectPng} />
             <Dice dice='Assassin' />
             <h3>This page is assassinated.</h3>
