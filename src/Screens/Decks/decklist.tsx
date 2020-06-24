@@ -36,7 +36,7 @@ export default function DeckList({
             ?.filter(dice => dice.rarity === 'Legendary')
             .map(dice => dice.name) || [];
     const [findAlt, setFindAlt] = useState({
-        list: [] as number[],
+        list: [] as string[],
         open: false,
     });
 
@@ -62,10 +62,10 @@ export default function DeckList({
     const legendaryMissing = filter.legendary
         .filter(legendary => !legendary.checked)
         .map(
-            legendary => dices?.find(dice => dice.name === legendary.name)?.id
+            legendary => dices?.find(dice => dice.name === legendary.name)?.name
         );
     const customSearch =
-        dices?.find(dice => dice.name === filter.customSearch)?.id || 0;
+        dices?.find(dice => dice.name === filter.customSearch)?.name || '?';
 
     let jsx;
     if (dices && decks && decks.length > 0 && filter.legendary.length > 0) {
@@ -91,11 +91,11 @@ export default function DeckList({
         );
 
         const options = [
-            dices.find(alt => alt.id === findAlt.list[0]),
-            dices.find(alt => alt.id === findAlt.list[1]),
-            dices.find(alt => alt.id === findAlt.list[2]),
-            dices.find(alt => alt.id === findAlt.list[3]),
-            dices.find(alt => alt.id === findAlt.list[4]),
+            dices.find(alt => alt.name === findAlt.list[0]),
+            dices.find(alt => alt.name === findAlt.list[1]),
+            dices.find(alt => alt.name === findAlt.list[2]),
+            dices.find(alt => alt.name === findAlt.list[3]),
+            dices.find(alt => alt.name === findAlt.list[4]),
         ];
         if (findAlt.open) {
             document.body.classList.add('popup-opened');
@@ -160,11 +160,11 @@ export default function DeckList({
                 id: filteredDeck.length,
                 type: '-',
                 rating: 0,
-                slot1: 0,
-                slot2: 0,
-                slot3: 0,
-                slot4: 0,
-                slot5: 0,
+                slot1: '?',
+                slot2: '?',
+                slot3: '?',
+                slot4: '?',
+                slot5: '?',
                 alternatives: [],
                 added: '-',
                 updated: '-',
@@ -195,7 +195,7 @@ export default function DeckList({
                         const target = evt.target as HTMLDivElement;
                         if (target.classList.contains('popup-overlay')) {
                             setFindAlt({
-                                list: [] as number[],
+                                list: [] as string[],
                                 open: false,
                             });
                         }
@@ -203,7 +203,7 @@ export default function DeckList({
                     onKeyUp={(evt): void => {
                         if (evt.key === 'Escape') {
                             setFindAlt({
-                                list: [] as number[],
+                                list: [] as string[],
                                 open: false,
                             });
                         }
@@ -255,7 +255,7 @@ export default function DeckList({
                                 className='close'
                                 onClick={(): void =>
                                     setFindAlt({
-                                        list: [] as number[],
+                                        list: [] as string[],
                                         open: false,
                                     })
                                 }
@@ -374,7 +374,9 @@ export default function DeckList({
                                                 {deckKeys[i].match(
                                                     /^slot[1-5]$/
                                                 ) ? (
-                                                    <Dice dice={Number(data)} />
+                                                    <Dice
+                                                        dice={data as string}
+                                                    />
                                                 ) : deck.type === '-' ? (
                                                     '-'
                                                 ) : deckKeys[i] ===
@@ -383,7 +385,7 @@ export default function DeckList({
                                                         type='button'
                                                         onClick={(): void => {
                                                             setFindAlt({
-                                                                list: data as number[],
+                                                                list: data as string[],
                                                                 open: true,
                                                             });
                                                         }}
