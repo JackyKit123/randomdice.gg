@@ -27,6 +27,9 @@
             "$uid": {
                 ".read": "auth.uid === $uid || auth.uid === 'my-service-worker'",
                 ".write": "auth.uid === $uid",
+                "editor": {
+                  ".write": false
+                },
                 "linked-account": {
                     ".write": "auth.uid === 'my-service-worker'"
                 },
