@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-indent */
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
@@ -16,10 +16,14 @@ import { fetchWiki } from '../../../Misc/Firebase/fetchData';
 import './dice.less';
 
 export default function DiceMechanic(): JSX.Element {
-    replaceAnchorWithHistory();
+    const history = useHistory();
     const dispatch = useDispatch();
     const selection = useSelector((state: RootState) => state.fetchWikiReducer);
     const { error, wiki } = selection;
+
+    useEffect(() => {
+        return replaceAnchorWithHistory(history);
+    });
 
     let jsx;
 

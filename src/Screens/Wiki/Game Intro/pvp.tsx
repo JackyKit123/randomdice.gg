@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { sanitize } from 'dompurify';
 import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
@@ -12,10 +13,14 @@ import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import './pvp.less';
 
 export default function PVP(): JSX.Element {
-    replaceAnchorWithHistory();
+    const history = useHistory();
     const dispatch = useDispatch();
     const selection = useSelector((state: RootState) => state.fetchWikiReducer);
     const { error, wiki } = selection;
+
+    useEffect(() => {
+        return replaceAnchorWithHistory(history);
+    });
 
     let jsx;
 

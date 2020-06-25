@@ -22,7 +22,7 @@ export default function DeckGuideMenu(): JSX.Element | null {
         (state: RootState) => state.fetchDecksGuideReducer
     );
     useEffect(() => {
-        replaceAnchorWithHistory();
+        return replaceAnchorWithHistory(history);
     });
 
     let jsx;

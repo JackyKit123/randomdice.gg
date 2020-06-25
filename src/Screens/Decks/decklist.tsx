@@ -47,18 +47,21 @@ export default function DeckList({
         }
     }, [findAlt.open]);
 
-    if (legendaryList.length > 0 && filter.legendary.length === 0) {
-        dispatch({
-            type: FILTER_ACTION,
-            payload: {
-                legendary: legendaryList.map(legendary => ({
-                    name: legendary,
-                    checked: true,
-                })),
-                customSearch: filter.customSearch,
-            },
-        });
-    }
+    useEffect(() => {
+        if (legendaryList.length > 0 && filter.legendary.length === 0) {
+            dispatch({
+                type: FILTER_ACTION,
+                payload: {
+                    legendary: legendaryList.map(legendary => ({
+                        name: legendary,
+                        checked: true,
+                    })),
+                    customSearch: filter.customSearch,
+                },
+            });
+        }
+    }, [dices]);
+
     const legendaryMissing = filter.legendary
         .filter(legendary => !legendary.checked)
         .map(legendary => legendary.name);
