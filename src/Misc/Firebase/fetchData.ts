@@ -5,6 +5,7 @@ import initApp from './init';
 import * as FETCH_DICES from '../Redux Storage/Fetch Firebase/Dices/types';
 import * as FETCH_DECKS from '../Redux Storage/Fetch Firebase/Decks/types';
 import * as FETCH_WIKI from '../Redux Storage/Fetch Firebase/Wiki/types';
+import * as FETCH_DECKS_GUIDE from '../Redux Storage/Fetch Firebase/Decks Guide/types';
 import * as FETCH_USER from '../Redux Storage/Fetch Firebase/User/types';
 
 const database = firebase.apps.length
@@ -14,6 +15,7 @@ type ActionType =
     | FETCH_DICES.ActionType
     | FETCH_DECKS.ActionType
     | FETCH_WIKI.ActionType
+    | FETCH_DECKS_GUIDE.ActionType
     | FETCH_USER.ActionType;
 
 async function fetch(
@@ -62,6 +64,18 @@ export function fetchWiki(dispatch: Dispatch<FETCH_WIKI.Action>): void {
     fetch(dispatch, FETCH_WIKI.SUCCESS, FETCH_WIKI.FAIL, '/wiki', 'wiki');
 }
 
+export function fetchDecksGuide(
+    dispatch: Dispatch<FETCH_DECKS_GUIDE.Action>
+): void {
+    fetch(
+        dispatch,
+        FETCH_DECKS_GUIDE.SUCCESS,
+        FETCH_DECKS_GUIDE.FAIL,
+        '/decks_guide',
+        'decks_guide'
+    );
+}
+
 export function fetchUser(
     dispatch: Dispatch<FETCH_USER.Action>,
     uid: string
@@ -71,6 +85,7 @@ export function fetchUser(
 
 export default function fetchAll(dispatch: Dispatch): void {
     fetchDecks(dispatch);
+    fetchDecksGuide(dispatch);
     fetchDices(dispatch);
     fetchWiki(dispatch);
 }

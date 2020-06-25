@@ -3,6 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import fetchDecksReducer from './Fetch Firebase/Decks/reducer';
 import fetchDicesReducer from './Fetch Firebase/Dices/reducer';
 import fetchWikiReducer from './Fetch Firebase/Wiki/reducer';
+import fetchDecksGuideReducer from './Fetch Firebase/Decks Guide/reducer';
 import fetchUserDataReducer from './Fetch Firebase/User/reducer';
 import authReducer from './Firebase Auth/reducer';
 import filterReducer from './Deck Filter/reducer';
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     fetchDicesReducer,
     fetchWikiReducer,
     fetchUserDataReducer,
+    fetchDecksGuideReducer,
     filterReducer,
     authReducer,
     fetchGAPIresponseFormReducer,

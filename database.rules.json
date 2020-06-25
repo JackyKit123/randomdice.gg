@@ -5,6 +5,10 @@
             ".read": true,
             ".write": "auth.token.isEditor === true"
         },
+        "decks_guide": {
+            ".read": true,
+            ".write": "auth.token.isEditor === true"
+        },
         "dice": {
             ".read": true,
             ".write": "auth.token.isEditor === true"
