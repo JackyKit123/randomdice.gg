@@ -133,6 +133,12 @@ export default function updateDeck(): JSX.Element {
             if (a.rating < b.rating) {
                 return 1;
             }
+            if (a.rating === b.rating) {
+                if (a.id > b.id) {
+                    return 1;
+                }
+                return -1;
+            }
             return 0;
         });
         database.ref('/decks').set([...deckList]);
@@ -166,6 +172,7 @@ export default function updateDeck(): JSX.Element {
         if (invalidRatingToAdd) {
             return;
         }
+        decks.sort((a, b) => (a.id > b.id ? 1 : -1));
         const newId = decks.findIndex((deck, i) => deck.id - 1 !== i);
         if (newId === -1) {
             clone.id = decks.length + 1;
@@ -613,6 +620,7 @@ export default function updateDeck(): JSX.Element {
                                                 </td>
                                                 <td>
                                                     <select
+                                                        defaultValue={deck.type}
                                                         onChange={(
                                                             evt
                                                         ): void => {
