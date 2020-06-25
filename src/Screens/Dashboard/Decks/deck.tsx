@@ -9,6 +9,7 @@ import {
     faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from '../../../Components/Dashboard/dashboard';
+import LoadingScreen from '../../../Components/Loading/loading';
 import Dice from '../../../Components/Dice/dice';
 import {
     Deck,
@@ -146,6 +147,7 @@ export default function updateDeck(): JSX.Element {
     };
 
     const updateDecks = (): void => {
+        activeEdit.updated = currentGameVersion;
         const updated = decks.map(deck =>
             deck.id === activeEdit.id ? activeEdit : deck
         );
@@ -182,6 +184,14 @@ export default function updateDeck(): JSX.Element {
         sortDecksAndUpdate([...decks, clone]);
         setOverlayOpen(false);
     };
+
+    if (!decks.length || !diceList) {
+        return (
+            <Dashboard>
+                <LoadingScreen />
+            </Dashboard>
+        );
+    }
 
     return (
         <Dashboard className='deck'>
@@ -520,411 +530,358 @@ export default function updateDeck(): JSX.Element {
                     </div>
                 </div>
             ) : null}
-            {decks.length && diceList ? (
-                <>
-                    <p>
-                        To begin updating the deck data, first enter the current
-                        game version in a format of #.#.#
-                    </p>
-                    <p>
-                        To Edit the decks, press the edit button, once you are
-                        done editing, press the button again to save the data to
-                        the database.
-                    </p>
-                    <label htmlFor='game-version'>
-                        Current Game Version :{' '}
-                        <input
-                            className={
-                                missingVersion || invalidVersion
-                                    ? 'invalid'
-                                    : ''
-                            }
-                            type='textbox'
-                            placeholder='1.0.0'
-                            onChange={(evt): void =>
-                                setCurrentGameVersion(evt.target.value)
-                            }
-                        />
-                    </label>
-                    <label htmlFor='add-deck'>
-                        Add a Deck :{' '}
-                        <button
-                            type='button'
-                            onClick={(): void => setOverlayOpen('add-deck')}
-                        >
-                            <FontAwesomeIcon icon={faPlusCircle} />
-                        </button>
-                    </label>
-                    {invalidVersion ? (
-                        <span className='invalid-warning'>
-                            Current game version input is invalid.
-                        </span>
-                    ) : null}
-                    {invalidRating ? (
-                        <span className='invalid-warning'>
-                            Invalid Rating Input.
-                        </span>
-                    ) : null}
-                    {missingVersion ? (
-                        <span className='invalid-warning'>
-                            You need to input the current game version.
-                        </span>
-                    ) : null}
-                    <div className='table-container'>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>rating</th>
-                                    <th>type</th>
-                                    <th>slot1</th>
-                                    <th>slot2</th>
-                                    <th>slot3</th>
-                                    <th>slot4</th>
-                                    <th>slot5</th>
-                                    <th>Toggle Edit</th>
-                                    <th>Remove Deck</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {decks.map(deck => (
-                                    <tr key={deck.id}>
-                                        <td>{deck.id}</td>
-                                        {activeEdit.id === deck.id ? (
-                                            <>
-                                                <td>
-                                                    <input
-                                                        type='textbox'
-                                                        defaultValue={
-                                                            deck.rating
-                                                        }
-                                                        className={
-                                                            invalidRating
-                                                                ? 'invalid'
-                                                                : ''
-                                                        }
-                                                        onChange={(
-                                                            evt
-                                                        ): void => {
-                                                            const clone = {
-                                                                ...activeEdit,
-                                                            };
-                                                            clone.rating = Number(
-                                                                evt.target.value
-                                                            );
-                                                            setActiveEdit(
-                                                                clone
-                                                            );
-                                                        }}
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <select
-                                                        defaultValue={deck.type}
-                                                        onChange={(
-                                                            evt
-                                                        ): void => {
-                                                            const clone = {
-                                                                ...activeEdit,
-                                                            };
-                                                            clone.type = evt
-                                                                .target
-                                                                .value as
-                                                                | 'PvP'
-                                                                | 'PvE';
-                                                            setActiveEdit(
-                                                                clone
-                                                            );
-                                                        }}
-                                                    >
-                                                        <option>PvP</option>
-                                                        <option>PvE</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <select
-                                                        defaultValue={
-                                                            deck.slot1
-                                                        }
-                                                        onChange={(
-                                                            evt
-                                                        ): void => {
-                                                            const clone = {
-                                                                ...activeEdit,
-                                                            };
-                                                            clone.slot1 =
-                                                                evt.target.value;
-                                                            setActiveEdit(
-                                                                clone
-                                                            );
-                                                        }}
-                                                    >
-                                                        {diceList
-                                                            .filter(
-                                                                dice =>
-                                                                    !(
-                                                                        dice ===
-                                                                            activeEdit.slot2 ||
-                                                                        dice ===
-                                                                            activeEdit.slot3 ||
-                                                                        dice ===
-                                                                            activeEdit.slot4 ||
-                                                                        dice ===
-                                                                            activeEdit.slot5
-                                                                    )
-                                                            )
-                                                            .map(name => (
-                                                                <option
-                                                                    key={`slot1${name}`}
-                                                                >
-                                                                    {name}
-                                                                </option>
-                                                            ))}
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <select
-                                                        defaultValue={
-                                                            deck.slot2
-                                                        }
-                                                        onChange={(
-                                                            evt
-                                                        ): void => {
-                                                            const clone = {
-                                                                ...activeEdit,
-                                                            };
-                                                            clone.slot2 =
-                                                                evt.target.value;
-                                                            setActiveEdit(
-                                                                clone
-                                                            );
-                                                        }}
-                                                    >
-                                                        {diceList
-                                                            .filter(
-                                                                dice =>
-                                                                    !(
-                                                                        dice ===
-                                                                            activeEdit.slot1 ||
-                                                                        dice ===
-                                                                            activeEdit.slot3 ||
-                                                                        dice ===
-                                                                            activeEdit.slot4 ||
-                                                                        dice ===
-                                                                            activeEdit.slot5
-                                                                    )
-                                                            )
-                                                            .map(name => (
-                                                                <option
-                                                                    key={`slot2${name}`}
-                                                                >
-                                                                    {name}
-                                                                </option>
-                                                            ))}
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <select
-                                                        defaultValue={
-                                                            deck.slot3
-                                                        }
-                                                        onChange={(
-                                                            evt
-                                                        ): void => {
-                                                            const clone = {
-                                                                ...activeEdit,
-                                                            };
-                                                            clone.slot3 =
-                                                                evt.target.value;
-                                                            setActiveEdit(
-                                                                clone
-                                                            );
-                                                        }}
-                                                    >
-                                                        {diceList
-                                                            .filter(
-                                                                dice =>
-                                                                    !(
-                                                                        dice ===
-                                                                            activeEdit.slot1 ||
-                                                                        dice ===
-                                                                            activeEdit.slot2 ||
-                                                                        dice ===
-                                                                            activeEdit.slot4 ||
-                                                                        dice ===
-                                                                            activeEdit.slot5
-                                                                    )
-                                                            )
-                                                            .map(name => (
-                                                                <option
-                                                                    key={`slot3${name}`}
-                                                                >
-                                                                    {name}
-                                                                </option>
-                                                            ))}
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <select
-                                                        defaultValue={
-                                                            deck.slot4
-                                                        }
-                                                        onChange={(
-                                                            evt
-                                                        ): void => {
-                                                            const clone = {
-                                                                ...activeEdit,
-                                                            };
-                                                            clone.slot4 =
-                                                                evt.target.value;
-                                                            setActiveEdit(
-                                                                clone
-                                                            );
-                                                        }}
-                                                    >
-                                                        {diceList
-                                                            .filter(
-                                                                dice =>
-                                                                    !(
-                                                                        dice ===
-                                                                            activeEdit.slot1 ||
-                                                                        dice ===
-                                                                            activeEdit.slot2 ||
-                                                                        dice ===
-                                                                            activeEdit.slot3 ||
-                                                                        dice ===
-                                                                            activeEdit.slot5
-                                                                    )
-                                                            )
-                                                            .map(name => (
-                                                                <option
-                                                                    key={`slot4${name}`}
-                                                                >
-                                                                    {name}
-                                                                </option>
-                                                            ))}
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <select
-                                                        defaultValue={
-                                                            deck.slot5
-                                                        }
-                                                        onChange={(
-                                                            evt
-                                                        ): void => {
-                                                            const clone = {
-                                                                ...activeEdit,
-                                                            };
-                                                            clone.slot5 =
-                                                                evt.target.value;
-                                                            setActiveEdit(
-                                                                clone
-                                                            );
-                                                        }}
-                                                    >
-                                                        {diceList
-                                                            .filter(
-                                                                dice =>
-                                                                    !(
-                                                                        dice ===
-                                                                            activeEdit.slot1 ||
-                                                                        dice ===
-                                                                            activeEdit.slot2 ||
-                                                                        dice ===
-                                                                            activeEdit.slot3 ||
-                                                                        dice ===
-                                                                            activeEdit.slot4
-                                                                    )
-                                                            )
-                                                            .map(name => (
-                                                                <option
-                                                                    key={`slot5${name}`}
-                                                                >
-                                                                    {name}
-                                                                </option>
-                                                            ))}
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        type='button'
-                                                        onClick={(): void => {
-                                                            if (
-                                                                activeEdit.rating !==
-                                                                    deck.rating ||
-                                                                activeEdit.type !==
-                                                                    deck.type ||
-                                                                activeEdit.slot1 !==
-                                                                    deck.slot1 ||
-                                                                activeEdit.slot2 !==
-                                                                    deck.slot2 ||
-                                                                activeEdit.slot3 !==
-                                                                    deck.slot3 ||
-                                                                activeEdit.slot4 !==
-                                                                    deck.slot4 ||
-                                                                activeEdit.slot5 !==
-                                                                    deck.slot5
-                                                            ) {
-                                                                if (
-                                                                    invalidVersion ||
-                                                                    invalidRating ||
-                                                                    missingVersion
-                                                                ) {
-                                                                    setOverlayOpen(
-                                                                        'error'
-                                                                    );
-                                                                } else {
-                                                                    updateDecks();
-                                                                }
-                                                            } else {
-                                                                setActiveEdit({
-                                                                    ...initialEditState,
-                                                                });
-                                                            }
-                                                        }}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={faCheck}
-                                                        />
-                                                    </button>
-                                                </td>
-                                            </>
-                                        ) : (
-                                            <MemoRow
-                                                deck={deck}
-                                                setActiveEdit={setActiveEdit}
+            <p>
+                To begin updating the deck data, first enter the current game
+                version in a format of #.#.#
+            </p>
+            <p>
+                To Edit the decks, press the edit button, once you are done
+                editing, press the button again to save the data to the
+                database.
+            </p>
+            <label htmlFor='game-version'>
+                Current Game Version :{' '}
+                <input
+                    className={
+                        missingVersion || invalidVersion ? 'invalid' : ''
+                    }
+                    type='textbox'
+                    placeholder='1.0.0'
+                    onChange={(evt): void =>
+                        setCurrentGameVersion(evt.target.value)
+                    }
+                />
+            </label>
+            <label htmlFor='add-deck'>
+                Add a Deck :{' '}
+                <button
+                    type='button'
+                    onClick={(): void => setOverlayOpen('add-deck')}
+                >
+                    <FontAwesomeIcon icon={faPlusCircle} />
+                </button>
+            </label>
+            {invalidVersion ? (
+                <span className='invalid-warning'>
+                    Current game version input is invalid.
+                </span>
+            ) : null}
+            {invalidRating ? (
+                <span className='invalid-warning'>Invalid Rating Input.</span>
+            ) : null}
+            {missingVersion ? (
+                <span className='invalid-warning'>
+                    You need to input the current game version.
+                </span>
+            ) : null}
+            <div className='table-container'>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>rating</th>
+                            <th>type</th>
+                            <th>slot1</th>
+                            <th>slot2</th>
+                            <th>slot3</th>
+                            <th>slot4</th>
+                            <th>slot5</th>
+                            <th>Toggle Edit</th>
+                            <th>Remove Deck</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {decks.map(deck => (
+                            <tr key={deck.id}>
+                                <td>{deck.id}</td>
+                                {activeEdit.id === deck.id ? (
+                                    <>
+                                        <td>
+                                            <input
+                                                type='textbox'
+                                                defaultValue={deck.rating}
+                                                className={
+                                                    invalidRating
+                                                        ? 'invalid'
+                                                        : ''
+                                                }
+                                                onChange={(evt): void => {
+                                                    const clone = {
+                                                        ...activeEdit,
+                                                    };
+                                                    clone.rating = Number(
+                                                        evt.target.value
+                                                    );
+                                                    setActiveEdit(clone);
+                                                }}
                                             />
-                                        )}
+                                        </td>
+                                        <td>
+                                            <select
+                                                defaultValue={deck.type}
+                                                onChange={(evt): void => {
+                                                    const clone = {
+                                                        ...activeEdit,
+                                                    };
+                                                    clone.type = evt.target
+                                                        .value as 'PvP' | 'PvE';
+                                                    setActiveEdit(clone);
+                                                }}
+                                            >
+                                                <option>PvP</option>
+                                                <option>PvE</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select
+                                                defaultValue={deck.slot1}
+                                                onChange={(evt): void => {
+                                                    const clone = {
+                                                        ...activeEdit,
+                                                    };
+                                                    clone.slot1 =
+                                                        evt.target.value;
+                                                    setActiveEdit(clone);
+                                                }}
+                                            >
+                                                {diceList
+                                                    .filter(
+                                                        dice =>
+                                                            !(
+                                                                dice ===
+                                                                    activeEdit.slot2 ||
+                                                                dice ===
+                                                                    activeEdit.slot3 ||
+                                                                dice ===
+                                                                    activeEdit.slot4 ||
+                                                                dice ===
+                                                                    activeEdit.slot5
+                                                            )
+                                                    )
+                                                    .map(name => (
+                                                        <option
+                                                            key={`slot1${name}`}
+                                                        >
+                                                            {name}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select
+                                                defaultValue={deck.slot2}
+                                                onChange={(evt): void => {
+                                                    const clone = {
+                                                        ...activeEdit,
+                                                    };
+                                                    clone.slot2 =
+                                                        evt.target.value;
+                                                    setActiveEdit(clone);
+                                                }}
+                                            >
+                                                {diceList
+                                                    .filter(
+                                                        dice =>
+                                                            !(
+                                                                dice ===
+                                                                    activeEdit.slot1 ||
+                                                                dice ===
+                                                                    activeEdit.slot3 ||
+                                                                dice ===
+                                                                    activeEdit.slot4 ||
+                                                                dice ===
+                                                                    activeEdit.slot5
+                                                            )
+                                                    )
+                                                    .map(name => (
+                                                        <option
+                                                            key={`slot2${name}`}
+                                                        >
+                                                            {name}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select
+                                                defaultValue={deck.slot3}
+                                                onChange={(evt): void => {
+                                                    const clone = {
+                                                        ...activeEdit,
+                                                    };
+                                                    clone.slot3 =
+                                                        evt.target.value;
+                                                    setActiveEdit(clone);
+                                                }}
+                                            >
+                                                {diceList
+                                                    .filter(
+                                                        dice =>
+                                                            !(
+                                                                dice ===
+                                                                    activeEdit.slot1 ||
+                                                                dice ===
+                                                                    activeEdit.slot2 ||
+                                                                dice ===
+                                                                    activeEdit.slot4 ||
+                                                                dice ===
+                                                                    activeEdit.slot5
+                                                            )
+                                                    )
+                                                    .map(name => (
+                                                        <option
+                                                            key={`slot3${name}`}
+                                                        >
+                                                            {name}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select
+                                                defaultValue={deck.slot4}
+                                                onChange={(evt): void => {
+                                                    const clone = {
+                                                        ...activeEdit,
+                                                    };
+                                                    clone.slot4 =
+                                                        evt.target.value;
+                                                    setActiveEdit(clone);
+                                                }}
+                                            >
+                                                {diceList
+                                                    .filter(
+                                                        dice =>
+                                                            !(
+                                                                dice ===
+                                                                    activeEdit.slot1 ||
+                                                                dice ===
+                                                                    activeEdit.slot2 ||
+                                                                dice ===
+                                                                    activeEdit.slot3 ||
+                                                                dice ===
+                                                                    activeEdit.slot5
+                                                            )
+                                                    )
+                                                    .map(name => (
+                                                        <option
+                                                            key={`slot4${name}`}
+                                                        >
+                                                            {name}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select
+                                                defaultValue={deck.slot5}
+                                                onChange={(evt): void => {
+                                                    const clone = {
+                                                        ...activeEdit,
+                                                    };
+                                                    clone.slot5 =
+                                                        evt.target.value;
+                                                    setActiveEdit(clone);
+                                                }}
+                                            >
+                                                {diceList
+                                                    .filter(
+                                                        dice =>
+                                                            !(
+                                                                dice ===
+                                                                    activeEdit.slot1 ||
+                                                                dice ===
+                                                                    activeEdit.slot2 ||
+                                                                dice ===
+                                                                    activeEdit.slot3 ||
+                                                                dice ===
+                                                                    activeEdit.slot4
+                                                            )
+                                                    )
+                                                    .map(name => (
+                                                        <option
+                                                            key={`slot5${name}`}
+                                                        >
+                                                            {name}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                        </td>
                                         <td>
                                             <button
                                                 type='button'
                                                 onClick={(): void => {
-                                                    setDeckToDelete({
-                                                        id: deck.id,
-                                                        dice: [
-                                                            deck.slot1,
-                                                            deck.slot2,
-                                                            deck.slot3,
-                                                            deck.slot4,
-                                                            deck.slot5,
-                                                        ],
-                                                    });
-                                                    setOverlayOpen('delete');
+                                                    if (
+                                                        activeEdit.rating !==
+                                                            deck.rating ||
+                                                        activeEdit.type !==
+                                                            deck.type ||
+                                                        activeEdit.slot1 !==
+                                                            deck.slot1 ||
+                                                        activeEdit.slot2 !==
+                                                            deck.slot2 ||
+                                                        activeEdit.slot3 !==
+                                                            deck.slot3 ||
+                                                        activeEdit.slot4 !==
+                                                            deck.slot4 ||
+                                                        activeEdit.slot5 !==
+                                                            deck.slot5
+                                                    ) {
+                                                        if (
+                                                            invalidVersion ||
+                                                            invalidRating ||
+                                                            missingVersion
+                                                        ) {
+                                                            setOverlayOpen(
+                                                                'error'
+                                                            );
+                                                        } else {
+                                                            updateDecks();
+                                                        }
+                                                    } else {
+                                                        setActiveEdit({
+                                                            ...initialEditState,
+                                                        });
+                                                    }
                                                 }}
                                             >
                                                 <FontAwesomeIcon
-                                                    icon={faTrashAlt}
+                                                    icon={faCheck}
                                                 />
                                             </button>
                                         </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </>
-            ) : null}
+                                    </>
+                                ) : (
+                                    <MemoRow
+                                        deck={deck}
+                                        setActiveEdit={setActiveEdit}
+                                    />
+                                )}
+                                <td>
+                                    <button
+                                        type='button'
+                                        onClick={(): void => {
+                                            setDeckToDelete({
+                                                id: deck.id,
+                                                dice: [
+                                                    deck.slot1,
+                                                    deck.slot2,
+                                                    deck.slot3,
+                                                    deck.slot4,
+                                                    deck.slot5,
+                                                ],
+                                            });
+                                            setOverlayOpen('delete');
+                                        }}
+                                    >
+                                        <FontAwesomeIcon icon={faTrashAlt} />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </Dashboard>
     );
 }
