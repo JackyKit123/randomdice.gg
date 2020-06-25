@@ -47,27 +47,10 @@ export default function Homepage(): JSX.Element {
             <br />
             <h3 className='news'>What&apos;s New?</h3>
             <p>
-                A login system is now implemented, you may not need to login to
-                use this website, there is no hidden content. For now it is for
-                content writers and{' '}
-                <Link to='/about/patreon'>patreon supporters</Link> to enjoying
-                ad free browsing. Later we may implement system to find co-op
-                games.
-            </p>
-            <p>
-                Update for v4.1.0 is live with the game. Updated{' '}
-                <Link to='/calculator/solar'>Solar Calculator</Link>,{' '}
-                <Link to='/calculator/combo'>Combo Calculator</Link>,{' '}
-                <Link to='/calculator/dps'>DPS Calculator</Link> in accordance
-                to moon dice buff.{' '}
-                <Link to='/calculator/stat'>Stat Calculator</Link> is also live.
-            </p>
-            <p>
-                Login system is updated, you may now skip verifying email if
-                your Discord or Patreon is account is verified by them, once
-                again, as of now you do not need to login to use this website.
-                This is mainly for Patreon Ad-Free browsing and editors editing
-                only.
+                As most players should be aware of the power of moon dice in
+                v4.1.0, we are starting to update some decks in the{' '}
+                <Link to='/decks/pvp'>Deck List</Link>. More decks listing will
+                be available this week.
             </p>
             <br />
             <br />
