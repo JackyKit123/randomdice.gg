@@ -52,6 +52,13 @@ export default function Homepage(): JSX.Element {
                 <Link to='/decks/pvp'>Deck List</Link>. More decks listing will
                 be available this week.
             </p>
+            <p>
+                Moon buff is allowing the Solar to have synergy from it, Solar
+                can exceed maximum attack speed cap with Moon dice. We have
+                updated the{' '}
+                <Link to='/calculator/solar'>Solar DPS Calculator</Link> to show
+                the latest calculation.
+            </p>
             <br />
             <br />
             <br />
