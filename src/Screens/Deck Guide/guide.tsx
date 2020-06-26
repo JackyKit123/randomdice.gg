@@ -27,7 +27,7 @@ export default function DeckGuideMenu(): JSX.Element | null {
 
     let jsx;
     if (guide) {
-        const thisGuide = guide[name];
+        const thisGuide = guide.find(g => g.name === name);
         if (!thisGuide) {
             history.push('/decks/guide');
         }

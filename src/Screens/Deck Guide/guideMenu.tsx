@@ -19,16 +19,6 @@ export default function DeckGuideMenu(): JSX.Element {
 
     let jsx;
     if (guide) {
-        const decks = Object.entries(guide).map(([key, value]) => ({
-            name: key,
-            diceList: value.diceList,
-            guide: value.guide,
-        })) as {
-            name: string;
-            diceList: string[][];
-            guide: string;
-        }[];
-
         jsx = (
             <>
                 <p>
@@ -38,7 +28,7 @@ export default function DeckGuideMenu(): JSX.Element {
                 <div className='divisor' />
                 <table className='filter'>
                     <tbody>
-                        {decks.map(deck => (
+                        {guide.map(deck => (
                             <tr
                                 key={deck.name}
                                 tabIndex={0}
