@@ -87,11 +87,6 @@ export default function DeckList({
             dices.find(alt => alt.name === findAlt[3]),
             dices.find(alt => alt.name === findAlt[4]),
         ];
-        if (findAlt) {
-            document.body.classList.add('popup-opened');
-        } else {
-            document.body.classList.remove('popup-opened');
-        }
 
         const deckKeys = [
             'id',
