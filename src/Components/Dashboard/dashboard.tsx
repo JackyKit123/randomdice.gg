@@ -20,10 +20,12 @@ export default function Dashboard(props: {
     );
 
     useEffect(() => {
-        if (user && data?.editor) {
-            setAuthorized(true);
-        } else {
-            setAuthorized(false);
+        if (user && data) {
+            if (data.editor) {
+                setAuthorized(true);
+            } else {
+                setAuthorized(false);
+            }
         }
     });
 
@@ -40,7 +42,10 @@ export default function Dashboard(props: {
             <main>
                 <div className={`dashboard ${className}`}>
                     <div className='content'>
-                        <Link to='/dashboard/deck'>Update Decks</Link>
+                        <Link to='/dashboard/deck'>Update Deck List</Link>
+                        <Link to='/dashboard/guide'>
+                            Update Written Decks Guide
+                        </Link>
                         <div className='divisor' />
                         {children}
                     </div>
