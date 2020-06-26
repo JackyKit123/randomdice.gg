@@ -7,6 +7,7 @@ import fetchDecksGuideReducer from './Fetch Firebase/Decks Guide/reducer';
 import fetchUserDataReducer from './Fetch Firebase/User/reducer';
 import authReducer from './Firebase Auth/reducer';
 import filterReducer from './Deck Filter/reducer';
+import popupReducer from './PopUp Overlay/reducer';
 import fetchGAPIresponseFormReducer from './Google API Fetch Response Form/reducers';
 
 const rootReducer = combineReducers({
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
     fetchDecksGuideReducer,
     filterReducer,
     authReducer,
+    popupReducer,
     fetchGAPIresponseFormReducer,
 });
 export type RootState = ReturnType<typeof rootReducer>;

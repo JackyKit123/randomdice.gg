@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, FormEvent } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect, FormEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import firebase from 'firebase/app';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,6 +17,11 @@ import {
 } from '../../../Misc/Redux Storage/Fetch Firebase/Decks/types';
 import { RootState } from '../../../Misc/Redux Storage/store';
 import './deck.less';
+import PopUp from '../../../Components/PopUp Overlay/popup';
+import {
+    CLOSE_POPUP,
+    OPEN_POPUP,
+} from '../../../Misc/Redux Storage/PopUp Overlay/types';
 
 function DeckRow({
     deck,
@@ -56,12 +61,12 @@ function DeckRow({
 const MemoRow = React.memo(DeckRow);
 
 export default function updateDeck(): JSX.Element {
+    const dispatch = useDispatch();
     const database = firebase.database();
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
     const [decks, setDecks] = useState<Decks>([]);
-    const [overlayOpen, setOverlayOpen] = useState<string | false>(false);
     const [currentGameVersion, setCurrentGameVersion] = useState('');
     const initialNewDeckState = {
         id: -1,
@@ -80,7 +85,7 @@ export default function updateDeck(): JSX.Element {
         id: -1,
         dice: [] as string[],
     });
-    const overlayRef = useRef(null as null | HTMLDivElement);
+
     const initialEditState = {
         id: -1,
         rating: 0,
@@ -115,16 +120,6 @@ export default function updateDeck(): JSX.Element {
         const ref = database.ref('/decks');
         ref.once('value').then(snapshot => setDecks(snapshot.val()));
     }, []);
-
-    useEffect(() => {
-        if (overlayOpen) {
-            document.body.classList.add('popup-opened');
-            // eslint-disable-next-line no-unused-expressions
-            overlayRef.current?.focus();
-        } else {
-            document.body.classList.remove('popup-opened');
-        }
-    }, [overlayOpen]);
 
     const sortDecksAndUpdate = (deckList: Decks): void => {
         deckList.sort((a, b) => {
@@ -182,7 +177,7 @@ export default function updateDeck(): JSX.Element {
             clone.id = newId + 1;
         }
         sortDecksAndUpdate([...decks, clone]);
-        setOverlayOpen(false);
+        dispatch({ type: CLOSE_POPUP });
     };
 
     if (!decks.length || !diceList) {
@@ -195,341 +190,224 @@ export default function updateDeck(): JSX.Element {
 
     return (
         <Dashboard className='deck'>
-            {overlayOpen === 'error' ? (
-                <div
-                    className='popup-overlay active'
-                    role='button'
-                    tabIndex={0}
-                    onClick={(evt): void => {
-                        const target = evt.target as HTMLDivElement;
-                        if (target.classList.contains('popup-overlay')) {
-                            setOverlayOpen(false);
-                        }
-                    }}
-                    onKeyUp={(evt): void => {
-                        if (evt.key === 'Escape') {
-                            setOverlayOpen(false);
-                        }
-                    }}
-                >
-                    <div className='popup'>
-                        <div
-                            className='container'
-                            ref={overlayRef}
-                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                            tabIndex={0}
-                        >
-                            <h3>Error</h3>
-                            <p>
-                                You need to fix the following errors before you
-                                can save your updated deck onto the database.
-                            </p>
-                            {invalidVersion ? (
-                                <span className='invalid-warning'>
-                                    Current game version input is invalid.
-                                </span>
-                            ) : null}
-                            {invalidRating ? (
-                                <span className='invalid-warning'>
-                                    Invalid Rating Input.
-                                </span>
-                            ) : null}
-                            {missingVersion ? (
-                                <span className='invalid-warning'>
-                                    You need to input the current game version.
-                                </span>
-                            ) : null}
-                            <button
-                                type='button'
-                                className='close'
-                                onClick={(): void => setOverlayOpen(false)}
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            ) : null}
-            {overlayOpen === 'delete' ? (
-                <div
-                    className='popup-overlay delete active'
-                    role='button'
-                    tabIndex={0}
-                    onClick={(evt): void => {
-                        const target = evt.target as HTMLDivElement;
-                        if (target.classList.contains('popup-overlay')) {
-                            setOverlayOpen(false);
-                        }
-                    }}
-                    onKeyUp={(evt): void => {
-                        if (evt.key === 'Escape') {
-                            setOverlayOpen(false);
-                        }
+            <PopUp popUpTarget='error'>
+                <h3>Error</h3>
+                <p>
+                    You need to fix the following errors before you can save
+                    your updated deck onto the database.
+                </p>
+                {invalidVersion ? (
+                    <span className='invalid-warning'>
+                        Current game version input is invalid.
+                    </span>
+                ) : null}
+                {invalidRating ? (
+                    <span className='invalid-warning'>
+                        Invalid Rating Input.
+                    </span>
+                ) : null}
+                {missingVersion ? (
+                    <span className='invalid-warning'>
+                        You need to input the current game version.
+                    </span>
+                ) : null}
+            </PopUp>
+            <PopUp popUpTarget='delete' className='delete'>
+                <h3>Please confirm</h3>
+                <p>Are you sure you want to delete this deck?</p>
+                {deckToDelete.dice.map(dice => (
+                    <Dice key={dice} dice={dice} />
+                ))}
+                <button
+                    type='button'
+                    className='confirm'
+                    onClick={(): void => {
+                        deleteDeck();
+                        dispatch({ type: CLOSE_POPUP });
                     }}
                 >
-                    <div className='popup'>
-                        <div
-                            className='container'
-                            ref={overlayRef}
-                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                            tabIndex={0}
-                        >
-                            <h3>Please confirm</h3>
-                            <p>Are you sure you want to delete this deck?</p>
-                            {deckToDelete.dice.map(dice => (
-                                <Dice key={dice} dice={dice} />
+                    Yes
+                </button>
+            </PopUp>
+            <PopUp popUpTarget='add-deck'>
+                <h3>Add A Deck</h3>
+                <form onSubmit={addDeck}>
+                    <label htmlFor='game-version'>
+                        Current Game Version :{' '}
+                        <input
+                            className={invalidVersionToAdd ? 'invalid' : ''}
+                            type='textbox'
+                            placeholder='1.0.0'
+                            onChange={(evt): void => {
+                                const clone = {
+                                    ...deckToAdd,
+                                };
+                                clone.added = evt.target.value;
+                                setDeckToAdd(clone);
+                            }}
+                        />
+                    </label>
+                    <label htmlFor='rating'>
+                        Rating :{' '}
+                        <input
+                            defaultValue={0}
+                            type='textbox'
+                            className={invalidRatingToAdd ? 'invalid' : ''}
+                            onChange={(evt): void => {
+                                const clone = {
+                                    ...deckToAdd,
+                                };
+                                clone.rating = Number(evt.target.value);
+                                setDeckToAdd(clone);
+                            }}
+                        />
+                    </label>
+                    <select
+                        defaultValue='PvP'
+                        onChange={(evt): void => {
+                            const clone = {
+                                ...deckToAdd,
+                            };
+                            clone.type = evt.target.value as 'PvP' | 'PvE';
+                            setDeckToAdd(clone);
+                        }}
+                    >
+                        <option>PvP</option>
+                        <option>PvE</option>
+                    </select>
+                    <select
+                        defaultValue='Fire'
+                        onChange={(evt): void => {
+                            const clone = {
+                                ...deckToAdd,
+                            };
+                            clone.slot1 = evt.target.value;
+                            setDeckToAdd(clone);
+                        }}
+                    >
+                        {diceList
+                            ?.filter(
+                                dice =>
+                                    !(
+                                        dice === deckToAdd.slot2 ||
+                                        dice === deckToAdd.slot3 ||
+                                        dice === deckToAdd.slot4 ||
+                                        dice === deckToAdd.slot5
+                                    )
+                            )
+                            .map(name => (
+                                <option key={`slot1${name}`}>{name}</option>
                             ))}
-                            <button
-                                type='button'
-                                className='confirm'
-                                onClick={(): void => {
-                                    deleteDeck();
-                                    setOverlayOpen(false);
-                                }}
-                            >
-                                Yes
-                            </button>
-                            <button
-                                type='button'
-                                className='close'
-                                onClick={(): void => setOverlayOpen(false)}
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            ) : null}
-            {overlayOpen === 'add-deck' ? (
-                <div
-                    className='popup-overlay add-deck active'
-                    role='button'
-                    tabIndex={0}
-                    onClick={(evt): void => {
-                        const target = evt.target as HTMLDivElement;
-                        if (target.classList.contains('popup-overlay')) {
-                            setOverlayOpen(false);
-                        }
-                    }}
-                    onKeyUp={(evt): void => {
-                        if (evt.key === 'Escape') {
-                            setOverlayOpen(false);
-                        }
-                    }}
-                >
-                    <div className='popup'>
-                        <div
-                            className='container'
-                            ref={overlayRef}
-                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                            tabIndex={0}
-                        >
-                            <h3>Add A Deck</h3>
-                            <form onSubmit={addDeck}>
-                                <label htmlFor='game-version'>
-                                    Current Game Version :{' '}
-                                    <input
-                                        className={
-                                            invalidVersionToAdd ? 'invalid' : ''
-                                        }
-                                        type='textbox'
-                                        placeholder='1.0.0'
-                                        onChange={(evt): void => {
-                                            const clone = {
-                                                ...deckToAdd,
-                                            };
-                                            clone.added = evt.target.value;
-                                            setDeckToAdd(clone);
-                                        }}
-                                    />
-                                </label>
-                                <label htmlFor='rating'>
-                                    Rating :{' '}
-                                    <input
-                                        defaultValue={0}
-                                        type='textbox'
-                                        className={
-                                            invalidRatingToAdd ? 'invalid' : ''
-                                        }
-                                        onChange={(evt): void => {
-                                            const clone = {
-                                                ...deckToAdd,
-                                            };
-                                            clone.rating = Number(
-                                                evt.target.value
-                                            );
-                                            setDeckToAdd(clone);
-                                        }}
-                                    />
-                                </label>
-                                <select
-                                    defaultValue='PvP'
-                                    onChange={(evt): void => {
-                                        const clone = {
-                                            ...deckToAdd,
-                                        };
-                                        clone.type = evt.target.value as
-                                            | 'PvP'
-                                            | 'PvE';
-                                        setDeckToAdd(clone);
-                                    }}
-                                >
-                                    <option>PvP</option>
-                                    <option>PvE</option>
-                                </select>
-                                <select
-                                    defaultValue='Fire'
-                                    onChange={(evt): void => {
-                                        const clone = {
-                                            ...deckToAdd,
-                                        };
-                                        clone.slot1 = evt.target.value;
-                                        setDeckToAdd(clone);
-                                    }}
-                                >
-                                    {diceList
-                                        ?.filter(
-                                            dice =>
-                                                !(
-                                                    dice === deckToAdd.slot2 ||
-                                                    dice === deckToAdd.slot3 ||
-                                                    dice === deckToAdd.slot4 ||
-                                                    dice === deckToAdd.slot5
-                                                )
-                                        )
-                                        .map(name => (
-                                            <option key={`slot1${name}`}>
-                                                {name}
-                                            </option>
-                                        ))}
-                                </select>
-                                <select
-                                    defaultValue='Electric'
-                                    onChange={(evt): void => {
-                                        const clone = {
-                                            ...deckToAdd,
-                                        };
-                                        clone.slot2 = evt.target.value;
-                                        setDeckToAdd(clone);
-                                    }}
-                                >
-                                    {diceList
-                                        ?.filter(
-                                            dice =>
-                                                !(
-                                                    dice === deckToAdd.slot1 ||
-                                                    dice === deckToAdd.slot3 ||
-                                                    dice === deckToAdd.slot4 ||
-                                                    dice === deckToAdd.slot5
-                                                )
-                                        )
-                                        .map(name => (
-                                            <option key={`slot2${name}`}>
-                                                {name}
-                                            </option>
-                                        ))}
-                                </select>
-                                <select
-                                    defaultValue='Poison'
-                                    onChange={(evt): void => {
-                                        const clone = {
-                                            ...deckToAdd,
-                                        };
-                                        clone.slot3 = evt.target.value;
-                                        setDeckToAdd(clone);
-                                    }}
-                                >
-                                    {diceList
-                                        ?.filter(
-                                            dice =>
-                                                !(
-                                                    dice === deckToAdd.slot1 ||
-                                                    dice === deckToAdd.slot2 ||
-                                                    dice === deckToAdd.slot4 ||
-                                                    dice === deckToAdd.slot5
-                                                )
-                                        )
-                                        .map(name => (
-                                            <option key={`slot3${name}`}>
-                                                {name}
-                                            </option>
-                                        ))}
-                                </select>
-                                <select
-                                    defaultValue='Ice'
-                                    onChange={(evt): void => {
-                                        const clone = {
-                                            ...deckToAdd,
-                                        };
-                                        clone.slot4 = evt.target.value;
-                                        setDeckToAdd(clone);
-                                    }}
-                                >
-                                    {diceList
-                                        ?.filter(
-                                            dice =>
-                                                !(
-                                                    dice === deckToAdd.slot1 ||
-                                                    dice === deckToAdd.slot2 ||
-                                                    dice === deckToAdd.slot3 ||
-                                                    dice === deckToAdd.slot5
-                                                )
-                                        )
-                                        .map(name => (
-                                            <option key={`slot4${name}`}>
-                                                {name}
-                                            </option>
-                                        ))}
-                                </select>
-                                <select
-                                    defaultValue='Wind'
-                                    onChange={(evt): void => {
-                                        const clone = {
-                                            ...deckToAdd,
-                                        };
-                                        clone.slot5 = evt.target.value;
-                                        setDeckToAdd(clone);
-                                    }}
-                                >
-                                    {diceList
-                                        ?.filter(
-                                            dice =>
-                                                !(
-                                                    dice === deckToAdd.slot1 ||
-                                                    dice === deckToAdd.slot2 ||
-                                                    dice === deckToAdd.slot3 ||
-                                                    dice === deckToAdd.slot4
-                                                )
-                                        )
-                                        .map(name => (
-                                            <option key={`slot5${name}`}>
-                                                {name}
-                                            </option>
-                                        ))}
-                                </select>
-                                <input type='submit' />
-                                {invalidVersionToAdd ? (
-                                    <span className='invalid-warning'>
-                                        Current game version input is invalid.
-                                    </span>
-                                ) : null}
-                                {invalidRatingToAdd ? (
-                                    <span className='invalid-warning'>
-                                        Invalid Rating Input.
-                                    </span>
-                                ) : null}
-                            </form>
-                            <button
-                                type='button'
-                                className='close'
-                                onClick={(): void => setOverlayOpen(false)}
-                            >
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            ) : null}
+                    </select>
+                    <select
+                        defaultValue='Electric'
+                        onChange={(evt): void => {
+                            const clone = {
+                                ...deckToAdd,
+                            };
+                            clone.slot2 = evt.target.value;
+                            setDeckToAdd(clone);
+                        }}
+                    >
+                        {diceList
+                            ?.filter(
+                                dice =>
+                                    !(
+                                        dice === deckToAdd.slot1 ||
+                                        dice === deckToAdd.slot3 ||
+                                        dice === deckToAdd.slot4 ||
+                                        dice === deckToAdd.slot5
+                                    )
+                            )
+                            .map(name => (
+                                <option key={`slot2${name}`}>{name}</option>
+                            ))}
+                    </select>
+                    <select
+                        defaultValue='Poison'
+                        onChange={(evt): void => {
+                            const clone = {
+                                ...deckToAdd,
+                            };
+                            clone.slot3 = evt.target.value;
+                            setDeckToAdd(clone);
+                        }}
+                    >
+                        {diceList
+                            ?.filter(
+                                dice =>
+                                    !(
+                                        dice === deckToAdd.slot1 ||
+                                        dice === deckToAdd.slot2 ||
+                                        dice === deckToAdd.slot4 ||
+                                        dice === deckToAdd.slot5
+                                    )
+                            )
+                            .map(name => (
+                                <option key={`slot3${name}`}>{name}</option>
+                            ))}
+                    </select>
+                    <select
+                        defaultValue='Ice'
+                        onChange={(evt): void => {
+                            const clone = {
+                                ...deckToAdd,
+                            };
+                            clone.slot4 = evt.target.value;
+                            setDeckToAdd(clone);
+                        }}
+                    >
+                        {diceList
+                            ?.filter(
+                                dice =>
+                                    !(
+                                        dice === deckToAdd.slot1 ||
+                                        dice === deckToAdd.slot2 ||
+                                        dice === deckToAdd.slot3 ||
+                                        dice === deckToAdd.slot5
+                                    )
+                            )
+                            .map(name => (
+                                <option key={`slot4${name}`}>{name}</option>
+                            ))}
+                    </select>
+                    <select
+                        defaultValue='Wind'
+                        onChange={(evt): void => {
+                            const clone = {
+                                ...deckToAdd,
+                            };
+                            clone.slot5 = evt.target.value;
+                            setDeckToAdd(clone);
+                        }}
+                    >
+                        {diceList
+                            ?.filter(
+                                dice =>
+                                    !(
+                                        dice === deckToAdd.slot1 ||
+                                        dice === deckToAdd.slot2 ||
+                                        dice === deckToAdd.slot3 ||
+                                        dice === deckToAdd.slot4
+                                    )
+                            )
+                            .map(name => (
+                                <option key={`slot5${name}`}>{name}</option>
+                            ))}
+                    </select>
+                    <input type='submit' />
+                    {invalidVersionToAdd ? (
+                        <span className='invalid-warning'>
+                            Current game version input is invalid.
+                        </span>
+                    ) : null}
+                    {invalidRatingToAdd ? (
+                        <span className='invalid-warning'>
+                            Invalid Rating Input.
+                        </span>
+                    ) : null}
+                </form>
+            </PopUp>
             <p>
                 To begin updating the deck data, first enter the current game
                 version in a format of #.#.#
@@ -556,7 +434,12 @@ export default function updateDeck(): JSX.Element {
                 Add a Deck :{' '}
                 <button
                     type='button'
-                    onClick={(): void => setOverlayOpen('add-deck')}
+                    onClick={(): void => {
+                        dispatch({
+                            type: OPEN_POPUP,
+                            payload: 'add-deck',
+                        });
+                    }}
                 >
                     <FontAwesomeIcon icon={faPlusCircle} />
                 </button>
@@ -832,9 +715,11 @@ export default function updateDeck(): JSX.Element {
                                                             invalidRating ||
                                                             missingVersion
                                                         ) {
-                                                            setOverlayOpen(
-                                                                'error'
-                                                            );
+                                                            dispatch({
+                                                                type: OPEN_POPUP,
+                                                                payload:
+                                                                    'error',
+                                                            });
                                                         } else {
                                                             updateDecks();
                                                         }
@@ -871,7 +756,10 @@ export default function updateDeck(): JSX.Element {
                                                     deck.slot5,
                                                 ],
                                             });
-                                            setOverlayOpen('delete');
+                                            dispatch({
+                                                type: OPEN_POPUP,
+                                                payload: 'delete',
+                                            });
                                         }}
                                     >
                                         <FontAwesomeIcon icon={faTrashAlt} />

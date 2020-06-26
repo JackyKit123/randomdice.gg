@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
@@ -11,10 +11,12 @@ import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
 import AdUnit from '../../Components/Ad Unit/ad';
 import Dice from '../../Components/Dice/dice';
-import './decklist.less';
+import PopUp from '../../Components/PopUp Overlay/popup';
 import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
 import { fetchDecks, fetchDices } from '../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
+import './decklist.less';
+import { OPEN_POPUP } from '../../Misc/Redux Storage/PopUp Overlay/types';
 
 export default function DeckList({
     deckType,
@@ -23,7 +25,6 @@ export default function DeckList({
 }): JSX.Element {
     const history = useHistory();
     const dispatch = useDispatch();
-    const overlayRef = useRef(null as HTMLDivElement | null);
     const selection = useSelector((state: RootState) => state);
     const { error } =
         selection.fetchDecksReducer || selection.fetchDicesReducer;
@@ -35,17 +36,7 @@ export default function DeckList({
         dices
             ?.filter(dice => dice.rarity === 'Legendary')
             .map(dice => dice.name) || [];
-    const [findAlt, setFindAlt] = useState({
-        list: [] as string[],
-        open: false,
-    });
-
-    useEffect(() => {
-        if (findAlt.open) {
-            // eslint-disable-next-line no-unused-expressions
-            overlayRef.current?.focus();
-        }
-    }, [findAlt.open]);
+    const [findAlt, setFindAlt] = useState([] as string[]);
 
     useEffect(() => {
         if (legendaryList.length > 0 && filter.legendary.length === 0) {
@@ -90,13 +81,13 @@ export default function DeckList({
         );
 
         const options = [
-            dices.find(alt => alt.name === findAlt.list[0]),
-            dices.find(alt => alt.name === findAlt.list[1]),
-            dices.find(alt => alt.name === findAlt.list[2]),
-            dices.find(alt => alt.name === findAlt.list[3]),
-            dices.find(alt => alt.name === findAlt.list[4]),
+            dices.find(alt => alt.name === findAlt[0]),
+            dices.find(alt => alt.name === findAlt[1]),
+            dices.find(alt => alt.name === findAlt[2]),
+            dices.find(alt => alt.name === findAlt[3]),
+            dices.find(alt => alt.name === findAlt[4]),
         ];
-        if (findAlt.open) {
+        if (findAlt) {
             document.body.classList.add('popup-opened');
         } else {
             document.body.classList.remove('popup-opened');
@@ -186,86 +177,38 @@ export default function DeckList({
                     options for some legendary dice.
                 </p>
                 <div className='divisor' />
-                <div
-                    className={`popup-overlay ${findAlt.open ? 'active' : ''}`}
-                    role='button'
-                    tabIndex={0}
-                    onClick={(evt): void => {
-                        const target = evt.target as HTMLDivElement;
-                        if (target.classList.contains('popup-overlay')) {
-                            setFindAlt({
-                                list: [] as string[],
-                                open: false,
-                            });
-                        }
-                    }}
-                    onKeyUp={(evt): void => {
-                        if (evt.key === 'Escape') {
-                            setFindAlt({
-                                list: [] as string[],
-                                open: false,
-                            });
-                        }
-                    }}
-                >
-                    <div className='popup'>
-                        <div
-                            className='container'
-                            ref={overlayRef}
-                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                            tabIndex={0}
-                        >
-                            <h3>Alternatives List</h3>
-                            <div className='original'>
-                                <Dice dice={findAlt.list[0]} />
-                                <Dice dice={findAlt.list[1]} />
-                                <Dice dice={findAlt.list[2]} />
-                                <Dice dice={findAlt.list[3]} />
-                                <Dice dice={findAlt.list[4]} />
-                            </div>
-                            {options?.map((alt, i) => (
-                                <div
-                                    key={Number(new Date()) + Math.random() + i}
-                                >
-                                    <Dice dice={findAlt.list[i]} />
-                                    <h4>
-                                        {alt?.alternatives?.desc
-                                            ? alt?.alternatives?.desc
-                                            : 'You should not need to replace this.'}
-                                    </h4>
-                                    {alt?.alternatives?.desc ? (
-                                        <h5>Alternatives :</h5>
-                                    ) : null}
-                                    <div className='replacement'>
-                                        {options[
-                                            i
-                                        ]?.alternatives?.list.map(
-                                            (altDice: string) =>
-                                                altDice ? (
-                                                    <Dice
-                                                        dice={altDice}
-                                                        key={altDice}
-                                                    />
-                                                ) : null
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                            <button
-                                type='button'
-                                className='close'
-                                onClick={(): void =>
-                                    setFindAlt({
-                                        list: [] as string[],
-                                        open: false,
-                                    })
-                                }
-                            >
-                                Close
-                            </button>
-                        </div>
+                <PopUp popUpTarget='alt'>
+                    <h3>Alternatives List</h3>
+                    <div className='original'>
+                        <Dice dice={findAlt[0]} />
+                        <Dice dice={findAlt[1]} />
+                        <Dice dice={findAlt[2]} />
+                        <Dice dice={findAlt[3]} />
+                        <Dice dice={findAlt[4]} />
                     </div>
-                </div>
+                    {options?.map((alt, i) => (
+                        <div key={Number(new Date()) + Math.random() + i}>
+                            <Dice dice={findAlt[i]} />
+                            <h4>
+                                {alt?.alternatives?.desc
+                                    ? alt?.alternatives?.desc
+                                    : 'You should not need to replace this.'}
+                            </h4>
+                            {alt?.alternatives?.desc ? (
+                                <h5>Alternatives :</h5>
+                            ) : null}
+                            <div className='replacement'>
+                                {options[
+                                    i
+                                ]?.alternatives?.list.map((altDice: string) =>
+                                    altDice ? (
+                                        <Dice dice={altDice} key={altDice} />
+                                    ) : null
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </PopUp>
                 <form className='filter'>
                     <div className='top-label'>
                         <label htmlFor='pvePvp'>
@@ -385,10 +328,13 @@ export default function DeckList({
                                                     <button
                                                         type='button'
                                                         onClick={(): void => {
-                                                            setFindAlt({
-                                                                list: data as string[],
-                                                                open: true,
+                                                            dispatch({
+                                                                type: OPEN_POPUP,
+                                                                payload: 'alt',
                                                             });
+                                                            setFindAlt(
+                                                                data as string[]
+                                                            );
                                                         }}
                                                     >
                                                         <FontAwesomeIcon

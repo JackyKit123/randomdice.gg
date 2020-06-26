@@ -1,34 +1,32 @@
 @import '../../../cross_import_lesshat.less';
 
 .dashboard.deck {
-    .popup-overlay.active {
+    .popup-overlay > .popup > .container {
         &.delete {
-            & > .popup {
+            text-align: center;
+
+            img {
+                width: 20%;
+            }
+
+            button.close,
+            button.confirm {
+                display: inline-block;
                 text-align: center;
+                margin: 0 10px;
+                text-decoration: none;
+                cursor: pointer;
+                font-size: 20px;
+                background-color: #05292e;
+                padding: 10px;
+                border-radius: 5px;
+                color: #ffffff;
+                .transition(all 0.2s ease-in-out);
 
-                img {
-                    width: 20%;
-                }
-
-                button.close,
-                button.confirm {
-                    display: inline-block;
-                    text-align: center;
-                    margin: 0 10px;
-                    text-decoration: none;
-                    cursor: pointer;
-                    font-size: 20px;
-                    background-color: #05292e;
-                    padding: 10px;
-                    border-radius: 5px;
-                    color: #ffffff;
-                    .transition(all 0.2s ease-in-out);
-
-                    &:hover,
-                    &:focus {
-                        color: #05292e;
-                        background-color: #eeeeee;
-                    }
+                &:hover,
+                &:focus {
+                    color: #05292e;
+                    background-color: #eeeeee;
                 }
             }
         }
