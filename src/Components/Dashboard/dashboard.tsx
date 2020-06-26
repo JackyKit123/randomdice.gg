@@ -20,12 +20,10 @@ export default function Dashboard(props: {
     );
 
     useEffect(() => {
-        if (user && data) {
-            if (data.editor) {
-                setAuthorized(true);
-            } else {
-                setAuthorized(false);
-            }
+        const timeout = setTimeout(() => setAuthorized(false), 10000);
+        if (user && data?.editor) {
+            setAuthorized(true);
+            clearTimeout(timeout);
         }
     });
 
