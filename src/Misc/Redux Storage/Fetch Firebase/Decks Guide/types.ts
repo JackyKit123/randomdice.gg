@@ -10,14 +10,14 @@ export const FAIL = 'FETCH_DECKS_GUIDE_FAIL';
 
 export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
-interface DeckGuide {
+export interface DeckGuide {
     id: number;
     name: string;
     diceList: string[][];
     guide: string;
 }
 
-type DecksGuide = DeckGuide[];
+export type DecksGuide = DeckGuide[];
 
 export interface FetchState {
     guide: DecksGuide | undefined;

@@ -25,3 +25,13 @@ declare module 'react-image-webp/dist/utils' {
 declare module 'adblockdetect' {
     export const detected: () => boolean;
 }
+
+declare module '@ckeditor/ckeditor5-react' {
+    const CKEditor: any;
+    export default CKEditor;
+}
+
+declare module '@ckeditor/ckeditor5-build-classic' {
+    const ClassicEditor: ClassicEditor;
+    export default ClassicEditor;
+}

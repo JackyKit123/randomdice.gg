@@ -208,6 +208,13 @@ export const menu: Menu[] = [
                     import('../Screens/Dashboard/Decks/deck')
                 ),
             },
+            {
+                path: '/dashboard/guide',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Dashboard/Decks Guide/guide')
+                ),
+            },
         ],
     },
     {
