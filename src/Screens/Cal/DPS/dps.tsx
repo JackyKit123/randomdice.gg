@@ -256,8 +256,9 @@ export default function DpsCalculator(): JSX.Element {
                     atkSpd(data.melec)) *
                 critMultiplier;
             const dps = boss
-                ? basicDpsPerPip * filter.pip + lightingDPSPerPip
-                : (basicDpsPerPip + lightingDPSPerPip) * filter.pip;
+                ? (basicDpsPerPip + lightingDPSPerPip) * filter.pip
+                : (basicDpsPerPip + lightingDPSPerPip * filter.pip) *
+                  filter.pip;
             return invalidInput ? 0 : roundTo3Sf(dps);
         };
 
