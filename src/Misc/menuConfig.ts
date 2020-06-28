@@ -109,6 +109,13 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Wiki/Game Intro/pve')),
             },
             {
+                name: 'Crew Introduction',
+                path: '/wiki/crew',
+                component: lazy(() =>
+                    import('../Screens/Wiki/Game Intro/crew')
+                ),
+            },
+            {
                 name: 'Dice Mechanics',
                 path: '/wiki/dice_mechanics',
                 component: lazy(() => import('../Screens/Wiki/Dice/dice')),
@@ -223,6 +230,14 @@ export const menu: Menu[] = [
                 excludeFromMenu: true,
                 component: lazy(() =>
                     import('../Screens/Dashboard/Wiki/Dice Mechanics/dice')
+                ),
+            },
+            {
+                name: 'Update Game Introduction',
+                path: '/dashboard/intro',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Dashboard/Wiki/Intro/intro')
                 ),
             },
         ],
