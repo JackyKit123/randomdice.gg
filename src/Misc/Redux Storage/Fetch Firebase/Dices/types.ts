@@ -12,7 +12,7 @@ export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
 interface Alternatives {
     desc: string;
-    list: string[];
+    list: Array<Dice['name']>;
 }
 
 interface ArenaValue {
@@ -28,6 +28,7 @@ export interface Dice {
     name: string;
     type: string;
     desc: string;
+    detail: string;
     img: string;
     target: string;
     rarity: 'Common' | 'Rare' | 'Unique' | 'Legendary';

@@ -20,8 +20,15 @@ main > .dashboard {
         .calc(min-height, ~'100vh - 315px');
         width: 100%;
 
-        a {
-            margin: 0 10px;
+        & > .menu {
+            .display(flex);
+            .flex-direction(row);
+            .flex-wrap(wrap);
+            margin: 0 -10px;
+
+            & > a {
+                margin: 0 10px;
+            }
         }
     }
 }

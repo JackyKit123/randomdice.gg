@@ -202,6 +202,7 @@ export const menu: Menu[] = [
                 ),
             },
             {
+                name: 'Updated Deck List',
                 path: '/dashboard/deck',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -209,10 +210,19 @@ export const menu: Menu[] = [
                 ),
             },
             {
+                name: 'Update Written Deck Guide',
                 path: '/dashboard/guide',
                 excludeFromMenu: true,
                 component: lazy(() =>
                     import('../Screens/Dashboard/Decks Guide/guide')
+                ),
+            },
+            {
+                name: 'Update Detail Dice Mechanics',
+                path: '/dashboard/dice_mechanics',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Dashboard/Wiki/Dice Mechanics/dice')
                 ),
             },
         ],

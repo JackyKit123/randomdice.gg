@@ -5,6 +5,7 @@ import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../Main/main';
 import LoadingScreen from '../Loading/loading';
 import NoMatch from '../../Screens/NoMatch/NoMatch';
+import { menu } from '../../Misc/menuConfig';
 import './dashboard.less';
 
 export default function Dashboard(props: {
@@ -25,6 +26,7 @@ export default function Dashboard(props: {
             setAuthorized(true);
             clearTimeout(timeout);
         }
+        return (): void => clearTimeout(timeout);
     });
 
     if (authorized === 'loading') {
@@ -40,10 +42,20 @@ export default function Dashboard(props: {
             <main>
                 <div className={`dashboard ${className}`}>
                     <div className='content'>
-                        <Link to='/dashboard/deck'>Update Deck List</Link>
-                        <Link to='/dashboard/guide'>
-                            Update Written Decks Guide
-                        </Link>
+                        <div className='menu'>
+                            {menu
+                                .find(item => item.name === 'Dashboard')
+                                ?.childNode?.map(item =>
+                                    item.name ? (
+                                        <Link
+                                            to={item.path || ''}
+                                            key={`${item.name}${item.path}`}
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    ) : null
+                                )}
+                        </div>
                         <div className='divisor' />
                         {children}
                     </div>

@@ -1,0 +1,86 @@
+@import '../../../../cross_import_lesshat.less';
+
+.dashboard.dice-mechanics {
+    form.filter {
+        .display(flex);
+        .justify-content(center);
+        margin-bottom: 10px;
+
+        & > label {
+            .display(flex);
+            .justify-content(center);
+            .align-items(center);
+
+            & > span {
+                margin-right: 15px;
+            }
+
+            & > select {
+                margin: 10px 0;
+                font-size: inherit;
+                font-weight: 200;
+                background-color: #6ba4a5;
+                .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+                border: 0;
+                border-radius: 3px;
+                padding: 2px 4px;
+
+                &[data-value='?'] {
+                    background: #eeeeee;
+                }
+            }
+
+            img {
+                height: 50px;
+                vertical-align: middle;
+                margin-left: 15px;
+            }
+        }
+    }
+
+    .ckeditor-container {
+        margin: 0 auto;
+        max-width: 500px;
+        min-height: 400px;
+
+        &.empty {
+            border: 3px inset;
+            background: #ffffff;
+        }
+
+        .ck.ck-sticky-panel .ck-sticky-panel__content_sticky {
+            top: 80px;
+        }
+    }
+
+    .popup-overlay > .popup,
+    & {
+        button {
+            &.submit,
+            &.confirm {
+                text-align: center;
+                margin: 5px auto;
+                text-decoration: none;
+                font-size: 20px;
+                background-color: #05292e;
+                padding: 10px;
+                border-radius: 5px;
+                color: #ffffff;
+                cursor: pointer;
+
+                &:hover,
+                &:focus {
+                    color: #05292e;
+                    background-color: #eeeeee;
+                }
+            }
+
+            &.submit {
+                margin: 20px auto;
+                font-size: 20px;
+                padding: 5px;
+            }
+            display: block;
+        }
+    }
+}

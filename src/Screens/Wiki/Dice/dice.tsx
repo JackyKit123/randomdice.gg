@@ -18,8 +18,10 @@ import './dice.less';
 export default function DiceMechanic(): JSX.Element {
     const history = useHistory();
     const dispatch = useDispatch();
-    const selection = useSelector((state: RootState) => state.fetchWikiReducer);
-    const { error, wiki } = selection;
+    const selection = useSelector(
+        (state: RootState) => state.fetchDicesReducer
+    );
+    const { error, dices } = selection;
 
     useEffect(() => {
         return replaceAnchorWithHistory(history);
@@ -27,15 +29,15 @@ export default function DiceMechanic(): JSX.Element {
 
     let jsx;
 
-    if (wiki) {
-        const paragraph = wiki.dice.list.map(dice => (
+    if (dices) {
+        const paragraph = dices.map(dice => (
             <li key={dice.name}>
                 <div className='divisor' />
                 <h3>{dice.name}</h3>
                 <div className='dice-container'>
                     <Dice dice={dice.name || ''} />
                 </div>
-                {ReactHtmlParser(sanitize(dice.desc))}
+                {ReactHtmlParser(sanitize(dice.detail))}
             </li>
         ));
         paragraph.splice(
@@ -51,9 +53,8 @@ export default function DiceMechanic(): JSX.Element {
         jsx = (
             <>
                 <p className='intro'>
-                    On this page you will find any Dice Mechanics (
-                    <span className='version'>{wiki.dice.version}</span>). Dice
-                    Dots will only affect the Base Attack Speed of the dice; the
+                    On this page you will find any Dice Mechanics. Dice Dots
+                    will only affect the Base Attack Speed of the dice; the
                     in-game level up, instead, Increases the Base Attack and
                     Special Attack of the dice. Some Dice tagged as Special,
                     will have different dot mechanics. For every Die not tagged
