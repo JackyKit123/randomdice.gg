@@ -122,9 +122,10 @@ export default function GoldCalculator(): JSX.Element {
                 time.
             </p>
             <p>
-                By default, there are 3 modes: Gear deck wave 30 run (10 mins),
+                By default, there are 4 modes: Gear deck wave 30 run (10 mins),
                 Solar/Time wave 56 runs(18mins), Combo Mirror wave 76
-                run(25mins). You can also enter a custom target wave goal.
+                run(25mins), Solar Moon wave 106 (43mins). You can also enter a
+                custom target wave goal.
             </p>
             <p>
                 Keep in mind that the calculator assume average 20 seconds per
@@ -133,7 +134,10 @@ export default function GoldCalculator(): JSX.Element {
             </p>
             <div className='divisor' />
             <section className='filter'>
-                <form className='filter'>
+                <form
+                    className='filter'
+                    onSubmit={(evt): void => evt.preventDefault()}
+                >
                     <img src={GoldPng} alt='gold' />
                     <label htmlFor='class'>
                         <span>PVP Rank :</span>
@@ -172,7 +176,9 @@ export default function GoldCalculator(): JSX.Element {
                     <label htmlFor='current-gold'>
                         <span>Current Gold :</span>
                         <input
-                            type='textbox'
+                            type='number'
+                            min={0}
+                            step={1}
                             name='current-gold'
                             defaultValue={0}
                             className={
@@ -192,7 +198,9 @@ export default function GoldCalculator(): JSX.Element {
                     <label htmlFor='target-gold'>
                         <span>Target Gold :</span>
                         <input
-                            type='textbox'
+                            type='number'
+                            min={0}
+                            step={1}
                             name='target-gold'
                             defaultValue={40000}
                             className={
@@ -226,12 +234,17 @@ export default function GoldCalculator(): JSX.Element {
                         ''
                     )}
                 </form>
-                <form className='filter'>
+                <form
+                    className='filter'
+                    onSubmit={(evt): void => evt.preventDefault()}
+                >
                     <img src={DiamondPng} alt='diamond' />
                     <label htmlFor='current-diamond'>
                         <span>Current Diamond :</span>
                         <input
-                            type='textbox'
+                            type='number'
+                            min={0}
+                            step={1}
                             name='current-diamond'
                             defaultValue={0}
                             className={
@@ -252,7 +265,9 @@ export default function GoldCalculator(): JSX.Element {
                     <label htmlFor='target-diamond'>
                         <span>Target Diamond :</span>
                         <input
-                            type='textbox'
+                            type='number'
+                            min={0}
+                            step={1}
                             name='target-diamond'
                             defaultValue={500}
                             className={
@@ -287,7 +302,10 @@ export default function GoldCalculator(): JSX.Element {
                         ''
                     )}
                 </form>
-                <form className='filter'>
+                <form
+                    className='filter'
+                    onSubmit={(evt): void => evt.preventDefault()}
+                >
                     <img src={LegendaryPng} alt='legendary' />
                     <label htmlFor='target-legendary'>
                         <span>Target Legendary :</span>
@@ -336,7 +354,10 @@ export default function GoldCalculator(): JSX.Element {
                         </select>
                     </label>
                 </form>
-                <form className='filter'>
+                <form
+                    className='filter'
+                    onSubmit={(evt): void => evt.preventDefault()}
+                >
                     <label htmlFor='wave'>
                         <span>Mode :</span>
                         <select
@@ -355,11 +376,14 @@ export default function GoldCalculator(): JSX.Element {
                             <option value={30}>Gear 30s</option>
                             <option value={56}>Solar / Time 56s</option>
                             <option value={76}>Combo Mirror 76s</option>
+                            <option value={106}>Solar Moon 106s</option>
                             <option>Custom</option>
                         </select>
                         {filter.custom ? (
                             <input
-                                type='textbox'
+                                type='number'
+                                min={1}
+                                step={1}
                                 name='wave'
                                 placeholder='Wave#'
                                 className={isInvalidWave ? 'invalid' : ''}

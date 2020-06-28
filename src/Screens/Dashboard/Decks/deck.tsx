@@ -251,7 +251,10 @@ export default function updateDeck(): JSX.Element {
                         Rating :{' '}
                         <input
                             defaultValue={0}
-                            type='textbox'
+                            type='number'
+                            min={0}
+                            max={10}
+                            step={0.25}
                             className={invalidRatingToAdd ? 'invalid' : ''}
                             onChange={(evt): void => {
                                 const clone = {
@@ -481,7 +484,10 @@ export default function updateDeck(): JSX.Element {
                                     <>
                                         <td>
                                             <input
-                                                type='textbox'
+                                                type='number'
+                                                min={0}
+                                                max={10}
+                                                step={0.25}
                                                 defaultValue={deck.rating}
                                                 className={
                                                     invalidRating

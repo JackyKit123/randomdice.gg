@@ -174,7 +174,10 @@ export default function ComboCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Critical' />
                         <h3 className='desc'>{data.critical?.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='crit-class'>
                                 <span>Class :</span>
                                 <select
@@ -258,7 +261,10 @@ export default function ComboCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Combo' />
                         <h3 className='desc'>{data.combo.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='class'>
                                 <span>Class :</span>
                                 <select
@@ -310,7 +316,9 @@ export default function ComboCalculator(): JSX.Element {
                             <label htmlFor='combo count'>
                                 <span>Combo:</span>
                                 <input
-                                    type='textbox'
+                                    type='number'
+                                    min={0}
+                                    step={1}
                                     name='combo count'
                                     className={isInvalidCombo ? 'invalid' : ''}
                                     defaultValue={1}
@@ -328,7 +336,10 @@ export default function ComboCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Moon' />
                         <h3 className='desc'>{data.moon?.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label
                                 htmlFor='moon-active'
                                 className='checkbox-label'
@@ -423,11 +434,17 @@ export default function ComboCalculator(): JSX.Element {
                         </form>
                     </div>
                 </div>
-                <form className='filter'>
+                <form
+                    className='filter'
+                    onSubmit={(evt): void => evt.preventDefault()}
+                >
                     <label htmlFor='crit dmg'>
                         <span>Crit%:</span>
                         <input
-                            type='textbox'
+                            type='number'
+                            min={111}
+                            step={1}
+                            max={2108}
                             name='crit dmg'
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}

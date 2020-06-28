@@ -62,7 +62,10 @@ export default function BlizzardCalculator(): JSX.Element {
                     <Dice dice='Blizzard' />
                     <h3 className='desc'>{data.desc}</h3>
 
-                    <form className='filter'>
+                    <form
+                        className='filter'
+                        onSubmit={(evt): void => evt.preventDefault()}
+                    >
                         <label htmlFor='class'>
                             <span>Class :</span>
                             <select

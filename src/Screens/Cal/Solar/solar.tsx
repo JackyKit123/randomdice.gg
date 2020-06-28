@@ -258,7 +258,10 @@ export default function SolarCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Light' />
                         <h3 className='desc'>{lightData.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='light-class'>
                                 <span>Class :</span>
                                 <select
@@ -341,7 +344,10 @@ export default function SolarCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Moon' />
                         <h3 className='desc'>{moonData?.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label
                                 htmlFor='moon-active'
                                 className='checkbox-label'
@@ -438,7 +444,10 @@ export default function SolarCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Critical' />
                         <h3 className='desc'>{critData.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='crit-class'>
                                 <span>Class :</span>
                                 <select
@@ -521,7 +530,10 @@ export default function SolarCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Solar' />
                         <h3 className='desc'>{solarData.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='solar-class'>
                                 <span>Class :</span>
                                 <select
@@ -597,12 +609,18 @@ export default function SolarCalculator(): JSX.Element {
                         </form>
                     </div>
                 </div>
-                <form className='filter'>
+                <form
+                    className='filter'
+                    onSubmit={(evt): void => evt.preventDefault()}
+                >
                     <label htmlFor='crit dmg'>
                         <span>Crit% :</span>
                         <input
-                            type='textbox'
+                            type='number'
                             name='crit dmg'
+                            min={111}
+                            max={2108}
+                            step={1}
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
                             onChange={(
@@ -617,7 +635,9 @@ export default function SolarCalculator(): JSX.Element {
                     <label htmlFor='duration'>
                         <span>Duration(s) :</span>
                         <input
-                            type='textbox'
+                            type='number'
+                            min={1}
+                            step={1}
                             name='duration'
                             style={
                                 !isInvalidDuration && filter.duration > 200

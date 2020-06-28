@@ -320,7 +320,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Wind' />
                         <h3 className='desc'>{data.wind.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='class'>
                                 <span>Class :</span>
                                 <select
@@ -352,7 +355,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Iron' />
                         <h3 className='desc'>{data.iron.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='class'>
                                 <span>Class :</span>
                                 <select
@@ -383,7 +389,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Gamble' />
                         <h3 className='desc'>{data.gamble.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='class'>
                                 <span>Class :</span>
                                 <select
@@ -414,7 +423,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Crossbow' />
                         <h3 className='desc'>{data.crossbow.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='class'>
                                 <span>Class :</span>
                                 <select
@@ -445,7 +457,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Mighty Wind' />
                         <h3 className='desc'>{data.mwind.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='class'>
                                 <span>Class :</span>
                                 <select
@@ -476,7 +491,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Modified Electric' />
                         <h3 className='desc'>{data.melec.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='class'>
                                 <span>Class :</span>
                                 <select
@@ -507,7 +525,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Typhoon' />
                         <h3 className='desc'>{data.typhoon.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label htmlFor='class'>
                                 <span>Class :</span>
                                 <select
@@ -544,7 +565,10 @@ export default function DpsCalculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                <form className='filter'>
+                <form
+                    className='filter'
+                    onSubmit={(evt): void => evt.preventDefault()}
+                >
                     <label htmlFor='level'>
                         <span>Level :</span>
                         <select
@@ -586,8 +610,11 @@ export default function DpsCalculator(): JSX.Element {
                     <label htmlFor='crit dmg'>
                         <span>Crit%:</span>
                         <input
-                            type='textbox'
+                            type='number'
                             name='crit dmg'
+                            min={111}
+                            max={2108}
+                            step={1}
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
                             onChange={(
@@ -606,7 +633,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Light' />
                         <h3 className='desc'>{data.light?.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label
                                 htmlFor='light-enable'
                                 className='checkbox-label'
@@ -708,7 +738,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Moon' />
                         <h3 className='desc'>{data.moon?.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label
                                 htmlFor='moon-enable'
                                 className='checkbox-label'
@@ -823,7 +856,10 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='dice-container'>
                         <Dice dice='Critical' />
                         <h3 className='desc'>{data.critical?.desc}</h3>
-                        <form className='filter'>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
                             <label
                                 htmlFor='crit-enable'
                                 className='checkbox-label'

@@ -77,7 +77,10 @@ export default function GearCalculator(): JSX.Element {
                         <h3 className='desc'>{data.desc}</h3>
                     </div>
                 </div>
-                <form className='filter'>
+                <form
+                    className='filter'
+                    onSubmit={(evt): void => evt.preventDefault()}
+                >
                     <label htmlFor='class'>
                         <span>Class :</span>
                         <select
@@ -152,9 +155,12 @@ export default function GearCalculator(): JSX.Element {
                     <label htmlFor='pip'>
                         <span>Total Gear Pip:</span>
                         <input
-                            type='textbox'
+                            type='number'
                             name='pip'
                             defaultValue={1}
+                            min={1}
+                            max={105}
+                            step={1}
                             className={
                                 isInvalidPip || isInvalidChain ? 'invalid' : ''
                             }
@@ -170,8 +176,11 @@ export default function GearCalculator(): JSX.Element {
                     <label htmlFor='crit dmg'>
                         <span>Crit%:</span>
                         <input
-                            type='textbox'
+                            type='number'
                             name='crit dmg'
+                            min={111}
+                            max={2108}
+                            step={1}
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
                             onChange={(
