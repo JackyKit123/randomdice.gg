@@ -104,9 +104,7 @@ export default function DpsCalculator(): JSX.Element {
             filter.moon.enable && filter.moon.active
                 ? (5 * filter.moon.pip) / 100
                 : 0;
-        let critBuffSum = critBuff + moonCritBuff + 0.05;
-        critBuffSum = critBuffSum > 100 ? 100 : critBuffSum;
-
+        const critBuffSum = Math.max(critBuff, moonCritBuff) + 0.05;
         const critMultiplier =
             1 - critBuffSum + critBuffSum * (filter.crit / 100);
 

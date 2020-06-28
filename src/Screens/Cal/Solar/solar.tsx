@@ -146,10 +146,7 @@ export default function SolarCalculator(): JSX.Element {
             1 - critMultiplier + critMultiplier * (filter.crit / 100);
         const moonBuffedCrit =
             1 - moonCritMultiplier + moonCritMultiplier * (filter.crit / 100);
-        const moonCritDoubleBuffedCrit =
-            1 -
-            (critMultiplier + moonCritMultiplier) +
-            (critMultiplier + moonCritMultiplier) * (filter.crit / 100);
+        const moonCritDoubleBuffedCrit = Math.max(buffedCrit, moonBuffedCrit);
 
         const dps = (
             sourceDmgPerHit: number,

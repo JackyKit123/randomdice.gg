@@ -127,6 +127,10 @@ export default function ComboCalculator(): JSX.Element {
                             filter.moon.pip +
                             data.moon.pupEff1 * (filter.moon.level - 1)) /
                             100;
+                    const atkSpd =
+                        spdBuff * data.combo.spd <= 0.1
+                            ? 0.1
+                            : spdBuff * data.combo.spd;
                     const buffedDmg = filter.moon.active
                         ? (filter.moon.pip * 0.1 + 1) * dmg
                         : dmg;
@@ -136,7 +140,7 @@ export default function ComboCalculator(): JSX.Element {
                             (buffedDmg * (1 - critMultiplier) +
                                 (buffedDmg * critMultiplier * filter.crit) /
                                     100) /
-                                (data.combo.spd * spdBuff)
+                                atkSpd
                         ),
                     };
                 }
