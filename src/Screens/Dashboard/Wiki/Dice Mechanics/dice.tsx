@@ -27,17 +27,17 @@ export default function UpdateDiceMechanics(): JSX.Element {
     const [dices, setDices] = useState([] as Dices);
     const [activeEdit, setActiveEdit] = useState<DiceType>();
 
-    if (!dices) {
+    useEffect(() => {
+        dbRef.once('value').then(snapshot => setDices(snapshot.val()));
+    }, []);
+
+    if (!dices.length) {
         return (
             <Dashboard>
                 <LoadingScreen />
             </Dashboard>
         );
     }
-
-    useEffect(() => {
-        dbRef.once('value').then(snapshot => setDices(snapshot.val()));
-    }, []);
 
     return (
         <Dashboard className='dice-mechanics'>
