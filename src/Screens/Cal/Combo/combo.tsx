@@ -173,7 +173,7 @@ export default function ComboCalculator(): JSX.Element {
                 <div className='multiple-dice'>
                     <div className='dice-container'>
                         <Dice dice='Critical' />
-                        <h3 className='desc'>{data.critical?.desc}</h3>
+                        <h3 className='desc'>{data.crit?.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
