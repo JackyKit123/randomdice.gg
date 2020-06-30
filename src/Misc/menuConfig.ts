@@ -69,6 +69,11 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Cal/Combo/combo')),
             },
             {
+                name: 'Energy Damage Calculator',
+                path: '/calculator/energy',
+                component: lazy(() => import('../Screens/Cal/Energy/energy')),
+            },
+            {
                 name: 'Solar Damage Calculator',
                 path: '/calculator/solar',
                 component: lazy(() => import('../Screens/Cal/Solar/solar')),
