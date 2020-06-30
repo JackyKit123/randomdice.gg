@@ -65,8 +65,6 @@ export default function ComboCalculator(): JSX.Element {
     const invalidInput = isInvalidCombo || isInvalidCrit;
 
     if (Object.values(data).every(d => d !== undefined)) {
-        data.combo.cupEff1 = 2;
-
         const dpsPerComboCount = (
             mode: 'raw' | 'crit' | 'moon',
             count = filter.combo.count
