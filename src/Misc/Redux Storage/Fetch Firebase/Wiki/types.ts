@@ -16,6 +16,7 @@ export interface WikiContent {
         PvE: string;
         Crew: string;
     };
+    patch_note: string;
 }
 
 export interface FetchState {

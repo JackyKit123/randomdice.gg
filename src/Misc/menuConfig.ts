@@ -141,7 +141,7 @@ export const menu: Menu[] = [
                 name: 'Patch Note',
                 path: '/wiki/patch_note',
                 component: lazy(() =>
-                    import('../Screens/Wiki/Patch Note/table')
+                    import('../Screens/Wiki/Patch Note/patchNote')
                 ),
             },
             {
@@ -214,7 +214,7 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Updated Deck List',
+                name: 'Update Deck List',
                 path: '/dashboard/deck',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -243,6 +243,14 @@ export const menu: Menu[] = [
                 excludeFromMenu: true,
                 component: lazy(() =>
                     import('../Screens/Dashboard/Wiki/Intro/intro')
+                ),
+            },
+            {
+                name: 'Update Patch Note',
+                path: '/dashboard/patch_note',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Dashboard/Wiki/Patch Note/patchNote')
                 ),
             },
         ],
