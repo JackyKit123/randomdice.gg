@@ -3,6 +3,7 @@ service firebase.storage {
     match /Dice%20Images {
        match /{allImages=**} {
          allow read;
+         allow write: if request.auth.token.isEditor == true;
        }
     }
   }
