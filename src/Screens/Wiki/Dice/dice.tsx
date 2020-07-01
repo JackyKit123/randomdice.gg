@@ -56,7 +56,7 @@ export default function DiceMechanic(): JSX.Element {
                     This page will inform you about the basic workings of all
                     dice in the game. In game level ups generally increase the
                     base attack and special attack of all dice. The amount of
-                    dots a dice has is commonly referred to as pips. There for a
+                    dots a dice has is commonly referred to as pips. Therefore a
                     6 dot dice is called a 6 pip dice. For dice value statistic,
                     you can visit{' '}
                     <Link to='/calculator/stat'>Dice Stat Calculator</Link>.
