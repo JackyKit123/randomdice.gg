@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/functions';
 import axios from 'axios';
 import { Dispatch } from 'react';
 import initApp from './init';

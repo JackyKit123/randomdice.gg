@@ -214,6 +214,12 @@ export const menu: Menu[] = [
                 ),
             },
             {
+                name: 'Update Dice Information',
+                path: '/dashboard/dice',
+                excludeFromMenu: true,
+                component: lazy(() => import('../Screens/Dashboard/Dice/dice')),
+            },
+            {
                 name: 'Update Deck List',
                 path: '/dashboard/deck',
                 excludeFromMenu: true,
@@ -227,14 +233,6 @@ export const menu: Menu[] = [
                 excludeFromMenu: true,
                 component: lazy(() =>
                     import('../Screens/Dashboard/Decks Guide/guide')
-                ),
-            },
-            {
-                name: 'Update Detail Dice Mechanics',
-                path: '/dashboard/dice_mechanics',
-                excludeFromMenu: true,
-                component: lazy(() =>
-                    import('../Screens/Dashboard/Wiki/Dice Mechanics/dice')
                 ),
             },
             {

@@ -1,5 +1,4 @@
 import firebase from 'firebase/app';
-import 'firebase/database';
 import { Dispatch } from 'redux';
 import initApp from './init';
 import * as FETCH_DICES from '../Redux Storage/Fetch Firebase/Dices/types';

@@ -26,11 +26,11 @@ interface ArenaValue {
 export interface Dice {
     id: number;
     name: string;
-    type: string;
+    type: 'Physical' | 'Magic' | 'Buff' | 'Merge' | 'Transform';
     desc: string;
     detail: string;
     img: string;
-    target: string;
+    target: 'Front' | 'Strongest' | 'Random' | '-';
     rarity: 'Common' | 'Rare' | 'Unique' | 'Legendary';
     atk: number;
     spd: number;
