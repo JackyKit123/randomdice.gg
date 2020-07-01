@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import loading from './loading.gif';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import './loading.less';
 
 export default function Loading(): JSX.Element {
@@ -13,7 +14,7 @@ export default function Loading(): JSX.Element {
     return (
         <>
             <h3>Loading...</h3>
-            <img alt='Loading' className='loading' src={loading} />
+            <FontAwesomeIcon className='loading' icon={faSpinner} />
             {loadingTime >= 10 ? (
                 <h4 className='warning'>
                     You seem to be stuck loading.{' '}

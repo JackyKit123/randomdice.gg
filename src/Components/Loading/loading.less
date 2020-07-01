@@ -1,9 +1,21 @@
 @import '../../cross_import_lesshat.less';
 
-img.loading {
-    margin: 0 auto;
+@keyframes spin {
+    from {
+        .transform(rotate(0deg));
+    }
+
+    to {
+        .transform(rotate(360deg));
+    }
+}
+
+.loading {
+    margin: 30px auto;
     display: block;
-    height: 200px;
+    font-size: 160px;
+    color: #6ba4a5;
+    .animation(spin 900ms steps(10, end) infinite);
 }
 
 .warning {

@@ -12,10 +12,10 @@ import {
     faSignOutAlt,
     faUserEdit,
     faEdit,
+    faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
 import Menu from '../../Components/Menu/menu';
-import LoadingGif from '../../Components/Loading/loading.gif';
 import * as auth from '../../Misc/Firebase/auth';
 import { menu } from '../../Misc/menuConfig';
 import { RootState } from '../../Misc/Redux Storage/store';
@@ -111,7 +111,7 @@ export default function Header(): JSX.Element {
                     </button>
                 </div>
                 {error === 'Loading' ? (
-                    <img src={LoadingGif} alt='loading' className='loading' />
+                    <FontAwesomeIcon icon={faSpinner} className='loading' />
                 ) : (
                     <span className='error'>{error}</span>
                 )}
@@ -182,7 +182,7 @@ export default function Header(): JSX.Element {
                     ) : null}
                 </div>
                 {error === 'Loading' ? (
-                    <img src={LoadingGif} alt='loading' className='loading' />
+                    <FontAwesomeIcon icon={faSpinner} className='loading' />
                 ) : (
                     <span className='error'>{error}</span>
                 )}
