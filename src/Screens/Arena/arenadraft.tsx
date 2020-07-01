@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import * as math from 'mathjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,6 +20,7 @@ export default function ArenaDraft(): JSX.Element {
     );
     const { error } = selection;
     const { dices } = selection;
+    const manualPickRef = useRef(null as null | HTMLSelectElement);
 
     const [currentPick, setCurrentPick] = useState(1);
     const emptyPick = {
@@ -65,8 +66,28 @@ export default function ArenaDraft(): JSX.Element {
                     setDeck({ ...deck });
                     setPrevPick([...prevPick, pick]);
                     setPick(emptyPick);
+                    if (manualPickRef.current) {
+                        manualPickRef.current.value = '?';
+                    }
                     setCurrentPick(currentPick + 1);
                 }
+            }
+        };
+
+        const manualPickDice = (name: string): void => {
+            if (name === '?') {
+                return;
+            }
+            const nextPick = Object.values(deck).indexOf('?') + 1;
+            if (nextPick >= 1 && nextPick <= 5) {
+                deck[nextPick] = name;
+                setDeck({ ...deck });
+                setPrevPick([...prevPick, { 1: '?', 2: '?', 3: '?' }]);
+                setPick(emptyPick);
+                if (manualPickRef.current) {
+                    manualPickRef.current.value = '?';
+                }
+                setCurrentPick(currentPick + 1);
             }
         };
 
@@ -292,6 +313,37 @@ export default function ArenaDraft(): JSX.Element {
                             </tbody>
                         </table>
                     </div>
+                    <div className='manual'>
+                        <span>
+                            I do not need to compare the value, put this dice
+                            into the deck directly:{' '}
+                        </span>
+                        <select
+                            ref={manualPickRef}
+                            data-value='?'
+                            onChange={(evt): void =>
+                                manualPickDice(evt.target.value)
+                            }
+                        >
+                            <option>?</option>
+                            {dices
+                                .filter(dice =>
+                                    currentPick < 3
+                                        ? dice.rarity !== 'Legendary' &&
+                                          dice.name !== 'Growth'
+                                        : dice.name !== 'Growth'
+                                )
+                                .filter(
+                                    dice =>
+                                        !Object.values(deck).includes(dice.name)
+                                )
+                                .map(dice => (
+                                    <option key={`pick--${dice.name}`}>
+                                        {dice.name}
+                                    </option>
+                                ))}
+                        </select>
+                    </div>
                     <button
                         type='button'
                         disabled={prevPick.length === 0}
@@ -320,6 +372,9 @@ export default function ArenaDraft(): JSX.Element {
                             setPrevPick([]);
                             setDeck(emptyDeck);
                             setCurrentPick(1);
+                            if (manualPickRef.current) {
+                                manualPickRef.current.value = '?';
+                            }
                         }}
                     >
                         Reset <FontAwesomeIcon icon={faTimes} />

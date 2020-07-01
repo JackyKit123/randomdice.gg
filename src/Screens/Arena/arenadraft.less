@@ -1,6 +1,22 @@
 @import '../../cross_import_lesshat.less';
 
 .arena-draft {
+    select {
+        margin: 10px 0;
+        max-width: 100%;
+        font-size: inherit;
+        font-weight: 200;
+        background-color: #6ba4a5;
+        .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+        border: 0;
+        border-radius: 3px;
+        padding: 2px 4px;
+
+        &[data-value='?'] {
+            background: #eeeeee;
+        }
+    }
+
     section {
         text-align: center;
 
@@ -24,6 +40,12 @@
         }
 
         &.pick {
+            .manual {
+                font-weight: 500;
+                font-size: 20px;
+                margin: 10px auto;
+            }
+
             button {
                 display: inline-block;
                 text-align: center;
@@ -116,22 +138,6 @@
                     h4 {
                         margin: 0;
                     }
-                }
-            }
-
-            select {
-                margin: 10px 0;
-                max-width: 100%;
-                font-size: inherit;
-                font-weight: 200;
-                background-color: #6ba4a5;
-                .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
-                border: 0;
-                border-radius: 3px;
-                padding: 2px 4px;
-
-                &[data-value='?'] {
-                    background: #eeeeee;
                 }
             }
         }
