@@ -53,17 +53,12 @@ export default function DiceMechanic(): JSX.Element {
         jsx = (
             <>
                 <p className='intro'>
-                    On this page you will find any Dice Mechanics. Dice Dots
-                    will only affect the Base Attack Speed of the dice; the
-                    in-game level up, instead, Increases the Base Attack and
-                    Special Attack of the dice. Some Dice tagged as Special,
-                    will have different dot mechanics. For every Die not tagged
-                    as Special, the normal description of how dots works
-                    applies. NOTICE: Dots are not affected by in-game power ups.
-                    Dots and Power-Ups are separated. Dots affects the Base
-                    Stats where as Power-Ups affects the Final Output. If you
-                    are unsure how it works, refer to Light Dice, Critical Dice
-                    and Hell Dice. For specific stat, refer to{' '}
+                    This page will inform you about the basic workings of all
+                    dice in the game. In game level ups generally increase the
+                    base attack and special attack of all dice. The amount of
+                    dots a dice has is commonly referred to as pips. There for a
+                    6 dot dice is called a 6 pip dice. For dice value statistic,
+                    you can visit{' '}
                     <Link to='/calculator/stat'>Dice Stat Calculator</Link>.
                 </p>
                 <ul>{paragraph}</ul>
