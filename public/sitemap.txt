@@ -17,6 +17,7 @@ https://randomdice.gg/decks/pve
 https://randomdice.gg/critData
 https://randomdice.gg/calculator/blizzard
 https://randomdice.gg/calculator/combo
+https://randomdice.gg/calculator/energy
 https://randomdice.gg/calculator/solar
 https://randomdice.gg/calculator/gear
 https://randomdice.gg/calculator/coop
@@ -24,6 +25,7 @@ https://randomdice.gg/calculator/stat
 https://randomdice.gg/calculator/dps
 https://randomdice.gg/wiki/pvp
 https://randomdice.gg/wiki/pve
+https://randomdice.gg/wiki/crew
 https://randomdice.gg/wiki/dice_mechanics
 https://randomdice.gg/wiki/boss_mechanics
 https://randomdice.gg/wiki/guide
