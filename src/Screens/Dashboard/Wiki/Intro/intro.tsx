@@ -59,8 +59,30 @@ export default function editIntro(): JSX.Element {
                         editor={ClassicEditor}
                         data={content[type as 'PvP' | 'PvE' | 'Crew']}
                         config={{
-                            removePlugins: ['Heading'],
+                            heading: {
+                                options: [
+                                    {
+                                        model: 'paragraph',
+                                        title: 'Paragraph',
+                                        class: 'content p',
+                                    },
+                                    {
+                                        model: 'heading3',
+                                        view: 'h3',
+                                        title: 'Heading 3',
+                                        class: 'content h3',
+                                    },
+                                    {
+                                        model: 'heading4',
+                                        view: 'h4',
+                                        title: 'Heading 4',
+                                        class: 'content h4',
+                                    },
+                                ],
+                            },
                             toolbar: [
+                                'heading',
+                                '|',
                                 'undo',
                                 'redo',
                                 '|',
