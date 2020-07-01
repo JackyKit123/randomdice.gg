@@ -30,6 +30,11 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Decks/pveDeck')),
             },
             {
+                name: 'Crew Deck List',
+                path: '/decks/crew',
+                component: lazy(() => import('../Screens/Decks/crewDeck')),
+            },
+            {
                 name: 'Crit% Data Per Class',
                 path: '/critData',
                 component: lazy(() => import('../Screens/Crit Info/crit')),
@@ -250,6 +255,12 @@ export const menu: Menu[] = [
                 component: lazy(() =>
                     import('../Screens/Dashboard/Wiki/Patch Note/patchNote')
                 ),
+            },
+            {
+                name: 'Update News',
+                path: '/dashboard/news',
+                excludeFromMenu: true,
+                component: lazy(() => import('../Screens/Dashboard/News/news')),
             },
         ],
     },

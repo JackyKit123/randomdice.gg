@@ -17,6 +17,10 @@
             ".read": true,
             ".write": "auth.token.isEditor === true"
         },
+        "news": {
+            ".read": true,
+            ".write": "auth.token.isEditor === true"
+        },
         "token_storage": {
             ".read": "auth.uid === 'my-service-worker'",
             ".write": "auth.uid === 'my-service-worker'"

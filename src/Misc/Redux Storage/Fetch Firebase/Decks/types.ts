@@ -8,7 +8,7 @@ export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
 export interface Deck {
     id: number;
-    type: 'PvP' | 'PvE' | '-';
+    type: 'PvP' | 'PvE' | 'Crew' | '-';
     rating: number;
     slot1: Dice['name'];
     slot2: Dice['name'];

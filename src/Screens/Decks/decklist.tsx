@@ -159,11 +159,11 @@ export default function DeckList({
         jsx = (
             <>
                 <p>
-                    This is a interactive deck list for PVP and PVE decks. You
-                    can filter the legendary you have below. Click the button to
-                    switch between PVP and PVE view. You can also specify a dice
-                    in Custom Search, which will show the decks with the dice
-                    you specified.
+                    This is a interactive deck list for PVP, PVE and Crew decks.
+                    You can filter the legendary you have below. In this page{' '}
+                    {deckType} decks are shown, you can switch the deck type
+                    below. You can also specify a dice in Custom Search, which
+                    will show the decks with the dice you specified.
                 </p>
                 <p>
                     We know that that not everyone have every legendary dices
@@ -207,19 +207,17 @@ export default function DeckList({
                 <form className='filter'>
                     <div className='top-label'>
                         <label htmlFor='pvePvp'>
-                            <span>PVE / PVE :</span>
-                            <button
-                                type='button'
-                                name='pvePvp'
-                                onClick={(): void =>
-                                    history.replace(
-                                        deckType === 'PvP' ? 'pve' : 'pvp'
-                                    )
+                            <span>Deck Type :</span>
+                            <select
+                                defaultValue={deckType}
+                                onChange={(evt): void =>
+                                    history.replace(evt.target.value)
                                 }
                             >
-                                Switch to {deckType === 'PvP' ? 'PvE ' : 'PvP '}
-                                view
-                            </button>
+                                <option>PvP</option>
+                                <option>PvE</option>
+                                <option>Crew</option>
+                            </select>
                         </label>
                         <label htmlFor='Custom Search'>
                             <span>Custom Search :</span>

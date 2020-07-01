@@ -71,7 +71,7 @@ export default function updateDeck(): JSX.Element {
     const initialNewDeckState = {
         id: -1,
         rating: 0,
-        type: 'PvP' as 'PvP' | 'PvE',
+        type: 'PvP' as 'PvP' | 'PvE' | 'Crew',
         slot1: 'Fire',
         slot2: 'Electric',
         slot3: 'Poison',
@@ -89,7 +89,7 @@ export default function updateDeck(): JSX.Element {
     const initialEditState = {
         id: -1,
         rating: 0,
-        type: '-' as '-' | 'PvP' | 'PvE',
+        type: '-' as '-' | 'PvP' | 'PvE' | 'Crew',
         slot1: '',
         slot2: '',
         slot3: '',
@@ -271,12 +271,16 @@ export default function updateDeck(): JSX.Element {
                             const clone = {
                                 ...deckToAdd,
                             };
-                            clone.type = evt.target.value as 'PvP' | 'PvE';
+                            clone.type = evt.target.value as
+                                | 'PvP'
+                                | 'PvE'
+                                | 'Crew';
                             setDeckToAdd(clone);
                         }}
                     >
                         <option>PvP</option>
                         <option>PvE</option>
+                        <option>Crew</option>
                     </select>
                     <select
                         defaultValue='Fire'
@@ -513,12 +517,16 @@ export default function updateDeck(): JSX.Element {
                                                         ...activeEdit,
                                                     };
                                                     clone.type = evt.target
-                                                        .value as 'PvP' | 'PvE';
+                                                        .value as
+                                                        | 'PvP'
+                                                        | 'PvE'
+                                                        | 'Crew';
                                                     setActiveEdit(clone);
                                                 }}
                                             >
                                                 <option>PvP</option>
                                                 <option>PvE</option>
+                                                <option>Crew</option>
                                             </select>
                                         </td>
                                         <td>
