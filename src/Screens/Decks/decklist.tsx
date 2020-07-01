@@ -211,7 +211,9 @@ export default function DeckList({
                             <select
                                 defaultValue={deckType}
                                 onChange={(evt): void =>
-                                    history.replace(evt.target.value)
+                                    history.replace(
+                                        evt.target.value.toLowerCase()
+                                    )
                                 }
                             >
                                 <option>PvP</option>
