@@ -28,7 +28,7 @@ export default function Homepage(): JSX.Element {
                     modern framework and can be served while having no internet
                     connection; it can also be easily installed onto your device
                     for convenient access, you can check out how to install in
-                    the links here for
+                    the links here for{' '}
                     <a
                         href='https://www.howtogeek.com/fyi/how-to-install-progressive-web-apps-pwas-in-chrome/'
                         target='_blank'
@@ -47,9 +47,24 @@ export default function Homepage(): JSX.Element {
                     .
                 </p>
                 <p>
-                    You are welcome to join the community in discord or on
-                    Reddit. If you find any issues, please contact the webmaster
-                    through discord on JackyKit#0333 or by emailing{' '}
+                    You are welcome to join the community in{' '}
+                    <a
+                        href='https://discord.gg/zQj6tCM'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
+                        Discord
+                    </a>{' '}
+                    or on
+                    <a
+                        href='https://www.reddit.com/r/randomdice/'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
+                        Reddit
+                    </a>
+                    . If you find any issues, please contact the webmaster
+                    through Discord on JackyKit#0333 or by emailing{' '}
                     <a href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}>
                         {`admin@${process.env.REACT_APP_DOMAIN}`}
                     </a>{' '}
