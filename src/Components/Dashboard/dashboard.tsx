@@ -57,7 +57,16 @@ export default function Dashboard(props: {
                                 )}
                         </div>
                         <div className='divisor' />
-                        {children}
+                        {children || (
+                            <>
+                                <h3>Dashboard</h3>
+                                <p>
+                                    This is the homepage of the dashboard, click
+                                    on any item above in the navigation menu to
+                                    begin editing.
+                                </p>
+                            </>
+                        )}
                     </div>
                 </div>
             </main>
