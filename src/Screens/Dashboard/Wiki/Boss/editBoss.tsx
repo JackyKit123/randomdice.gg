@@ -5,19 +5,9 @@ import firebase from 'firebase/app';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faPencilAlt,
-    faTrashAlt,
-    faCheck,
-    faPlusCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from '../../../../Components/Dashboard/dashboard';
 import LoadingScreen from '../../../../Components/Loading/loading';
-import {
-    Deck,
-    Decks,
-} from '../../../../Misc/Redux Storage/Fetch Firebase/Decks/types';
-import { RootState } from '../../../../Misc/Redux Storage/store';
 import PopUp from '../../../../Components/PopUp Overlay/popup';
 import {
     CLOSE_POPUP,
@@ -56,7 +46,7 @@ export default function editBoss(): JSX.Element {
     const invalidName = activeEdit.name.length <= 0;
     const invalidImg = activeEdit.img.length <= 0;
     const invalidInput = invalidName || invalidImg;
-    console.log(activeEdit.id);
+
     const handleSubmit = async (): Promise<void> => {
         if (activeEdit) {
             const originalBoss = bossInfo.find(
