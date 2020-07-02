@@ -17,6 +17,12 @@ export interface WikiContent {
         Crew: string;
     };
     patch_note: string;
+    boss: {
+        id: number;
+        name: string;
+        img: string;
+        desc: string;
+    }[];
 }
 
 export interface FetchState {

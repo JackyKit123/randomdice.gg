@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -96,10 +97,8 @@ export default function editDice(): JSX.Element {
 
     const handleSubmit = async (): Promise<void> => {
         if (activeEdit) {
+            const originalDice = dices.find(dice => dice.id === activeEdit.id);
             if (/^data:image\/png;base64,/.test(activeEdit.img)) {
-                const originalDice = dices.find(
-                    dice => dice.id === activeEdit.id
-                );
                 if (originalDice) {
                     await storage
                         .ref(`Dice Images/${originalDice.name}.png`)
@@ -114,6 +113,38 @@ export default function editDice(): JSX.Element {
                     .ref(`Dice Images/${activeEdit.name}.png`)
                     .getDownloadURL();
                 activeEdit.img = newUrl;
+            } else if (originalDice && originalDice.name !== activeEdit.name) {
+                const reader = new FileReader();
+                const img = (
+                    await axios.get(originalDice.img, {
+                        responseType: 'blob',
+                    })
+                ).data;
+                reader.readAsDataURL(img);
+                reader.onloadend = async (): Promise<void> => {
+                    const base64 = reader.result as string;
+                    await storage
+                        .ref(`Dice Images/${activeEdit.name}.png`)
+                        .putString(base64, 'data_url', {
+                            cacheControl: 'public,max-age=4000',
+                        });
+                    const newUrl = await storage
+                        .ref(`Dice Images/${activeEdit.name}.png`)
+                        .getDownloadURL();
+                    activeEdit.img = newUrl;
+                    const result = dices.map(dice => {
+                        if (dice.id === activeEdit.id) {
+                            return activeEdit;
+                        }
+                        return dice;
+                    });
+                    dbRef.set(result);
+                    setDices(result);
+                    setActiveEdit({ ...initialState });
+                    if (selectRef.current) {
+                        selectRef.current.value = '?';
+                    }
+                };
             }
             let updateDice = false;
             const result = dices.map(dice => {

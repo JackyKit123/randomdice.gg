@@ -249,6 +249,14 @@ export const menu: Menu[] = [
                 ),
             },
             {
+                name: 'Update Boss Information',
+                path: '/dashboard/boss',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Dashboard/Wiki/Boss/editBoss')
+                ),
+            },
+            {
                 name: 'Update Patch Note',
                 path: '/dashboard/patch_note',
                 excludeFromMenu: true,

@@ -6,5 +6,11 @@ service firebase.storage {
          allow write: if request.auth.token.isEditor == true;
        }
     }
+    match /Boss%20Images {
+       match /{allImages=**} {
+         allow read;
+         allow write: if request.auth.token.isEditor == true;
+       }
+    }
   }
 }
