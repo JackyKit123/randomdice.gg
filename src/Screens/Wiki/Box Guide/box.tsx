@@ -53,8 +53,8 @@ export default function BoxGuide(): JSX.Element {
                                         Contains:{' '}
                                         {ReactHtmlParser(
                                             replaceTextWithImgTag(
-                                                dices,
-                                                box.contain
+                                                box.contain,
+                                                dices
                                             )
                                         )}
                                     </p>

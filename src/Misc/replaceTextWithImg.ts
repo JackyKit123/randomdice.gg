@@ -1,13 +1,13 @@
 import { Dices } from './Redux Storage/Fetch Firebase/Dices/types';
 
 export default function replaceTextWithImgTag(
-    dices: Dices,
-    text: string
+    text: string,
+    dices?: Dices
 ): string {
     return text
         .replace(/{Dice:\w*( \w*)*}/g, match => {
             const diceName = match.replace('{Dice:', '').replace('}', '');
-            const imgUrl = dices.find(dice => dice.name === diceName)?.img;
+            const imgUrl = dices?.find(dice => dice.name === diceName)?.img;
             const nullDiceUrl =
                 'https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty.png?alt=media&token=193f9435-4c38-4ef0-95cd-317d9fbe6efe';
             return `<img src="${imgUrl || nullDiceUrl}" alt="${
