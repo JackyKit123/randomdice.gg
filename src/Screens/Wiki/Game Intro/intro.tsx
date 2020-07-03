@@ -7,6 +7,7 @@ import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
 import replaceAnchorWithHistory from '../../../Misc/HTMLAnchorNavigation';
+import { WikiContent } from '../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
 import { RootState } from '../../../Misc/Redux Storage/store';
 import { fetchWiki } from '../../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
@@ -15,7 +16,7 @@ import './intro.less';
 export default function Intro({
     type,
 }: {
-    type: 'PvP' | 'PvE' | 'Crew';
+    type: keyof WikiContent['intro'];
 }): JSX.Element {
     const history = useHistory();
     const dispatch = useDispatch();

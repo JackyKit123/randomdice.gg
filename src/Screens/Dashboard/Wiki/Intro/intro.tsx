@@ -52,7 +52,7 @@ export default function editIntro(): JSX.Element {
                     Yes
                 </button>
             </PopUp>
-            {['PvP', 'PvE', 'Crew'].map(type => (
+            {['PvP', 'PvE', 'Crew', 'Arena', 'Store'].map(type => (
                 <div className='block' key={type}>
                     <h3>{type}</h3>
                     <CKEditor

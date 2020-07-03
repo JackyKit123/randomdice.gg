@@ -126,6 +126,13 @@ export const menu: Menu[] = [
                 ),
             },
             {
+                name: 'Arena Introduction',
+                path: '/wiki/arena',
+                component: lazy(() =>
+                    import('../Screens/Wiki/Game Intro/arena')
+                ),
+            },
+            {
                 name: 'Dice Mechanics',
                 path: '/wiki/dice_mechanics',
                 component: lazy(() => import('../Screens/Wiki/Dice/dice')),
@@ -152,12 +159,9 @@ export const menu: Menu[] = [
             {
                 name: 'The Store',
                 path: '/wiki/store',
-                component: lazy(() => import('../Screens/Wiki/Store/store')),
-            },
-            {
-                name: 'The Arena',
-                path: '/wiki/arena',
-                component: lazy(() => import('../Screens/Wiki/Arena/arena')),
+                component: lazy(() =>
+                    import('../Screens/Wiki/Game Intro/store')
+                ),
             },
             {
                 name: 'Box Guide',

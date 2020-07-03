@@ -15,6 +15,8 @@ export interface WikiContent {
         PvP: string;
         PvE: string;
         Crew: string;
+        Arena: string;
+        Store: string;
     };
     patch_note: string;
     boss: {
