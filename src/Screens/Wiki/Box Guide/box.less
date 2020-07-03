@@ -11,13 +11,27 @@
     }
 
     p img {
-        height: 72px;
         width: auto;
         display: inline;
         vertical-align: middle;
 
-        &.gold {
+        &[alt^='dice '] {
+            height: 72px;
+        }
+
+        &[alt='Gold'],
+        &[alt='Diamond'] {
             height: 36px;
+        }
+
+        &[alt='Common Dice'],
+        &[alt='Legendary Dice'] {
+            height: 36px;
+        }
+
+        &[alt='Rare Dice'],
+        &[alt='Unique Dice'] {
+            height: 51px;
         }
     }
 }

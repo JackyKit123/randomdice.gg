@@ -135,6 +135,36 @@ body {
             }
         }
     }
+
+    img[alt='Legendary Dice'] {
+        .animation(rainbow 1s linear infinite;);
+
+        @keyframes rainbow {
+            0% {
+                .filter(brightness(70%) sepia(100) hue-rotate(0deg));
+            }
+
+            20% {
+                .filter(brightness(70%) sepia(100) hue-rotate(72deg));
+            }
+
+            40% {
+                .filter(brightness(70%) sepia(100) hue-rotate(144deg));
+            }
+
+            60% {
+                .filter(brightness(70%) sepia(100) hue-rotate(216deg));
+            }
+
+            80% {
+                .filter(brightness(70%) sepia(100) hue-rotate(288deg));
+            }
+
+            100% {
+                .filter(brightness(70%) sepia(100) hue-rotate(360deg));
+            }
+        }
+    }
 }
 
 /* reset-css */

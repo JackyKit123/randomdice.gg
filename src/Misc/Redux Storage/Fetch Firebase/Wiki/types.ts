@@ -11,6 +11,13 @@ export const FAIL = 'FETCH_WIKI_FAIL';
 export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
 export interface WikiContent {
+    box: {
+        id: number;
+        name: string;
+        img: string;
+        from: string;
+        contain: string;
+    }[];
     intro: {
         PvP: string;
         PvE: string;
