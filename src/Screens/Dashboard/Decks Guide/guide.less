@@ -34,6 +34,16 @@
             & > tr {
                 position: relative;
 
+                &:first-of-type > td:first-of-type {
+                    width: 200px;
+
+                    input {
+                        margin: 0;
+                        font-size: inherit;
+                        width: 90%;
+                    }
+                }
+
                 &:nth-of-type(odd) {
                     background: #f8d298;
                 }
@@ -49,25 +59,11 @@
                     text-align: center;
                     font-weight: 500;
                     line-height: 32px;
-
-                    &:first-of-type {
-                        max-width: 200px;
-                    }
                 }
 
-                &.dice-container {
-                    & > td {
-                        select {
-                            display: inline-block;
-                            margin: 10px;
-                        }
-
-                        input {
-                            margin: 0;
-                            font-size: inherit;
-                            width: 150px;
-                        }
-                    }
+                &.dice-container > td select {
+                    display: inline-block;
+                    margin: 10px;
                 }
             }
         }
