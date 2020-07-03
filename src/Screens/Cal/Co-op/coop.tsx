@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import * as math from 'mathjs';
+import { combinations } from 'mathjs';
+import ReactHtmlParser from 'react-html-parser';
 import Main from '../../../Components/Main/main';
-import GoldPng from './Image/gold.png';
-import DiamondPng from './Image/diamond.png';
-import LegendaryPng from './Image/legendary_dice.png';
+import replaceTextWithImgTag from '../../../Misc/replaceTextWithImg';
 import '../cal.less';
 import './coop.less';
 
@@ -82,7 +81,7 @@ export default function GoldCalculator(): JSX.Element {
         let probAccumulator = 0;
         for (let n = 0; n < filter.legendary; n += 1) {
             probAccumulator +=
-                math.combinations(box, n) * 0.01 ** n * 0.99 ** (box - n);
+                combinations(box, n) * 0.01 ** n * 0.99 ** (box - n);
         }
         if (probAccumulator > filter.luck) {
             return boxNeededForLegendary(box + 1);
@@ -138,7 +137,7 @@ export default function GoldCalculator(): JSX.Element {
                     className='filter'
                     onSubmit={(evt): void => evt.preventDefault()}
                 >
-                    <img src={GoldPng} alt='gold' />
+                    {ReactHtmlParser(replaceTextWithImgTag('{Gold}'))}
                     <label htmlFor='class'>
                         <span>PVP Rank :</span>
                         <select
@@ -238,7 +237,7 @@ export default function GoldCalculator(): JSX.Element {
                     className='filter'
                     onSubmit={(evt): void => evt.preventDefault()}
                 >
-                    <img src={DiamondPng} alt='diamond' />
+                    {ReactHtmlParser(replaceTextWithImgTag('{Diamond}'))}
                     <label htmlFor='current-diamond'>
                         <span>Current Diamond :</span>
                         <input
@@ -306,7 +305,7 @@ export default function GoldCalculator(): JSX.Element {
                     className='filter'
                     onSubmit={(evt): void => evt.preventDefault()}
                 >
-                    <img src={LegendaryPng} alt='legendary' />
+                    {ReactHtmlParser(replaceTextWithImgTag('{Legendary Dice}'))}
                     <label htmlFor='target-legendary'>
                         <span>Target Legendary :</span>
                         <select
