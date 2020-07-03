@@ -1,7 +1,7 @@
 @import '../../../../cross_import_lesshat.less';
 
 .dashboard.boss {
-    label[for='select-boss'] {
+    label {
         margin: 0 auto 20px;
         width: 400px;
         max-width: 100%;
@@ -11,17 +11,6 @@
         & > input {
             width: 50%;
             float: right;
-            font-size: inherit;
-            font-weight: 200;
-            background-color: #6ba4a5;
-            .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
-            border: 0;
-            border-radius: 3px;
-            padding: 2px 4px;
-
-            &[data-value='?'] {
-                background: #eeeeee;
-            }
         }
 
         img {
@@ -31,127 +20,9 @@
         }
     }
 
-    input.invalid {
-        background-color: #ff0000;
-    }
-
-    .invalid-warning {
-        display: block;
-        text-align: center;
-        color: #ff0000;
-        margin: 5px auto;
-
-        & > strong {
-            font-weight: 600;
-        }
-    }
-
     form {
         .display(flex);
         .flex-direction(column);
         .align-items(center);
-        margin: 0 auto;
-        width: 100%;
-
-        & > label {
-            margin-bottom: 10px;
-            width: 400px;
-            max-width: 100%;
-
-            & > select,
-            & > input {
-                width: 50%;
-                float: right;
-                font-size: inherit;
-                font-weight: 200;
-                background-color: #6ba4a5;
-                .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
-                border: 0;
-                border-radius: 3px;
-                padding: 2px 4px;
-
-                &[data-value='?'] {
-                    background: #eeeeee;
-                }
-
-                &.invalid {
-                    background-color: #ff0000;
-                }
-            }
-
-            img {
-                height: 50px;
-                vertical-align: middle;
-                margin-left: 15px;
-            }
-        }
-
-        .invalid-warning {
-            display: block;
-            text-align: center;
-            color: #ff0000;
-            margin: 5px auto;
-
-            & > strong {
-                font-weight: 600;
-            }
-        }
-    }
-
-    .ckeditor-container {
-        margin: 0 auto;
-        max-width: 500px;
-        min-height: 400px;
-
-        &.empty {
-            border: 3px inset;
-            background: #ffffff;
-        }
-
-        .ck.ck-sticky-panel .ck-sticky-panel__content_sticky {
-            top: 80px;
-        }
-    }
-
-    .popup-overlay > .popup,
-    & {
-        button {
-            &.submit,
-            &.confirm {
-                text-align: center;
-                margin: 5px auto;
-                text-decoration: none;
-                font-size: 20px;
-                background-color: #05292e;
-                padding: 10px;
-                border-radius: 5px;
-                color: #ffffff;
-                cursor: pointer;
-
-                &:hover,
-                &:focus {
-                    color: #05292e;
-                    background-color: #eeeeee;
-                }
-
-                &:disabled {
-                    background-color: #aaaaaa;
-
-                    &:hover,
-                    &:focus {
-                        cursor: initial;
-                        color: #ffffff;
-                        background-color: #aaaaaa;
-                    }
-                }
-            }
-
-            &.submit {
-                margin: 20px auto;
-                font-size: 20px;
-                padding: 5px;
-            }
-            display: block;
-        }
     }
 }

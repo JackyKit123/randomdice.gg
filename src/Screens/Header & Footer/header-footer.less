@@ -66,13 +66,6 @@ body {
                     input {
                         height: 30px;
                         font-size: 18px;
-                        font-weight: 200;
-                        background-color: #6ba4a5;
-                        .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
-                        border: 0;
-                        border-radius: 3px;
-                        padding: 2px 4px;
-                        vertical-align: middle;
                     }
                 }
             }
@@ -152,6 +145,8 @@ body {
                             vertical-align: middle;
                             background: none;
                             border: 0;
+                            padding: 0;
+                            font-size: inherit;
                             color: #ffffff;
                             line-height: 30px;
 
@@ -173,8 +168,8 @@ body {
                         }
 
                         & > button,
-                        & > span a {
-                            margin-left: 5px;
+                        & > span:not(.dashboard) a {
+                            margin-left: 10px;
                             cursor: pointer;
                             .transition(color 0.2s ease-in-out);
 

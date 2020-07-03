@@ -31,4 +31,44 @@ main > .dashboard {
             }
         }
     }
+
+    .ck {
+        &.ck-sticky-panel .ck-sticky-panel__content_sticky {
+            top: 80px;
+        }
+
+        &.ck-label {
+            display: none;
+        }
+
+        &.ck-editor__editable {
+            ul li {
+                list-style: disc;
+            }
+
+            ol li {
+                list-style: decimal;
+            }
+
+            li {
+                margin: 0 0 20px 20px;
+            }
+        }
+    }
+
+    .popup-overlay > .popup {
+        text-align: center;
+
+        button {
+            display: inline-block;
+            margin: 0 10px;
+        }
+    }
+
+    button {
+        &.submit,
+        &.delete {
+            margin: 20px auto;
+        }
+    }
 }

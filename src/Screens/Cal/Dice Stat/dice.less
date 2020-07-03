@@ -20,6 +20,7 @@
                     'class desc desc';
 
                 select {
+                    background-color: #eeeeee;
                     font-weight: 600;
                 }
 
@@ -33,46 +34,48 @@
                     }
                 }
 
-                label[for='class'] {
-                    grid-area: class;
-                }
+                label {
+                    &[for='class'] {
+                        grid-area: class;
+                    }
 
-                .dice-name {
-                    grid-area: dicename;
-                    margin: 5px;
-                    padding: 5px;
-                    background: #999393;
-                    border-radius: 5px;
+                    &[for='dice-name'] {
+                        grid-area: dicename;
+                        margin: 5px;
+                        padding: 5px;
+                        background: #999393;
+                        border-radius: 5px;
 
-                    span {
-                        display: block;
-                        margin-bottom: 3px;
+                        span {
+                            display: block;
+                            margin-bottom: 3px;
 
-                        &.Legendary {
-                            color: orange;
+                            &.Legendary {
+                                color: orange;
+                            }
+
+                            &.Unique {
+                                color: purple;
+                            }
+
+                            &.Rare {
+                                color: blue;
+                            }
+
+                            &.Common {
+                                color: white;
+                            }
                         }
 
-                        &.Unique {
-                            color: purple;
-                        }
-
-                        &.Rare {
-                            color: blue;
-                        }
-
-                        &.Common {
-                            color: white;
+                        select {
+                            display: block;
                         }
                     }
 
-                    select {
-                        display: block;
+                    &[for='level'] {
+                        grid-area: level;
+                        margin: 5px;
                     }
-                }
-
-                label[for='level'] {
-                    grid-area: level;
-                    margin: 5px;
                 }
 
                 .desc {

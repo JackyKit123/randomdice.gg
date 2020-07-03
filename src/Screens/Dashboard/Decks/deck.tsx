@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from 'firebase/app';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -156,8 +156,7 @@ export default function updateDeck(): JSX.Element {
         setDeckToDelete({ id: -1, dice: [] as string[] });
     };
 
-    const addDeck = (evt: FormEvent): void => {
-        evt.preventDefault();
+    const addDeck = (): void => {
         const clone = {
             ...deckToAdd,
         };
@@ -231,7 +230,7 @@ export default function updateDeck(): JSX.Element {
             </PopUp>
             <PopUp popUpTarget='add-deck'>
                 <h3>Add A Deck</h3>
-                <form onSubmit={addDeck}>
+                <form onSubmit={(evt): void => evt.preventDefault()}>
                     <label htmlFor='game-version'>
                         Current Game Version :{' '}
                         <input
@@ -402,7 +401,6 @@ export default function updateDeck(): JSX.Element {
                                 <option key={`slot5${name}`}>{name}</option>
                             ))}
                     </select>
-                    <input type='submit' />
                     {invalidVersionToAdd ? (
                         <span className='invalid-warning'>
                             Current game version input is invalid.
@@ -414,6 +412,13 @@ export default function updateDeck(): JSX.Element {
                         </span>
                     ) : null}
                 </form>
+                <button
+                    onClick={addDeck}
+                    type='submit'
+                    disabled={invalidVersionToAdd || invalidRatingToAdd}
+                >
+                    Submit
+                </button>
             </PopUp>
             <p>
                 To begin updating the deck data, first enter the current game

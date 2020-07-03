@@ -314,35 +314,37 @@ export default function ArenaDraft(): JSX.Element {
                         </table>
                     </div>
                     <div className='manual'>
-                        <span>
+                        <label htmlFor='manual-select'>
                             I do not need to compare the value, put this dice
                             into the deck directly:{' '}
-                        </span>
-                        <select
-                            ref={manualPickRef}
-                            data-value='?'
-                            onChange={(evt): void =>
-                                manualPickDice(evt.target.value)
-                            }
-                        >
-                            <option>?</option>
-                            {dices
-                                .filter(dice =>
-                                    currentPick < 3
-                                        ? dice.rarity !== 'Legendary' &&
-                                          dice.name !== 'Growth'
-                                        : dice.name !== 'Growth'
-                                )
-                                .filter(
-                                    dice =>
-                                        !Object.values(deck).includes(dice.name)
-                                )
-                                .map(dice => (
-                                    <option key={`pick--${dice.name}`}>
-                                        {dice.name}
-                                    </option>
-                                ))}
-                        </select>
+                            <select
+                                ref={manualPickRef}
+                                data-value='?'
+                                onChange={(evt): void =>
+                                    manualPickDice(evt.target.value)
+                                }
+                            >
+                                <option>?</option>
+                                {dices
+                                    .filter(dice =>
+                                        currentPick < 3
+                                            ? dice.rarity !== 'Legendary' &&
+                                              dice.name !== 'Growth'
+                                            : dice.name !== 'Growth'
+                                    )
+                                    .filter(
+                                        dice =>
+                                            !Object.values(deck).includes(
+                                                dice.name
+                                            )
+                                    )
+                                    .map(dice => (
+                                        <option key={`pick--${dice.name}`}>
+                                            {dice.name}
+                                        </option>
+                                    ))}
+                            </select>
+                        </label>
                     </div>
                     <button
                         type='button'

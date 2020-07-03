@@ -108,7 +108,7 @@ export default function DiceStat(): JSX.Element {
                                     ))}
                             </select>
                         </label>
-                        <div className='dice-name'>
+                        <label htmlFor='dice-name'>
                             <span className={dice.rarity}>{dice.rarity}</span>
                             <select
                                 onChange={(evt): void => {
@@ -124,7 +124,7 @@ export default function DiceStat(): JSX.Element {
                                     <option key={d.name}>{d.name} Dice</option>
                                 ))}
                             </select>
-                        </div>
+                        </label>
                         <label htmlFor='level'>
                             Level :{' '}
                             <select

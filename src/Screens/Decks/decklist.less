@@ -43,31 +43,8 @@
                     margin-right: 15px;
                 }
 
-                & > button {
-                    font-size: inherit;
-                    font-weight: 200;
-                    background-color: #6ba4a5;
-                    .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
-                    border: 0;
-                    border-radius: 3px;
-                    padding: 2px 4px;
-                    .transition(all 0.2s ease-in-out);
-                    cursor: pointer;
-                }
-
                 & > select {
-                    margin: 10px 0;
                     font-size: inherit;
-                    font-weight: 200;
-                    background-color: #6ba4a5;
-                    .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
-                    border: 0;
-                    border-radius: 3px;
-                    padding: 2px 4px;
-
-                    &[data-value='?'] {
-                        background: #eeeeee;
-                    }
                 }
 
                 & > img {
@@ -90,8 +67,10 @@
                     }
 
                     button {
+                        display: inline-block;
                         font-size: inherit;
                         font-weight: 200;
+                        color: #000000;
                         background-color: #6ba4a5;
                         .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
                         border: 0;
@@ -221,24 +200,13 @@
                         }
 
                         button {
-                            display: block;
-                            text-align: center;
-                            margin: 0 auto;
-                            text-decoration: none;
-                            cursor: pointer;
                             font-size: 15px;
-                            background-color: #05292e;
                             padding: 5px;
                             border-radius: 5px;
-                            color: #ffffff;
-                            .transition(all 0.2s ease-in-out);
                             position: relative;
 
                             &:hover,
                             &:focus {
-                                color: #05292e;
-                                background-color: #eeeeee;
-
                                 &::after {
                                     display: inline-block;
                                     opacity: 1;

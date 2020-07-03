@@ -13,7 +13,6 @@ import {
     CLOSE_POPUP,
 } from '../../../../Misc/Redux Storage/PopUp Overlay/types';
 import { WikiContent } from '../../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
-import './patchNote.less';
 
 export default function editPatchNote(): JSX.Element {
     const dispatch = useDispatch();
