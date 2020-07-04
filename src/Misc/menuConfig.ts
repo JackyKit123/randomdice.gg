@@ -223,13 +223,13 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Update Dice Information',
+                name: 'Dice Information',
                 path: '/dashboard/dice',
                 excludeFromMenu: true,
                 component: lazy(() => import('../Screens/Dashboard/Dice/dice')),
             },
             {
-                name: 'Update Deck List',
+                name: 'Deck List',
                 path: '/dashboard/deck',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -237,7 +237,7 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Update Written Deck Guide',
+                name: 'Written Deck Guide',
                 path: '/dashboard/guide',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -245,7 +245,7 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Update Game Introduction',
+                name: 'Game Introduction',
                 path: '/dashboard/intro',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -253,7 +253,7 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Update Boss Information',
+                name: 'Boss Information',
                 path: '/dashboard/boss',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -261,7 +261,7 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Update Box Information',
+                name: 'Box Information',
                 path: '/dashboard/box',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -269,7 +269,15 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Update Patch Note',
+                name: 'Tips and Tricks',
+                path: '/dashboard/tips',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Dashboard/Wiki/Tips/tips')
+                ),
+            },
+            {
+                name: 'Patch Note',
                 path: '/dashboard/patch_note',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -277,7 +285,7 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Update News',
+                name: 'News',
                 path: '/dashboard/news',
                 excludeFromMenu: true,
                 component: lazy(() => import('../Screens/Dashboard/News/news')),
