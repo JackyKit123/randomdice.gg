@@ -41,14 +41,14 @@ export default function Basic(): JSX.Element {
                 <section>
                     {tips.map(tip =>
                         tip.img === 'ad' ? (
-                            <>
+                            <Fragment key='ad'>
                                 <hr className='divisor' />
                                 <AdUnit
                                     unitId='227378933'
                                     dimension='300x250'
                                 />
                                 <AdUnit unitId='219055766' dimension='970x90' />
-                            </>
+                            </Fragment>
                         ) : (
                             <Fragment key={tip.id}>
                                 <hr className='divisor' />
