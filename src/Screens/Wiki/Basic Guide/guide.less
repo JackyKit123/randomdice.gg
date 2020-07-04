@@ -1,22 +1,8 @@
 @import '../../../cross_import_lesshat.less';
 
 .wiki.guide {
-    li {
-        @media @desktop {
-            .display(flex);
-            .align-items(center);
-
-            & > .img-container {
-                height: 350px;
-                .transition(all 0.2s ease-out);
-
-                &:hover {
-                    .transform(scale(1.1));
-                }
-            }
-        }
-
-        & > .img-container {
+    section > div.tip {
+        & > figure {
             border-radius: 5px;
             margin-right: 20px;
 
@@ -27,8 +13,22 @@
             }
         }
 
+        @media @desktop {
+            .display(flex);
+            .align-items(center);
+
+            & > figure {
+                height: 350px;
+                .transition(all 0.2s ease-out);
+
+                &:hover {
+                    .transform(scale(1.1));
+                }
+            }
+        }
+
         @media @mobile {
-            & > .img-container {
+            & > figure {
                 margin: 0 0 20px;
                 text-align: center;
                 max-height: 350px;
@@ -41,7 +41,7 @@
             }
         }
 
-        &:nth-of-type(even) > .img-container {
+        &:nth-of-type(even) > figure {
             .order(2);
             margin-left: 20px;
         }

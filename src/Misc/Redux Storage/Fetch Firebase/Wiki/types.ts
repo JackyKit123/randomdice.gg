@@ -32,6 +32,11 @@ export interface WikiContent {
         img: string;
         desc: string;
     }[];
+    tips: {
+        id: number;
+        img: string;
+        desc: string;
+    }[];
 }
 
 export interface FetchState {

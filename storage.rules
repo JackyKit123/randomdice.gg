@@ -18,6 +18,12 @@ service firebase.storage {
          allow write: if request.auth.token.isEditor == true;
        }
     }
+    match /Tip%20Images {
+       match /{allImages=**} {
+         allow read;
+         allow write: if request.auth.token.isEditor == true;
+       }
+    }
     match /General%20Images {
        match /{allImages=**} {
          allow read;
