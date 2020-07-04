@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-indent */
-import React, { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useEffect, useState, Fragment } from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
@@ -18,27 +18,61 @@ import './dice.less';
 export default function DiceMechanic(): JSX.Element {
     const history = useHistory();
     const dispatch = useDispatch();
+    const { hash } = useLocation();
     const selection = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
     const { error, dices } = selection;
+    const [mechanics, setMechanics] = useState<
+        (
+            | {
+                  name: string;
+                  detail: string;
+              }
+            | 'ad'
+        )[]
+    >();
 
     useEffect(() => {
         return replaceAnchorWithHistory(history);
-    });
+    }, []);
+
+    useEffect(() => {
+        // eslint-disable-next-line no-unused-expressions
+        document
+            .getElementById(decodeURI(hash.replace(/^#/, '')))
+            ?.scrollIntoView();
+    }, [hash]);
+
+    useEffect(() => {
+        if (dices && !mechanics?.includes('ad')) {
+            const tmp = dices.map(dice => ({
+                name: dice.name,
+                detail: dice.detail,
+            })) as (
+                | {
+                      name: string;
+                      detail: string;
+                  }
+                | 'ad'
+            )[];
+            tmp.splice(Math.min(Math.floor(dices.length / 2), 10), 0, 'ad');
+            setMechanics(tmp);
+        }
+    }, [dices]);
 
     let jsx;
 
-    if (dices) {
+    if (dices && mechanics) {
         const paragraph = dices.map(dice => (
-            <li key={dice.name}>
+            <div key={dice.name}>
                 <div className='divisor' />
                 <h3>{dice.name}</h3>
                 <div className='dice-container'>
                     <Dice dice={dice.name || ''} />
                 </div>
                 {ReactHtmlParser(sanitize(dice.detail))}
-            </li>
+            </div>
         ));
         paragraph.splice(
             25,
@@ -61,7 +95,31 @@ export default function DiceMechanic(): JSX.Element {
                     you can visit{' '}
                     <Link to='/calculator/stat'>Dice Stat Calculator</Link>.
                 </p>
-                <ul>{paragraph}</ul>
+                <section>
+                    {mechanics.map(dice =>
+                        dice === 'ad' ? (
+                            <Fragment key='ad'>
+                                <hr className='divisor' />
+                                <AdUnit
+                                    unitId='227378933'
+                                    dimension='300x250'
+                                />
+                                <AdUnit unitId='219055766' dimension='970x90' />
+                            </Fragment>
+                        ) : (
+                            <Fragment key={dice.name}>
+                                <hr className='divisor' />
+                                <div className='row' id={dice.name}>
+                                    <h3>{dice.name}</h3>
+                                    <figure>
+                                        <Dice dice={dice.name || ''} />
+                                    </figure>
+                                    {ReactHtmlParser(sanitize(dice.detail))}
+                                </div>
+                            </Fragment>
+                        )
+                    )}
+                </section>
             </>
         );
     } else if (error) {

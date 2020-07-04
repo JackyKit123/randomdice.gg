@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
@@ -11,24 +12,34 @@ import './guide.less';
 import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import { fetchWiki } from '../../../Misc/Firebase/fetchData';
 import { WikiContent } from '../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
+import replaceAnchorWithHistory from '../../../Misc/HTMLAnchorNavigation';
 
 export default function Basic(): JSX.Element {
     const dispatch = useDispatch();
+    const history = useHistory();
     const { wiki, error } = useSelector(
         (state: RootState) => state.fetchWikiReducer
     );
     const [tips, setTips] = useState<WikiContent['tips']>();
 
     useEffect(() => {
-        if (wiki) {
-            wiki.tips.splice(Math.floor(wiki.tips.length / 2), 0, {
-                id: -1,
-                img: 'ad',
-                desc: 'ad',
-            });
+        if (wiki && !wiki.tips.find(tip => tip.img === 'ad')) {
+            wiki.tips.splice(
+                Math.min(Math.floor(wiki.tips.length / 2), 10),
+                0,
+                {
+                    id: -1,
+                    img: 'ad',
+                    desc: 'ad',
+                }
+            );
             setTips(wiki.tips);
         }
     }, [wiki]);
+
+    useEffect(() => {
+        return replaceAnchorWithHistory(history);
+    }, []);
 
     let jsx;
     if (tips) {

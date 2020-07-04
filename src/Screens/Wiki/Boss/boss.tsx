@@ -1,7 +1,8 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
+import { useLocation } from 'react-router-dom';
 import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
@@ -14,22 +15,34 @@ import { WikiContent } from '../../../Misc/Redux Storage/Fetch Firebase/Wiki/typ
 
 export default function BossGuide(): JSX.Element {
     const dispatch = useDispatch();
+    const { hash } = useLocation();
+    const [bossInfo, setBossInfo] = useState<WikiContent['boss']>();
     const { wiki, error } = useSelector(
         (state: RootState) => state.fetchWikiReducer
     );
-    const [bossInfo, setBossInfo] = useState<WikiContent['boss']>();
 
     useEffect(() => {
-        if (wiki) {
-            wiki.boss.splice(Math.floor(wiki.boss.length / 2), 0, {
-                id: -1,
-                name: 'ad',
-                img: 'ad',
-                desc: 'ad',
-            });
+        if (wiki && !wiki.boss.find(boss => boss.img === 'ad')) {
+            wiki.boss.splice(
+                Math.min(Math.floor(wiki.boss.length / 2), 10),
+                0,
+                {
+                    id: -1,
+                    name: 'ad',
+                    img: 'ad',
+                    desc: 'ad',
+                }
+            );
             setBossInfo(wiki.boss);
         }
     }, [wiki]);
+
+    useEffect(() => {
+        // eslint-disable-next-line no-unused-expressions
+        document
+            .getElementById(decodeURI(hash.replace(/^#/, '')))
+            ?.scrollIntoView();
+    }, [hash]);
 
     let jsx;
     if (bossInfo) {
@@ -60,7 +73,7 @@ export default function BossGuide(): JSX.Element {
                         ) : (
                             <Fragment key={boss.name}>
                                 <div className='divisor' />
-                                <div className='boss'>
+                                <div className='boss' id={boss.name}>
                                     <figure>
                                         <img src={boss.img} alt={boss.name} />
                                     </figure>

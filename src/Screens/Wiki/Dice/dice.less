@@ -5,27 +5,29 @@
         }
     }
 
-    h3 {
-        display: inline-block;
-    }
-
-    .dice-container {
-        height: 150px;
-
-        & > img {
-            height: 100%;
+    .row {
+        h3 {
+            display: inline-block;
         }
-    }
 
-    li:nth-of-type(odd) > .dice-container {
-        float: left;
-    }
+        p {
+            min-height: 100px;
+        }
 
-    li:nth-of-type(even) > .dice-container {
-        float: right;
-    }
+        figure {
+            height: 150px;
 
-    p {
-        min-height: 100px;
+            & > img {
+                height: 100%;
+            }
+        }
+
+        &:nth-of-type(odd) > figure {
+            float: left;
+        }
+
+        &:nth-of-type(even) > figure {
+            float: right;
+        }
     }
 }
