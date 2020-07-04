@@ -261,6 +261,14 @@ export const menu: Menu[] = [
                 ),
             },
             {
+                name: 'Update Box Information',
+                path: '/dashboard/box',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Dashboard/Wiki/Box/box')
+                ),
+            },
+            {
                 name: 'Update Patch Note',
                 path: '/dashboard/patch_note',
                 excludeFromMenu: true,
