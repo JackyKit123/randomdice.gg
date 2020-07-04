@@ -276,7 +276,7 @@ export default function editBoss(): JSX.Element {
                             }}
                         />
                     </form>
-                    <div className='divisor' />
+                    <hr className='divisor' />
                     <button
                         disabled={invalidInput}
                         type='button'

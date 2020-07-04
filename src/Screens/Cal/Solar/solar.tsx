@@ -253,7 +253,7 @@ export default function SolarCalculator(): JSX.Element {
                     across certain period of time instead of the damage per
                     second at a certain point of time.
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='multiple-dice'>
                     <div className='dice-container'>
                         <Dice dice='Light' />
@@ -674,10 +674,10 @@ export default function SolarCalculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                <div className='divisor' />
+                <hr className='divisor' />
                 <AdUnit unitId='227378933' dimension='300x250' />
                 <AdUnit unitId='219055766' dimension='970x90' />
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='chart-container'>
                     <VictoryChart
                         maxDomain={{
@@ -1031,7 +1031,7 @@ export default function SolarCalculator(): JSX.Element {
                         />
                     </VictoryChart>
                 </div>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <h3>Cumulative Damage Over {filter.duration} seconds.</h3>
                 <div className='result'>
                     <div>

@@ -167,7 +167,7 @@ export default function ComboCalculator(): JSX.Element {
                     critical dice and moon dice, the dps is not summed up. It
                     should not make sense to use both dice with combo.
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='multiple-dice'>
                     <div className='dice-container'>
                         <Dice dice='Critical' />
@@ -472,10 +472,10 @@ export default function ComboCalculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                <div className='divisor' />
+                <hr className='divisor' />
                 <AdUnit unitId='227378933' dimension='300x250' />
                 <AdUnit unitId='219055766' dimension='970x90' />
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='result'>
                     <div className='dmg'>
                         <span>Damage per Combo pip:</span>

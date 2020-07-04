@@ -185,7 +185,7 @@ export default function ArenaDraft(): JSX.Element {
                     estimated win rate on the deck based on the deck score of
                     your deck.
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <section className='pick'>
                     <h3>Your Picks</h3>
                     <div className='table-container'>
@@ -383,7 +383,7 @@ export default function ArenaDraft(): JSX.Element {
                     </button>
                 </section>
                 <section className='deck'>
-                    <div className='divisor' />
+                    <hr className='divisor' />
                     <h3>Your Deck</h3>
                     {[1, 2, 3, 4, 5].map(i => (
                         <Dice key={`deck${i}`} dice={deck[i]} />
@@ -405,7 +405,7 @@ export default function ArenaDraft(): JSX.Element {
                 <section
                     className={`winrate ${currentPick === 6 ? 'show' : ''}`}
                 >
-                    <div className='divisor' />
+                    <hr className='divisor' />
                     <h3>Your Estimated Win Rate</h3>
                     <input
                         type='textbox'

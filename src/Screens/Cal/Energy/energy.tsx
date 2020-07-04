@@ -188,7 +188,7 @@ export default function EnergyCalculator(): JSX.Element {
                     have to multiply the total pip count on your board to get
                     the final dps.
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='multiple-dice'>
                     <div className='dice-container'>
                         <Dice dice='Critical' />
@@ -582,10 +582,10 @@ export default function EnergyCalculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                <div className='divisor' />
+                <hr className='divisor' />
                 <AdUnit unitId='227378933' dimension='300x250' />
                 <AdUnit unitId='219055766' dimension='970x90' />
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='result'>
                     <div className='dmg'>
                         <span>Damage per Energy pip:</span>

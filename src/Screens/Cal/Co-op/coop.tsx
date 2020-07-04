@@ -131,7 +131,7 @@ export default function GoldCalculator(): JSX.Element {
                 wave for wave 1 - 60. Then average 30 seconds per wave beyond
                 wave 60. And extra 60 seconds between every games.
             </p>
-            <div className='divisor' />
+            <hr className='divisor' />
             <section className='filter'>
                 <form
                     className='filter'
@@ -406,7 +406,7 @@ export default function GoldCalculator(): JSX.Element {
                     )}
                 </form>
             </section>
-            <div className='divisor' />
+            <hr className='divisor' />
             <div className='result'>
                 <div>
                     <span>Card Boxes Needed :</span>

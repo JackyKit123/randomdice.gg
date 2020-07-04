@@ -139,7 +139,7 @@ export default function Header(): JSX.Element {
                         />
                     </label>
                 </div>
-                <div className='divisor' />
+                <hr className='divisor' />
                 {accountLinked.length ? (
                     <>
                         <h3>Account Linked</h3>
@@ -157,7 +157,7 @@ export default function Header(): JSX.Element {
                         </div>
                     </>
                 ) : null}
-                <div className='divisor' />
+                <hr className='divisor' />
                 <h3>Linkable Accounts</h3>
                 <div className='oauth'>
                     {!accountLinked.includes('discord') ? (

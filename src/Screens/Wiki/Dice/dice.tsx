@@ -66,7 +66,7 @@ export default function DiceMechanic(): JSX.Element {
     if (dices && mechanics) {
         const paragraph = dices.map(dice => (
             <div key={dice.name}>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <h3>{dice.name}</h3>
                 <div className='dice-container'>
                     <Dice dice={dice.name || ''} />
@@ -78,7 +78,7 @@ export default function DiceMechanic(): JSX.Element {
             25,
             0,
             <li key='ad'>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <AdUnit unitId='227378933' dimension='300x250' />
                 <AdUnit unitId='219055766' dimension='970x90' />
             </li>

@@ -72,7 +72,7 @@ export default function BossGuide(): JSX.Element {
                             </Fragment>
                         ) : (
                             <Fragment key={boss.name}>
-                                <div className='divisor' />
+                                <hr className='divisor' />
                                 <div className='boss' id={boss.name}>
                                     <figure>
                                         <img src={boss.img} alt={boss.name} />

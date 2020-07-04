@@ -314,7 +314,7 @@ export default function DpsCalculator(): JSX.Element {
                     for other dice and your suggestion may be considered and we
                     will make more calculators.
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <h3>DPS Dice</h3>
                 <div className='multiple-dice'>
                     <div className='dice-container'>
@@ -627,7 +627,7 @@ export default function DpsCalculator(): JSX.Element {
                         />
                     </label>
                 </form>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <h3>Buff Dice</h3>
                 <div className='multiple-dice'>
                     <div className='dice-container'>
@@ -959,7 +959,7 @@ export default function DpsCalculator(): JSX.Element {
                         </form>
                     </div>
                 </div>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='result'>
                     <div className='wave-dmg'>
                         <span>DPS on wave :</span>
@@ -1068,7 +1068,7 @@ export default function DpsCalculator(): JSX.Element {
                         />
                     </div>
                 </div>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <p>
                     The chart below updates according to the information you
                     input above, so you can enter the your dice class and read

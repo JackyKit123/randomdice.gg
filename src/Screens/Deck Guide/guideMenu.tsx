@@ -25,7 +25,7 @@ export default function DeckGuideMenu(): JSX.Element {
                     In here you can find the guide to the meta decks. Click the
                     deck below to show the detail guide for each decks.
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <table className='filter'>
                     <tbody>
                         {guide.map(deck => (

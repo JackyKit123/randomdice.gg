@@ -56,7 +56,7 @@ export default function Dashboard(props: {
                                     ) : null
                                 )}
                         </div>
-                        <div className='divisor' />
+                        <hr className='divisor' />
                         {children || (
                             <>
                                 <h3>Dashboard</h3>

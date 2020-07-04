@@ -32,7 +32,7 @@ export default function PatreonIntro(): JSX.Element {
                 </a>
                 .
             </p>
-            <div className='divisor' />
+            <hr className='divisor' />
             <h3>Tier 3 Supporters</h3>
             <ul>
                 <li>

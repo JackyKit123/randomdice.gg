@@ -293,7 +293,7 @@ export default function editBox(): JSX.Element {
                             </div>
                         ) : null}
                     </form>
-                    <div className='divisor' />
+                    <hr className='divisor' />
                     <button
                         disabled={invalidInput}
                         type='button'

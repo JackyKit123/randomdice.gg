@@ -83,7 +83,7 @@ export default function DiceStat(): JSX.Element {
                     <Link to='/calculator/dps'>dice DPS calculator</Link>{' '}
                     instead.
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='container'>
                     <div className='upper'>
                         <div className='img-container'>
@@ -182,7 +182,7 @@ export default function DiceStat(): JSX.Element {
                         </div>
                     </div>
                 </div>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <p>
                     The table below shows the information of upgrading a dice
                     class. Copies needed and gold needed mean the cost of

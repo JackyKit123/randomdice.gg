@@ -247,7 +247,7 @@ export default function editDice(): JSX.Element {
                     <option>Add a New Dice</option>
                 </select>
             </label>
-            <div className='divisor' />
+            <hr className='divisor' />
             {activeEdit.id === 0 ? null : (
                 <>
                     <form onSubmit={(evt): void => evt.preventDefault()}>
@@ -577,7 +577,7 @@ export default function editDice(): JSX.Element {
                         </label>
                         {activeEdit.name === 'Growth' ? null : (
                             <>
-                                <div className='divisor' />
+                                <hr className='divisor' />
                                 <h3>Arena</h3>
                                 <label htmlFor='dice-arena-type'>
                                     Type:
@@ -685,7 +685,7 @@ export default function editDice(): JSX.Element {
                         )}
                         {activeEdit.rarity === 'Legendary' ? (
                             <>
-                                <div className='divisor' />
+                                <hr className='divisor' />
                                 <h3>Legendary Alternatives</h3>
                                 <label htmlFor='dice-alt-desc'>
                                     Strength Description:
@@ -838,7 +838,7 @@ export default function editDice(): JSX.Element {
                                 </label>
                             </>
                         ) : null}
-                        <div className='divisor' />
+                        <hr className='divisor' />
                         <h3>Detail Dice Mechanic</h3>
                         <CKEditor
                             key={`dice${activeEdit.id}-mechanic`}
@@ -869,7 +869,7 @@ export default function editDice(): JSX.Element {
                             }}
                         />
                     </form>
-                    <div className='divisor' />
+                    <hr className='divisor' />
                     <button
                         disabled={invalidInput}
                         type='button'

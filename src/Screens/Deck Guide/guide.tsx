@@ -49,10 +49,10 @@ export default function DeckGuideMenu(): JSX.Element | null {
                             ))}
                         </div>
                     ))}
-                    <div className='divisor' />
+                    <hr className='divisor' />
                     <AdUnit unitId='227378933' dimension='300x250' />
                     <AdUnit unitId='219055766' dimension='970x90' />
-                    <div className='divisor' />
+                    <hr className='divisor' />
                     {ReactHtmlParser(sanitize(thisGuide?.guide || ''))}
                 </div>
                 <button

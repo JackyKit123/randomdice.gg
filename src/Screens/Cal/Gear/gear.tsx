@@ -70,7 +70,7 @@ export default function GearCalculator(): JSX.Element {
                     0 (1 dice on board) and maxed at 14 chain length (board full
                     of dice).
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='dice-container'>
                     <div>
                         <Dice dice='Gear' />
@@ -220,7 +220,7 @@ export default function GearCalculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='result'>
                     <div className='dmg'>
                         <span>Damage per Gear pip :</span>

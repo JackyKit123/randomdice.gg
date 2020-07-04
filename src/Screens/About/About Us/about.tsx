@@ -21,7 +21,7 @@ export default function AboutUs(): JSX.Element {
                 and we will need to spend our time into making the content. We
                 welcome any suggestions and ideas from the community.
             </p>
-            <div className='divisor' />
+            <hr className='divisor' />
             <h3>Webmaster Information</h3>
             <div className='img-container'>
                 <img src={IconJpg} alt='Icon of JackyKit' />

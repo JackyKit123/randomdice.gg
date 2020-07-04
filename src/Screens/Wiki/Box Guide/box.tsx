@@ -64,7 +64,7 @@ export default function BoxGuide(): JSX.Element {
                         ) : (
                             <Fragment key={box.name}>
                                 <div id={box.name}>
-                                    <div className='divisor' />
+                                    <hr className='divisor' />
                                     <div>
                                         <h3>{box.name}</h3>
                                         <div className='box-container'>

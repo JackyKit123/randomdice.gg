@@ -171,7 +171,7 @@ export default function DeckList({
                     alternatives column to show yourself some alternative
                     options for some legendary dice.
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <PopUp popUpTarget='alt'>
                     <h3>Alternatives List</h3>
                     <div className='original'>
@@ -289,10 +289,10 @@ export default function DeckList({
                         </label>
                     </div>
                 </form>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <AdUnit unitId='227378933' dimension='300x250' />
                 <AdUnit unitId='219055766' dimension='970x90' />
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='table-container'>
                     <table>
                         <thead>

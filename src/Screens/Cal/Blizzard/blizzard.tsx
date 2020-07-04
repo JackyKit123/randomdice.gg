@@ -57,7 +57,7 @@ export default function BlizzardCalculator(): JSX.Element {
                     Frost layers, extra blizzard dices will not give extra slow
                     when 3 layers of frost are applied.
                 </p>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='dice-container'>
                     <Dice dice='Blizzard' />
                     <h3 className='desc'>{data.desc}</h3>
@@ -171,7 +171,7 @@ export default function BlizzardCalculator(): JSX.Element {
                         </label>
                     </form>
                 </div>
-                <div className='divisor' />
+                <hr className='divisor' />
                 <div className='result'>
                     <div>
                         <span>Slow Effect of 1st Blizzard:</span>
