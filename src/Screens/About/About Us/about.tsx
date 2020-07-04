@@ -23,9 +23,9 @@ export default function AboutUs(): JSX.Element {
             </p>
             <hr className='divisor' />
             <h3>Webmaster Information</h3>
-            <div className='img-container'>
+            <figure>
                 <img src={IconJpg} alt='Icon of JackyKit' />
-            </div>
+            </figure>
             <p>Hi, I am the developer of this website.</p>
             <p>
                 I hope you are enjoying the content of this website and found it

@@ -68,9 +68,9 @@ export default function DiceMechanic(): JSX.Element {
             <div key={dice.name}>
                 <hr className='divisor' />
                 <h3>{dice.name}</h3>
-                <div className='dice-container'>
+                <figure>
                     <Dice dice={dice.name || ''} />
-                </div>
+                </figure>
                 {ReactHtmlParser(sanitize(dice.detail))}
             </div>
         ));

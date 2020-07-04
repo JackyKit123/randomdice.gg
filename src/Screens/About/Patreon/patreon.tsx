@@ -37,9 +37,9 @@ export default function PatreonIntro(): JSX.Element {
             <ul>
                 <li>
                     <span>Breakky</span>
-                    <div className='img-container'>
+                    <figure>
                         <img src={BreakkyPng} alt='icon of Breakky' />
-                    </div>
+                    </figure>
                     <div>
                         <Link to='/about/patreon/Breakky/'>
                             Message from Breakky

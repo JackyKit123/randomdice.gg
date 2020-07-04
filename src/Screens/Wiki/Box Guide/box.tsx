@@ -67,9 +67,9 @@ export default function BoxGuide(): JSX.Element {
                                     <hr className='divisor' />
                                     <div>
                                         <h3>{box.name}</h3>
-                                        <div className='box-container'>
+                                        <figure>
                                             <img src={box.img} alt={box.name} />
-                                        </div>
+                                        </figure>
                                         <p>Obtained from: {box.from}</p>
                                         <p>
                                             Contains:{' '}

@@ -124,9 +124,9 @@ export default function Header(): JSX.Element {
                     associated with the same email address in this account.
                 </span>
                 <div className='profile-and-name'>
-                    <div className='img-container'>
+                    <figure>
                         <img src={user?.photoURL || ''} alt='Profile pic' />
-                    </div>
+                    </figure>
                     <label htmlFor='display-name'>
                         <span>Update your display name:</span>
                         <input
@@ -203,12 +203,12 @@ export default function Header(): JSX.Element {
                                     </span>
                                 ) : null}
                                 {user.photoURL ? (
-                                    <div className='img-container'>
+                                    <figure>
                                         <img
                                             src={user.photoURL}
                                             alt='profile pic'
                                         />
-                                    </div>
+                                    </figure>
                                 ) : null}
                                 <span className='user'>
                                     Welcome, {user.displayName}!

@@ -21,9 +21,9 @@ export default function PatreonProfile(): JSX.Element {
             className='patreon-profile'
         >
             <h3>Message from {patreon?.name}</h3>
-            <div className='img-container'>
+            <figure>
                 <img src={BreakkyPng} alt={`Icon of ${patreon?.name}`} />
-            </div>
+            </figure>
             <div className='message'>
                 <p>{patreon?.name} does not have a message to share yet.</p>
             </div>

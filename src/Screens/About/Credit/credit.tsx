@@ -19,63 +19,63 @@ export default function Credit(): JSX.Element {
             <ul>
                 <li>
                     The creator of this website: JackyKit{' '}
-                    <div className='img-container'>
+                    <figure>
                         <img src={JackyKitJpg} alt='icon of JackyKit' />
-                    </div>
+                    </figure>
                 </li>
                 <li>
                     Backend server support: Sweeney{' '}
-                    <div className='img-container'>
+                    <figure>
                         <img src={SweeneyJpg} alt='icon of Sweeney' />
-                    </div>
+                    </figure>
                 </li>
             </ul>
             <h3>Content Provider</h3>
             <ul>
                 <li>
                     Original Deck Database Creator: Campion{' '}
-                    <div className='img-container'>
+                    <figure>
                         <img src={CampionJpg} alt='icon of Campion' />
-                    </div>
+                    </figure>
                 </li>
                 <li>
                     Original Deck Database Creator: FinDiesel{' '}
-                    <div className='img-container'>
+                    <figure>
                         <img src={FinDieselJpg} alt='icon of FinDiesel' />
-                    </div>
+                    </figure>
                 </li>
                 <li>
                     Original Decks and Calculator Maker: TAXA{' '}
-                    <div className='img-container'>
+                    <figure>
                         <img src={TAXAJpg} alt='icon of TAXA' />
-                    </div>
+                    </figure>
                 </li>
                 <li>
                     Decks Maker: BadLuck™{' '}
-                    <div className='img-container'>
+                    <figure>
                         <img src={BadLuckJpg} alt='icon of BadLuck' />
-                    </div>
+                    </figure>
                 </li>
                 <li>
                     Deck Guide Writer: Crunchy{' '}
-                    <div className='img-container'>
+                    <figure>
                         <img src={CrunchyJpg} alt='icon of Crunchy' />
-                    </div>
+                    </figure>
                 </li>
             </ul>
             <h3>Community Manger</h3>
             <ul>
                 <li>
                     Reddit and Discord Manager: Staple{' '}
-                    <div className='img-container'>
+                    <figure>
                         <img src={StapleJpg} alt='icon of Staple' />
-                    </div>
+                    </figure>
                 </li>
                 <li>
                     Wiki Creator: Enry{' '}
-                    <div className='img-container'>
+                    <figure>
                         <img src={EnryJpg} alt='icon of Enry' />
-                    </div>
+                    </figure>
                 </li>
             </ul>
             <h3>
