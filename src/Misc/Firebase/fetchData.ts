@@ -5,6 +5,7 @@ import * as FETCH_DICES from '../Redux Storage/Fetch Firebase/Dices/types';
 import * as FETCH_DECKS from '../Redux Storage/Fetch Firebase/Decks/types';
 import * as FETCH_WIKI from '../Redux Storage/Fetch Firebase/Wiki/types';
 import * as FETCH_DECKS_GUIDE from '../Redux Storage/Fetch Firebase/Decks Guide/types';
+import * as FETCH_CREDIT from '../Redux Storage/Fetch Firebase/Credit/types';
 import * as FETCH_USER from '../Redux Storage/Fetch Firebase/User/types';
 import * as FETCH_NEWS from '../Redux Storage/Fetch Firebase/News/types';
 
@@ -17,7 +18,8 @@ type ActionType =
     | FETCH_WIKI.ActionType
     | FETCH_DECKS_GUIDE.ActionType
     | FETCH_USER.ActionType
-    | FETCH_NEWS.ActionType;
+    | FETCH_NEWS.ActionType
+    | FETCH_CREDIT.ActionType;
 
 async function fetch(
     dispatch: Dispatch,
@@ -77,6 +79,16 @@ export function fetchDecksGuide(
     );
 }
 
+export function fetchCredit(dispatch: Dispatch<FETCH_CREDIT.Action>): void {
+    fetch(
+        dispatch,
+        FETCH_CREDIT.SUCCESS,
+        FETCH_CREDIT.FAIL,
+        '/credit',
+        'credit'
+    );
+}
+
 export function fetchUser(
     dispatch: Dispatch<FETCH_USER.Action>,
     uid: string
@@ -94,4 +106,5 @@ export default function fetchAll(dispatch: Dispatch): void {
     fetchDices(dispatch);
     fetchWiki(dispatch);
     fetchNews(dispatch);
+    fetchCredit(dispatch);
 }
