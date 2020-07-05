@@ -290,6 +290,14 @@ export const menu: Menu[] = [
                 excludeFromMenu: true,
                 component: lazy(() => import('../Screens/Dashboard/News/news')),
             },
+            {
+                name: 'Credit',
+                path: '/dashboard/credit',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Dashboard/Credit/credit')
+                ),
+            },
         ],
     },
     {

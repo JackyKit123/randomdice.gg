@@ -74,6 +74,9 @@ export default function editBoss(): JSX.Element {
                         responseType: 'blob',
                     })
                 ).data;
+                await storage
+                    .ref(`Boss Images/${originalBoss.name}.png`)
+                    .delete();
                 reader.readAsDataURL(img);
                 reader.onloadend = async (): Promise<void> => {
                     const base64 = reader.result as string;

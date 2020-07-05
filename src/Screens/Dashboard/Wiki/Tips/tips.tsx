@@ -47,13 +47,7 @@ export default function editTips(): JSX.Element {
 
     const handleSubmit = async (): Promise<void> => {
         if (activeEdit) {
-            const originalTips = tips.find(tip => tip.id === activeEdit.id);
             if (/^data:image\/png;base64,/.test(activeEdit.img)) {
-                if (originalTips) {
-                    await storage
-                        .ref(`Tip Images/${originalTips.id}.png`)
-                        .delete();
-                }
                 await storage
                     .ref(`Tip Images/${activeEdit.id}.png`)
                     .putString(activeEdit.img, 'data_url', {
@@ -63,38 +57,6 @@ export default function editTips(): JSX.Element {
                     .ref(`Tip Images/${activeEdit.id}.png`)
                     .getDownloadURL();
                 activeEdit.img = newUrl;
-            } else if (originalTips && originalTips.id !== activeEdit.id) {
-                const reader = new FileReader();
-                const img = (
-                    await axios.get(originalTips.img, {
-                        responseType: 'blob',
-                    })
-                ).data;
-                reader.readAsDataURL(img);
-                reader.onloadend = async (): Promise<void> => {
-                    const base64 = reader.result as string;
-                    await storage
-                        .ref(`Tip Images/${activeEdit.id}.png`)
-                        .putString(base64, 'data_url', {
-                            cacheControl: 'public,max-age=4000',
-                        });
-                    const newUrl = await storage
-                        .ref(`Tip Images/${activeEdit.id}.png`)
-                        .getDownloadURL();
-                    activeEdit.img = newUrl;
-                    const result = tips.map(tip => {
-                        if (tip.id === activeEdit.id) {
-                            return activeEdit;
-                        }
-                        return tip;
-                    });
-                    database.set(result);
-                    setTips(result);
-                    setActiveEdit({ ...initialState });
-                    if (selectRef.current) {
-                        selectRef.current.value = '?';
-                    }
-                };
             }
             let updateTips = false;
             const result = tips.map(tip => {

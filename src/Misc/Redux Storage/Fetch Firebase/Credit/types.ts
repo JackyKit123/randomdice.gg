@@ -10,20 +10,20 @@ export const FAIL = 'FETCH_CREDIT_FAIL';
 
 export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
-interface People {
+export interface People {
     id: number;
     name: string;
     img: string;
     role: string;
 }
 
-interface Category {
+export interface Category {
     id: number;
     category: string;
     people: People[];
 }
 
-type Credit = Category[];
+export type Credit = Category[];
 
 export interface FetchState {
     credit: Credit | undefined;

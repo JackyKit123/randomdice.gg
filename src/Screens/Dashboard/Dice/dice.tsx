@@ -120,6 +120,9 @@ export default function editDice(): JSX.Element {
                         responseType: 'blob',
                     })
                 ).data;
+                await storage
+                    .ref(`Dice Images/${originalDice.name}.png`)
+                    .delete();
                 reader.readAsDataURL(img);
                 reader.onloadend = async (): Promise<void> => {
                     const base64 = reader.result as string;
