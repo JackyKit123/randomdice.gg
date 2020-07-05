@@ -48,11 +48,11 @@ export const discord_login = functions.https.onRequest((req, res) => {
                 const userData = getUserData.data;
                 const uid = `discord-${userData.id}`;
                 const isEditor = (
-                    await database
-                        .ref(`/users/${uid}/editor`)
-                        .once('value')
+                    await database.ref(`/users/${uid}/editor`).once('value')
                 ).val();
-                const authToken = await auth.createCustomToken(uid, { isEditor });
+                const authToken = await auth.createCustomToken(uid, {
+                    isEditor,
+                });
 
                 try {
                     const userExist = await auth.getUserByEmail(userData.email);
@@ -71,7 +71,8 @@ export const discord_login = functions.https.onRequest((req, res) => {
                         if (userData.verified || uid === userExist.uid) {
                             res.send({
                                 authToken: await auth.createCustomToken(
-                                    userExist.uid, { isEditor }
+                                    userExist.uid,
+                                    { isEditor }
                                 ),
                             });
                             await database
@@ -90,7 +91,8 @@ export const discord_login = functions.https.onRequest((req, res) => {
                         ) {
                             res.send({
                                 authToken: await auth.createCustomToken(
-                                    userExist.uid, { isEditor }
+                                    userExist.uid,
+                                    { isEditor }
                                 ),
                             });
                         } else {
@@ -190,11 +192,11 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                 const userData = getUserData.data;
                 const uid = `patreon-${userData.data.id}`;
                 const isEditor = (
-                    await database
-                        .ref(`/users/${uid}/editor`)
-                        .once('value')
+                    await database.ref(`/users/${uid}/editor`).once('value')
                 ).val();
-                const authToken = await auth.createCustomToken(uid, { isEditor });
+                const authToken = await auth.createCustomToken(uid, {
+                    isEditor,
+                });
 
                 try {
                     const userExist = await auth.getUserByEmail(
@@ -218,7 +220,8 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                         ) {
                             res.send({
                                 authToken: await auth.createCustomToken(
-                                    userExist.uid, { isEditor }
+                                    userExist.uid,
+                                    { isEditor }
                                 ),
                             });
                             await database
@@ -237,7 +240,8 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                         ) {
                             res.send({
                                 authToken: await auth.createCustomToken(
-                                    userExist.uid, { isEditor }
+                                    userExist.uid,
+                                    { isEditor }
                                 ),
                             });
                         } else {
@@ -327,7 +331,7 @@ export const fetchPatreon = functions.pubsub
             );
 
             const { access_token } = res.data;
-
+            await token_store.set(res.data.refresh_token);
             const getMemberData = await axios.get(
                 `${url}/api/oauth2/v2/campaigns/4696297/members?include=currently_entitled_tiers,user`,
                 {
@@ -350,6 +354,7 @@ export const fetchPatreon = functions.pubsub
             const campaignData = getCampaignData.data;
 
             interface Member {
+                id: string;
                 relationships: {
                     currently_entitled_tiers: {
                         data: { id: string }[];
@@ -365,23 +370,43 @@ export const fetchPatreon = functions.pubsub
             const tierList = campaignData.included.map(
                 (tier: { id: string }) => tier.id
             );
-            const patreonList = memberData.data.map((member: Member) => {
-                const tierArr = member.relationships.currently_entitled_tiers.data.map(
-                    t => t.id
-                );
-                let tier;
-                for (let i = tierList.length; i > 0; i--) {
-                    if (tierArr.includes(tierList[i])) {
-                        tier = i + 1;
+            const patreonList = await Promise.all(
+                memberData.data.map(async (member: Member) => {
+                    const tierArr = member.relationships.currently_entitled_tiers.data.map(
+                        t => t.id
+                    );
+                    let tier;
+                    for (let i = tierList.length; i > 0; i--) {
+                        if (tierArr.includes(tierList[i])) {
+                            tier = i + 1;
+                        }
                     }
-                }
+                    const userData = (
+                        await axios.get(
+                            `${url}/api/oauth2/v2/members/${member.id}?fields%5Bmember%5D=full_name`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${access_token}`,
+                                    'Content-Type':
+                                        'application/x-www-form-urlencoded',
+                                },
+                            }
+                        )
+                    ).data;
 
-                return {
-                    id: member.relationships.user.data.id,
-                    tier,
-                };
-            }) as { id: string; tier: number }[];
-            await token_store.set(res.data.refresh_token);
+                    return {
+                        id: member.relationships.user.data.id,
+                        name: userData.data.attributes.full_name,
+                        tier,
+                    };
+                }) as {
+                    id: string;
+                    name: string;
+                    img: string | undefined;
+                    tier: number;
+                }[]
+            );
+
             const users = (
                 await database.ref('/users').once('value')
             ).val() as {
@@ -390,15 +415,36 @@ export const fetchPatreon = functions.pubsub
                 };
             };
             const usersData = Object.entries(users);
-            usersData.forEach(async ([uid, userData]) => {
-                const patreonId = userData['linked-account'].patreon;
-                const isPatreon = patreonList.find(
-                    patreon => patreon.id === patreonId
-                );
-                await database
-                    .ref(`/users/${uid}/patreon-tier`)
-                    .set(isPatreon?.tier || 0);
-            });
+            await Promise.all(
+                usersData.map(async ([uid, userData]) => {
+                    const patreonId = userData['linked-account'].patreon;
+                    const isPatreon = patreonList.find(
+                        patreon => patreon.id === patreonId
+                    );
+                    if (isPatreon) {
+                        try {
+                            const i = patreonList.findIndex(
+                                patreon => patreon.id === patreonId
+                            );
+                            const userProfile = await auth.getUser(uid);
+                            patreonList[i].id = uid;
+                            patreonList[i].name =
+                                userProfile.displayName || patreonList[i].name;
+                            patreonList[i].img = userProfile.photoURL;
+                            await database
+                                .ref(`/users/${uid}/patreon-tier`)
+                                .set(isPatreon.tier);
+                        } finally {
+                            await database
+                                .ref(`/users/${uid}/patreon-tier`)
+                                .set(isPatreon.tier);
+                        }
+                    } else {
+                        await database.ref(`/users/${uid}/patreon-tier`).set(0);
+                    }
+                })
+            );
+            await database.ref('/patreon_list').set(patreonList);
         } catch (err) {
             console.log(err.message);
         }

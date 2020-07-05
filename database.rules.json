@@ -36,7 +36,7 @@
                 ".read": "auth.uid === $uid || auth.uid === 'my-service-worker'",
                 ".write": "auth.uid === $uid",
                 "editor": {
-                  ".write": false
+                    ".write": false
                 },
                 "linked-account": {
                     ".write": "auth.uid === 'my-service-worker'"
@@ -45,6 +45,10 @@
                     ".write": "auth.uid === 'my-service-worker'"
                 }
             }
+        },
+        "patreon_list": {
+            ".read": true,
+            ".write": "auth.uid === 'my-service-worker'",
         }
     }
 }
