@@ -1,6 +1,5 @@
 import React from 'react';
 import Main from '../../../Components/Main/main';
-import IconJpg from './JackyKit.jpg';
 import './about.less';
 
 export default function AboutUs(): JSX.Element {
@@ -24,7 +23,10 @@ export default function AboutUs(): JSX.Element {
             <hr className='divisor' />
             <h3>Webmaster Information</h3>
             <figure>
-                <img src={IconJpg} alt='Icon of JackyKit' />
+                <img
+                    src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/People%20Images%2FJackyKit.png?alt=media&token=798ada68-b17e-48a8-8af1-095c7df7169b'
+                    alt='Icon of JackyKit'
+                />
             </figure>
             <p>Hi, I am the developer of this website.</p>
             <p>
