@@ -21,13 +21,13 @@
             ".read": true,
             ".write": "auth.token.isEditor === true"
         },
-        "credit": {
-            ".read": true,
-            ".write": "auth.token.isEditor === true"
-        },
         "token_storage": {
             ".read": "auth.uid === 'my-service-worker'",
             ".write": "auth.uid === 'my-service-worker'"
+        },
+        "credit": {
+            ".read": true,
+            ".write": "auth.token.isEditor === true"
         },
         "users": {
             ".read": "auth.uid === 'my-service-worker'",
@@ -49,6 +49,13 @@
         "patreon_list": {
             ".read": true,
             ".write": "auth.uid === 'my-service-worker'",
+            "$i": {
+                "$uid": {
+                    "message": {
+                        ".write": "auth.uid === $uid"
+                    }
+                }
+            }
         }
     }
 }

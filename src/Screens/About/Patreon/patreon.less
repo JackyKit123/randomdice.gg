@@ -52,8 +52,15 @@
 }
 
 .patreon-profile {
+    button.edit {
+        position: absolute;
+        font-size: 12px;
+        padding: 5px;
+    }
+
     figure {
         float: right;
+        margin-left: 20px;
         height: 200px;
         width: 200px;
         border-radius: 50%;
@@ -71,5 +78,52 @@
 
     .message {
         min-height: 200px;
+
+        ul li {
+            list-style: disc;
+        }
+
+        ol li {
+            list-style: decimal;
+        }
+
+        li {
+            margin: 0 0 20px 20px;
+        }
+    }
+
+    .editor-container {
+        min-height: 200px;
+        margin-bottom: 20px;
+
+        button.submit {
+            font-size: 12px;
+            padding: 5px;
+            margin-top: 20px;
+        }
+
+        .ck {
+            &.ck-sticky-panel .ck-sticky-panel__content_sticky {
+                top: 80px;
+            }
+
+            &.ck-label {
+                display: none;
+            }
+
+            &.ck-editor__editable {
+                ul li {
+                    list-style: disc;
+                }
+
+                ol li {
+                    list-style: decimal;
+                }
+
+                li {
+                    margin: 0 0 20px 20px;
+                }
+            }
+        }
     }
 }

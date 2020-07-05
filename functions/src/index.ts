@@ -399,12 +399,16 @@ export const fetchPatreon = functions.pubsub
                         name: userData.data.attributes.full_name,
                         tier,
                     };
-                }) as {
+                }) as ({
                     id: string;
                     name: string;
                     img: string | undefined;
                     tier: number;
-                }[]
+                } & {
+                    [key: string]: {
+                        message: string;
+                    };
+                })[]
             );
 
             const users = (
@@ -431,6 +435,16 @@ export const fetchPatreon = functions.pubsub
                             patreonList[i].name =
                                 userProfile.displayName || patreonList[i].name;
                             patreonList[i].img = userProfile.photoURL;
+                            patreonList[i][uid] = {
+                                message:
+                                    (
+                                        await database
+                                            .ref(
+                                                `/patreon_list/${i}/${uid}/message`
+                                            )
+                                            .once('value')
+                                    ).val() || '',
+                            };
                             await database
                                 .ref(`/users/${uid}/patreon-tier`)
                                 .set(isPatreon.tier);

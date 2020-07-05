@@ -16,7 +16,7 @@ interface Message {
     };
 }
 
-interface Patreon {
+export interface Patreon {
     id: string;
     name: string;
     img: string | undefined;
