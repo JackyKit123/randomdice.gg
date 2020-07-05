@@ -7,6 +7,7 @@ import fetchNewsReducer from './Fetch Firebase/News/reducer';
 import fetchDecksGuideReducer from './Fetch Firebase/Decks Guide/reducer';
 import fetchCreditReducer from './Fetch Firebase/Credit/reducer';
 import fetchUserDataReducer from './Fetch Firebase/User/reducer';
+import fetchPatreonListReducer from './Fetch Firebase/Patreon List/reducer';
 import authReducer from './Firebase Auth/reducer';
 import filterReducer from './Deck Filter/reducer';
 import popupReducer from './PopUp Overlay/reducer';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
     fetchUserDataReducer,
     fetchDecksGuideReducer,
     fetchCreditReducer,
+    fetchPatreonListReducer,
     filterReducer,
     authReducer,
     popupReducer,

@@ -8,6 +8,7 @@ import * as FETCH_DECKS_GUIDE from '../Redux Storage/Fetch Firebase/Decks Guide/
 import * as FETCH_CREDIT from '../Redux Storage/Fetch Firebase/Credit/types';
 import * as FETCH_USER from '../Redux Storage/Fetch Firebase/User/types';
 import * as FETCH_NEWS from '../Redux Storage/Fetch Firebase/News/types';
+import * as FETCH_PATREON from '../Redux Storage/Fetch Firebase/Patreon List/types';
 
 const database = firebase.apps.length
     ? firebase.database()
@@ -19,7 +20,8 @@ type ActionType =
     | FETCH_DECKS_GUIDE.ActionType
     | FETCH_USER.ActionType
     | FETCH_NEWS.ActionType
-    | FETCH_CREDIT.ActionType;
+    | FETCH_CREDIT.ActionType
+    | FETCH_PATREON.ActionType;
 
 async function fetch(
     dispatch: Dispatch,
@@ -100,6 +102,16 @@ export function fetchNews(dispatch: Dispatch<FETCH_NEWS.Action>): void {
     fetch(dispatch, FETCH_NEWS.SUCCESS, FETCH_NEWS.FAIL, '/news', 'news');
 }
 
+export function fetchPatreon(dispatch: Dispatch<FETCH_PATREON.Action>): void {
+    fetch(
+        dispatch,
+        FETCH_PATREON.SUCCESS,
+        FETCH_PATREON.FAIL,
+        '/patreon_list',
+        'patreon_list'
+    );
+}
+
 export default function fetchAll(dispatch: Dispatch): void {
     fetchDecks(dispatch);
     fetchDecksGuide(dispatch);
@@ -107,4 +119,5 @@ export default function fetchAll(dispatch: Dispatch): void {
     fetchWiki(dispatch);
     fetchNews(dispatch);
     fetchCredit(dispatch);
+    fetchPatreon(dispatch);
 }

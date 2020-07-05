@@ -15,37 +15,38 @@
         }
     }
 
-    ul {
+    h3 ~ div {
         text-align: center;
         min-height: 100px;
+        margin: 15px 0;
 
-        li {
-            margin: 15px 0;
+        & > figure {
+            display: inline-block;
+            margin: 0 0 10px 20px;
+            border-radius: 50%;
+            .box-shadow(0 0 5px 5px rgba(0, 0, 0, 0.3));
+            overflow: hidden;
+            height: 100px;
+            width: 100px;
+            vertical-align: middle;
 
-            & > figure {
-                display: inline-block;
-                margin: 0 0 10px 20px;
-                border-radius: 50%;
-                .box-shadow(0 0 5px 5px rgba(0, 0, 0, 0.3));
-                overflow: hidden;
-                height: 100px;
-                width: 100px;
-                vertical-align: middle;
-
-                @media @mobile {
-                    display: block;
-                    margin: 10px auto;
-                }
-
-                & > img {
-                    width: 100%;
-                }
+            @media @mobile {
+                display: block;
+                margin: 10px auto;
             }
 
-            a {
-                font-size: 20px;
-                font-style: italic;
+            &.no-icon {
+                padding: 15px;
             }
+
+            & > img {
+                width: 100%;
+            }
+        }
+
+        a {
+            font-size: 20px;
+            font-style: italic;
         }
     }
 }
@@ -58,6 +59,10 @@
         border-radius: 50%;
         .box-shadow(0 0 5px 5px rgba(0, 0, 0, 0.3));
         overflow: hidden;
+
+        &.no-icon {
+            padding: 28px;
+        }
 
         img {
             width: 100%;
