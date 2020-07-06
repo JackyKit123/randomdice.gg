@@ -64,7 +64,7 @@ export default function DpsCalculator(): JSX.Element {
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
-        filter.crit > 2108;
+        filter.crit > 2109;
     const invalidInput = isInvalidCrit;
 
     const data = {
@@ -560,7 +560,7 @@ export default function DpsCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2108</strong>.
+                        <strong>111-2109</strong>.
                     </span>
                 ) : (
                     ''
@@ -613,7 +613,7 @@ export default function DpsCalculator(): JSX.Element {
                             type='number'
                             name='crit dmg'
                             min={111}
-                            max={2108}
+                            max={2109}
                             step={1}
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}

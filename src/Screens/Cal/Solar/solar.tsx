@@ -60,7 +60,7 @@ export default function SolarCalculator(): JSX.Element {
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
-        filter.crit > 2108;
+        filter.crit > 2109;
     const isInvalidDuration =
         !Number.isInteger(filter.duration) || filter.duration <= 0;
     const invalidInput = isInvalidCrit || isInvalidDuration;
@@ -619,7 +619,7 @@ export default function SolarCalculator(): JSX.Element {
                             type='number'
                             name='crit dmg'
                             min={111}
-                            max={2108}
+                            max={2109}
                             step={1}
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
@@ -661,7 +661,7 @@ export default function SolarCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2108</strong>.
+                        <strong>111-2109</strong>.
                     </span>
                 ) : (
                     ''
