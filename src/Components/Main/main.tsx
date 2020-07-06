@@ -31,8 +31,12 @@ export default function Main(props: {
                 </div>
             </Online>
             <div className={`main ${className}`}>
-                <AdUnit unitId='521838365' dimension='970x90' />
-                <AdUnit unitId='431667212' dimension='300x250' />
+                <AdUnit
+                    provider='Google'
+                    unitId='3944820222'
+                    dimension='mobile'
+                    style={{ display: 'block' }}
+                />
                 <div className='content'>{children}</div>
             </div>
         </main>

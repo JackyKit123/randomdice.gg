@@ -56,10 +56,15 @@ export default function BoxGuide(): JSX.Element {
                             <Fragment key='ad'>
                                 <hr className='divisor' />
                                 <AdUnit
+                                    provider='Media.net'
                                     unitId='227378933'
                                     dimension='300x250'
                                 />
-                                <AdUnit unitId='219055766' dimension='970x90' />
+                                <AdUnit
+                                    provider='Media.net'
+                                    unitId='219055766'
+                                    dimension='970x90'
+                                />
                             </Fragment>
                         ) : (
                             <Fragment key={box.name}>

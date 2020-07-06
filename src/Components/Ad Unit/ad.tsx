@@ -8,14 +8,17 @@ import './ad.less';
 import { RootState } from '../../Misc/Redux Storage/store';
 
 export default function AdUnit({
+    provider,
     unitId,
     dimension,
 }: {
+    provider: 'Google' | 'Media.net';
     unitId: string;
     dimension: string;
-}): JSX.Element {
+    style?: React.CSSProperties;
+}): JSX.Element | null {
     const { user } = useSelector((state: RootState) => state.authReducer);
-    const [adFree, setAdFree] = useState(false);
+    const [adFree, setAdFree] = useState<true | null>(null);
 
     useEffect(() => {
         if (user) {
@@ -31,14 +34,31 @@ export default function AdUnit({
 
     useEffect(() => {
         try {
-            // eslint-disable-next-line func-names
-            window._mNHandle.queue.push(function() {
-                window._mNDetails.loadTag(unitId, dimension, unitId);
-            });
+            if (provider === 'Media.net') {
+                // eslint-disable-next-line func-names
+                window._mNHandle.queue.push(function() {
+                    window._mNDetails.loadTag(unitId, dimension, unitId);
+                });
+            } else if (provider === 'Google') {
+                const element = document.getElementsByTagName('script')[0];
+                const scriptTag = document.createElement('script');
+                scriptTag.id = 'google-ads-sdk';
+                scriptTag.src =
+                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+                // eslint-disable-next-line no-unused-expressions
+                element.parentNode?.insertBefore(scriptTag, element);
+                scriptTag.onload = (): void => {
+                    (window.adsbygoogle = window.adsbygoogle || []).push({});
+                };
+            }
         } catch (err) {
             //
         }
-    }, []);
+    }, [adFree]);
+
+    if (adFree) {
+        return null;
+    }
 
     return (
         <div
@@ -66,6 +86,16 @@ export default function AdUnit({
             ) : (
                 <div id={unitId}>
                     <h6 className='sponsor'>Sponsor</h6>
+                    {provider === 'Media.net' ? null : (
+                        <ins
+                            className='adsbygoogle'
+                            style={{ display: 'block' }}
+                            data-ad-client='ca-pub-3031422008949072'
+                            data-ad-slot={unitId}
+                            data-ad-format='auto'
+                            data-full-width-responsive='true'
+                        />
+                    )}
                 </div>
             )}
         </div>

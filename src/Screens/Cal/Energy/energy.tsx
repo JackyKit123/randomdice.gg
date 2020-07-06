@@ -583,8 +583,16 @@ export default function EnergyCalculator(): JSX.Element {
                     ''
                 )}
                 <hr className='divisor' />
-                <AdUnit unitId='227378933' dimension='300x250' />
-                <AdUnit unitId='219055766' dimension='970x90' />
+                <AdUnit
+                    provider='Media.net'
+                    unitId='227378933'
+                    dimension='300x250'
+                />
+                <AdUnit
+                    provider='Media.net'
+                    unitId='219055766'
+                    dimension='970x90'
+                />
                 <hr className='divisor' />
                 <div className='result'>
                     <div className='dmg'>

@@ -64,26 +64,6 @@ export default function DiceMechanic(): JSX.Element {
     let jsx;
 
     if (dices && mechanics) {
-        const paragraph = dices.map(dice => (
-            <div key={dice.name}>
-                <hr className='divisor' />
-                <h3>{dice.name}</h3>
-                <figure>
-                    <Dice dice={dice.name || ''} />
-                </figure>
-                {ReactHtmlParser(sanitize(dice.detail))}
-            </div>
-        ));
-        paragraph.splice(
-            25,
-            0,
-            <li key='ad'>
-                <hr className='divisor' />
-                <AdUnit unitId='227378933' dimension='300x250' />
-                <AdUnit unitId='219055766' dimension='970x90' />
-            </li>
-        );
-
         jsx = (
             <>
                 <p className='intro'>
@@ -101,10 +81,15 @@ export default function DiceMechanic(): JSX.Element {
                             <Fragment key='ad'>
                                 <hr className='divisor' />
                                 <AdUnit
+                                    provider='Media.net'
                                     unitId='227378933'
                                     dimension='300x250'
                                 />
-                                <AdUnit unitId='219055766' dimension='970x90' />
+                                <AdUnit
+                                    provider='Media.net'
+                                    unitId='219055766'
+                                    dimension='970x90'
+                                />
                             </Fragment>
                         ) : (
                             <Fragment key={dice.name}>

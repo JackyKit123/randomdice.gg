@@ -3,6 +3,7 @@ interface Window {
     gapi: gapi;
     _mNHandle: _mNHandle;
     _mNDetails: _mNDetails;
+    adsbygoogle: adsbygoogle;
 }
 
 interface WindowEventMap {
@@ -11,6 +12,10 @@ interface WindowEventMap {
 
 declare module 'react-router-ga' {
     export default function Analytics({ children }: ReactNode): JSX.Element;
+}
+
+declare module 'react-google-ads' {
+    export default function GoogleAds({ client, slot, style }): JSX.Element;
 }
 
 declare module 'react-detect-offline' {

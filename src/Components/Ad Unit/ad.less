@@ -1,8 +1,10 @@
 @import '../../cross_import_lesshat.less';
 
 .ad-container {
+    margin: 0 auto 20px;
     max-width: 1200px;
     width: 100%;
+    overflow: hidden;
 
     &.hide {
         display: none;
@@ -26,7 +28,8 @@
 
     & > div {
         width: 100%;
-        margin: 0 auto 20px;
+        margin: 0 auto;
+        padding: 3px;
 
         &.ad-block-warning {
             background: rgba(255, 255, 255, 0.5);
@@ -48,7 +51,8 @@
             font-size: 15px;
         }
 
-        & > iframe {
+        & > iframe,
+        & > ins {
             .box-shadow(0 0 10px -1px #192425);
         }
     }
