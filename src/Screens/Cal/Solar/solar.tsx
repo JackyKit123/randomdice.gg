@@ -723,11 +723,11 @@ export default function SolarCalculator(): JSX.Element {
                                     case t > 999999999999999999:
                                         return `${Math.round(
                                             t / 100000000000000000
-                                        ) / 10}T`;
+                                        ) / 10}q`;
                                     case t > 999999999999999:
                                         return `${Math.round(
                                             t / 100000000000000
-                                        ) / 10}T`;
+                                        ) / 10}t`;
                                     case t > 999999999999:
                                         return `${Math.round(t / 100000000000) /
                                             10}G`;
@@ -896,11 +896,11 @@ export default function SolarCalculator(): JSX.Element {
                                     case t > 999999999999999999:
                                         return `${Math.round(
                                             t / 100000000000000000
-                                        ) / 10}T`;
+                                        ) / 10}q`;
                                     case t > 999999999999999:
                                         return `${Math.round(
                                             t / 100000000000000
-                                        ) / 10}T`;
+                                        ) / 10}t`;
                                     case t > 999999999999:
                                         return `${Math.round(t / 100000000000) /
                                             10}G`;

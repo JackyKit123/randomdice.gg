@@ -1098,7 +1098,36 @@ export default function DpsCalculator(): JSX.Element {
                                 },
                             }}
                         />
-                        <VictoryAxis dependentAxis />
+                        <VictoryAxis
+                            dependentAxis
+                            tickFormat={(t): string => {
+                                switch (true) {
+                                    case t > 999999999999999999999:
+                                        return t;
+                                    case t > 999999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000000
+                                        ) / 10}Q`;
+                                    case t > 999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000
+                                        ) / 10}t`;
+                                    case t > 999999999999:
+                                        return `${Math.round(t / 100000000000) /
+                                            10}G`;
+                                    case t > 999999999:
+                                        return `${Math.round(t / 100000000) /
+                                            10}B`;
+                                    case t > 999999:
+                                        return `${Math.round(t / 100000) /
+                                            10}M`;
+                                    case t > 999:
+                                        return `${Math.round(t / 100) / 10}K`;
+                                    default:
+                                        return t;
+                                }
+                            }}
+                        />
                         <VictoryLine
                             name='No Buff'
                             samples={4}
@@ -1209,7 +1238,36 @@ export default function DpsCalculator(): JSX.Element {
                                 },
                             }}
                         />
-                        <VictoryAxis dependentAxis />
+                        <VictoryAxis
+                            dependentAxis
+                            tickFormat={(t): string => {
+                                switch (true) {
+                                    case t > 999999999999999999999:
+                                        return t;
+                                    case t > 999999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000000
+                                        ) / 10}q`;
+                                    case t > 999999999999999:
+                                        return `${Math.round(
+                                            t / 100000000000000
+                                        ) / 10}t`;
+                                    case t > 999999999999:
+                                        return `${Math.round(t / 100000000000) /
+                                            10}G`;
+                                    case t > 999999999:
+                                        return `${Math.round(t / 100000000) /
+                                            10}B`;
+                                    case t > 999999:
+                                        return `${Math.round(t / 100000) /
+                                            10}M`;
+                                    case t > 999:
+                                        return `${Math.round(t / 100) / 10}K`;
+                                    default:
+                                        return t;
+                                }
+                            }}
+                        />
                         <VictoryLine
                             name='No Buff'
                             samples={4}
