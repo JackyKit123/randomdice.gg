@@ -6,10 +6,6 @@
     width: 100%;
     overflow: hidden;
 
-    &.hide {
-        display: none;
-    }
-
     &[data-dimension='970x90'] {
         @media @mobile {
             display: none;
@@ -37,6 +33,8 @@
             border-radius: 5px;
             padding: 15px 10px;
             line-height: 30px;
+            .calc(width, ~'100% - 10px');
+            margin: 5px;
 
             & > span > a {
                 font-size: inherit;
