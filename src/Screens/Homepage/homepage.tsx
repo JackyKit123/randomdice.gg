@@ -55,7 +55,7 @@ export default function Homepage(): JSX.Element {
                     >
                         Discord
                     </a>{' '}
-                    or on
+                    or on{' '}
                     <a
                         href='https://www.reddit.com/r/randomdice/'
                         target='_blank'
