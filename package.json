@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.10.2",
+    "@babel/core": "^7.10.4",
     "@babel/register": "^7.10.1",
     "@ckeditor/ckeditor5-build-classic": "^20.0.0",
     "@ckeditor/ckeditor5-react": "^2.1.0",
@@ -33,8 +33,7 @@
     "adblockdetect": "^0.0.2",
     "axios": "^0.19.2",
     "babel-eslint": "10.1.0",
-    "babel-jest": "^24.9.0",
-    "babel-loader": "8.1.0",
+    "babel-loader": "^8.1.0",
     "babel-plugin-named-asset-import": "^0.3.6",
     "babel-preset-react-app": "^9.1.2",
     "camelcase": "^5.3.1",
@@ -62,10 +61,6 @@
     "history": "^4.10.1",
     "html-webpack-plugin": "4.0.0-beta.11",
     "identity-obj-proxy": "3.0.0",
-    "jest": "24.9.0",
-    "jest-environment-jsdom-fourteen": "1.0.1",
-    "jest-resolve": "24.9.0",
-    "jest-watch-typeahead": "0.4.2",
     "less": "^3.11.1",
     "less-loader": "^6.1.0",
     "lesshat": "^4.1.0",
@@ -107,7 +102,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "node scripts/makeSitemap.js && node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
