@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -15,6 +15,7 @@ import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
 import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Misc/Redux Storage/store';
+import { Dice as DiceType } from '../../../Misc/Redux Storage/Fetch Firebase/Dices/types';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import '../cal.less';
@@ -53,10 +54,7 @@ export default function SolarCalculator(): JSX.Element {
         },
     });
     let jsx;
-    const solarData = dices?.find(dice => dice.name === 'Solar');
-    const lightData = dices?.find(dice => dice.name === 'Light');
-    const critData = dices?.find(dice => dice.name === 'Critical');
-    const moonData = dices?.find(dice => dice.name === 'Moon');
+
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
@@ -65,78 +63,52 @@ export default function SolarCalculator(): JSX.Element {
         !Number.isInteger(filter.duration) || filter.duration <= 0;
     const invalidInput = isInvalidCrit || isInvalidDuration;
 
-    if (solarData && lightData && critData && moonData) {
+    if (dices) {
         const diceData = {
-            solar: {
-                baseAtk: solarData.atk,
-                atkPerClass: solarData.cupAtk,
-                atkPerLevel: solarData.pupAtk,
-                atkSpd: solarData.spd / 2, // active solar
-                splashDmg: solarData.eff1,
-                splashDmgPerClass: solarData.cupEff1,
-                splashDmgPerLevel: solarData.pupEff1,
-            },
-            light: {
-                baseBuff: lightData.eff1,
-                buffPerClass: lightData.cupEff1,
-                buffPerLevel: lightData.pupEff1,
-            },
-            crit: {
-                baseBuff: critData.eff1,
-                buffPerClass: critData.cupEff1,
-                buffPerLevel: critData.pupEff1,
-            },
-            moon: {
-                baseBuff: moonData.eff1,
-                buffPerClass: moonData.cupEff1,
-                buffPerLevel: moonData.pupEff1,
-                activeAtkBuff: 10,
-                activeCritBuff: 5,
-            },
+            solar: dices.find(dice => dice.name === 'Solar') as DiceType,
+            light: dices.find(dice => dice.name === 'Light') as DiceType,
+            crit: dices.find(dice => dice.name === 'Critical') as DiceType,
+            moon: dices.find(dice => dice.name === 'Moon') as DiceType,
         };
 
         const basicDmgPerHit =
-            (filter.solar.class - 7) * diceData.solar.atkPerClass +
-            diceData.solar.baseAtk +
-            diceData.solar.atkPerLevel * (filter.solar.level - 1);
+            (filter.solar.class - 7) * diceData.solar.cupAtk +
+            diceData.solar.atk +
+            diceData.solar.pupAtk * (filter.solar.level - 1);
         const basicDmgPerSplash =
-            (filter.solar.class - 7) * diceData.solar.splashDmgPerClass +
-            diceData.solar.splashDmg +
-            diceData.solar.splashDmgPerLevel * (filter.solar.level - 1);
+            (filter.solar.class - 7) * diceData.solar.cupEff1 +
+            diceData.solar.eff1 +
+            diceData.solar.pupEff1 * (filter.solar.level - 1);
         const moonBuffedDmgPerHit = filter.moon.active
-            ? ((filter.moon.pip * diceData.moon.activeAtkBuff) / 100 + 1) *
-              basicDmgPerHit
+            ? ((filter.moon.pip * 10) / 100 + 1) * basicDmgPerHit
             : basicDmgPerHit;
         const moonBuffedDmgPerSplash = filter.moon.active
-            ? ((filter.moon.pip * diceData.moon.activeAtkBuff) / 100 + 1) *
-              basicDmgPerSplash
+            ? ((filter.moon.pip * 10) / 100 + 1) * basicDmgPerSplash
             : basicDmgPerSplash;
 
         const lightBuff =
-            ((filter.light.class - 3) * diceData.light.buffPerClass +
-                diceData.light.baseBuff) *
+            ((filter.light.class - 3) * diceData.light.cupEff1 +
+                diceData.light.eff1) *
                 filter.light.pip +
-            diceData.light.buffPerLevel * (filter.light.level - 1);
+            diceData.light.pupEff1 * (filter.light.level - 1);
         const moonSpdBuff =
-            ((filter.moon.class - 7) * diceData.moon.buffPerClass +
-                diceData.moon.baseBuff) *
+            ((filter.moon.class - 7) * diceData.moon.cupEff1 +
+                diceData.moon.eff1) *
                 filter.moon.pip +
-            diceData.moon.buffPerLevel * (filter.moon.level - 1);
+            diceData.moon.pupEff1 * (filter.moon.level - 1);
         const critBuff =
-            ((filter.critical.class - 3) * diceData.crit.buffPerClass +
-                diceData.crit.baseBuff) *
+            ((filter.critical.class - 3) * diceData.crit.cupEff1 +
+                diceData.crit.eff1) *
                 filter.critical.pip +
-            diceData.crit.buffPerLevel * (filter.critical.level - 1);
-        const moonCritBuff = filter.moon.active
-            ? filter.moon.pip * diceData.moon.activeCritBuff
-            : 0;
+            diceData.crit.pupEff1 * (filter.critical.level - 1);
+        const moonCritBuff = filter.moon.active ? filter.moon.pip * 5 : 0;
 
         const atkSpdMultiplier = 1 - lightBuff / 100;
         const moonAtkSpdMultiplier = 1 - moonSpdBuff / 100;
-        const basicAtkSpd = diceData.solar.atkSpd;
-        let buffedAtkSpd = diceData.solar.atkSpd * atkSpdMultiplier;
+        const basicAtkSpd = diceData.solar.spd;
+        let buffedAtkSpd = diceData.solar.spd * atkSpdMultiplier;
         buffedAtkSpd = buffedAtkSpd <= 0.1 ? 0.1 : buffedAtkSpd;
-        let moonBuffedAtkSpd = diceData.solar.atkSpd * moonAtkSpdMultiplier;
+        let moonBuffedAtkSpd = diceData.solar.spd * moonAtkSpdMultiplier;
         moonBuffedAtkSpd = moonBuffedAtkSpd <= 0.1 ? 0.1 : moonBuffedAtkSpd;
 
         const critMultiplier = (5 + critBuff) / 100;
@@ -165,78 +137,170 @@ export default function SolarCalculator(): JSX.Element {
         };
 
         const result = {
-            basicAtkDps:
-                Math.round(
-                    dps(
-                        basicDmgPerHit,
-                        basicAtkSpd,
-                        basicCrit,
-                        filter.duration
-                    ) * 100
-                ) / 100,
-            basicSplashDps:
-                Math.round(
-                    dps(
-                        basicDmgPerSplash,
-                        basicAtkSpd,
-                        basicCrit,
-                        filter.duration
-                    ) * 100
-                ) / 100,
-            lightBuffAtk:
-                Math.round(
-                    dps(
-                        basicDmgPerHit,
-                        buffedAtkSpd,
-                        basicCrit,
-                        filter.duration
-                    ) * 100
-                ) / 100,
-            lightBuffSplash:
-                Math.round(
-                    dps(
-                        basicDmgPerSplash,
-                        buffedAtkSpd,
-                        basicCrit,
-                        filter.duration
-                    ) * 100
-                ) / 100,
-            critBuffAtk:
-                Math.round(
-                    dps(
-                        basicDmgPerHit,
-                        basicAtkSpd,
-                        buffedCrit,
-                        filter.duration
-                    ) * 100
-                ) / 100,
-            critBuffSplash:
-                Math.round(
-                    dps(
-                        basicDmgPerSplash,
-                        basicAtkSpd,
-                        buffedCrit,
-                        filter.duration
-                    ) * 100
-                ) / 100,
-            moonBuffAtk:
-                Math.round(
-                    dps(
-                        moonBuffedDmgPerHit,
-                        moonBuffedAtkSpd,
-                        moonBuffedCrit,
-                        filter.duration
-                    ) * 100
-                ) / 100,
-            moonBuffSplash:
-                Math.round(
-                    dps(
-                        moonBuffedDmgPerSplash,
-                        moonBuffedAtkSpd,
-                        moonBuffedCrit,
-                        filter.duration
-                    ) * 100
-                ) / 100,
+            basicAtkDps: useMemo(
+                () =>
+                    Math.round(
+                        dps(
+                            basicDmgPerHit,
+                            basicAtkSpd,
+                            basicCrit,
+                            filter.duration
+                        ) * 100
+                    ) / 100,
+                [
+                    filter.solar.class,
+                    filter.solar.level,
+                    filter.solar.pip,
+                    filter.duration,
+                    filter.crit,
+                ]
+            ),
+            basicSplashDps: useMemo(
+                () =>
+                    Math.round(
+                        dps(
+                            basicDmgPerSplash,
+                            basicAtkSpd,
+                            basicCrit,
+                            filter.duration
+                        ) * 100
+                    ) / 100,
+                [
+                    filter.solar.class,
+                    filter.solar.level,
+                    filter.solar.pip,
+                    filter.duration,
+                    filter.crit,
+                ]
+            ),
+            lightBuffAtk: useMemo(
+                () =>
+                    Math.round(
+                        dps(
+                            basicDmgPerHit,
+                            buffedAtkSpd,
+                            basicCrit,
+                            filter.duration
+                        ) * 100
+                    ) / 100,
+                [
+                    filter.solar.class,
+                    filter.solar.level,
+                    filter.solar.pip,
+                    filter.light.class,
+                    filter.light.level,
+                    filter.light.pip,
+                    filter.duration,
+                    filter.crit,
+                ]
+            ),
+            lightBuffSplash: useMemo(
+                () =>
+                    Math.round(
+                        dps(
+                            basicDmgPerSplash,
+                            buffedAtkSpd,
+                            basicCrit,
+                            filter.duration
+                        ) * 100
+                    ) / 100,
+                [
+                    filter.solar.class,
+                    filter.solar.level,
+                    filter.solar.pip,
+                    filter.light.class,
+                    filter.light.level,
+                    filter.light.pip,
+                    filter.duration,
+                    filter.crit,
+                ]
+            ),
+            critBuffAtk: useMemo(
+                () =>
+                    Math.round(
+                        dps(
+                            basicDmgPerHit,
+                            basicAtkSpd,
+                            buffedCrit,
+                            filter.duration
+                        ) * 100
+                    ) / 100,
+                [
+                    filter.solar.class,
+                    filter.solar.level,
+                    filter.solar.pip,
+                    filter.critical.class,
+                    filter.critical.level,
+                    filter.critical.pip,
+                    filter.duration,
+                    filter.crit,
+                ]
+            ),
+            critBuffSplash: useMemo(
+                () =>
+                    Math.round(
+                        dps(
+                            basicDmgPerSplash,
+                            basicAtkSpd,
+                            buffedCrit,
+                            filter.duration
+                        ) * 100
+                    ) / 100,
+                [
+                    filter.solar.class,
+                    filter.solar.level,
+                    filter.solar.pip,
+                    filter.critical.class,
+                    filter.critical.level,
+                    filter.critical.pip,
+                    filter.duration,
+                    filter.crit,
+                ]
+            ),
+            moonBuffAtk: useMemo(
+                () =>
+                    Math.round(
+                        dps(
+                            moonBuffedDmgPerHit,
+                            moonBuffedAtkSpd,
+                            moonBuffedCrit,
+                            filter.duration
+                        ) * 100
+                    ) / 100,
+                [
+                    filter.solar.class,
+                    filter.solar.level,
+                    filter.solar.pip,
+                    filter.moon.active,
+                    filter.moon.class,
+                    filter.moon.level,
+                    filter.moon.pip,
+                    filter.duration,
+                    filter.crit,
+                ]
+            ),
+            moonBuffSplash: useMemo(
+                () =>
+                    Math.round(
+                        dps(
+                            moonBuffedDmgPerSplash,
+                            moonBuffedAtkSpd,
+                            moonBuffedCrit,
+                            filter.duration
+                        ) * 100
+                    ) / 100,
+                [
+                    filter.solar.class,
+                    filter.solar.level,
+                    filter.solar.pip,
+                    filter.moon.active,
+                    filter.moon.class,
+                    filter.moon.level,
+                    filter.moon.pip,
+                    filter.duration,
+                    filter.crit,
+                ]
+            ),
         };
 
         jsx = (
@@ -257,7 +321,7 @@ export default function SolarCalculator(): JSX.Element {
                 <div className='multiple-dice'>
                     <div className='dice-container'>
                         <Dice dice='Light' />
-                        <h3 className='desc'>{lightData.desc}</h3>
+                        <h3 className='desc'>{diceData.light.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
@@ -343,7 +407,7 @@ export default function SolarCalculator(): JSX.Element {
                     </div>
                     <div className='dice-container'>
                         <Dice dice='Moon' />
-                        <h3 className='desc'>{moonData?.desc}</h3>
+                        <h3 className='desc'>{diceData.moon.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
@@ -443,7 +507,7 @@ export default function SolarCalculator(): JSX.Element {
                     </div>
                     <div className='dice-container'>
                         <Dice dice='Critical' />
-                        <h3 className='desc'>{critData.desc}</h3>
+                        <h3 className='desc'>{diceData.crit.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
@@ -529,7 +593,7 @@ export default function SolarCalculator(): JSX.Element {
                     </div>
                     <div className='dice-container'>
                         <Dice dice='Solar' />
-                        <h3 className='desc'>{solarData.desc}</h3>
+                        <h3 className='desc'>{diceData.solar.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
@@ -780,9 +844,22 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#111111', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(basicDmgPerHit, basicAtkSpd, basicCrit, d.x)
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        basicDmgPerHit,
+                                        basicAtkSpd,
+                                        basicCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Light Buffed'
@@ -790,14 +867,25 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#ffff00', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    basicDmgPerHit,
-                                    buffedAtkSpd,
-                                    basicCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        basicDmgPerHit,
+                                        buffedAtkSpd,
+                                        basicCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.light.class,
+                                    filter.light.level,
+                                    filter.light.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Crit Buffed'
@@ -805,14 +893,25 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#ff0000', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    basicDmgPerHit,
-                                    basicAtkSpd,
-                                    buffedCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        basicDmgPerHit,
+                                        basicAtkSpd,
+                                        buffedCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.critical.class,
+                                    filter.critical.level,
+                                    filter.critical.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Moon Buffed'
@@ -820,14 +919,26 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#197cf0', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    moonBuffedDmgPerHit,
-                                    moonBuffedAtkSpd,
-                                    moonBuffedCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        moonBuffedDmgPerHit,
+                                        moonBuffedAtkSpd,
+                                        moonBuffedCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.moon.active,
+                                    filter.moon.class,
+                                    filter.moon.level,
+                                    filter.moon.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Light + Crit'
@@ -835,14 +946,28 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#ff6a00', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    basicDmgPerHit,
-                                    buffedAtkSpd,
-                                    buffedCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        basicDmgPerHit,
+                                        buffedAtkSpd,
+                                        buffedCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.critical.class,
+                                    filter.critical.level,
+                                    filter.critical.pip,
+                                    filter.light.class,
+                                    filter.light.level,
+                                    filter.light.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Moon + Crit'
@@ -850,14 +975,29 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#d178ff', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    moonBuffedDmgPerHit,
-                                    moonBuffedAtkSpd,
-                                    moonCritDoubleBuffedCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        moonBuffedDmgPerHit,
+                                        moonBuffedAtkSpd,
+                                        moonCritDoubleBuffedCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.critical.class,
+                                    filter.critical.level,
+                                    filter.critical.pip,
+                                    filter.moon.active,
+                                    filter.moon.class,
+                                    filter.moon.level,
+                                    filter.moon.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                     </VictoryChart>
                     <VictoryChart
@@ -931,14 +1071,22 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#111111', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    basicDmgPerSplash,
-                                    basicAtkSpd,
-                                    basicCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        basicDmgPerSplash,
+                                        basicAtkSpd,
+                                        basicCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Light Buffed'
@@ -946,14 +1094,25 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#ffff00', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    basicDmgPerSplash,
-                                    buffedAtkSpd,
-                                    basicCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        basicDmgPerSplash,
+                                        buffedAtkSpd,
+                                        basicCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.light.class,
+                                    filter.light.level,
+                                    filter.light.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Crit Buffed'
@@ -961,14 +1120,25 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#ff0000', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    basicDmgPerSplash,
-                                    basicAtkSpd,
-                                    buffedCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        basicDmgPerSplash,
+                                        basicAtkSpd,
+                                        buffedCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.critical.class,
+                                    filter.critical.level,
+                                    filter.critical.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Moon Buffed'
@@ -976,14 +1146,26 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#197cf0', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    moonBuffedDmgPerSplash,
-                                    moonBuffedAtkSpd,
-                                    moonBuffedCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        moonBuffedDmgPerSplash,
+                                        moonBuffedAtkSpd,
+                                        moonBuffedCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.moon.active,
+                                    filter.moon.class,
+                                    filter.moon.level,
+                                    filter.moon.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Light + Crit'
@@ -991,14 +1173,28 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#ff6a00', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    basicDmgPerSplash,
-                                    buffedAtkSpd,
-                                    buffedCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        basicDmgPerSplash,
+                                        buffedAtkSpd,
+                                        buffedCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.critical.class,
+                                    filter.critical.level,
+                                    filter.critical.pip,
+                                    filter.light.class,
+                                    filter.light.level,
+                                    filter.light.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Moon + Crit'
@@ -1006,14 +1202,29 @@ export default function SolarCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#d178ff', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dps(
-                                    moonBuffedDmgPerSplash,
-                                    moonBuffedAtkSpd,
-                                    moonCritDoubleBuffedCrit,
-                                    d.x
-                                )
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dps(
+                                        moonBuffedDmgPerSplash,
+                                        moonBuffedAtkSpd,
+                                        moonCritDoubleBuffedCrit,
+                                        d.x
+                                    ),
+                                [
+                                    filter.solar.class,
+                                    filter.solar.level,
+                                    filter.solar.pip,
+                                    filter.critical.class,
+                                    filter.critical.level,
+                                    filter.critical.pip,
+                                    filter.moon.active,
+                                    filter.moon.class,
+                                    filter.moon.level,
+                                    filter.moon.pip,
+                                    filter.duration,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLegend
                             x={50}

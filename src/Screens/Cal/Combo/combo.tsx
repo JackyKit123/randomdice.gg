@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -639,9 +639,20 @@ export default function ComboCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#197cf0', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dpsPerComboCount('moon', d.x).dps
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dpsPerComboCount('moon', d.x).dps,
+                                [
+                                    filter.moon.active,
+                                    filter.moon.class,
+                                    filter.moon.level,
+                                    filter.moon.pip,
+                                    filter.combo.class,
+                                    filter.combo.level,
+                                    filter.combo.count,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Crit Buffed'
@@ -649,9 +660,19 @@ export default function ComboCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#ff0000', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dpsPerComboCount('crit', d.x).dps
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dpsPerComboCount('crit', d.x).dps,
+                                [
+                                    filter.critical.class,
+                                    filter.critical.level,
+                                    filter.critical.pip,
+                                    filter.combo.class,
+                                    filter.combo.level,
+                                    filter.combo.count,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='No Buff'
@@ -659,9 +680,16 @@ export default function ComboCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#111111', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number =>
-                                dpsPerComboCount('raw', d.x).dps
-                            }
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dpsPerComboCount('raw', d.x).dps,
+                                [
+                                    filter.combo.class,
+                                    filter.combo.level,
+                                    filter.combo.count,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                     </VictoryChart>
                 </div>
