@@ -33,7 +33,7 @@ export default function DpsCalculator(): JSX.Element {
         windClass: 1,
         ironClass: 1,
         gambleClass: 1,
-        crossbowClass: 3,
+        arrowClass: 3,
         mwindClass: 5,
         melecClass: 5,
         typhoonClass: 7,
@@ -71,7 +71,7 @@ export default function DpsCalculator(): JSX.Element {
         wind: dices?.find(dice => dice.name === 'Wind'),
         iron: dices?.find(dice => dice.name === 'Iron'),
         gamble: dices?.find(dice => dice.name === 'Gamble'),
-        crossbow: dices?.find(dice => dice.name === 'Crossbow'),
+        arrow: dices?.find(dice => dice.name === 'Arrow'),
         mwind: dices?.find(dice => dice.name === 'Mighty Wind'),
         melec: dices?.find(dice => dice.name === 'Modified Electric'),
         typhoon: dices?.find(dice => dice.name === 'Typhoon'),
@@ -208,14 +208,14 @@ export default function DpsCalculator(): JSX.Element {
             return invalidInput ? 0 : roundTo3Sf(dps);
         };
 
-        const crossbowDps = (level = filter.level): number => {
+        const arrowDps = (level = filter.level): number => {
             const dpsPerPip =
-                ((baseAtkDmg(data.crossbow, filter.crossbowClass, level) +
-                    (data.crossbow.eff1 +
-                        data.crossbow.pupEff1 * (level - 1) +
-                        data.crossbow.cupEff1 * (filter.crossbowClass - 3)) /
+                ((baseAtkDmg(data.arrow, filter.arrowClass, level) +
+                    (data.arrow.eff1 +
+                        data.arrow.pupEff1 * (level - 1) +
+                        data.arrow.cupEff1 * (filter.arrowClass - 3)) /
                         5) /
-                    atkSpd(data.crossbow, filter.crossbowClass)) *
+                    atkSpd(data.arrow, filter.arrowClass)) *
                 critMultiplier;
             const dps = dpsPerPip * filter.pip;
             return invalidInput ? 0 : roundTo3Sf(dps);
@@ -288,7 +288,7 @@ export default function DpsCalculator(): JSX.Element {
                   windDps(5),
                   ironDps(true, 5),
                   gambleDps(5),
-                  crossbowDps(5),
+                  arrowDps(5),
                   mwindDps(5),
                   melecDps(false, 5),
                   typhoonDps(5)
@@ -421,8 +421,8 @@ export default function DpsCalculator(): JSX.Element {
                         </form>
                     </div>
                     <div className='dice-container'>
-                        <Dice dice='Crossbow' />
-                        <h3 className='desc'>{data.crossbow.desc}</h3>
+                        <Dice dice='Arrow' />
+                        <h3 className='desc'>{data.arrow.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
@@ -436,7 +436,7 @@ export default function DpsCalculator(): JSX.Element {
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.crossbowClass = Number(
+                                        filter.arrowClass = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -446,7 +446,7 @@ export default function DpsCalculator(): JSX.Element {
                                         .fill('')
                                         .map((_, i) => (
                                             // eslint-disable-next-line react/no-array-index-key
-                                            <option key={`crossbow-${i}`}>
+                                            <option key={`arrow-${i}`}>
                                                 {i + 3}
                                             </option>
                                         ))}
@@ -984,11 +984,11 @@ export default function DpsCalculator(): JSX.Element {
                             value={invalidInput ? 'Check Input' : gambleDps()}
                             disabled
                         />
-                        <span className='dice-name'>Crossbow</span>
+                        <span className='dice-name'>Arrow</span>
                         <input
                             type='textbox'
                             className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : crossbowDps()}
+                            value={invalidInput ? 'Check Input' : arrowDps()}
                             disabled
                         />
                         <span className='dice-name'>Mighty Wind</span>
@@ -1036,11 +1036,11 @@ export default function DpsCalculator(): JSX.Element {
                             value={invalidInput ? 'Check Input' : gambleDps()}
                             disabled
                         />
-                        <span className='dice-name'>Crossbow</span>
+                        <span className='dice-name'>Arrow</span>
                         <input
                             type='textbox'
                             className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : crossbowDps()}
+                            value={invalidInput ? 'Check Input' : arrowDps()}
                             disabled
                         />
                         <span className='dice-name'>Mighty Wind</span>
@@ -1160,7 +1160,7 @@ export default function DpsCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#fa762c', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number => crossbowDps(d.x)}
+                            y={(d: { x: number }): number => arrowDps(d.x)}
                         />
                         <VictoryLine
                             name='No Buff'
@@ -1208,7 +1208,7 @@ export default function DpsCalculator(): JSX.Element {
                                 { name: 'Modified Electric' },
                                 { name: 'Iron' },
                                 { name: 'Gamble' },
-                                { name: 'Crossbow' },
+                                { name: 'Arrow' },
                                 { name: 'Mighty Wind' },
                                 { name: 'Wind' },
                                 { name: 'Typhoon' },
@@ -1298,7 +1298,7 @@ export default function DpsCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#fa762c', strokeWidth: 1 },
                             }}
-                            y={(d: { x: number }): number => crossbowDps(d.x)}
+                            y={(d: { x: number }): number => arrowDps(d.x)}
                         />
                         <VictoryLine
                             name='No Buff'
@@ -1346,7 +1346,7 @@ export default function DpsCalculator(): JSX.Element {
                                 { name: 'Modified Electric' },
                                 { name: 'Iron' },
                                 { name: 'Gamble' },
-                                { name: 'Crossbow' },
+                                { name: 'Arrow' },
                                 { name: 'Mighty Wind' },
                                 { name: 'Wind' },
                                 { name: 'Typhoon' },
