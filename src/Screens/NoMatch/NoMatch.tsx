@@ -2,7 +2,6 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Main from '../../Components/Main/main';
 import Dice from '../../Components/Dice/dice';
-import EffectPng from './effect.png';
 import './nomatch.less';
 
 export default function NoMatch(props: { title?: string }): JSX.Element {
@@ -10,7 +9,11 @@ export default function NoMatch(props: { title?: string }): JSX.Element {
     const { title } = props;
     return (
         <Main title={title || '404 Not found'} className='NoMatch'>
-            <img id='assassin-cross' alt='assassinate effect' src={EffectPng} />
+            <img
+                id='assassin-cross'
+                alt='assassinate effect'
+                src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FAssassin%20Snipe.png?alt=media&token=4f38af19-31d3-4706-b5da-bd38a0b11809'
+            />
             <Dice dice='Assassin' />
             <h3>This page is assassinated.</h3>
             <div>
