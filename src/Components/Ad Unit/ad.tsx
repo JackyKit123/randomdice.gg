@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import firebase from 'firebase/app';
 import 'firebase/database';
 import { detected } from 'adblockdetect';
 import './ad.less';
@@ -17,54 +16,78 @@ export default function AdUnit({
     dimension: string;
     style?: React.CSSProperties;
 }): JSX.Element | null {
-    const { user } = useSelector((state: RootState) => state.authReducer);
-    const [adFree, setAdFree] = useState<true | null>(null);
-
-    useEffect(() => {
-        if (user) {
-            const ref = firebase.database().ref(`/users/${user.uid}`);
-            (async (): Promise<void> => {
-                const data = (await ref.once('value')).val();
-                if (data && data['patreon-tier']) {
-                    setAdFree(true);
-                }
-            })();
-        }
-    }, [user]);
+    const { data } = useSelector(
+        (state: RootState) => state.fetchUserDataReducer
+    );
 
     useEffect(() => {
         try {
             if (provider === 'Media.net') {
-                // eslint-disable-next-line func-names
-                window._mNHandle.queue.push(function() {
-                    window._mNDetails.loadTag(unitId, dimension, unitId);
-                });
+                if (
+                    !document.querySelector(
+                        'script[src="https://contextual.media.net/dmedianet.js?cid=8CU6HWIGD"]'
+                    )
+                ) {
+                    window._mNHandle = window._mNHandle || {};
+                    window._mNHandle.queue = window._mNHandle.queue || [];
+                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    window.medianet_versionId = '3121199';
+                    const script = document.createElement('script');
+                    script.src =
+                        'https://contextual.media.net/dmedianet.js?cid=8CU6HWIGD';
+                    script.async = true;
+                    document.head.appendChild(script);
+                    script.onload = (): void => {
+                        // eslint-disable-next-line func-names
+                        window._mNHandle.queue.push(function() {
+                            window._mNDetails.loadTag(
+                                unitId,
+                                dimension,
+                                unitId
+                            );
+                        });
+                    };
+                } else {
+                    // eslint-disable-next-line func-names
+                    window._mNHandle.queue.push(function() {
+                        window._mNDetails.loadTag(unitId, dimension, unitId);
+                    });
+                }
             } else if (provider === 'Google') {
-                const element = document.getElementsByTagName('script')[0];
-                const scriptTag = document.createElement('script');
-                scriptTag.id = 'google-ads-sdk';
-                scriptTag.src =
-                    'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-                // eslint-disable-next-line no-unused-expressions
-                element.parentNode?.insertBefore(scriptTag, element);
-                scriptTag.onload = (): void => {
+                if (
+                    !document.querySelector(
+                        'script[src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"][data-ad-client="ca-pub-3031422008949072"]'
+                    )
+                ) {
+                    const script = document.createElement('script');
+                    script.src =
+                        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+                    script.setAttribute(
+                        'data-ad-client',
+                        'ca-pub-3031422008949072'
+                    );
+                    script.async = true;
+                    document.head.appendChild(script);
+                    script.onload = (): void => {
+                        (window.adsbygoogle = window.adsbygoogle || []).push(
+                            {}
+                        );
+                    };
+                } else {
                     (window.adsbygoogle = window.adsbygoogle || []).push({});
-                };
+                }
             }
         } catch (err) {
             //
         }
-    }, [adFree]);
+    }, []);
 
-    if (adFree) {
+    if (data && data['patreon-tier']) {
         return null;
     }
 
     return (
-        <div
-            className={`ad-container ${adFree ? 'hide' : ''}`}
-            data-dimension={dimension}
-        >
+        <div className='ad-container' data-dimension={dimension}>
             {detected() ? (
                 <div className='ad-block-warning'>
                     <span>
@@ -85,7 +108,6 @@ export default function AdUnit({
                 </div>
             ) : (
                 <div id={unitId}>
-                    <h6 className='sponsor'>Sponsor</h6>
                     {provider === 'Media.net' ? null : (
                         <ins
                             className='adsbygoogle'
@@ -96,6 +118,7 @@ export default function AdUnit({
                             data-full-width-responsive='true'
                         />
                     )}
+                    <h6 className='sponsor'>Advertisement</h6>
                 </div>
             )}
         </div>

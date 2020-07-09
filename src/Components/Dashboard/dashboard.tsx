@@ -14,7 +14,6 @@ export default function Dashboard(props: {
 }): JSX.Element {
     const { className, children } = props;
     const selector = useSelector((state: RootState) => state);
-    const { user } = selector.authReducer;
     const { data } = selector.fetchUserDataReducer;
     const [authorized, setAuthorized] = useState<'loading' | boolean>(
         'loading'
@@ -22,12 +21,12 @@ export default function Dashboard(props: {
 
     useEffect(() => {
         const timeout = setTimeout(() => setAuthorized(false), 10000);
-        if (user && data?.editor) {
+        if (data?.editor) {
             setAuthorized(true);
             clearTimeout(timeout);
         }
         return (): void => clearTimeout(timeout);
-    }, []);
+    }, [data]);
 
     if (authorized === 'loading') {
         return (

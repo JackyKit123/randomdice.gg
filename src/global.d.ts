@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface Window {
     ga: ga;
     gapi: gapi;
     _mNHandle: _mNHandle;
     _mNDetails: _mNDetails;
+    medianet_versionId: any;
     adsbygoogle: adsbygoogle;
 }
 
@@ -12,19 +15,6 @@ interface WindowEventMap {
 
 declare module 'react-router-ga' {
     export default function Analytics({ children }: ReactNode): JSX.Element;
-}
-
-declare module 'react-google-ads' {
-    export default function GoogleAds({ client, slot, style }): JSX.Element;
-}
-
-declare module 'react-detect-offline' {
-    export function Offline({ children }: ReactNode): JSX.Element;
-    export function Online({ children }: ReactNode): JSX.Element;
-}
-
-declare module 'react-image-webp/dist/utils' {
-    export const isWebpSupported: () => boolean;
 }
 
 declare module 'adblockdetect' {
@@ -37,6 +27,6 @@ declare module '@ckeditor/ckeditor5-react' {
 }
 
 declare module '@ckeditor/ckeditor5-build-classic' {
-    const ClassicEditor: ClassicEditor;
+    const ClassicEditor: any;
     export default ClassicEditor;
 }

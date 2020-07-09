@@ -95,7 +95,13 @@ export function fetchUser(
     dispatch: Dispatch<FETCH_USER.Action>,
     uid: string
 ): void {
-    fetch(dispatch, FETCH_USER.SUCCESS, FETCH_USER.FAIL, `/users/${uid}`);
+    fetch(
+        dispatch,
+        FETCH_USER.SUCCESS,
+        FETCH_USER.FAIL,
+        `/users/${uid}`,
+        'user'
+    );
 }
 
 export function fetchNews(dispatch: Dispatch<FETCH_NEWS.Action>): void {
