@@ -1,5 +1,4 @@
-import React, { ReactNode } from 'react';
-import { Offline, Online } from 'react-detect-offline';
+import React, { useState, useEffect, ReactNode } from 'react';
 import AdUnit from '../Ad Unit/ad';
 import './main.less';
 
@@ -9,27 +8,31 @@ export default function Main(props: {
     children: ReactNode;
 }): JSX.Element {
     const { title, className, children } = props;
+    const [online, setOnline] = useState(navigator.onLine);
+
+    useEffect(() => {
+        const updateOnlineState = (): void => setOnline(navigator.onLine);
+        window.addEventListener('online', updateOnlineState);
+        window.addEventListener('offline', updateOnlineState);
+        return (): void => {
+            window.removeEventListener('online', updateOnlineState);
+            window.removeEventListener('offline', updateOnlineState);
+        };
+    }, []);
 
     return (
         <main>
-            <Offline>
-                <div className='banner offline'>
-                    <div className='title-container'>
-                        <h2 className='title'>{title}</h2>
-                    </div>
+            <div className={`banner ${!online ? 'offline' : ''}`}>
+                <div className='title-container'>
+                    <h2 className='title'>{title}</h2>
+                </div>
+                {!online ? (
                     <span>
                         You are currently offline, please check your connection,
                         content of this website will continue to be served.
                     </span>
-                </div>
-            </Offline>
-            <Online>
-                <div className='banner'>
-                    <div className='title-container'>
-                        <h2 className='title'>{title}</h2>
-                    </div>
-                </div>
-            </Online>
+                ) : null}
+            </div>
             <div className={`main ${className}`}>
                 <AdUnit
                     provider='Google'
