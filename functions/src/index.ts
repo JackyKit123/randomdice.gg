@@ -370,6 +370,18 @@ export const fetchPatreon = functions.pubsub
             const tierList = campaignData.included.map(
                 (tier: { id: string }) => tier.id
             );
+
+            type PatreonProfile = {
+                id: string;
+                name: string;
+                img: string | undefined;
+                tier: number;
+            } & {
+                [key: string]: {
+                    message: string;
+                };
+            };
+
             const patreonList = await Promise.all(
                 memberData.data.map(async (member: Member) => {
                     const tierArr = member.relationships.currently_entitled_tiers.data.map(
@@ -399,16 +411,7 @@ export const fetchPatreon = functions.pubsub
                         name: userData.data.attributes.full_name,
                         tier,
                     };
-                }) as ({
-                    id: string;
-                    name: string;
-                    img: string | undefined;
-                    tier: number;
-                } & {
-                    [key: string]: {
-                        message: string;
-                    };
-                })[]
+                }) as PatreonProfile[]
             );
 
             const users = (
@@ -437,17 +440,14 @@ export const fetchPatreon = functions.pubsub
                             patreonList[i].img = userProfile.photoURL;
                             patreonList[i][uid] = {
                                 message:
-                                    (
+                                    ((
                                         await database
-                                            .ref(
-                                                `/patreon_list/${i}/${uid}/message`
-                                            )
+                                            .ref(`/patreon_list`)
                                             .once('value')
-                                    ).val() || '',
+                                    ).val() as PatreonProfile[]).find(
+                                        patreon => patreon.id === uid
+                                    )?.[uid].message || '',
                             };
-                            await database
-                                .ref(`/users/${uid}/patreon-tier`)
-                                .set(isPatreon.tier);
                         } finally {
                             await database
                                 .ref(`/users/${uid}/patreon-tier`)
