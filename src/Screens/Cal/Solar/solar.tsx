@@ -1366,10 +1366,7 @@ export default function SolarCalculator(): JSX.Element {
         jsx = <LoadingScreen />;
     }
     return (
-        <Main
-            title='Solar Light vs Crit Damage Calculator'
-            className='solar-cal cal'
-        >
+        <Main title='Solar Damage Calculator' className='solar-cal cal'>
             {jsx}
         </Main>
     );

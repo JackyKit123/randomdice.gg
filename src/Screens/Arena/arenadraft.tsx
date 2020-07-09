@@ -12,6 +12,7 @@ import Dice from '../../Components/Dice/dice';
 import { fetchDices } from '../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import './arenadraft.less';
+import AdUnit from '../../Components/Ad Unit/ad';
 
 export default function ArenaDraft(): JSX.Element {
     const dispatch = useDispatch();
@@ -382,6 +383,17 @@ export default function ArenaDraft(): JSX.Element {
                         Reset <FontAwesomeIcon icon={faTimes} />
                     </button>
                 </section>
+                <hr className='divisor' />
+                <AdUnit
+                    provider='Media.net'
+                    unitId='227378933'
+                    dimension='300x250'
+                />
+                <AdUnit
+                    provider='Media.net'
+                    unitId='219055766'
+                    dimension='970x90'
+                />
                 <section className='deck'>
                     <hr className='divisor' />
                     <h3>Your Deck</h3>

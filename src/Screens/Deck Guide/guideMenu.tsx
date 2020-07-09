@@ -9,6 +9,7 @@ import './guide.less';
 import { RootState } from '../../Misc/Redux Storage/store';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import { fetchDecksGuide, fetchDices } from '../../Misc/Firebase/fetchData';
+import AdUnit from '../../Components/Ad Unit/ad';
 
 export default function DeckGuideMenu(): JSX.Element {
     const history = useHistory();
@@ -19,6 +20,14 @@ export default function DeckGuideMenu(): JSX.Element {
 
     let jsx;
     if (guide) {
+        if (!guide.find(g => g.guide === 'ad')) {
+            guide.splice(Math.min(Math.floor(guide.length / 2), 10), 0, {
+                id: -10,
+                diceList: [],
+                guide: 'ad',
+                name: 'ad',
+            });
+        }
         jsx = (
             <>
                 <p>
@@ -28,44 +37,63 @@ export default function DeckGuideMenu(): JSX.Element {
                 <hr className='divisor' />
                 <table className='filter'>
                     <tbody>
-                        {guide.map(deck => (
-                            <tr
-                                key={deck.name}
-                                tabIndex={0}
-                                onClick={(): void =>
-                                    history.push(`/decks/guide/${deck.name}`)
-                                }
-                                onKeyDown={(evt): void => {
-                                    // Enter or SpaceBar
-                                    if (
-                                        evt.keyCode === 13 ||
-                                        evt.keyCode === 32
-                                    ) {
+                        {guide.map(deck =>
+                            deck.guide === 'ad' ? (
+                                <tr className='ad'>
+                                    <td colSpan={2}>
+                                        <AdUnit
+                                            provider='Media.net'
+                                            unitId='227378933'
+                                            dimension='300x250'
+                                        />
+                                        <AdUnit
+                                            provider='Media.net'
+                                            unitId='219055766'
+                                            dimension='970x90'
+                                        />
+                                    </td>
+                                </tr>
+                            ) : (
+                                <tr
+                                    key={deck.name}
+                                    tabIndex={0}
+                                    onClick={(): void =>
                                         history.push(
                                             `/decks/guide/${deck.name}`
-                                        );
+                                        )
                                     }
-                                }}
-                            >
-                                <td>{deck.name}</td>
-                                <td>
-                                    {deck.diceList.map(dicelist => (
-                                        <div
-                                            className='dice-container'
-                                            key={`filter-${dicelist.join()}`}
-                                        >
-                                            {dicelist.map((dice, i) => (
-                                                <Dice
-                                                    /* eslint-disable-next-line react/no-array-index-key */
-                                                    key={`filter-${dicelist.join()}-${dice}${i}`}
-                                                    dice={dice}
-                                                />
-                                            ))}
-                                        </div>
-                                    ))}
-                                </td>
-                            </tr>
-                        ))}
+                                    onKeyDown={(evt): void => {
+                                        // Enter or SpaceBar
+                                        if (
+                                            evt.keyCode === 13 ||
+                                            evt.keyCode === 32
+                                        ) {
+                                            history.push(
+                                                `/decks/guide/${deck.name}`
+                                            );
+                                        }
+                                    }}
+                                >
+                                    <td>{deck.name}</td>
+                                    <td>
+                                        {deck.diceList.map(dicelist => (
+                                            <div
+                                                className='dice-container'
+                                                key={`filter-${dicelist.join()}`}
+                                            >
+                                                {dicelist.map((dice, i) => (
+                                                    <Dice
+                                                        /* eslint-disable-next-line react/no-array-index-key */
+                                                        key={`filter-${dicelist.join()}-${dice}${i}`}
+                                                        dice={dice}
+                                                    />
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </td>
+                                </tr>
+                            )
+                        )}
                     </tbody>
                 </table>
             </>

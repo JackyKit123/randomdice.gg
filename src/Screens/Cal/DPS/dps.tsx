@@ -20,6 +20,7 @@ import { RootState } from '../../../Misc/Redux Storage/store';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import '../cal.less';
 import './dps.less';
+import AdUnit from '../../../Components/Ad Unit/ad';
 
 export default function DpsCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -959,6 +960,17 @@ export default function DpsCalculator(): JSX.Element {
                         </form>
                     </div>
                 </div>
+                <hr className='divisor' />
+                <AdUnit
+                    provider='Media.net'
+                    unitId='227378933'
+                    dimension='300x250'
+                />
+                <AdUnit
+                    provider='Media.net'
+                    unitId='219055766'
+                    dimension='970x90'
+                />
                 <hr className='divisor' />
                 <div className='result'>
                     <div className='wave-dmg'>

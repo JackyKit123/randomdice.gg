@@ -24,6 +24,12 @@
                 .filter(opacity(0.5));
                 .transition(0.2s all ease-in-out);
 
+                &.ad {
+                    font-size: initial;
+                    cursor: auto;
+                    .filter(none);
+                }
+
                 &:nth-of-type(odd) {
                     background: #f8d298;
                 }
