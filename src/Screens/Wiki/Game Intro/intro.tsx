@@ -25,7 +25,7 @@ export default function Intro({
 
     useEffect(() => {
         return replaceAnchorWithHistory(history);
-    });
+    }, []);
 
     let jsx;
 

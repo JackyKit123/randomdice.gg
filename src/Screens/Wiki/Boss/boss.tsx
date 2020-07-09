@@ -42,7 +42,7 @@ export default function BossGuide(): JSX.Element {
         document
             .getElementById(decodeURI(hash.replace(/^#/, '')))
             ?.scrollIntoView();
-    }, [hash]);
+    }, [hash, wiki]);
 
     let jsx;
     if (bossInfo) {

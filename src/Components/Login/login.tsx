@@ -36,6 +36,6 @@ export default function LoginCallback(): JSX.Element {
     window.close();
     useEffect(() => {
         root.style.display = 'block';
-    });
+    }, []);
     return <NoMatch />;
 }

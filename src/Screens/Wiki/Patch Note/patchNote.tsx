@@ -20,7 +20,7 @@ export default function PatchNote(): JSX.Element {
 
     useEffect(() => {
         return replaceAnchorWithHistory(history);
-    });
+    }, []);
 
     let jsx;
 

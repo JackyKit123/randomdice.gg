@@ -42,7 +42,7 @@ export default function PatreonProfile(): JSX.Element {
             );
             setIsPatreonPageOwner(Boolean(patreon));
         }
-    });
+    }, [list]);
 
     let jsx;
     if (list) {

@@ -25,7 +25,7 @@ export default function Menu(props: {
             unlisten();
             document.removeEventListener('keyup', keyup);
         };
-    });
+    }, []);
     const createMenu = (
         menulist: MenuProp[],
         depth = 0

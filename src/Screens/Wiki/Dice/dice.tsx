@@ -42,7 +42,7 @@ export default function DiceMechanic(): JSX.Element {
         document
             .getElementById(decodeURI(hash.replace(/^#/, '')))
             ?.scrollIntoView();
-    }, [hash]);
+    }, [dices, hash]);
 
     useEffect(() => {
         if (dices && !mechanics?.includes('ad')) {

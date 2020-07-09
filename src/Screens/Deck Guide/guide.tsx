@@ -23,7 +23,7 @@ export default function DeckGuideMenu(): JSX.Element | null {
     );
     useEffect(() => {
         return replaceAnchorWithHistory(history);
-    });
+    }, []);
 
     let jsx;
     if (guide) {

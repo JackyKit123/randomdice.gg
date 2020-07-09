@@ -27,7 +27,7 @@ export default function Dashboard(props: {
             clearTimeout(timeout);
         }
         return (): void => clearTimeout(timeout);
-    });
+    }, []);
 
     if (authorized === 'loading') {
         return (

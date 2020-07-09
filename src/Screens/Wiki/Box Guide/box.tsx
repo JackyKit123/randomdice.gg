@@ -27,7 +27,7 @@ export default function BoxGuide(): JSX.Element {
         document
             .getElementById(decodeURI(hash.replace(/^#/, '')))
             ?.scrollIntoView();
-    }, [hash]);
+    }, [hash, dices, wiki]);
 
     useEffect(() => {
         if (wiki && !wiki.box.find(box => box.img === 'ad')) {
