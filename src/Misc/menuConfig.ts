@@ -62,11 +62,9 @@ export const menu: Menu[] = [
         name: 'Calculator',
         childNode: [
             {
-                name: 'Blizzard Slow Effect Calculator',
-                path: '/calculator/blizzard',
-                component: lazy(() =>
-                    import('../Screens/Cal/Blizzard/blizzard')
-                ),
+                name: 'Slow Effect Calculator',
+                path: '/calculator/speed',
+                component: lazy(() => import('../Screens/Cal/Speed/speed')),
             },
             {
                 name: 'Combo Damage Calculator',
