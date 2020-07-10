@@ -50,7 +50,6 @@ export default function Header(): JSX.Element {
                 setScrolled(true);
             } else if (window.scrollY === 0) setScrolled(false);
         }
-        handler();
         window.addEventListener('scroll', handler);
         return (): void => {
             unlisten();
