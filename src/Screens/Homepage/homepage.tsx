@@ -72,10 +72,19 @@ export default function Homepage(): JSX.Element {
                 </p>
             </section>
             <section>
-                <h3>What&apos;s New?</h3>
+                <h3>Game News</h3>
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {news
-                    ? ReactHtmlParser(sanitize(news))
+                    ? ReactHtmlParser(sanitize(news.game))
+                    : error
+                    ? `Unable to load the latest news : ${error}`
+                    : 'Loading News...'}
+            </section>
+            <section>
+                <h3>Website News</h3>
+                {/* eslint-disable-next-line no-nested-ternary */}
+                {news
+                    ? ReactHtmlParser(sanitize(news.website))
                     : error
                     ? `Unable to load the latest news : ${error}`
                     : 'Loading News...'}

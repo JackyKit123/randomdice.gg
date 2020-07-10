@@ -10,12 +10,17 @@ export const FAIL = 'FETCH_NEWS_FAIL';
 
 export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
+export interface News {
+    game: string;
+    website: string;
+}
+
 export interface FetchState {
-    news: string | undefined;
+    news: News | undefined;
     error: firebase.FirebaseError | undefined;
 }
 
 export type Action =
-    | SuccessAction<typeof SUCCESS, string>
+    | SuccessAction<typeof SUCCESS, News>
     | FailureAction<typeof FAIL>
     | ClearErrorAction;

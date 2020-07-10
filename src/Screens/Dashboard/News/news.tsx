@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -18,7 +18,7 @@ export default function editPatchNote(): JSX.Element {
     const dispatch = useDispatch();
     const database = firebase.database();
     const dbRef = database.ref('/news');
-    const [content, setContent] = useState<string>();
+    const [content, setContent] = useState<{ game: string; website: string }>();
 
     useEffect(() => {
         dbRef.once('value').then(snapshot => setContent(snapshot.val()));
@@ -51,31 +51,40 @@ export default function editPatchNote(): JSX.Element {
                     Yes
                 </button>
             </PopUp>
-            <h3>Update News</h3>
-            <CKEditor
-                editor={ClassicEditor}
-                data={content}
-                config={{
-                    removePlugins: ['heading'],
-                    toolbar: [
-                        'undo',
-                        'redo',
-                        '|',
-                        'bold',
-                        'italic',
-                        'numberedList',
-                        'bulletedList',
-                        '|',
-                        'link',
-                    ],
-                }}
-                onBlur={(
-                    _: unknown,
-                    editor: {
-                        getData: () => string;
-                    }
-                ): void => setContent(editor.getData())}
-            />
+            {['Game', 'Website'].map(type => (
+                <Fragment key={type}>
+                    <h3>Update {type} News</h3>
+                    <CKEditor
+                        editor={ClassicEditor}
+                        data={content[type.toLowerCase() as 'game' | 'website']}
+                        config={{
+                            removePlugins: ['heading'],
+                            toolbar: [
+                                'undo',
+                                'redo',
+                                '|',
+                                'bold',
+                                'italic',
+                                'numberedList',
+                                'bulletedList',
+                                '|',
+                                'link',
+                            ],
+                        }}
+                        onBlur={(
+                            _: unknown,
+                            editor: {
+                                getData: () => string;
+                            }
+                        ): void => {
+                            content[
+                                type.toLowerCase() as 'game' | 'website'
+                            ] = editor.getData();
+                            setContent({ ...content });
+                        }}
+                    />
+                </Fragment>
+            ))}
             <button
                 type='button'
                 className='submit'
