@@ -96,7 +96,9 @@ export default function editBox(): JSX.Element {
                         }
                         return box;
                     });
-                    database.ref('/wiki').set(new Date().toISOString());
+                    database
+                        .ref('/last_updated/wiki')
+                        .set(new Date().toISOString());
                     dbRef.set(result);
                     setBoxInfo(result);
                     setActiveEdit({ ...initialState });
@@ -116,7 +118,7 @@ export default function editBox(): JSX.Element {
             if (!updateBox) {
                 result.push(activeEdit);
             }
-            database.ref('/wiki').set(new Date().toISOString());
+            database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
             setBoxInfo(result);
             setActiveEdit({ ...initialState });
@@ -132,7 +134,7 @@ export default function editBox(): JSX.Element {
         if (originalBox) {
             await storage.ref(`Box Images/${originalBox.name}.png`).delete();
             const result = boxInfo.filter(box => box.id !== activeEdit.id);
-            database.ref('/wiki').set(new Date().toISOString());
+            database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
             setBoxInfo(result);
             setActiveEdit({ ...initialState });

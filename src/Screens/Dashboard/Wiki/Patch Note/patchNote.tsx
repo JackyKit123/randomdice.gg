@@ -41,7 +41,9 @@ export default function editPatchNote(): JSX.Element {
                     type='button'
                     className='confirm'
                     onClick={(): void => {
-                        database.ref('/wiki').set(new Date().toISOString());
+                        database
+                            .ref('/last_updated/wiki')
+                            .set(new Date().toISOString());
                         dbRef.set(content);
                         dispatch({ type: CLOSE_POPUP });
                     }}

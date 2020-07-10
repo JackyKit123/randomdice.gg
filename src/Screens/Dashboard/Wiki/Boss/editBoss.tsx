@@ -115,7 +115,7 @@ export default function editBoss(): JSX.Element {
             if (!updateBoss) {
                 result.push(activeEdit);
             }
-            database.ref('/wiki').set(new Date().toISOString());
+            database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
             setBossInfo(result);
             setActiveEdit({ ...initialState });

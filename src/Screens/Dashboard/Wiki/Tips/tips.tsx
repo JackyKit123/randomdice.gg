@@ -69,7 +69,7 @@ export default function editTips(): JSX.Element {
             if (!updateTips) {
                 result.push(activeEdit);
             }
-            database.ref('/wiki').set(new Date().toISOString());
+            database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
             setTips(result);
             setActiveEdit({ ...initialState });
@@ -85,7 +85,7 @@ export default function editTips(): JSX.Element {
         if (originalTips) {
             await storage.ref(`Tip Images/${originalTips.id}.png`).delete();
             const result = tips.filter(tip => tip.id !== activeEdit.id);
-            database.ref('/wiki').set(new Date().toISOString());
+            database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
             setTips(result);
             setActiveEdit({ ...initialState });
