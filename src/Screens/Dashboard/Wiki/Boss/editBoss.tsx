@@ -19,7 +19,8 @@ import './boss.less';
 export default function editBoss(): JSX.Element {
     const dispatch = useDispatch();
     const selectRef = useRef(null as null | HTMLSelectElement);
-    const database = firebase.database().ref('/wiki/boss');
+    const database = firebase.database();
+    const dbRef = database.ref('/wiki/boss');
     const storage = firebase.storage();
     const [bossInfo, setBossInfo] = useState<WikiContent['boss']>();
 
@@ -32,7 +33,7 @@ export default function editBoss(): JSX.Element {
     const [activeEdit, setActiveEdit] = useState({ ...initialState });
 
     useEffect(() => {
-        database.once('value').then(snapshot => setBossInfo(snapshot.val()));
+        dbRef.once('value').then(snapshot => setBossInfo(snapshot.val()));
     }, []);
 
     if (!bossInfo) {
@@ -95,7 +96,7 @@ export default function editBoss(): JSX.Element {
                         }
                         return boss;
                     });
-                    database.set(result);
+                    dbRef.set(result);
                     setBossInfo(result);
                     setActiveEdit({ ...initialState });
                     if (selectRef.current) {
@@ -114,7 +115,8 @@ export default function editBoss(): JSX.Element {
             if (!updateBoss) {
                 result.push(activeEdit);
             }
-            database.set(result);
+            database.ref('/wiki').set(new Date().toISOString());
+            dbRef.set(result);
             setBossInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
@@ -129,7 +131,7 @@ export default function editBoss(): JSX.Element {
         if (originalBoss) {
             await storage.ref(`Boss Images/${originalBoss.name}.png`).delete();
             const result = bossInfo.filter(boss => boss.id !== activeEdit.id);
-            database.set(result);
+            dbRef.set(result);
             setBossInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {

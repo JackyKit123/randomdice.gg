@@ -148,6 +148,7 @@ export default function updateDeck(): JSX.Element {
             }
             return 0;
         });
+        database.ref('/last_updated/decks').set(new Date().toISOString());
         database.ref('/decks').set([...deckList]);
         setDecks([...deckList]);
     };

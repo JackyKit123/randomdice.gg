@@ -17,7 +17,8 @@ import './box.less';
 export default function editBox(): JSX.Element {
     const dispatch = useDispatch();
     const selectRef = useRef(null as null | HTMLSelectElement);
-    const database = firebase.database().ref('/wiki/box');
+    const database = firebase.database();
+    const dbRef = database.ref('/wiki/box');
     const storage = firebase.storage();
     const [boxInfo, setBoxInfo] = useState<WikiContent['box']>();
 
@@ -31,7 +32,7 @@ export default function editBox(): JSX.Element {
     const [activeEdit, setActiveEdit] = useState({ ...initialState });
 
     useEffect(() => {
-        database.once('value').then(snapshot => setBoxInfo(snapshot.val()));
+        dbRef.once('value').then(snapshot => setBoxInfo(snapshot.val()));
     }, []);
 
     if (!boxInfo) {
@@ -95,7 +96,8 @@ export default function editBox(): JSX.Element {
                         }
                         return box;
                     });
-                    database.set(result);
+                    database.ref('/wiki').set(new Date().toISOString());
+                    dbRef.set(result);
                     setBoxInfo(result);
                     setActiveEdit({ ...initialState });
                     if (selectRef.current) {
@@ -114,7 +116,8 @@ export default function editBox(): JSX.Element {
             if (!updateBox) {
                 result.push(activeEdit);
             }
-            database.set(result);
+            database.ref('/wiki').set(new Date().toISOString());
+            dbRef.set(result);
             setBoxInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
@@ -129,7 +132,8 @@ export default function editBox(): JSX.Element {
         if (originalBox) {
             await storage.ref(`Box Images/${originalBox.name}.png`).delete();
             const result = boxInfo.filter(box => box.id !== activeEdit.id);
-            database.set(result);
+            database.ref('/wiki').set(new Date().toISOString());
+            dbRef.set(result);
             setBoxInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {

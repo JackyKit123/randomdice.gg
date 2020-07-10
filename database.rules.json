@@ -1,6 +1,10 @@
 {
     "rules": {
         ".write": false,
+        "last_updated": {
+            ".read": true,
+            ".write": "auth.token.isEditor === true"
+        },
         "decks": {
             ".read": true,
             ".write": "auth.token.isEditor === true"

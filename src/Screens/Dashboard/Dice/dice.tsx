@@ -141,6 +141,9 @@ export default function editDice(): JSX.Element {
                         }
                         return dice;
                     });
+                    database
+                        .ref('/last_updated/dice')
+                        .set(new Date().toISOString());
                     dbRef.set(result);
                     setDices(result);
                     setActiveEdit({ ...initialState });
@@ -160,6 +163,7 @@ export default function editDice(): JSX.Element {
             if (!updateDice) {
                 result.push(activeEdit);
             }
+            database.ref('/last_updated/dice').set(new Date().toISOString());
             dbRef.set(result);
             setDices(result);
             setActiveEdit({ ...initialState });

@@ -186,6 +186,7 @@ export default function editCredit(): JSX.Element {
                 );
             })
         );
+        database.ref('/last_updated/credit').set(new Date().toISOString());
         database.ref('/credit').set(credit);
         setInitialCredit(credit);
     };

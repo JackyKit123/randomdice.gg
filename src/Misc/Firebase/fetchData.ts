@@ -28,14 +28,9 @@ async function fetch(
     successAction: ActionType,
     errorAction: ActionType,
     dbPath: string,
-    localStorageKey?: string
+    localStorageKey: string
 ): Promise<void> {
-    if (!localStorageKey) {
-        const res = await database.ref(dbPath).once('value');
-        dispatch({ type: successAction, payload: res.val() });
-        return;
-    }
-
+    // apply local storage cache before fetching database
     const localCache = localStorage.getItem(localStorageKey);
     if (localCache) {
         try {
@@ -44,13 +39,39 @@ async function fetch(
                 payload: JSON.parse(localCache),
             });
         } catch (err) {
+            // error at JSON.parse, prob corrupted JSON, removing item and proceed to fetch database
             localStorage.removeItem(localStorageKey);
         }
     }
 
     try {
+        // check database path last updated time
+        const localVersion = localStorage.getItem('last_updated');
+        let parsedJson;
+
+        try {
+            parsedJson = JSON.parse(localVersion as string);
+        } catch (err) {
+            localStorage.removeItem('last_updated');
+        }
+
+        const remoteVersion = (
+            await database.ref('/last_updated').once('value')
+        ).val();
+
+        // localVersion match database version, no need to refetch
+        if (
+            parsedJson &&
+            remoteVersion[dbPath.replace(/^\//, '')] ===
+                parsedJson[dbPath.replace(/^\//, '')]
+        ) {
+            return;
+        }
+
+        // localVersion doesn't match database version, proceed to fetch database
         const res = await database.ref(dbPath).once('value');
         dispatch({ type: successAction, payload: res.val() });
+        localStorage.setItem('last_updated', JSON.stringify(remoteVersion));
         localStorage.setItem(localStorageKey, JSON.stringify(res.val()));
     } catch (err) {
         dispatch({ type: errorAction, payload: err });

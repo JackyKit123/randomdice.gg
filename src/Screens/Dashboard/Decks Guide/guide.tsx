@@ -69,6 +69,9 @@ export default function updateDecksGuide(): JSX.Element {
                                 guides[i] = activeEdit;
                             }
                             setGuides([...guides]);
+                            database
+                                .ref('/last_updated/decks_guide')
+                                .set(new Date().toISOString());
                             dbRef.set([...guides]);
                             setActiveEdit(undefined);
                             dispatch({ type: CLOSE_POPUP });
@@ -110,6 +113,9 @@ export default function updateDecksGuide(): JSX.Element {
                         guides.splice(guideToDelete as number, 1);
                         setGuideToDelete(undefined);
                         setGuides([...guides]);
+                        database
+                            .ref('/last_updated/decks_guide')
+                            .set(new Date().toISOString());
                         dbRef.set([...guides]);
                         dispatch({ type: CLOSE_POPUP });
                     }}

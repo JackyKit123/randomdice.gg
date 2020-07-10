@@ -18,7 +18,8 @@ import './tips.less';
 export default function editTips(): JSX.Element {
     const dispatch = useDispatch();
     const selectRef = useRef(null as null | HTMLSelectElement);
-    const database = firebase.database().ref('/wiki/tips');
+    const database = firebase.database();
+    const dbRef = database.ref('/wiki/tips');
     const storage = firebase.storage();
     const [tips, setTips] = useState<WikiContent['tips']>();
 
@@ -30,7 +31,7 @@ export default function editTips(): JSX.Element {
     const [activeEdit, setActiveEdit] = useState({ ...initialState });
 
     useEffect(() => {
-        database.once('value').then(snapshot => setTips(snapshot.val()));
+        dbRef.once('value').then(snapshot => setTips(snapshot.val()));
     }, []);
 
     if (!tips) {
@@ -68,7 +69,8 @@ export default function editTips(): JSX.Element {
             if (!updateTips) {
                 result.push(activeEdit);
             }
-            database.set(result);
+            database.ref('/wiki').set(new Date().toISOString());
+            dbRef.set(result);
             setTips(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
@@ -83,7 +85,8 @@ export default function editTips(): JSX.Element {
         if (originalTips) {
             await storage.ref(`Tip Images/${originalTips.id}.png`).delete();
             const result = tips.filter(tip => tip.id !== activeEdit.id);
-            database.set(result);
+            database.ref('/wiki').set(new Date().toISOString());
+            dbRef.set(result);
             setTips(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
