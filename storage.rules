@@ -1,39 +1,40 @@
 service firebase.storage {
-  match /b/{bucket}/o {
-    match /Dice%20Images {
-       match /{allImages=**} {
-         allow read;
-         allow write: if request.auth.token.isEditor == true;
-       }
+    match /b/{bucket}/o {
+        match /Dice%20Images {
+            match /{allImages=**} {
+                allow read;
+            allow write: if request.auth.token.isEditor == true;
+            }
+        }
+        match /Boss%20Images {
+            match /{allImages=**} {
+                allow read;
+                allow write: if request.auth.token.isEditor == true;
+            }
+        }
+        match /Box%20Images {
+            match /{allImages=**} {
+                allow read;
+                allow write: if request.auth.token.isEditor == true;
+            }
+        }
+        match /Tip%20Images {
+            match /{allImages=**} {
+                allow read;
+                allow write: if request.auth.token.isEditor == true;
+            }
+        }
+        match /People%20Images {
+            match /{allImages=**} {
+                allow read;
+                allow write: if request.auth.token.isEditor == true;
+            }
+        }
+        match /Users {
+            match /{userId}/avatar {
+                allow read;
+                allow write: if request.auth.uid == userId;
+            }
+        }
     }
-    match /Boss%20Images {
-       match /{allImages=**} {
-         allow read;
-         allow write: if request.auth.token.isEditor == true;
-       }
-    }
-    match /Box%20Images {
-       match /{allImages=**} {
-         allow read;
-         allow write: if request.auth.token.isEditor == true;
-       }
-    }
-    match /Tip%20Images {
-       match /{allImages=**} {
-         allow read;
-         allow write: if request.auth.token.isEditor == true;
-       }
-    }
-    match /People%20Images {
-       match /{allImages=**} {
-         allow read;
-         allow write: if request.auth.token.isEditor == true;
-       }
-    }
-    match /General%20Images {
-       match /{allImages=**} {
-         allow read;
-       }
-    }
-  }
 }

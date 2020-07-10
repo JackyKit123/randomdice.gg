@@ -24,6 +24,7 @@ import {
     OPEN_POPUP,
     CLOSE_POPUP,
 } from '../../Misc/Redux Storage/PopUp Overlay/types';
+import { ERROR } from '../../Misc/Redux Storage/Firebase Auth/types';
 
 export default function Header(): JSX.Element {
     const dispatch = useDispatch();
@@ -33,6 +34,7 @@ export default function Header(): JSX.Element {
     const { data } = selector.fetchUserDataReducer;
     const [scrolled, setScrolled] = useState(true);
     const [menuToggle, setMenuToggle] = useState(false);
+    const [typingUsername, setTypingUsername] = useState<number>(0);
     const [accountLinked, setAccountLinked] = useState(
         Object.keys(data ? data['linked-account'] : [''])
     );
@@ -115,77 +117,148 @@ export default function Header(): JSX.Element {
                     <span className='error'>{error}</span>
                 )}
             </PopUp>
-            <PopUp popUpTarget='profile'>
-                <h3>Profile</h3>
-                <span>
-                    You can update your Displayed Name and link other account to
-                    your profile here. Keep in mind that the accounts should be
-                    associated with the same email address in this account.
-                </span>
-                <div className='profile-and-name'>
-                    <figure>
-                        <img src={user?.photoURL || ''} alt='Profile pic' />
-                    </figure>
-                    <label htmlFor='display-name'>
-                        <span>Update your display name:</span>
-                        <input
-                            defaultValue={user?.displayName || ''}
-                            onBlur={(evt): Promise<void> | undefined =>
-                                user?.updateProfile({
-                                    displayName: evt.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                </div>
-                <hr className='divisor' />
-                {accountLinked.length ? (
-                    <>
-                        <h3>Account Linked</h3>
-                        <div className='oauth'>
-                            {accountLinked.includes('discord') ? (
-                                <span className='discord'>
-                                    <FontAwesomeIcon icon={faDiscord} />
-                                </span>
-                            ) : null}
-                            {accountLinked.includes('patreon') ? (
-                                <span className='patreon'>
-                                    <FontAwesomeIcon icon={faPatreon} />
-                                </span>
-                            ) : null}
-                        </div>
-                    </>
-                ) : null}
-                <hr className='divisor' />
-                <h3>Linkable Accounts</h3>
-                <div className='oauth'>
-                    {!accountLinked.includes('discord') ? (
-                        <button
-                            className='discord'
-                            type='button'
-                            onClick={(): void => auth.discord(dispatch, true)}
-                        >
-                            <FontAwesomeIcon icon={faDiscord} />
-                        </button>
+            {user ? (
+                <PopUp popUpTarget='profile'>
+                    <h3>Profile</h3>
+                    <span>
+                        You can update your Displayed Name and link other
+                        account to your profile here. Keep in mind that the
+                        accounts should be associated with the same email
+                        address in this account.
+                    </span>
+                    <div className='profile-and-name'>
+                        <figure>
+                            <img src={user.photoURL || ''} alt='Profile pic' />
+                        </figure>
+                        <label htmlFor='display-name'>
+                            <span>Update your display name:</span>
+                            <input
+                                defaultValue={user.displayName || ''}
+                                onChange={(evt): void => {
+                                    evt.persist();
+                                    clearTimeout(typingUsername);
+                                    setTypingUsername(
+                                        window.setTimeout(async (): Promise<
+                                            void
+                                        > => {
+                                            dispatch({
+                                                type: ERROR,
+                                                payload: 'Loading',
+                                            });
+                                            try {
+                                                await user.updateProfile({
+                                                    displayName:
+                                                        evt.target.value,
+                                                });
+                                                dispatch({
+                                                    type: ERROR,
+                                                    payload: undefined,
+                                                });
+                                            } catch (err) {
+                                                dispatch({
+                                                    type: ERROR,
+                                                    payload: err.message,
+                                                });
+                                            }
+                                        }, 500)
+                                    );
+                                }}
+                            />
+                        </label>
+                        <label htmlFor='profile-pic'>
+                            <span>Update your profile picture:</span>
+                            <input
+                                type='file'
+                                accept='image/*'
+                                onChange={async (evt): Promise<void> => {
+                                    dispatch({
+                                        type: ERROR,
+                                        payload: 'Loading',
+                                    });
+                                    try {
+                                        if (evt.target.files) {
+                                            const pfpRef = firebase
+                                                .storage()
+                                                .ref(
+                                                    `Users/${user.uid}/avatar`
+                                                );
+                                            await pfpRef.put(
+                                                evt.target.files[0],
+                                                {
+                                                    cacheControl:
+                                                        'public,max-age=3600',
+                                                }
+                                            );
+                                            const url = await pfpRef.getDownloadURL();
+                                            await user.updateProfile({
+                                                photoURL: url,
+                                            });
+                                        }
+                                        dispatch({
+                                            type: ERROR,
+                                            payload: undefined,
+                                        });
+                                    } catch (err) {
+                                        dispatch({
+                                            type: ERROR,
+                                            payload: err.message,
+                                        });
+                                    }
+                                }}
+                            />
+                        </label>
+                    </div>
+                    <hr className='divisor' />
+                    {accountLinked.length ? (
+                        <>
+                            <h3>Account Linked</h3>
+                            <div className='oauth'>
+                                {accountLinked.includes('discord') ? (
+                                    <span className='discord'>
+                                        <FontAwesomeIcon icon={faDiscord} />
+                                    </span>
+                                ) : null}
+                                {accountLinked.includes('patreon') ? (
+                                    <span className='patreon'>
+                                        <FontAwesomeIcon icon={faPatreon} />
+                                    </span>
+                                ) : null}
+                            </div>
+                        </>
                     ) : null}
-                    {!accountLinked.includes('patreon') ? (
-                        <button
-                            className='patreon'
-                            type='button'
-                            onClick={(): Promise<void> =>
-                                auth.patreon(dispatch, true)
-                            }
-                        >
-                            <FontAwesomeIcon icon={faPatreon} />
-                        </button>
-                    ) : null}
-                </div>
-                {error === 'Loading' ? (
-                    <FontAwesomeIcon icon={faSpinner} className='loading' />
-                ) : (
-                    <span className='error'>{error}</span>
-                )}
-            </PopUp>
+                    <hr className='divisor' />
+                    <h3>Linkable Accounts</h3>
+                    <div className='oauth'>
+                        {!accountLinked.includes('discord') ? (
+                            <button
+                                className='discord'
+                                type='button'
+                                onClick={(): void =>
+                                    auth.discord(dispatch, true)
+                                }
+                            >
+                                <FontAwesomeIcon icon={faDiscord} />
+                            </button>
+                        ) : null}
+                        {!accountLinked.includes('patreon') ? (
+                            <button
+                                className='patreon'
+                                type='button'
+                                onClick={(): Promise<void> =>
+                                    auth.patreon(dispatch, true)
+                                }
+                            >
+                                <FontAwesomeIcon icon={faPatreon} />
+                            </button>
+                        ) : null}
+                    </div>
+                    {error === 'Loading' ? (
+                        <FontAwesomeIcon icon={faSpinner} className='loading' />
+                    ) : (
+                        <span className='error'>{error}</span>
+                    )}
+                </PopUp>
+            ) : null}
             <div className='container'>
                 <div className='topHeaderBar headerBar'>
                     <div className='container'>
