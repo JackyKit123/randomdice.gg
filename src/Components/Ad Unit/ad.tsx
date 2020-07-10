@@ -87,7 +87,17 @@ export default function AdUnit({
     }
 
     return (
-        <div className='ad-container' data-dimension={dimension}>
+        <div
+            className={`ad-container ${
+                // eslint-disable-next-line no-nested-ternary
+                detected()
+                    ? 'adblocked'
+                    : provider === 'Google'
+                    ? 'google'
+                    : 'medianet'
+            }`}
+            data-dimension={dimension}
+        >
             {detected() ? (
                 <div className='ad-block-warning'>
                     <span>
@@ -118,7 +128,7 @@ export default function AdUnit({
                             data-full-width-responsive='true'
                         />
                     )}
-                    <h6 className='sponsor'>Advertisement</h6>
+                    <h6 className='label'>Advertisement</h6>
                 </div>
             )}
         </div>

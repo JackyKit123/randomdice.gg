@@ -6,19 +6,37 @@
     width: 100%;
     overflow: hidden;
 
-    &[data-dimension='970x90'] {
-        @media @mobile {
-            display: none;
+    &.google {
+        min-height: 250px;
+
+        h6.label {
+            margin: 5px auto 0;
         }
     }
 
-    &[data-dimension='300x250'] {
-        @media @desktop {
-            display: none;
+    &.medianet {
+        &[data-dimension='970x90'] {
+            min-height: 90px;
+
+            @media @mobile {
+                display: none;
+            }
         }
 
-        & > div {
-            max-width: 400px;
+        &[data-dimension='300x250'] {
+            min-height: 250px;
+
+            @media @desktop {
+                display: none;
+            }
+
+            & > div {
+                max-width: 400px;
+            }
+        }
+
+        h6.label {
+            margin: 0 auto 5px;
         }
     }
 
@@ -41,9 +59,8 @@
             }
         }
 
-        & > h6.sponsor {
+        & > h6.label {
             width: 100%;
-            margin: 5px auto 0;
             text-align: center;
             font-style: italic;
             font-size: 15px;
