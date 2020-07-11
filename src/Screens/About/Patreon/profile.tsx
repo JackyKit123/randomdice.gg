@@ -83,6 +83,10 @@ export default function PatreonProfile(): JSX.Element {
                                     .database()
                                     .ref(`/patreon_list/${i}/${uid}/message`)
                                     .set(content);
+                                await firebase
+                                    .database()
+                                    .ref('/last_updated/patreon_list')
+                                    .set(new Date().toISOString());
                                 fetchPatreon(dispatch);
                                 setEditing(false);
                                 setSubmitLoading(false);
