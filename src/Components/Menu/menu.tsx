@@ -5,8 +5,9 @@ import { Menu as MenuProp } from '../../Misc/menuConfig';
 export default function Menu(props: {
     menuList: MenuProp[];
     className?: string | undefined;
+    style?: React.CSSProperties;
 }): JSX.Element {
-    const { menuList, className } = props;
+    const { menuList, className, style } = props;
     const [focusedTab, setFocusedTab] = useState(-1);
     const history = useHistory();
     const location = useLocation();
@@ -74,5 +75,9 @@ export default function Menu(props: {
             );
         });
     };
-    return <ul className={`menu ${className}`}>{createMenu(menuList)}</ul>;
+    return (
+        <ul className={`menu ${className}`} style={style}>
+            {createMenu(menuList)}
+        </ul>
+    );
 }

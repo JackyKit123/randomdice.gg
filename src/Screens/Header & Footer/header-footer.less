@@ -225,7 +225,12 @@ body {
                             .display(flex);
                             .justify-content(flex-end);
                             height: 100%;
-                            position: relative;
+                            position: unset;
+
+                            &.resizing,
+                            &.resizing * {
+                                .transition(none) !important;
+                            }
 
                             @media @mobile {
                                 .flex-direction(column);
@@ -284,7 +289,7 @@ body {
                             & > li {
                                 &:first-of-type {
                                     position: absolute;
-                                    left: 0;
+                                    left: 10px;
                                     margin-left: 0;
                                     display: table;
                                     visibility: visible;

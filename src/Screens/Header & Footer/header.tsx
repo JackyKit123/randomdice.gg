@@ -35,13 +35,14 @@ export default function Header(): JSX.Element {
     const [scrolled, setScrolled] = useState(true);
     const [menuToggle, setMenuToggle] = useState(false);
     const [typingUsername, setTypingUsername] = useState<number>(0);
+    const [resizing, setResizing] = useState(false);
     const [accountLinked, setAccountLinked] = useState(
         Object.keys(data ? data['linked-account'] : [''])
     );
 
     useEffect(() => {
         const unlisten = history.listen(() => setMenuToggle(false));
-        function handler(): void {
+        function scrollHandler(): void {
             if (
                 document.body.clientHeight -
                     window.innerHeight -
@@ -52,10 +53,19 @@ export default function Header(): JSX.Element {
                 setScrolled(true);
             } else if (window.scrollY === 0) setScrolled(false);
         }
-        window.addEventListener('scroll', handler);
+        let timeout = 0;
+        function resizeHandler(): void {
+            clearTimeout(timeout);
+            setResizing(true);
+            timeout = window.setTimeout((): void => setResizing(false), 400);
+        }
+
+        window.addEventListener('scroll', scrollHandler);
+        window.addEventListener('resize', resizeHandler);
         return (): void => {
             unlisten();
-            window.removeEventListener('scroll', handler);
+            window.removeEventListener('resize', resizeHandler);
+            window.removeEventListener('scroll', scrollHandler);
         };
     }, []);
 
@@ -327,7 +337,9 @@ export default function Header(): JSX.Element {
                     <div className='container'>
                         <Menu
                             menuList={menu}
-                            className={menuToggle ? 'open' : ''}
+                            className={`${menuToggle ? 'open' : ''} ${
+                                resizing ? 'resizing' : ''
+                            }`}
                         />
                         <button
                             type='button'
