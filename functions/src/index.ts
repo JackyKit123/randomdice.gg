@@ -422,6 +422,10 @@ export const fetchPatreon = functions.pubsub
                 };
             };
             const usersData = Object.entries(users);
+            const existingPatreonProfiles = (
+                await database.ref(`/patreon_list`).once('value')
+            ).val() as PatreonProfile[];
+            let anyProfileUpdated = existingPatreonProfiles.length !== patreonList.length;
             await Promise.all(
                 usersData.map(async ([uid, userData]) => {
                     const patreonId = userData['linked-account'].patreon;
@@ -433,6 +437,9 @@ export const fetchPatreon = functions.pubsub
                             const i = patreonList.findIndex(
                                 patreon => patreon.id === patreonId
                             );
+                            const prevPatreonProfile = existingPatreonProfiles.find(
+                                patreon => patreon.id === uid
+                            );
                             const userProfile = await auth.getUser(uid);
                             patreonList[i].id = uid;
                             patreonList[i].name =
@@ -440,14 +447,16 @@ export const fetchPatreon = functions.pubsub
                             patreonList[i].img = userProfile.photoURL;
                             patreonList[i][uid] = {
                                 message:
-                                    ((
-                                        await database
-                                            .ref(`/patreon_list`)
-                                            .once('value')
-                                    ).val() as PatreonProfile[]).find(
-                                        patreon => patreon.id === uid
-                                    )?.[uid].message || '',
+                                    prevPatreonProfile?.[uid].message || '',
                             };
+                            if (
+                                patreonList[i].name !==
+                                    prevPatreonProfile?.name ||
+                                patreonList[i].img !==
+                                    prevPatreonProfile?.img
+                            ) {
+                                anyProfileUpdated = true;
+                            }
                         } finally {
                             await database
                                 .ref(`/users/${uid}/patreon-tier`)
@@ -459,6 +468,9 @@ export const fetchPatreon = functions.pubsub
                 })
             );
             await database.ref('/patreon_list').set(patreonList);
+            if (anyProfileUpdated) {
+                await database.ref('/last_updated/patreon_list').set(new Date().toISOString());
+            }
         } catch (err) {
             console.log(err.message);
         }

@@ -38,7 +38,10 @@ export default function PatreonProfile(): JSX.Element {
         const user = firebase.auth().currentUser;
         if (list && user) {
             const patreon = list.find(
-                patron => patron.id === user.uid && patron.tier >= 2
+                patron =>
+                    patron.id === user.uid &&
+                    patron.name === name &&
+                    patron.tier >= 2
             );
             setIsPatreonPageOwner(Boolean(patreon));
         }

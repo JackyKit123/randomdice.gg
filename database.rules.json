@@ -3,7 +3,10 @@
         ".write": false,
         "last_updated": {
             ".read": true,
-            ".write": "auth.token.isEditor === true"
+            ".write": "auth.token.isEditor === true",
+            "patreon_list": {
+                ".write": "auth.uid !== null || auth.uid === 'my-service-worker'"
+            }
         },
         "decks": {
             ".read": true,
