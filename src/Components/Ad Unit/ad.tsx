@@ -121,7 +121,7 @@ export default function AdUnit({
                     {provider === 'Media.net' ? null : (
                         <ins
                             className='adsbygoogle'
-                            style={{ display: 'block' }}
+                            style={{ display: 'block', width: '100%' }}
                             data-ad-client='ca-pub-3031422008949072'
                             data-ad-slot={unitId}
                             data-ad-format='auto'
