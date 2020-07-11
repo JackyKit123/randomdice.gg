@@ -16,6 +16,7 @@ import LoadingScreen from '../../Components/Loading/loading';
 import fetchResponseForm from '../../Misc/Redux Storage/Google API Fetch Response Form/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Google API Fetch Response Form/types';
 import './crit.less';
+import ShareButtons from '../../Components/Social Media Share/share';
 
 export default function critData(): JSX.Element {
     const dispatch = useDispatch();
@@ -361,6 +362,8 @@ export default function critData(): JSX.Element {
                         </tbody>
                     </table>
                 </div>
+                <hr className='divisor' />
+                <ShareButtons name='Random Dice Players Critical Data' />
             </>
         );
     } else if (error) {

@@ -81,6 +81,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-router-ga": "^1.2.3",
+    "react-share": "^4.2.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "resolve": "1.15.0",

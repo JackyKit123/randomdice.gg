@@ -17,6 +17,7 @@ import { fetchDecks, fetchDices } from '../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import './decklist.less';
 import { OPEN_POPUP } from '../../Misc/Redux Storage/PopUp Overlay/types';
+import ShareButtons from '../../Components/Social Media Share/share';
 
 export default function DeckList({
     deckType,
@@ -359,6 +360,8 @@ export default function DeckList({
                         </tbody>
                     </table>
                 </div>
+                <hr className='divisor' />
+                <ShareButtons name='Random Dice Deck List' />
             </>
         );
     } else if (error) {

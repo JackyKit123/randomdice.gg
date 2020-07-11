@@ -9,6 +9,7 @@ import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
 import Dice from '../../Components/Dice/dice';
 import AdUnit from '../../Components/Ad Unit/ad';
+import SMshare from '../../Components/Social Media Share/share';
 import './guide.less';
 import { RootState } from '../../Misc/Redux Storage/store';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
@@ -63,6 +64,7 @@ export default function DeckGuideMenu(): JSX.Element | null {
                     <hr className='divisor' />
                     {ReactHtmlParser(sanitize(thisGuide?.guide || ''))}
                 </div>
+                <SMshare name={`Decks Guide (${name})`} />
                 <button
                     type='button'
                     className='read-more'

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
@@ -12,7 +12,6 @@ import { fetchDecksGuide, fetchDices } from '../../Misc/Firebase/fetchData';
 import AdUnit from '../../Components/Ad Unit/ad';
 
 export default function DeckGuideMenu(): JSX.Element {
-    const history = useHistory();
     const dispatch = useDispatch();
     const { guide, error } = useSelector(
         (state: RootState) => state.fetchDecksGuideReducer
@@ -54,42 +53,29 @@ export default function DeckGuideMenu(): JSX.Element {
                                     </td>
                                 </tr>
                             ) : (
-                                <tr
-                                    key={deck.name}
-                                    tabIndex={0}
-                                    onClick={(): void =>
-                                        history.push(
-                                            `/decks/guide/${deck.name}`
-                                        )
-                                    }
-                                    onKeyDown={(evt): void => {
-                                        // Enter or SpaceBar
-                                        if (
-                                            evt.keyCode === 13 ||
-                                            evt.keyCode === 32
-                                        ) {
-                                            history.push(
-                                                `/decks/guide/${deck.name}`
-                                            );
-                                        }
-                                    }}
-                                >
-                                    <td>{deck.name}</td>
+                                <tr>
                                     <td>
-                                        {deck.diceList.map(dicelist => (
-                                            <div
-                                                className='dice-container'
-                                                key={`filter-${dicelist.join()}`}
-                                            >
-                                                {dicelist.map((dice, i) => (
-                                                    <Dice
-                                                        /* eslint-disable-next-line react/no-array-index-key */
-                                                        key={`filter-${dicelist.join()}-${dice}${i}`}
-                                                        dice={dice}
-                                                    />
-                                                ))}
-                                            </div>
-                                        ))}
+                                        <Link to={`/decks/guide/${deck.name}`}>
+                                            <span>{deck.name}</span>
+                                        </Link>
+                                    </td>
+                                    <td>
+                                        <Link to={`/decks/guide/${deck.name}`}>
+                                            {deck.diceList.map(dicelist => (
+                                                <div
+                                                    className='dice-container'
+                                                    key={`filter-${dicelist.join()}`}
+                                                >
+                                                    {dicelist.map((dice, i) => (
+                                                        <Dice
+                                                            /* eslint-disable-next-line react/no-array-index-key */
+                                                            key={`filter-${dicelist.join()}-${dice}${i}`}
+                                                            dice={dice}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            ))}
+                                        </Link>
                                     </td>
                                 </tr>
                             )

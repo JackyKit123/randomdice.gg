@@ -13,6 +13,7 @@ import { fetchDices } from '../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import './arenadraft.less';
 import AdUnit from '../../Components/Ad Unit/ad';
+import ShareButtons from '../../Components/Social Media Share/share';
 
 export default function ArenaDraft(): JSX.Element {
     const dispatch = useDispatch();
@@ -414,6 +415,8 @@ export default function ArenaDraft(): JSX.Element {
                     <h4>Value / Buff (target score: 20)</h4>
                     <input type='textbox' value={deckScore('value')} disabled />
                 </section>
+                <hr className='divisor' />
+                <ShareButtons name='Random Dice Arena Draft Toll' />
                 <section
                     className={`winrate ${currentPick === 6 ? 'show' : ''}`}
                 >
