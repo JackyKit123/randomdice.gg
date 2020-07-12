@@ -6,8 +6,9 @@ export type Menu = {
     name?: string;
     path?: string;
     component?: FunctionComponent;
-    excludeFromMenu?: boolean;
+    excludeFromMenu?: true;
     childNode?: Menu[];
+    privateRoute?: true;
 };
 
 export const menu: Menu[] = [
@@ -215,6 +216,7 @@ export const menu: Menu[] = [
         childNode: [
             {
                 path: '/dashboard',
+                privateRoute: true,
                 excludeFromMenu: true,
                 component: lazy(() =>
                     import('../Components/Dashboard/dashboard')
@@ -222,12 +224,14 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Dice Information',
+                privateRoute: true,
                 path: '/dashboard/dice',
                 excludeFromMenu: true,
                 component: lazy(() => import('../Screens/Dashboard/Dice/dice')),
             },
             {
                 name: 'Deck List',
+                privateRoute: true,
                 path: '/dashboard/deck',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -236,6 +240,7 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Written Deck Guide',
+                privateRoute: true,
                 path: '/dashboard/guide',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -244,6 +249,7 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Game Introduction',
+                privateRoute: true,
                 path: '/dashboard/intro',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -252,6 +258,7 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Boss Information',
+                privateRoute: true,
                 path: '/dashboard/boss',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -260,6 +267,7 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Box Information',
+                privateRoute: true,
                 path: '/dashboard/box',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -268,6 +276,7 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Tips and Tricks',
+                privateRoute: true,
                 path: '/dashboard/tips',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -276,6 +285,7 @@ export const menu: Menu[] = [
             },
             {
                 name: 'Patch Note',
+                privateRoute: true,
                 path: '/dashboard/patch_note',
                 excludeFromMenu: true,
                 component: lazy(() =>
@@ -284,12 +294,14 @@ export const menu: Menu[] = [
             },
             {
                 name: 'News',
+                privateRoute: true,
                 path: '/dashboard/news',
                 excludeFromMenu: true,
                 component: lazy(() => import('../Screens/Dashboard/News/news')),
             },
             {
                 name: 'Credit',
+                privateRoute: true,
                 path: '/dashboard/credit',
                 excludeFromMenu: true,
                 component: lazy(() =>

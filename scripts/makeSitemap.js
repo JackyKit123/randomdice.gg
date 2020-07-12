@@ -59,10 +59,13 @@ const out = path.join(__dirname, '..', 'public', 'sitemap.txt');
                             name =>
                                 `https://randomdice.gg/about/patreon/${encodeURI(name)}`
                         );
+                    case item.privateRoute:
+                        return '';
                     default:
                         return `https://randomdice.gg${item.path}`;
                 }
             })
+            .filter(url => !!url)
             .flat()
             .join('\n');
     const sitemap = drawPath(menu);

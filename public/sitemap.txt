@@ -44,16 +44,5 @@ https://randomdice.gg/about/patreon/Jackdepirate
 https://randomdice.gg/about/patreon/YoMama
 https://randomdice.gg/about/patreon/Breakky
 https://randomdice.gg/about/terms
-https://randomdice.gg/dashboard
-https://randomdice.gg/dashboard/dice
-https://randomdice.gg/dashboard/deck
-https://randomdice.gg/dashboard/guide
-https://randomdice.gg/dashboard/intro
-https://randomdice.gg/dashboard/boss
-https://randomdice.gg/dashboard/box
-https://randomdice.gg/dashboard/tips
-https://randomdice.gg/dashboard/patch_note
-https://randomdice.gg/dashboard/news
-https://randomdice.gg/dashboard/credit
 https://randomdice.gg/discord_login
 https://randomdice.gg/patreon_login
