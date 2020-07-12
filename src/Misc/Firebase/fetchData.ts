@@ -62,6 +62,8 @@ async function fetch(
         // localVersion match database version, no need to refetch
         if (
             parsedJson &&
+            remoteVersion[dbPath.replace(/^\//, '')] &&
+            parsedJson[dbPath.replace(/^\//, '')] &&
             remoteVersion[dbPath.replace(/^\//, '')] ===
                 parsedJson[dbPath.replace(/^\//, '')]
         ) {
