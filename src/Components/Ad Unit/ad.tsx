@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import 'firebase/database';
 import { detected } from 'adblockdetect';
@@ -16,73 +16,87 @@ export default function AdUnit({
     dimension: string;
     style?: React.CSSProperties;
 }): JSX.Element | null {
-    const { data } = useSelector(
-        (state: RootState) => state.fetchUserDataReducer
-    );
+    const selector = useSelector((state: RootState) => state);
+    const { data } = selector.fetchUserDataReducer;
+    const { user, error } = selector.authReducer;
+    const [adLoaded, setAdLoaded] = useState(false);
 
     useEffect(() => {
-        try {
-            if (provider === 'Media.net') {
-                if (
-                    !document.querySelector(
-                        'script[src="https://contextual.media.net/dmedianet.js?cid=8CU6HWIGD"]'
-                    )
-                ) {
-                    window._mNHandle = window._mNHandle || {};
-                    window._mNHandle.queue = window._mNHandle.queue || [];
-                    // eslint-disable-next-line @typescript-eslint/camelcase
-                    window.medianet_versionId = '3121199';
-                    const script = document.createElement('script');
-                    script.src =
-                        'https://contextual.media.net/dmedianet.js?cid=8CU6HWIGD';
-                    script.async = true;
-                    document.head.appendChild(script);
-                    script.onload = (): void => {
-                        // eslint-disable-next-line func-names
-                        window._mNHandle.queue.push(function() {
-                            window._mNDetails.loadTag(
-                                unitId,
-                                dimension,
-                                unitId
+        if (user !== 'awaiting auth state') {
+            if (
+                !adLoaded &&
+                (user === null || (data && !data['patreon-tier']))
+            ) {
+                try {
+                    if (provider === 'Media.net') {
+                        if (
+                            !document.querySelector(
+                                'script[src="https://contextual.media.net/dmedianet.js?cid=8CU6HWIGD"]'
+                            )
+                        ) {
+                            window._mNHandle = window._mNHandle || {};
+                            window._mNHandle.queue =
+                                window._mNHandle.queue || [];
+                            // eslint-disable-next-line @typescript-eslint/camelcase
+                            window.medianet_versionId = '3121199';
+                            const script = document.createElement('script');
+                            script.src =
+                                'https://contextual.media.net/dmedianet.js?cid=8CU6HWIGD';
+                            script.async = true;
+                            document.head.appendChild(script);
+                            script.onload = (): void => {
+                                // eslint-disable-next-line func-names
+                                window._mNHandle.queue.push(function() {
+                                    window._mNDetails.loadTag(
+                                        unitId,
+                                        dimension,
+                                        unitId
+                                    );
+                                });
+                            };
+                        } else {
+                            // eslint-disable-next-line func-names
+                            window._mNHandle.queue.push(function() {
+                                window._mNDetails.loadTag(
+                                    unitId,
+                                    dimension,
+                                    unitId
+                                );
+                            });
+                        }
+                    } else if (provider === 'Google') {
+                        if (
+                            !document.querySelector(
+                                'script[src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"][data-ad-client="ca-pub-3031422008949072"]'
+                            )
+                        ) {
+                            const script = document.createElement('script');
+                            script.src =
+                                'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+                            script.setAttribute(
+                                'data-ad-client',
+                                'ca-pub-3031422008949072'
                             );
-                        });
-                    };
-                } else {
-                    // eslint-disable-next-line func-names
-                    window._mNHandle.queue.push(function() {
-                        window._mNDetails.loadTag(unitId, dimension, unitId);
-                    });
-                }
-            } else if (provider === 'Google') {
-                if (
-                    !document.querySelector(
-                        'script[src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"][data-ad-client="ca-pub-3031422008949072"]'
-                    )
-                ) {
-                    const script = document.createElement('script');
-                    script.src =
-                        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-                    script.setAttribute(
-                        'data-ad-client',
-                        'ca-pub-3031422008949072'
-                    );
-                    script.async = true;
-                    document.head.appendChild(script);
-                    script.onload = (): void => {
-                        (window.adsbygoogle = window.adsbygoogle || []).push(
-                            {}
-                        );
-                    };
-                } else {
-                    (window.adsbygoogle = window.adsbygoogle || []).push({});
+                            script.async = true;
+                            document.head.appendChild(script);
+                            script.onload = (): void => {
+                                (window.adsbygoogle =
+                                    window.adsbygoogle || []).push({});
+                            };
+                        } else {
+                            (window.adsbygoogle =
+                                window.adsbygoogle || []).push({});
+                        }
+                    }
+                    setAdLoaded(true);
+                } catch (err) {
+                    //
                 }
             }
-        } catch (err) {
-            //
         }
-    }, []);
+    }, [user, data]);
 
-    if (data && data['patreon-tier']) {
+    if ((error && error !== 'Loading') || (data && data['patreon-tier'])) {
         return null;
     }
 

@@ -2,7 +2,7 @@ export const AUTH = 'AUTH';
 export const ERROR = 'AUTH_ERROR';
 
 export interface AuthState {
-    user: firebase.User | null;
+    user: firebase.User | null | 'awaiting auth state';
     error: string | undefined;
 }
 

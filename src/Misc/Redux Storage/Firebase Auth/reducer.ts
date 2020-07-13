@@ -1,6 +1,9 @@
 import { AUTH, Action, AuthState, ERROR } from './types';
 
-const initialState: AuthState = { user: null, error: undefined };
+const initialState: AuthState = {
+    user: 'awaiting auth state',
+    error: undefined,
+};
 
 export default function(state = initialState, action: Action): AuthState {
     switch (action.type) {

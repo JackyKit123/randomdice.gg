@@ -71,7 +71,7 @@ export default function Header(): JSX.Element {
 
     // eslint-disable-next-line consistent-return
     useEffect(() => {
-        if (user) {
+        if (user && user !== 'awaiting auth state') {
             dispatch({ type: CLOSE_POPUP });
             const userData = firebase.database().ref(`users/${user.uid}`);
             const listener = userData.on('value', snapshot => {
@@ -127,7 +127,7 @@ export default function Header(): JSX.Element {
                     <span className='error'>{error}</span>
                 )}
             </PopUp>
-            {user ? (
+            {user && user !== 'awaiting auth state' ? (
                 <PopUp popUpTarget='profile'>
                     <h3>Profile</h3>
                     <span>
@@ -272,7 +272,7 @@ export default function Header(): JSX.Element {
             <div className='container'>
                 <div className='topHeaderBar headerBar'>
                     <div className='container'>
-                        {user ? (
+                        {user && user !== 'awaiting auth state' ? (
                             <>
                                 {data?.editor ? (
                                     <span className='dashboard'>
