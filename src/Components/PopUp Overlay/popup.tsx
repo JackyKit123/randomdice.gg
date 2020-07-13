@@ -58,7 +58,7 @@ export default function PopUp({
         >
             <div className='popup'>
                 <div
-                    className={`${className} container`}
+                    className={`${className || ''} container`}
                     ref={overlayRef}
                     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                     tabIndex={0}

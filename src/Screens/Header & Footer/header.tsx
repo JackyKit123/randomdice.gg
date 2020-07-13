@@ -128,151 +128,177 @@ export default function Header(): JSX.Element {
                 )}
             </PopUp>
             {user && user !== 'awaiting auth state' ? (
-                <PopUp popUpTarget='profile'>
-                    <h3>Profile</h3>
-                    <span>
-                        You can update your Displayed Name and link other
-                        account to your profile here. Keep in mind that the
-                        accounts should be associated with the same email
-                        address in this account.
-                    </span>
-                    <div className='profile-and-name'>
-                        <figure>
-                            <img src={user.photoURL || ''} alt='Profile pic' />
-                        </figure>
-                        <label htmlFor='display-name'>
-                            <span>Update your display name:</span>
-                            <input
-                                defaultValue={user.displayName || ''}
-                                onChange={(evt): void => {
-                                    evt.persist();
-                                    clearTimeout(typingUsername);
-                                    setTypingUsername(
-                                        window.setTimeout(async (): Promise<
-                                            void
-                                        > => {
-                                            dispatch({
-                                                type: ERROR,
-                                                payload: 'Loading',
-                                            });
-                                            try {
+                <>
+                    <PopUp popUpTarget='profile'>
+                        <h3>Profile</h3>
+                        <span>
+                            You can update your Displayed Name and link other
+                            account to your profile here. Keep in mind that the
+                            accounts should be associated with the same email
+                            address in this account.
+                        </span>
+                        <div className='profile-and-name'>
+                            <figure>
+                                <img
+                                    src={user.photoURL || ''}
+                                    alt='Profile pic'
+                                />
+                            </figure>
+                            <label htmlFor='display-name'>
+                                <span>Update your display name:</span>
+                                <input
+                                    defaultValue={user.displayName || ''}
+                                    onChange={(evt): void => {
+                                        evt.persist();
+                                        clearTimeout(typingUsername);
+                                        setTypingUsername(
+                                            window.setTimeout(async (): Promise<
+                                                void
+                                            > => {
+                                                dispatch({
+                                                    type: ERROR,
+                                                    payload: 'Loading',
+                                                });
+                                                try {
+                                                    await user.updateProfile({
+                                                        displayName:
+                                                            evt.target.value,
+                                                    });
+                                                    dispatch({
+                                                        type: ERROR,
+                                                        payload: undefined,
+                                                    });
+                                                } catch (err) {
+                                                    dispatch({
+                                                        type: ERROR,
+                                                        payload: err.message,
+                                                    });
+                                                }
+                                            }, 500)
+                                        );
+                                    }}
+                                />
+                            </label>
+                            <label htmlFor='profile-pic'>
+                                <span>Update your profile picture:</span>
+                                <input
+                                    type='file'
+                                    accept='image/*'
+                                    onChange={async (evt): Promise<void> => {
+                                        dispatch({
+                                            type: ERROR,
+                                            payload: 'Loading',
+                                        });
+                                        try {
+                                            if (evt.target.files) {
+                                                const pfpRef = firebase
+                                                    .storage()
+                                                    .ref(
+                                                        `Users/${user.uid}/avatar`
+                                                    );
+                                                await pfpRef.put(
+                                                    evt.target.files[0],
+                                                    {
+                                                        cacheControl:
+                                                            'public,max-age=3600',
+                                                    }
+                                                );
+                                                const url = await pfpRef.getDownloadURL();
                                                 await user.updateProfile({
-                                                    displayName:
-                                                        evt.target.value,
-                                                });
-                                                dispatch({
-                                                    type: ERROR,
-                                                    payload: undefined,
-                                                });
-                                            } catch (err) {
-                                                dispatch({
-                                                    type: ERROR,
-                                                    payload: err.message,
+                                                    photoURL: url,
                                                 });
                                             }
-                                        }, 500)
-                                    );
-                                }}
-                            />
-                        </label>
-                        <label htmlFor='profile-pic'>
-                            <span>Update your profile picture:</span>
-                            <input
-                                type='file'
-                                accept='image/*'
-                                onChange={async (evt): Promise<void> => {
-                                    dispatch({
-                                        type: ERROR,
-                                        payload: 'Loading',
-                                    });
-                                    try {
-                                        if (evt.target.files) {
-                                            const pfpRef = firebase
-                                                .storage()
-                                                .ref(
-                                                    `Users/${user.uid}/avatar`
-                                                );
-                                            await pfpRef.put(
-                                                evt.target.files[0],
-                                                {
-                                                    cacheControl:
-                                                        'public,max-age=3600',
-                                                }
-                                            );
-                                            const url = await pfpRef.getDownloadURL();
-                                            await user.updateProfile({
-                                                photoURL: url,
+                                            dispatch({
+                                                type: ERROR,
+                                                payload: undefined,
+                                            });
+                                        } catch (err) {
+                                            dispatch({
+                                                type: ERROR,
+                                                payload: err.message,
                                             });
                                         }
-                                        dispatch({
-                                            type: ERROR,
-                                            payload: undefined,
-                                        });
-                                    } catch (err) {
-                                        dispatch({
-                                            type: ERROR,
-                                            payload: err.message,
-                                        });
+                                    }}
+                                />
+                            </label>
+                        </div>
+                        <hr className='divisor' />
+                        {accountLinked.length ? (
+                            <>
+                                <h3>Account Linked</h3>
+                                <div className='oauth'>
+                                    {accountLinked.includes('discord') ? (
+                                        <span className='discord'>
+                                            <FontAwesomeIcon icon={faDiscord} />
+                                        </span>
+                                    ) : null}
+                                    {accountLinked.includes('patreon') ? (
+                                        <span className='patreon'>
+                                            <FontAwesomeIcon icon={faPatreon} />
+                                        </span>
+                                    ) : null}
+                                </div>
+                            </>
+                        ) : null}
+                        <hr className='divisor' />
+                        <h3>Linkable Accounts</h3>
+                        <div className='oauth'>
+                            {!accountLinked.includes('discord') ? (
+                                <button
+                                    className='discord'
+                                    type='button'
+                                    onClick={(): void =>
+                                        auth.discord(dispatch, true)
                                     }
-                                }}
+                                >
+                                    <FontAwesomeIcon icon={faDiscord} />
+                                </button>
+                            ) : null}
+                            {!accountLinked.includes('patreon') ? (
+                                <button
+                                    className='patreon'
+                                    type='button'
+                                    onClick={(): Promise<void> =>
+                                        auth.patreon(dispatch, true)
+                                    }
+                                >
+                                    <FontAwesomeIcon icon={faPatreon} />
+                                </button>
+                            ) : null}
+                        </div>
+                        {error === 'Loading' ? (
+                            <FontAwesomeIcon
+                                icon={faSpinner}
+                                className='loading'
                             />
-                        </label>
-                    </div>
-                    <hr className='divisor' />
-                    {accountLinked.length ? (
-                        <>
-                            <h3>Account Linked</h3>
-                            <div className='oauth'>
-                                {accountLinked.includes('discord') ? (
-                                    <span className='discord'>
-                                        <FontAwesomeIcon icon={faDiscord} />
-                                    </span>
-                                ) : null}
-                                {accountLinked.includes('patreon') ? (
-                                    <span className='patreon'>
-                                        <FontAwesomeIcon icon={faPatreon} />
-                                    </span>
-                                ) : null}
-                            </div>
-                        </>
-                    ) : null}
-                    <hr className='divisor' />
-                    <h3>Linkable Accounts</h3>
-                    <div className='oauth'>
-                        {!accountLinked.includes('discord') ? (
-                            <button
-                                className='discord'
-                                type='button'
-                                onClick={(): void =>
-                                    auth.discord(dispatch, true)
-                                }
-                            >
-                                <FontAwesomeIcon icon={faDiscord} />
-                            </button>
-                        ) : null}
-                        {!accountLinked.includes('patreon') ? (
-                            <button
-                                className='patreon'
-                                type='button'
-                                onClick={(): Promise<void> =>
-                                    auth.patreon(dispatch, true)
-                                }
-                            >
-                                <FontAwesomeIcon icon={faPatreon} />
-                            </button>
-                        ) : null}
-                    </div>
-                    {error === 'Loading' ? (
-                        <FontAwesomeIcon icon={faSpinner} className='loading' />
-                    ) : (
-                        <span className='error'>{error}</span>
-                    )}
-                </PopUp>
+                        ) : (
+                            <span className='error'>{error}</span>
+                        )}
+                    </PopUp>
+                    <PopUp
+                        popUpTarget='confirm-logout'
+                        className='confirm-logout'
+                    >
+                        <h3>Please Confirm</h3>
+                        <p>Are you sure you want to logout?</p>
+                        <button
+                            type='button'
+                            className='confirm'
+                            onClick={(): void => {
+                                auth.logout();
+                                dispatch({ type: CLOSE_POPUP });
+                            }}
+                        >
+                            Yes
+                        </button>
+                    </PopUp>
+                </>
             ) : null}
             <div className='container'>
                 <div className='topHeaderBar headerBar'>
                     <div className='container'>
-                        {user && user !== 'awaiting auth state' ? (
+                        {// eslint-disable-next-line no-nested-ternary
+                        user && user !== 'awaiting auth state' ? (
                             <>
                                 {data?.editor ? (
                                     <span className='dashboard'>
@@ -311,13 +337,18 @@ export default function Header(): JSX.Element {
                                 <button
                                     type='button'
                                     className='logout'
-                                    onClick={auth.logout}
+                                    onClick={(): void => {
+                                        dispatch({
+                                            type: OPEN_POPUP,
+                                            payload: 'confirm-logout',
+                                        });
+                                    }}
                                 >
                                     <FontAwesomeIcon icon={faSignOutAlt} />{' '}
                                     <span className='text'>LOGOUT</span>
                                 </button>
                             </>
-                        ) : (
+                        ) : user === 'awaiting auth state' ? null : (
                             <button
                                 type='button'
                                 className='login'
