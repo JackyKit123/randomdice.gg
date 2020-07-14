@@ -1,6 +1,8 @@
-import { History } from 'history';
+import { useHistory } from 'react-router-dom';
 
-export default function replaceAnchorWithHistory(history: History): () => void {
+export default function replaceAnchorWithHistory(
+    history: ReturnType<typeof useHistory>
+): () => void {
     const navigationHandler = (evt: MouseEvent): void => {
         const target = evt.target as HTMLElement | null;
         const targetLink = target?.closest('a')?.getAttribute('href');
