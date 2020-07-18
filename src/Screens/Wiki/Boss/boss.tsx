@@ -38,11 +38,20 @@ export default function BossGuide(): JSX.Element {
     }, [wiki]);
 
     useEffect(() => {
-        // eslint-disable-next-line no-unused-expressions
-        document
-            .getElementById(decodeURI(hash.replace(/^#/, '')))
-            ?.scrollIntoView();
-    }, [hash, wiki]);
+        const target = document.getElementById(
+            decodeURI(hash).replace(/^#/, '')
+        );
+        if (target) {
+            target.scrollIntoView();
+            setTimeout(
+                () =>
+                    window.scroll({
+                        top: window.scrollY - 90,
+                    }),
+                0
+            );
+        }
+    }, [bossInfo, hash]);
 
     let jsx;
     if (bossInfo) {

@@ -38,11 +38,20 @@ export default function DiceMechanic(): JSX.Element {
     }, []);
 
     useEffect(() => {
-        // eslint-disable-next-line no-unused-expressions
-        document
-            .getElementById(decodeURI(hash.replace(/^#/, '')))
-            ?.scrollIntoView();
-    }, [dices, hash]);
+        const target = document.getElementById(
+            decodeURI(hash).replace(/^#/, '')
+        );
+        if (target) {
+            target.scrollIntoView();
+            setTimeout(
+                () =>
+                    window.scroll({
+                        top: window.scrollY - 90,
+                    }),
+                0
+            );
+        }
+    }, [mechanics, hash]);
 
     useEffect(() => {
         if (dices && !mechanics?.includes('ad')) {

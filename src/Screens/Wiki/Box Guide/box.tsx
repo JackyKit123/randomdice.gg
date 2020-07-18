@@ -23,11 +23,20 @@ export default function BoxGuide(): JSX.Element {
     const error = store.fetchDicesReducer.error || store.fetchWikiReducer.error;
 
     useEffect(() => {
-        // eslint-disable-next-line no-unused-expressions
-        document
-            .getElementById(decodeURI(hash.replace(/^#/, '')))
-            ?.scrollIntoView();
-    }, [hash, dices, wiki]);
+        const target = document.getElementById(
+            decodeURI(hash).replace(/^#/, '')
+        );
+        if (target) {
+            target.scrollIntoView();
+            setTimeout(
+                () =>
+                    window.scroll({
+                        top: window.scrollY - 90,
+                    }),
+                0
+            );
+        }
+    }, [boxInfo, hash]);
 
     useEffect(() => {
         if (wiki && !wiki.box.find(box => box.img === 'ad')) {
