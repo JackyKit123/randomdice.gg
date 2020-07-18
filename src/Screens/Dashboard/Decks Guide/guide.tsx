@@ -160,7 +160,7 @@ export default function updateDecksGuide(): JSX.Element {
                                 <tr
                                     className='dice-container'
                                     /* eslint-disable-next-line react/no-array-index-key */
-                                    key={`dice-container-${dicelist.join()}-${i}`}
+                                    key={`dice-container-${i}`}
                                 >
                                     {i === 0 ? (
                                         <td rowSpan={arr.length + 1}>
@@ -212,7 +212,7 @@ export default function updateDecksGuide(): JSX.Element {
                                         {dicelist.map((dice, j) => (
                                             <select
                                                 /* eslint-disable-next-line react/no-array-index-key */
-                                                key={`${dicelist.join()}-${dice}-${j}`}
+                                                key={`${i}-${j}`}
                                                 defaultValue={dice}
                                                 onChange={(evt): void => {
                                                     activeEdit.diceList[i][j] =
