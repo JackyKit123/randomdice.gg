@@ -93,7 +93,7 @@ export default function Homepage(): JSX.Element {
                           news.game
                               .replace(
                                   /<figure class="media"><oembed url="/g,
-                                  '<iframe width="100%" id="game-news-youtube" src="'
+                                  '<iframe title="YouTube Video" width="100%" id="game-news-youtube" src="'
                               )
                               .replace(
                                   /youtube.com\/watch\?v=/g,
