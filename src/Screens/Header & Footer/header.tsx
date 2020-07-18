@@ -107,6 +107,7 @@ export default function Header(): JSX.Element {
                 </span>
                 <div className='oauth'>
                     <button
+                        aria-label='login with discord'
                         className='discord'
                         type='button'
                         onClick={(): void => auth.discord(dispatch)}
@@ -114,6 +115,7 @@ export default function Header(): JSX.Element {
                         <FontAwesomeIcon icon={faDiscord} />
                     </button>
                     <button
+                        aria-label='login with patreon'
                         className='patreon'
                         type='button'
                         onClick={(): Promise<void> => auth.patreon(dispatch)}
@@ -245,6 +247,7 @@ export default function Header(): JSX.Element {
                         <div className='oauth'>
                             {!accountLinked.includes('discord') ? (
                                 <button
+                                    aria-label='link discord'
                                     className='discord'
                                     type='button'
                                     onClick={(): void =>
@@ -256,6 +259,7 @@ export default function Header(): JSX.Element {
                             ) : null}
                             {!accountLinked.includes('patreon') ? (
                                 <button
+                                    aria-label='link patreon'
                                     className='patreon'
                                     type='button'
                                     onClick={(): Promise<void> =>
@@ -322,6 +326,7 @@ export default function Header(): JSX.Element {
                                     Welcome, {user.displayName}!
                                 </span>
                                 <button
+                                    aria-label='edit profile'
                                     type='button'
                                     className='update'
                                     onClick={(): void => {
@@ -335,6 +340,7 @@ export default function Header(): JSX.Element {
                                     <span className='text'>Edit Profile</span>
                                 </button>
                                 <button
+                                    aria-label='logout'
                                     type='button'
                                     className='logout'
                                     onClick={(): void => {
@@ -350,6 +356,7 @@ export default function Header(): JSX.Element {
                             </>
                         ) : user === 'awaiting auth state' ? null : (
                             <button
+                                aria-label='login'
                                 type='button'
                                 className='login'
                                 onClick={(): void => {
@@ -373,6 +380,7 @@ export default function Header(): JSX.Element {
                             }`}
                         />
                         <button
+                            aria-label='toggle mobile menu'
                             type='button'
                             className='toggleMenu'
                             onClick={(): void => setMenuToggle(!menuToggle)}

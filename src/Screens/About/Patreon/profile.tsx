@@ -98,6 +98,7 @@ export default function PatreonProfile(): JSX.Element {
                     </PopUp>
                     {isPatreonPageOwner ? (
                         <button
+                            aria-label='edit paragraph'
                             type='button'
                             className='edit'
                             onClick={(): void => setEditing(!editing)}
@@ -146,6 +147,7 @@ export default function PatreonProfile(): JSX.Element {
                                 }}
                             />
                             <button
+                                aria-label='submit'
                                 type='button'
                                 className='submit'
                                 onClick={(): void => {

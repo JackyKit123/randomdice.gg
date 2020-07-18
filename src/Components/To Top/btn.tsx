@@ -16,6 +16,7 @@ export default function ToTop(): JSX.Element {
 
     return (
         <button
+            aria-label='back to top'
             id='to-top'
             type='button'
             className={scrolled ? 'scroll' : ''}

@@ -330,6 +330,7 @@ export default function DeckList({
                                                 ) : deckKeys[i] ===
                                                   'alternatives' ? (
                                                     <button
+                                                        aria-label='see alternatives'
                                                         type='button'
                                                         onClick={(): void => {
                                                             dispatch({
