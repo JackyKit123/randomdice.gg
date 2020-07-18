@@ -27,7 +27,7 @@ export default function editDice(): JSX.Element {
     const dbRef = database.ref('/dice');
     const [dices, setDices] = useState<Dices>([]);
     const initialState = {
-        id: 0,
+        id: -1,
         name: '',
         type: 'Physical' as Dice['type'],
         desc: '',
@@ -141,6 +141,21 @@ export default function editDice(): JSX.Element {
                         }
                         return dice;
                     });
+                    result.sort((a, b) => {
+                        const rarityVal = {
+                            Common: 0,
+                            Rare: 1,
+                            Unique: 2,
+                            Legendary: 3,
+                        };
+                        if (rarityVal[a.rarity] < rarityVal[b.rarity]) {
+                            return -1;
+                        }
+                        if (rarityVal[a.rarity] > rarityVal[b.rarity]) {
+                            return 1;
+                        }
+                        return 0;
+                    });
                     database
                         .ref('/last_updated/dice')
                         .set(new Date().toISOString());
@@ -163,6 +178,21 @@ export default function editDice(): JSX.Element {
             if (!updateDice) {
                 result.push(activeEdit);
             }
+            result.sort((a, b) => {
+                const rarityVal = {
+                    Common: 0,
+                    Rare: 1,
+                    Unique: 2,
+                    Legendary: 3,
+                };
+                if (rarityVal[a.rarity] < rarityVal[b.rarity]) {
+                    return -1;
+                }
+                if (rarityVal[a.rarity] > rarityVal[b.rarity]) {
+                    return 1;
+                }
+                return 0;
+            });
             database.ref('/last_updated/dice').set(new Date().toISOString());
             dbRef.set(result);
             setDices(result);
@@ -238,7 +268,7 @@ export default function editDice(): JSX.Element {
                             } else {
                                 dices.sort((a, b) => (a.id < b.id ? -1 : 1));
                                 const newId = dices.findIndex(
-                                    (dice, i) => dice.id - 1 !== i
+                                    (dice, i) => dice.id !== i
                                 );
                                 const clone = { ...initialState };
                                 clone.id = newId;
@@ -249,13 +279,15 @@ export default function editDice(): JSX.Element {
                 >
                     <option>?</option>
                     {dices.map(dice => (
-                        <option key={dice.name}>{dice.name}</option>
+                        <option key={dice.name} id={dice.id.toString()}>
+                            {dice.name}
+                        </option>
                     ))}
                     <option>Add a New Dice</option>
                 </select>
             </label>
             <hr className='divisor' />
-            {activeEdit.id === 0 ? null : (
+            {activeEdit.id === -1 ? null : (
                 <>
                     <form onSubmit={(evt): void => evt.preventDefault()}>
                         <h3>Dice Stat</h3>
