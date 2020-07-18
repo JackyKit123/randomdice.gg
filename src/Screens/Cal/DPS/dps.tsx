@@ -19,7 +19,6 @@ import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Misc/Redux Storage/store';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import '../cal.less';
-import './dps.less';
 import AdUnit from '../../../Components/Ad Unit/ad';
 
 export default function DpsCalculator(): JSX.Element {
@@ -972,112 +971,162 @@ export default function DpsCalculator(): JSX.Element {
                     dimension='970x90'
                 />
                 <hr className='divisor' />
-                <div className='result'>
+                <div className='result vertical'>
                     <div className='wave-dmg'>
-                        <span>DPS on wave :</span>
-                        <span className='dice-name'>Wind</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : windDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Iron</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : ironDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Gamble</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : gambleDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Arrow</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : arrowDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Mighty Wind</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : mwindDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Modified Electric</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : melecDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Typhoon</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : typhoonDps()}
-                            disabled
-                        />
+                        <h4>DPS on wave :</h4>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Wind</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={invalidInput ? 'Check Input' : windDps()}
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Iron</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={invalidInput ? 'Check Input' : ironDps()}
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Gamble</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : gambleDps()
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Arrow</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : arrowDps()
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Mighty Wind</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : mwindDps()
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Modified Electric</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : melecDps()
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Typhoon</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : typhoonDps()
+                                }
+                                disabled
+                            />
+                        </label>
                     </div>
                     <div className='boss-dmg'>
-                        <span>DPS on boss :</span>
-                        <span className='dice-name'>Wind</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : windDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Iron</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : ironDps(true)}
-                            disabled
-                        />
-                        <span className='dice-name'>Gamble</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : gambleDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Arrow</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : arrowDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Mighty Wind</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : mwindDps()}
-                            disabled
-                        />
-                        <span className='dice-name'>Modified Electric</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput ? 'Check Input' : melecDps(true)
-                            }
-                            disabled
-                        />
-                        <span className='dice-name'>Typhoon</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={invalidInput ? 'Check Input' : typhoonDps()}
-                            disabled
-                        />
+                        <h4>DPS on boss :</h4>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Wind</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={invalidInput ? 'Check Input' : windDps()}
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Iron</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : ironDps(true)
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Gamble</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : gambleDps()
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Arrow</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : arrowDps()
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Mighty Wind</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : mwindDps()
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Modified Electric</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput
+                                        ? 'Check Input'
+                                        : melecDps(true)
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Typhoon</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : typhoonDps()
+                                }
+                                disabled
+                            />
+                        </label>
                     </div>
                 </div>
                 <hr className='divisor' />

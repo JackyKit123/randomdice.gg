@@ -1253,7 +1253,7 @@ export default function SolarCalculator(): JSX.Element {
                 <hr className='divisor' />
                 <h3>Cumulative Damage Over {filter.duration} seconds.</h3>
                 <div className='result'>
-                    <div>
+                    <label htmlFor='result'>
                         <span>Basic Attack</span>
                         <input
                             type='textbox'
@@ -1276,8 +1276,8 @@ export default function SolarCalculator(): JSX.Element {
                             }
                             disabled
                         />
-                    </div>
-                    <div>
+                    </label>
+                    <label htmlFor='result'>
                         <span>Light Buffed Basic Atk</span>
                         <input
                             type='textbox'
@@ -1300,8 +1300,8 @@ export default function SolarCalculator(): JSX.Element {
                             }
                             disabled
                         />
-                    </div>
-                    <div>
+                    </label>
+                    <label htmlFor='result'>
                         <span>Crit Buffed Basic Atk</span>
                         <input
                             type='textbox'
@@ -1324,8 +1324,8 @@ export default function SolarCalculator(): JSX.Element {
                             }
                             disabled
                         />
-                    </div>
-                    <div>
+                    </label>
+                    <label htmlFor='result'>
                         <span>Moon Buffed Basic Atk</span>
                         <input
                             type='textbox'
@@ -1348,7 +1348,7 @@ export default function SolarCalculator(): JSX.Element {
                             }
                             disabled
                         />
-                    </div>
+                    </label>
                 </div>
             </>
         );

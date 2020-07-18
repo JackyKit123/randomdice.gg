@@ -140,7 +140,23 @@
             .flex-wrap(wrap);
         }
 
-        & > div {
+        &.vertical {
+            label {
+                display: block;
+                margin: 10px 0;
+
+                span {
+                    font-size: 20px;
+                    font-weight: 400;
+                }
+
+                input {
+                    margin: 10px auto 0;
+                }
+            }
+        }
+
+        label {
             margin: 0 20px;
             font-size: 25px;
             font-weight: 500;

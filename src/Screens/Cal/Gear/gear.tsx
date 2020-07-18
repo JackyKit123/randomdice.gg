@@ -222,7 +222,7 @@ export default function GearCalculator(): JSX.Element {
                 )}
                 <hr className='divisor' />
                 <div className='result'>
-                    <div className='dmg'>
+                    <label htmlFor='result' className='dmg'>
                         <span>Damage per Gear pip :</span>
                         <input
                             type='textbox'
@@ -230,8 +230,8 @@ export default function GearCalculator(): JSX.Element {
                             value={invalidInput ? 'Check Input' : dmgPerPip}
                             disabled
                         />
-                    </div>
-                    <div className='dps'>
+                    </label>
+                    <label htmlFor='result' className='dps'>
                         <span>Total DPS :</span>
                         <input
                             type='textbox'
@@ -239,7 +239,7 @@ export default function GearCalculator(): JSX.Element {
                             value={invalidInput ? 'Check Input' : dps}
                             disabled
                         />
-                    </div>
+                    </label>
                 </div>
             </>
         );

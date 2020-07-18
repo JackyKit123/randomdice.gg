@@ -484,78 +484,90 @@ export default function ComboCalculator(): JSX.Element {
                     dimension='970x90'
                 />
                 <hr className='divisor' />
-                <div className='result'>
+                <div className='result vertical'>
                     <div className='dmg'>
-                        <span>Damage per Combo pip:</span>
-                        <span className='type'>No Buff</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : dpsPerComboCount('raw').dmg
-                            }
-                            disabled
-                        />
-                        <span className='type'>Crit Buffed</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : dpsPerComboCount('crit').dmg
-                            }
-                            disabled
-                        />
-                        <span className='type'>Moon Buffed</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : dpsPerComboCount('moon').dmg
-                            }
-                            disabled
-                        />
+                        <h4>Damage per Combo pip:</h4>
+                        <label htmlFor='result'>
+                            <span className='type'>No Buff</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput
+                                        ? 'Check Input'
+                                        : dpsPerComboCount('raw').dmg
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='type'>Crit Buffed</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput
+                                        ? 'Check Input'
+                                        : dpsPerComboCount('crit').dmg
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='type'>Moon Buffed</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput
+                                        ? 'Check Input'
+                                        : dpsPerComboCount('moon').dmg
+                                }
+                                disabled
+                            />
+                        </label>
                     </div>
                     <div className='dps'>
-                        <span>DPS per Combo Pip:</span>
-                        <span className='type'>No buff</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : dpsPerComboCount('raw').dps
-                            }
-                            disabled
-                        />
-                        <span className='type'>Crit Buffed</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : dpsPerComboCount('crit').dps
-                            }
-                            disabled
-                        />
-                        <span className='type'>Moon Buffed</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : dpsPerComboCount('moon').dps
-                            }
-                            disabled
-                        />
+                        <h4>DPS per Combo Pip:</h4>
+                        <label htmlFor='result'>
+                            <span className='type'>No Buff</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput
+                                        ? 'Check Input'
+                                        : dpsPerComboCount('raw').dps
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='type'>Crit Buffed</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput
+                                        ? 'Check Input'
+                                        : dpsPerComboCount('crit').dps
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='type'>Moon Buffed</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput
+                                        ? 'Check Input'
+                                        : dpsPerComboCount('moon').dps
+                                }
+                                disabled
+                            />
+                        </label>
                     </div>
                 </div>
                 <div className='chart-container'>

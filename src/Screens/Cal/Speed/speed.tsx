@@ -391,19 +391,19 @@ export default function SpeedCalculator(): JSX.Element {
                 />
                 <hr className='divisor' />
                 <div className='result'>
-                    <div>
+                    <label htmlFor='result'>
                         <span>Slow Effect of Blizzard:</span>
                         <input
                             type='textbox'
                             value={`-${blizzardSlow}%`}
                             disabled
                         />
-                    </div>
-                    <div>
+                    </label>
+                    <label htmlFor='result'>
                         <span>Slow Effect of Ice:</span>
                         <input type='textbox' value={`-${iceSlow}%`} disabled />
-                    </div>
-                    <div>
+                    </label>
+                    <label htmlFor='result'>
                         <span>Speed Effect of Flow:</span>
                         <input
                             className={invalidFlowPip ? 'invalid' : ''}
@@ -415,8 +415,8 @@ export default function SpeedCalculator(): JSX.Element {
                             }
                             disabled
                         />
-                    </div>
-                    <div>
+                    </label>
+                    <label htmlFor='result'>
                         <span>Mob Speed:</span>
                         <input
                             className={invalidFlowPip ? 'invalid' : ''}
@@ -428,7 +428,7 @@ export default function SpeedCalculator(): JSX.Element {
                             }
                             disabled
                         />
-                    </div>
+                    </label>
                 </div>
             </>
         );

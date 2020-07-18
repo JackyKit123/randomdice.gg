@@ -420,7 +420,7 @@ export default function GoldCalculator(): JSX.Element {
             />
             <hr className='divisor' />
             <div className='result'>
-                <div>
+                <label htmlFor='result'>
                     <span>Card Boxes Needed :</span>
                     <input
                         type='textbox'
@@ -428,8 +428,8 @@ export default function GoldCalculator(): JSX.Element {
                         value={invalidInput ? 'Check Input' : boxNeeded}
                         disabled
                     />
-                </div>
-                <div>
+                </label>
+                <label htmlFor='result'>
                     <span>Target number of runs :</span>
                     <input
                         type='textbox'
@@ -439,8 +439,8 @@ export default function GoldCalculator(): JSX.Element {
                         }
                         disabled
                     />
-                </div>
-                <div>
+                </label>
+                <label htmlFor='result'>
                     <span>Estimated Time needed :</span>
                     <input
                         type='textbox'
@@ -448,7 +448,7 @@ export default function GoldCalculator(): JSX.Element {
                         value={invalidInput ? 'Check Input' : timeNeeded}
                         disabled
                     />
-                </div>
+                </label>
             </div>
         </Main>
     );
