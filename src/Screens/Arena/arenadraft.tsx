@@ -194,52 +194,57 @@ export default function ArenaDraft(): JSX.Element {
                         <table className='pick'>
                             <tbody>
                                 <tr>
-                                    {[1, 2, 3].map(tdIndex => (
+                                    {[1, 2, 3].map((tdIndex, i) => (
                                         <td key={`pick${tdIndex}`}>
-                                            <select
-                                                data-value={pick[tdIndex]}
-                                                value={pick[tdIndex]}
-                                                onChange={(evt): void => {
-                                                    pick[tdIndex] =
-                                                        evt.target.value;
-                                                    setPick({ ...pick });
-                                                }}
-                                            >
-                                                <option>?</option>
-                                                {dices
-                                                    .filter(dice =>
-                                                        currentPick < 3
-                                                            ? dice.rarity !==
-                                                                  'Legendary' &&
-                                                              dice.name !==
+                                            <label htmlFor='option'>
+                                                <div>Option {i + 1}</div>
+                                                <select
+                                                    data-value={pick[tdIndex]}
+                                                    value={pick[tdIndex]}
+                                                    onChange={(evt): void => {
+                                                        pick[tdIndex] =
+                                                            evt.target.value;
+                                                        setPick({ ...pick });
+                                                    }}
+                                                >
+                                                    <option>?</option>
+                                                    {dices
+                                                        .filter(dice =>
+                                                            currentPick < 3
+                                                                ? dice.rarity !==
+                                                                      'Legendary' &&
+                                                                  dice.name !==
+                                                                      'Growth'
+                                                                : dice.name !==
                                                                   'Growth'
-                                                            : dice.name !==
-                                                              'Growth'
-                                                    )
-                                                    .filter(dice => {
-                                                        const activePicks = {
-                                                            ...pick,
-                                                        };
-                                                        delete activePicks[
-                                                            tdIndex
-                                                        ];
-                                                        return ![
-                                                            ...Object.values(
-                                                                deck
-                                                            ),
-                                                            ...Object.values(
-                                                                activePicks
-                                                            ),
-                                                        ].includes(dice.name);
-                                                    })
-                                                    .map(dice => (
-                                                        <option
-                                                            key={`pick-${tdIndex}-${dice.name}`}
-                                                        >
-                                                            {dice.name}
-                                                        </option>
-                                                    ))}
-                                            </select>
+                                                        )
+                                                        .filter(dice => {
+                                                            const activePicks = {
+                                                                ...pick,
+                                                            };
+                                                            delete activePicks[
+                                                                tdIndex
+                                                            ];
+                                                            return ![
+                                                                ...Object.values(
+                                                                    deck
+                                                                ),
+                                                                ...Object.values(
+                                                                    activePicks
+                                                                ),
+                                                            ].includes(
+                                                                dice.name
+                                                            );
+                                                        })
+                                                        .map(dice => (
+                                                            <option
+                                                                key={`pick-${tdIndex}-${dice.name}`}
+                                                            >
+                                                                {dice.name}
+                                                            </option>
+                                                        ))}
+                                                </select>
+                                            </label>
                                         </td>
                                     ))}
                                 </tr>
@@ -402,18 +407,38 @@ export default function ArenaDraft(): JSX.Element {
                         <Dice key={`deck${i}`} dice={deck[i]} />
                     ))}
                     <h3>Deck Score</h3>
-                    <h4>Main DPS (target score: 15)</h4>
-                    <input type='textbox' value={deckScore('dps')} disabled />
-                    <h4>Assist DPS (target score: 15)</h4>
-                    <input
-                        type='textbox'
-                        value={deckScore('assist')}
-                        disabled
-                    />
-                    <h4>Slow (target score: 10)</h4>
-                    <input type='textbox' value={deckScore('slow')} disabled />
-                    <h4>Value / Buff (target score: 20)</h4>
-                    <input type='textbox' value={deckScore('value')} disabled />
+                    <label htmlFor='Main-Dps'>
+                        <h4>Main DPS (target score: 15)</h4>
+                        <input
+                            type='textbox'
+                            value={deckScore('dps')}
+                            disabled
+                        />
+                    </label>
+                    <label htmlFor='Assist-Dps'>
+                        <h4>Assist DPS (target score: 15)</h4>
+                        <input
+                            type='textbox'
+                            value={deckScore('assist')}
+                            disabled
+                        />
+                    </label>
+                    <label htmlFor='Slow'>
+                        <h4>Slow (target score: 10)</h4>
+                        <input
+                            type='textbox'
+                            value={deckScore('slow')}
+                            disabled
+                        />
+                    </label>
+                    <label htmlFor='Value-Buff'>
+                        <h4>Value / Buff (target score: 20)</h4>
+                        <input
+                            type='textbox'
+                            value={deckScore('value')}
+                            disabled
+                        />
+                    </label>
                 </section>
                 <hr className='divisor' />
                 <ShareButtons name='Random Dice Arena Draft Toll' />
@@ -421,17 +446,19 @@ export default function ArenaDraft(): JSX.Element {
                     className={`winrate ${currentPick === 6 ? 'show' : ''}`}
                 >
                     <hr className='divisor' />
-                    <h3>Your Estimated Win Rate</h3>
-                    <input
-                        type='textbox'
-                        value={`${Math.round(winrate * 10000) / 100}%`}
-                        disabled
-                    />
+                    <label htmlFor='win-rate'>
+                        <h3>Your Estimated Win Rate</h3>
+                        <input
+                            type='textbox'
+                            value={`${Math.round(winrate * 10000) / 100}%`}
+                            disabled
+                        />
+                    </label>
                     <h3>Probability of Wins</h3>
                     {Array(12)
                         .fill('')
                         .map((_, i) => (
-                            <div key={winProb[i] || i}>
+                            <label htmlFor='win-chance' key={winProb[i] || i}>
                                 <span>{i + 1} : </span>
                                 <input
                                     type='textbox'
@@ -440,7 +467,7 @@ export default function ArenaDraft(): JSX.Element {
                                     ) / 100}%`}
                                     disabled
                                 />
-                            </div>
+                            </label>
                         ))}
                 </section>
             </>
