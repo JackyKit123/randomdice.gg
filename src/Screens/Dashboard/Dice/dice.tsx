@@ -267,9 +267,12 @@ export default function editDice(): JSX.Element {
                                 setActiveEdit({ ...foundDice });
                             } else {
                                 dices.sort((a, b) => (a.id < b.id ? -1 : 1));
-                                const newId = dices.findIndex(
+                                let newId = dices.findIndex(
                                     (dice, i) => dice.id !== i
                                 );
+                                if (newId === -1) {
+                                    newId = dices.length;
+                                }
                                 const clone = { ...initialState };
                                 clone.id = newId;
                                 setActiveEdit(clone);
