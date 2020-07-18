@@ -92,13 +92,13 @@ export default function critData(): JSX.Element {
                 <p>
                     The following data is collected through the community.
                     Please consider contributing by giving us your crit data in
-                    this Google Form{' '}
+                    this{' '}
                     <a
                         target='_blank'
                         rel='noopener noreferrer'
                         href='https://docs.google.com/forms/d/e/1FAIpQLSceQ9wJM5i5OhRO55NV_ycnfPbDvmmkH-9Or2o3ZGFDxUILQg/viewform?usp=sf_link'
                     >
-                        HERE
+                        Google Form
                     </a>
                     . The data you submitted will be immediately added below
                     upon refreshing.
