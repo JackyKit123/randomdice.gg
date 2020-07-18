@@ -69,7 +69,7 @@ export default function editPatchNote(): JSX.Element {
                                 'bulletedList',
                                 '|',
                                 'link',
-                            ],
+                            ].concat(type === 'Game' ? ['mediaembed'] : []),
                         }}
                         onBlur={(
                             _: unknown,
