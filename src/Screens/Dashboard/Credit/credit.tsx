@@ -147,7 +147,7 @@ export default function editCredit(): JSX.Element {
                             await storage
                                 .ref(`People Images/${person.name}.png`)
                                 .putString(person.img, 'data_url', {
-                                    cacheControl: 'public,max-age=4000',
+                                    cacheControl: 'public,max-age=31536000',
                                 });
                             const newUrl = await storage
                                 .ref(`People Images/${person.name}.png`)
@@ -173,7 +173,7 @@ export default function editCredit(): JSX.Element {
                                 await storage
                                     .ref(`People Images/${person.name}.png`)
                                     .putString(base64, 'data_url', {
-                                        cacheControl: 'public,max-age=4000',
+                                        cacheControl: 'public,max-age=31536000',
                                     });
                                 const newUrl = await storage
                                     .ref(`People Images/${person.name}.png`)

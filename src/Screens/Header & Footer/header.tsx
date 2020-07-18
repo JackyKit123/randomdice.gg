@@ -200,7 +200,7 @@ export default function Header(): JSX.Element {
                                                     evt.target.files[0],
                                                     {
                                                         cacheControl:
-                                                            'public,max-age=3600',
+                                                            'public,max-age=31536000',
                                                     }
                                                 );
                                                 const url = await pfpRef.getDownloadURL();

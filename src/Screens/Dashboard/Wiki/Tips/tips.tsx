@@ -51,7 +51,7 @@ export default function editTips(): JSX.Element {
                 await storage
                     .ref(`Tip Images/${activeEdit.id}.png`)
                     .putString(activeEdit.img, 'data_url', {
-                        cacheControl: 'public,max-age=4000',
+                        cacheControl: 'public,max-age=31536000',
                     });
                 const newUrl = await storage
                     .ref(`Tip Images/${activeEdit.id}.png`)

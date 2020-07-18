@@ -62,7 +62,7 @@ export default function editBoss(): JSX.Element {
                 await storage
                     .ref(`Boss Images/${activeEdit.name}.png`)
                     .putString(activeEdit.img, 'data_url', {
-                        cacheControl: 'public,max-age=4000',
+                        cacheControl: 'public,max-age=31536000',
                     });
                 const newUrl = await storage
                     .ref(`Boss Images/${activeEdit.name}.png`)
@@ -84,7 +84,7 @@ export default function editBoss(): JSX.Element {
                     await storage
                         .ref(`Boss Images/${activeEdit.name}.png`)
                         .putString(base64, 'data_url', {
-                            cacheControl: 'public,max-age=4000',
+                            cacheControl: 'public,max-age=31536000',
                         });
                     const newUrl = await storage
                         .ref(`Boss Images/${activeEdit.name}.png`)
