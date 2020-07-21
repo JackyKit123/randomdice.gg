@@ -38,7 +38,7 @@ export default function DeckGuideMenu(): JSX.Element {
                     <tbody>
                         {guide.map(deck =>
                             deck.guide === 'ad' ? (
-                                <tr className='ad'>
+                                <tr key='ad' className='ad'>
                                     <td colSpan={2}>
                                         <AdUnit
                                             provider='Media.net'
@@ -53,7 +53,7 @@ export default function DeckGuideMenu(): JSX.Element {
                                     </td>
                                 </tr>
                             ) : (
-                                <tr>
+                                <tr key={deck.id}>
                                     <td>
                                         <Link to={`/decks/guide/${deck.name}`}>
                                             <span>{deck.name}</span>
