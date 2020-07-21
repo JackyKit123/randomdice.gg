@@ -60,19 +60,21 @@ export default function updateDecksGuide(): JSX.Element {
                     className='confirm'
                     onClick={(): void => {
                         if (activeEdit) {
-                            const i = guides.findIndex(
+                            const clone = [...guides];
+                            clone.sort((a, b) => (a.id > b.id ? 1 : -1));
+                            const i = clone.findIndex(
                                 guide => guide.id === activeEdit?.id
                             );
                             if (i === -1) {
-                                guides.push(activeEdit);
+                                clone.push(activeEdit);
                             } else {
-                                guides[i] = activeEdit;
+                                clone[i] = activeEdit;
                             }
-                            setGuides([...guides]);
+                            setGuides(clone);
                             database
                                 .ref('/last_updated/decks_guide')
                                 .set(new Date().toISOString());
-                            dbRef.set([...guides]);
+                            dbRef.set(clone);
                             setActiveEdit(undefined);
                             dispatch({ type: CLOSE_POPUP });
                         }
@@ -137,9 +139,12 @@ export default function updateDecksGuide(): JSX.Element {
                         onClick={(): void => {
                             const clone = [...guides];
                             clone.sort((a, b) => (a.id > b.id ? 1 : -1));
-                            const newId = clone.findIndex(
+                            let newId = clone.findIndex(
                                 (guide, i) => guide.id !== i
                             );
+                            if (newId === -1) {
+                                newId = clone.length;
+                            }
                             setActiveEdit({
                                 id: newId,
                                 name: '',
