@@ -59,7 +59,7 @@ export default function ComboCalculator(): JSX.Element {
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
-        filter.crit > 2109;
+        filter.crit > 2185;
     const isInvalidCombo =
         !Number.isInteger(filter.combo.count) || filter.combo.count < 1;
     const invalidInput = isInvalidCombo || isInvalidCrit;
@@ -442,7 +442,7 @@ export default function ComboCalculator(): JSX.Element {
                             type='number'
                             min={111}
                             step={1}
-                            max={2109}
+                            max={2185}
                             name='crit dmg'
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
@@ -467,7 +467,7 @@ export default function ComboCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2109</strong>.
+                        <strong>111-2185</strong>.
                     </span>
                 ) : (
                     ''

@@ -65,7 +65,7 @@ export default function EnergyCalculator(): JSX.Element {
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
-        filter.crit > 2109;
+        filter.crit > 2185;
     const isInvalidSp =
         !Number.isInteger(filter.energy.sp) || filter.energy.sp < 0;
     const invalidInput = isInvalidSp || isInvalidCrit;
@@ -552,7 +552,7 @@ export default function EnergyCalculator(): JSX.Element {
                             type='number'
                             min={111}
                             step={1}
-                            max={2109}
+                            max={2185}
                             name='crit dmg'
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
@@ -577,7 +577,7 @@ export default function EnergyCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2109</strong>.
+                        <strong>111-2185</strong>.
                     </span>
                 ) : (
                     ''
