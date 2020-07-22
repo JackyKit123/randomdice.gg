@@ -75,7 +75,7 @@ export default function critData(): JSX.Element {
             20: 40000,
         };
 
-        const converToTrophiesData = (classData: GraphData): GraphData => {
+        const convertToTrophiesData = (classData: GraphData): GraphData => {
             return classData.map(row => {
                 const clone = { ...row };
                 clone.x = trophiesForClass[row.x];
@@ -83,9 +83,9 @@ export default function critData(): JSX.Element {
             });
         };
 
-        const scatterDataPerTrohpies = converToTrophiesData(scatterData);
-        const avgDataPerTrohpies = converToTrophiesData(avgData);
-        const medDataPerTrohpies = converToTrophiesData(medData);
+        const scatterDataPerTrophies = convertToTrophiesData(scatterData);
+        const avgDataPerTrophies = convertToTrophiesData(avgData);
+        const medDataPerTrophies = convertToTrophiesData(medData);
 
         jsx = (
             <>
@@ -205,7 +205,7 @@ export default function critData(): JSX.Element {
                         <VictoryScatter
                             name='No Buff'
                             size={1}
-                            data={scatterDataPerTrohpies}
+                            data={scatterDataPerTrophies}
                             symbol='plus'
                             style={{
                                 data: {
@@ -221,7 +221,7 @@ export default function critData(): JSX.Element {
                                     strokeWidth: 1,
                                 },
                             }}
-                            data={avgDataPerTrohpies}
+                            data={avgDataPerTrophies}
                         />
                         <VictoryLine
                             interpolation='bundle'
@@ -231,7 +231,7 @@ export default function critData(): JSX.Element {
                                     strokeWidth: 1,
                                 },
                             }}
-                            data={medDataPerTrohpies}
+                            data={medDataPerTrophies}
                         />
                     </VictoryChart>
                 </div>
