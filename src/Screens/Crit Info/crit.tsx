@@ -179,13 +179,13 @@ export default function critData(): JSX.Element {
                         domainPadding={{ x: [0, 5] }}
                     >
                         <VictoryLabel
-                            text='Crit % Per Trophie'
+                            text='Crit % Per Trophies'
                             x={175}
                             y={30}
                             textAnchor='middle'
                         />
                         <VictoryAxis
-                            label='Trohpies'
+                            label='Trophies'
                             fixLabelOverlap
                             style={{
                                 axisLabel: {
@@ -380,7 +380,7 @@ export default function critData(): JSX.Element {
         jsx = <LoadingScreen />;
     }
     return (
-        <Main title='Crti% Data' className='crit-data'>
+        <Main title='Crit% Data' className='crit-data'>
             {jsx}
         </Main>
     );
