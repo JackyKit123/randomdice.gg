@@ -16,5 +16,5 @@
         "jsx": "react"
     },
     "typeRoots": ["../node_modules/@types"],
-    "include": ["src", "functions/src"],
+    "include": ["src"],
 }
