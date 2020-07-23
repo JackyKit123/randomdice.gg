@@ -66,7 +66,7 @@ export default function ComboCalculator(): JSX.Element {
 
     if (Object.values(data).every(d => d !== undefined)) {
         const dpsPerComboCount = (
-            mode: 'raw' | 'crit' | 'moon',
+            mode: 'raw' | 'crit' | 'moon' | 'moon+crit',
             count = filter.combo.count
         ): { dmg: number; dps: number } => {
             const dmgPerCombo =
@@ -88,6 +88,25 @@ export default function ComboCalculator(): JSX.Element {
                 };
             }
             const dmg = (dmgPerCombo / 2) * (count ** 2 - count) + baseAtk;
+            const criticalCritMultiplier =
+                (5 +
+                    ((filter.critical.class - 3) * data.crit.cupEff1 +
+                        data.crit.eff1) *
+                        filter.critical.pip +
+                    data.crit.pupEff1 * (filter.critical.level - 1)) /
+                100;
+            const moonCritMultiplier =
+                (5 + (filter.moon.active ? filter.moon.pip * 5 : 0)) / 100;
+            const moonSpdBuff =
+                1 -
+                ((data.moon.eff1 +
+                    data.moon.cupEff1 * (filter.moon.class - 7)) *
+                    filter.moon.pip +
+                    data.moon.pupEff1 * (filter.moon.level - 1)) /
+                    100;
+            const moonBuffedDmg = filter.moon.active
+                ? (filter.moon.pip * 0.1 + 1) * dmg
+                : dmg;
             switch (mode) {
                 case 'raw':
                     return {
@@ -98,45 +117,53 @@ export default function ComboCalculator(): JSX.Element {
                         ),
                     };
                 case 'crit': {
-                    const critMultiplier =
-                        (5 +
-                            ((filter.critical.class - 3) * data.crit.cupEff1 +
-                                data.crit.eff1) *
-                                filter.critical.pip +
-                            data.crit.pupEff1 * (filter.critical.level - 1)) /
-                        100;
                     return {
                         dmg: roundTo3Sf(dmg),
                         dps: roundTo3Sf(
-                            (dmg * (1 - critMultiplier) +
-                                (dmg * critMultiplier * filter.crit) / 100) /
+                            (dmg * (1 - criticalCritMultiplier) +
+                                (dmg * criticalCritMultiplier * filter.crit) /
+                                    100) /
                                 data.combo.spd
                         ),
                     };
                 }
                 case 'moon': {
-                    const critMultiplier =
-                        (5 + (filter.moon.active ? filter.moon.pip * 5 : 0)) /
-                        100;
-                    const spdBuff =
-                        1 -
-                        ((data.moon.eff1 +
-                            data.moon.cupEff1 * (filter.moon.class - 7)) *
-                            filter.moon.pip +
-                            data.moon.pupEff1 * (filter.moon.level - 1)) /
-                            100;
                     const atkSpd =
-                        spdBuff * data.combo.spd <= 0.1
+                        moonSpdBuff * data.combo.spd <= 0.1
                             ? 0.1
-                            : spdBuff * data.combo.spd;
-                    const buffedDmg = filter.moon.active
-                        ? (filter.moon.pip * 0.1 + 1) * dmg
-                        : dmg;
+                            : moonSpdBuff * data.combo.spd;
                     return {
-                        dmg: roundTo3Sf(buffedDmg),
+                        dmg: roundTo3Sf(moonBuffedDmg),
                         dps: roundTo3Sf(
-                            (buffedDmg * (1 - critMultiplier) +
-                                (buffedDmg * critMultiplier * filter.crit) /
+                            (moonBuffedDmg * (1 - moonCritMultiplier) +
+                                (moonBuffedDmg *
+                                    moonCritMultiplier *
+                                    filter.crit) /
+                                    100) /
+                                atkSpd
+                        ),
+                    };
+                }
+                case 'moon+crit': {
+                    const atkSpd =
+                        moonSpdBuff * data.combo.spd <= 0.1
+                            ? 0.1
+                            : moonSpdBuff * data.combo.spd;
+                    return {
+                        dmg: roundTo3Sf(moonBuffedDmg),
+                        dps: roundTo3Sf(
+                            (moonBuffedDmg *
+                                (1 -
+                                    Math.max(
+                                        moonCritMultiplier,
+                                        criticalCritMultiplier
+                                    )) +
+                                (moonBuffedDmg *
+                                    Math.max(
+                                        moonCritMultiplier,
+                                        criticalCritMultiplier
+                                    ) *
+                                    filter.crit) /
                                     100) /
                                 atkSpd
                         ),
@@ -161,11 +188,6 @@ export default function ComboCalculator(): JSX.Element {
                     Do Remember that damage and dps shown is per pip. You will
                     have to multiply the total pip count on your board to get
                     the final dps.
-                </p>
-                <p>
-                    Although you can calculate the dps for both the use of
-                    critical dice and moon dice, the dps is not summed up. It
-                    should not make sense to use both dice with combo.
                 </p>
                 <hr className='divisor' />
                 <div className='multiple-dice'>
@@ -575,16 +597,10 @@ export default function ComboCalculator(): JSX.Element {
                         minDomain={{ x: 1 }}
                         maxDomain={{
                             x: filter.combo.count + 10 || 10,
-                            y: Math.max(
-                                dpsPerComboCount(
-                                    'crit',
-                                    filter.combo.count + 10
-                                ).dps,
-                                dpsPerComboCount(
-                                    'moon',
-                                    filter.combo.count + 10
-                                ).dps
-                            ),
+                            y: dpsPerComboCount(
+                                'moon+crit',
+                                filter.combo.count + 10
+                            ).dps,
                         }}
                         theme={VictoryTheme.material}
                     >
@@ -638,12 +654,42 @@ export default function ComboCalculator(): JSX.Element {
                             y={70}
                             orientation='vertical'
                             gutter={20}
-                            colorScale={['#197cf0', '#ff0000', '#111111']}
+                            colorScale={[
+                                '#d178ff',
+                                '#197cf0',
+                                '#ff0000',
+                                '#111111',
+                            ]}
                             data={[
+                                { name: 'Moon + Crit' },
                                 { name: 'Moon Buffed' },
                                 { name: 'Crit Buffed' },
                                 { name: 'No Buff' },
                             ]}
+                        />
+                        <VictoryLine
+                            name='Moon + Crit'
+                            samples={100}
+                            style={{
+                                data: { stroke: '#d178ff', strokeWidth: 1 },
+                            }}
+                            y={useCallback(
+                                (d: { x: number }): number =>
+                                    dpsPerComboCount('moon+crit', d.x).dps,
+                                [
+                                    filter.combo.class,
+                                    filter.combo.level,
+                                    filter.combo.count,
+                                    filter.critical.class,
+                                    filter.critical.level,
+                                    filter.critical.pip,
+                                    filter.moon.active,
+                                    filter.moon.class,
+                                    filter.moon.level,
+                                    filter.moon.pip,
+                                    filter.crit,
+                                ]
+                            )}
                         />
                         <VictoryLine
                             name='Moon Buffed'
