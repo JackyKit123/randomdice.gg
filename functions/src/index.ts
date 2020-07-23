@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as cors from 'cors';
 import axios from 'axios';
+
 const corsHandler = cors({ origin: true });
 
 // // Start writing Firebase Functions
@@ -20,8 +22,7 @@ const database = admin.database();
 
 export const discord_login = functions.https.onRequest((req, res) => {
     corsHandler(req, res, async () => {
-        const code = req.query.code;
-        const linkAccount = req.query.linkAccount;
+        const { code, linkAccount } = req.query;
         if (typeof code === 'string') {
             try {
                 const tokenExchange = await axios.post(
@@ -98,26 +99,24 @@ export const discord_login = functions.https.onRequest((req, res) => {
                         } else {
                             res.send({ error: 'provider-email-not-verified' });
                         }
+                    } else if (userData.verified) {
+                        await auth.deleteUser(userExist.uid);
+                        await auth.createUser({
+                            uid,
+                            email: userData.email,
+                            displayName: userData.username,
+                            photoURL: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
+                            emailVerified: true,
+                        });
+                        res.send({ authToken });
+                        await database
+                            .ref(`/users/${uid}/linked-account/discord`)
+                            .set(userData.id);
                     } else {
-                        if (userData.verified) {
-                            await auth.deleteUser(userExist.uid);
-                            await auth.createUser({
-                                uid,
-                                email: userData.email,
-                                displayName: userData.username,
-                                photoURL: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`,
-                                emailVerified: true,
-                            });
-                            res.send({ authToken });
-                            await database
-                                .ref(`/users/${uid}/linked-account/discord`)
-                                .set(userData.id);
-                        } else {
-                            res.send({
-                                authToken,
-                                error: 'email-not-verified',
-                            });
-                        }
+                        res.send({
+                            authToken,
+                            error: 'email-not-verified',
+                        });
                     }
                 } catch (err) {
                     if (linkAccount === 'true') {
@@ -162,8 +161,7 @@ export const discord_login = functions.https.onRequest((req, res) => {
 
 export const patreon_login = functions.https.onRequest((req, res) => {
     corsHandler(req, res, async () => {
-        const code = req.query.code;
-        const linkAccount = req.query.linkAccount;
+        const { code, linkAccount } = req.query;
         if (typeof code === 'string') {
             try {
                 const tokenExchange = await axios.post(
@@ -247,26 +245,24 @@ export const patreon_login = functions.https.onRequest((req, res) => {
                         } else {
                             res.send({ error: 'provider-email-not-verified' });
                         }
+                    } else if (userData.data.attributes.is_email_verified) {
+                        await auth.deleteUser(userExist.uid);
+                        await auth.createUser({
+                            uid,
+                            email: userData.data.attributes.email,
+                            displayName: userData.data.attributes.full_name,
+                            photoURL: userData.data.attributes.image_url,
+                            emailVerified: true,
+                        });
+                        res.send({ authToken });
+                        await database
+                            .ref(`/users/${uid}/linked-account/patreon`)
+                            .set(userData.data.id);
                     } else {
-                        if (userData.data.attributes.is_email_verified) {
-                            await auth.deleteUser(userExist.uid);
-                            await auth.createUser({
-                                uid,
-                                email: userData.data.attributes.email,
-                                displayName: userData.data.attributes.full_name,
-                                photoURL: userData.data.attributes.image_url,
-                                emailVerified: true,
-                            });
-                            res.send({ authToken });
-                            await database
-                                .ref(`/users/${uid}/linked-account/patreon`)
-                                .set(userData.data.id);
-                        } else {
-                            res.send({
-                                authToken,
-                                error: 'email-not-verified',
-                            });
-                        }
+                        res.send({
+                            authToken,
+                            error: 'email-not-verified',
+                        });
                     }
                 } catch (err) {
                     if (linkAccount === 'true') {
@@ -388,7 +384,7 @@ export const fetchPatreon = functions.pubsub
                         t => t.id
                     );
                     let tier;
-                    for (let i = tierList.length; i > 0; i--) {
+                    for (let i = tierList.length; i > 0; i -= 1) {
                         if (tierArr.includes(tierList[i])) {
                             tier = i + 1;
                         }
@@ -425,7 +421,8 @@ export const fetchPatreon = functions.pubsub
             const existingPatreonProfiles = (
                 await database.ref(`/patreon_list`).once('value')
             ).val() as PatreonProfile[];
-            let anyProfileUpdated = existingPatreonProfiles.length !== patreonList.length;
+            let anyProfileUpdated =
+                existingPatreonProfiles.length !== patreonList.length;
             await Promise.all(
                 usersData.map(async ([uid, userData]) => {
                     const patreonId = userData['linked-account'].patreon;
@@ -452,8 +449,7 @@ export const fetchPatreon = functions.pubsub
                             if (
                                 patreonList[i].name !==
                                     prevPatreonProfile?.name ||
-                                patreonList[i].img !==
-                                    prevPatreonProfile?.img
+                                patreonList[i].img !== prevPatreonProfile?.img
                             ) {
                                 anyProfileUpdated = true;
                             }
@@ -469,9 +465,12 @@ export const fetchPatreon = functions.pubsub
             );
             await database.ref('/patreon_list').set(patreonList);
             if (anyProfileUpdated) {
-                await database.ref('/last_updated/patreon_list').set(new Date().toISOString());
+                await database
+                    .ref('/last_updated/patreon_list')
+                    .set(new Date().toISOString());
             }
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.log(err.message);
         }
         return null;
