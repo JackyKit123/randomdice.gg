@@ -18,12 +18,16 @@ const out = path.join(__dirname, '..', 'public', 'sitemap.txt');
             .replace(/require\(".*"\)/g, '{ lazy: () => {} }')
     );
 
+    // eslint-disable-next-line
     const { menu } = require('./menuConfig.tmp');
-    const drawPath = menu =>
-        menu
+    const drawPath = items =>
+        items
             .map(item => {
                 switch (true) {
-                    case item.hasOwnProperty('childNode'):
+                    case Object.prototype.hasOwnProperty.call(
+                        item,
+                        'childNode'
+                    ):
                         return drawPath(item.childNode);
                     case item.path.match(/\/:\w+$/) !== null:
                         return `https://randomdice.gg${item.path.replace(

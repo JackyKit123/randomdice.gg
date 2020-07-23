@@ -21,6 +21,15 @@ module.exports = {
         'prettier/@typescript-eslint',
         'plugin:prettier/recommended',
     ],
+    overrides: [
+        {
+            files: ["*.js", "*.jsx"],
+            rules: {
+                "@typescript-eslint/no-var-requires": 0,
+                "@typescript-eslint/explicit-function-return-type": 0,
+            }
+        }
+    ],
     settings: {
         'import/resolver': {
             alias: {
