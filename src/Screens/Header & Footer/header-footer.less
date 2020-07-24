@@ -227,7 +227,7 @@ body {
                         position: relative;
                         padding-top: 1px;
 
-                        ul.menu {
+                        nav.menu {
                             .display(flex);
                             .justify-content(flex-end);
                             height: 100%;
@@ -257,7 +257,7 @@ body {
                                     visibility: visible;
                                     margin-top: 10px;
 
-                                    & > li {
+                                    & > div {
                                         &:first-of-type {
                                             pointer-events: initial;
                                             display: block;
@@ -292,7 +292,7 @@ body {
                                 }
                             }
 
-                            & > li {
+                            & > div {
                                 &:first-of-type {
                                     position: absolute;
                                     left: 10px;
@@ -336,7 +336,7 @@ body {
                                     height: 100%;
 
                                     &.focused {
-                                        & > ul {
+                                        & > nav {
                                             display: block;
                                             visibility: visible;
                                             opacity: 1;
@@ -344,7 +344,7 @@ body {
                                         }
                                     }
 
-                                    & > ul {
+                                    & > nav {
                                         .transition(all 0.4s ease-in-out);
                                         opacity: 0;
                                         visibility: hidden;
@@ -355,7 +355,7 @@ body {
                                         top: 100px;
                                         padding: 0 30px;
 
-                                        & > li {
+                                        & > div {
                                             text-align: right;
                                             margin: 25px 0;
                                             white-space: nowrap;
@@ -411,10 +411,10 @@ body {
                                             font-weight: 700;
                                         }
 
-                                        & > ul {
+                                        & > nav {
                                             margin-left: 20px;
 
-                                            & > li {
+                                            & > div {
                                                 margin: 10px 0;
 
                                                 & > a,
@@ -471,8 +471,8 @@ body {
                 & > .container .headerBar.lowHeaderBar {
                     height: 50px;
 
-                    ul.menu > li {
-                        & > ul {
+                    nav.menu > div {
+                        & > nav {
                             top: 50px;
                         }
                     }

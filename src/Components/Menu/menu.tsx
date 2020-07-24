@@ -53,11 +53,11 @@ export default function Menu(props: {
                     anchor = <span className='menu-item'>{menu.name}</span>;
             }
             const childNode = menu.childNode ? (
-                <ul>{createMenu(menu.childNode, depth + 1)}</ul>
+                <nav>{createMenu(menu.childNode, depth + 1)}</nav>
             ) : null;
             return (
                 // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-                <li
+                <div
                     key={`menu-${className}-${menu.name}`}
                     tabIndex={depth === 0 ? 0 : -1}
                     className={`menu-item ${focusedTab === i ? 'focused' : ''}`}
@@ -71,13 +71,13 @@ export default function Menu(props: {
                 >
                     {anchor}
                     {childNode}
-                </li>
+                </div>
             );
         });
     };
     return (
-        <ul className={`menu ${className}`} style={style}>
+        <nav className={`menu ${className}`} style={style}>
             {createMenu(menuList)}
-        </ul>
+        </nav>
     );
 }
