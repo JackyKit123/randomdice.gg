@@ -79,18 +79,14 @@
                             top: 0;
                             left: 0;
                             padding: 10px;
-                            display: table;
+                            .display(flex);
+                            .flex-direction(column);
+                            .justify-content(center);
                             text-decoration: none;
                             color: #000000;
 
                             &:hover {
                                 color: #000000;
-                            }
-
-                            & > span {
-                                display: table-cell;
-                                vertical-align: middle;
-                                padding: 10px;
                             }
                         }
                     }
