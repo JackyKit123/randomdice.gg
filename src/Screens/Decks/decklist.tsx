@@ -12,7 +12,7 @@ import LoadingScreen from '../../Components/Loading/loading';
 import AdUnit from '../../Components/Ad Unit/ad';
 import Dice from '../../Components/Dice/dice';
 import PopUp from '../../Components/PopUp Overlay/popup';
-import { Dice as DiceType } from '../../Misc/Redux Storage/Fetch Firebase/Dices/types';
+import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
 import { fetchDecks, fetchDices } from '../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import './decklist.less';
@@ -28,10 +28,7 @@ export default function DeckList(): JSX.Element {
         selection.fetchDecksReducer || selection.fetchDicesReducer;
     const { decks } = selection.fetchDecksReducer;
     const { dices } = selection.fetchDicesReducer;
-    const [filter, setFilter] = useState({
-        legendary: [] as DiceType['name'][],
-        customSearch: '?' as '?' | DiceType['name'],
-    });
+    const { filter } = selection.filterReducer;
     const deckType = location.pathname
         .replace(/^\/decks\//i, '')
         .toLowerCase() as 'pvp' | 'pve' | 'crew';
@@ -44,9 +41,12 @@ export default function DeckList(): JSX.Element {
 
     useEffect(() => {
         if (legendaryList.length > 0 && filter.legendary.length === 0) {
-            setFilter({
-                legendary: legendaryList,
-                customSearch: filter.customSearch,
+            dispatch({
+                type: FILTER_ACTION,
+                payload: {
+                    legendary: legendaryList,
+                    customSearch: filter.customSearch,
+                },
             });
         }
     }, [dices]);
@@ -193,7 +193,7 @@ export default function DeckList(): JSX.Element {
                             <select
                                 value={deckType}
                                 onChange={(evt): void =>
-                                    history.replace(
+                                    history.push(
                                         `/decks/${evt.target.value.toLowerCase()}`
                                     )
                                 }
@@ -210,7 +210,10 @@ export default function DeckList(): JSX.Element {
                                 defaultValue={filter.customSearch}
                                 onChange={(evt): void => {
                                     filter.customSearch = evt.target.value;
-                                    setFilter({ ...filter });
+                                    dispatch({
+                                        type: FILTER_ACTION,
+                                        payload: { ...filter },
+                                    });
                                 }}
                                 data-value={filter.customSearch}
                             >
@@ -249,7 +252,10 @@ export default function DeckList(): JSX.Element {
                                                 currentRef.checked = !selectedAll;
                                             }
                                         });
-                                        setFilter({ ...filter });
+                                        dispatch({
+                                            type: FILTER_ACTION,
+                                            payload: { ...filter },
+                                        });
                                     }}
                                 >
                                     {filter.legendary.length ===
@@ -280,7 +286,10 @@ export default function DeckList(): JSX.Element {
                                                     l => l !== evt.target.name
                                                 );
                                             }
-                                            setFilter({ ...filter });
+                                            dispatch({
+                                                type: FILTER_ACTION,
+                                                payload: { ...filter },
+                                            });
                                         }}
                                     />
                                     <span className='checkbox-styler'>
