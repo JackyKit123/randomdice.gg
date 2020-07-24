@@ -13,3 +13,6 @@ export const auth = {
         window.ga('send', 'event', 'User Login', 'login');
     },
 };
+
+export const share = (): void =>
+    window.ga('send', 'event', 'Social Media Share', 'share');
