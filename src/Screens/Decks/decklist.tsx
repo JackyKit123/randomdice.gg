@@ -1,10 +1,10 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
@@ -12,26 +12,29 @@ import LoadingScreen from '../../Components/Loading/loading';
 import AdUnit from '../../Components/Ad Unit/ad';
 import Dice from '../../Components/Dice/dice';
 import PopUp from '../../Components/PopUp Overlay/popup';
-import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
+import { Dice as DiceType } from '../../Misc/Redux Storage/Fetch Firebase/Dices/types';
 import { fetchDecks, fetchDices } from '../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import './decklist.less';
 import { OPEN_POPUP } from '../../Misc/Redux Storage/PopUp Overlay/types';
 import ShareButtons from '../../Components/Social Media Share/share';
 
-export default function DeckList({
-    deckType,
-}: {
-    deckType: string;
-}): JSX.Element {
+export default function DeckList(): JSX.Element {
     const history = useHistory();
+    const location = useLocation();
     const dispatch = useDispatch();
     const selection = useSelector((state: RootState) => state);
     const { error } =
         selection.fetchDecksReducer || selection.fetchDicesReducer;
     const { decks } = selection.fetchDecksReducer;
     const { dices } = selection.fetchDicesReducer;
-    const { filter } = selection.filterReducer;
+    const [filter, setFilter] = useState({
+        legendary: [] as DiceType['name'][],
+        customSearch: '?' as '?' | DiceType['name'],
+    });
+    const deckType = location.pathname
+        .replace(/^\/decks\//i, '')
+        .toLowerCase() as 'pvp' | 'pve' | 'crew';
 
     const legendaryList =
         dices
@@ -41,46 +44,19 @@ export default function DeckList({
 
     useEffect(() => {
         if (legendaryList.length > 0 && filter.legendary.length === 0) {
-            dispatch({
-                type: FILTER_ACTION,
-                payload: {
-                    legendary: legendaryList.map(legendary => ({
-                        name: legendary,
-                        checked: true,
-                    })),
-                    customSearch: filter.customSearch,
-                },
+            setFilter({
+                legendary: legendaryList,
+                customSearch: filter.customSearch,
             });
         }
     }, [dices]);
 
-    const legendaryMissing = filter.legendary
-        .filter(legendary => !legendary.checked)
-        .map(legendary => legendary.name);
+    const checkboxRefs = Array(dices?.length)
+        .fill('')
+        .map(() => useRef(null as null | HTMLInputElement));
 
     let jsx;
-    if (dices && decks && decks.length > 0 && filter.legendary.length > 0) {
-        const Checkbox = ({
-            legendary,
-            i,
-        }: {
-            legendary: string;
-            i: number;
-        }): JSX.Element => (
-            <input
-                name={legendary}
-                type='checkbox'
-                defaultChecked={filter.legendary[i].checked}
-                onChange={(evt): void => {
-                    filter.legendary[i].checked = evt.target.checked;
-                    dispatch({
-                        type: FILTER_ACTION,
-                        payload: filter,
-                    });
-                }}
-            />
-        );
-
+    if (dices && decks && decks.length > 0) {
         const options = [
             dices.find(alt => alt.name === findAlt[0]),
             dices.find(alt => alt.name === findAlt[1]),
@@ -113,8 +89,12 @@ export default function DeckList({
                     deckData.slot5,
                 ];
                 return (
-                    deck.every(dice => !legendaryMissing.includes(dice)) &&
-                    deckData.type === deckType &&
+                    deck.every(dice =>
+                        dices.find(d => d.name === dice)?.rarity === 'Legendary'
+                            ? filter.legendary.includes(dice)
+                            : true
+                    ) &&
+                    deckData.type.toLowerCase() === deckType &&
                     (filter.customSearch === '?'
                         ? true
                         : deck.includes(filter.customSearch))
@@ -162,9 +142,10 @@ export default function DeckList({
                 <p>
                     This is a interactive deck list for PVP, PVE and Crew decks.
                     You can filter the legendary you have below. In this page{' '}
-                    {deckType} decks are shown, you can switch the deck type
-                    below. You can also specify a dice in Custom Search, which
-                    will show the decks with the dice you specified.
+                    <strong>{deckType} decks</strong> are shown, you can switch
+                    the deck type below. You can also specify a dice in Custom
+                    Search, which will show the decks with the dice you
+                    specified.
                 </p>
                 <p>
                     We know that that not everyone have every legendary dices
@@ -210,16 +191,16 @@ export default function DeckList({
                         <label htmlFor='pvePvp'>
                             <span>Deck Type :</span>
                             <select
-                                defaultValue={deckType}
+                                value={deckType}
                                 onChange={(evt): void =>
                                     history.replace(
-                                        evt.target.value.toLowerCase()
+                                        `/decks/${evt.target.value.toLowerCase()}`
                                     )
                                 }
                             >
-                                <option>PvP</option>
-                                <option>PvE</option>
-                                <option>Crew</option>
+                                <option value='pvp'>PvP</option>
+                                <option value='pve'>PvE</option>
+                                <option value='crew'>Crew</option>
                             </select>
                         </label>
                         <label htmlFor='Custom Search'>
@@ -229,10 +210,7 @@ export default function DeckList({
                                 defaultValue={filter.customSearch}
                                 onChange={(evt): void => {
                                     filter.customSearch = evt.target.value;
-                                    dispatch({
-                                        type: FILTER_ACTION,
-                                        payload: filter,
-                                    });
+                                    setFilter({ ...filter });
                                 }}
                                 data-value={filter.customSearch}
                             >
@@ -252,25 +230,30 @@ export default function DeckList({
                                 <span>Legendary Owned :</span>
                                 <button
                                     type='button'
-                                    data-select-all={filter.legendary.every(
-                                        legendary => legendary.checked
-                                    )}
+                                    data-select-all={
+                                        filter.legendary.length ===
+                                        dices.filter(
+                                            d => d.rarity === 'Legendary'
+                                        ).length
+                                    }
                                     onClick={(): void => {
-                                        filter.legendary = filter.legendary.map(
-                                            legendary => ({
-                                                name: legendary.name,
-                                                checked: !filter.legendary.every(
-                                                    f => f.checked
-                                                ),
-                                            })
-                                        );
-                                        dispatch({
-                                            type: FILTER_ACTION,
-                                            payload: filter,
+                                        const selectedAll =
+                                            filter.legendary.length ===
+                                            legendaryList.length;
+                                        filter.legendary = selectedAll
+                                            ? []
+                                            : legendaryList;
+                                        checkboxRefs.forEach(ref => {
+                                            const currentRef = ref.current;
+                                            if (currentRef) {
+                                                currentRef.checked = !selectedAll;
+                                            }
                                         });
+                                        setFilter({ ...filter });
                                     }}
                                 >
-                                    {filter.legendary.every(f => f.checked)
+                                    {filter.legendary.length ===
+                                    legendaryList.length
                                         ? 'Deselect All'
                                         : 'Select All'}
                                 </button>
@@ -281,7 +264,25 @@ export default function DeckList({
                                     key={legendary}
                                 >
                                     <Dice dice={legendary} />
-                                    <Checkbox legendary={legendary} i={i} />
+                                    <input
+                                        ref={checkboxRefs[i]}
+                                        name={legendary}
+                                        type='checkbox'
+                                        defaultChecked
+                                        onChange={(evt): void => {
+                                            if (evt.target.checked) {
+                                                filter.legendary = [
+                                                    ...filter.legendary,
+                                                    evt.target.name,
+                                                ];
+                                            } else {
+                                                filter.legendary = filter.legendary.filter(
+                                                    l => l !== evt.target.name
+                                                );
+                                            }
+                                            setFilter({ ...filter });
+                                        }}
+                                    />
                                     <span className='checkbox-styler'>
                                         <FontAwesomeIcon icon={faCheck} />
                                     </span>
@@ -380,7 +381,12 @@ export default function DeckList({
         jsx = <LoadingScreen />;
     }
     return (
-        <Main title={`Deck List (${deckType})`} className='deck-list'>
+        <Main
+            title={`Deck List (${
+                deckType === 'pvp' ? 'PvP' : deckType === 'pve' ? 'PvE' : 'Crew'
+            })`}
+            className='deck-list'
+        >
             {jsx}
         </Main>
     );

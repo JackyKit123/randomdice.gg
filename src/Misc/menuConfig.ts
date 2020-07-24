@@ -23,17 +23,17 @@ export const menu: Menu[] = [
             {
                 name: 'PvP Deck List',
                 path: '/decks/pvp',
-                component: lazy(() => import('../Screens/Decks/pvpDeck')),
+                component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
                 name: 'PvE Deck List',
                 path: '/decks/pve',
-                component: lazy(() => import('../Screens/Decks/pveDeck')),
+                component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
                 name: 'Crew Deck List',
                 path: '/decks/crew',
-                component: lazy(() => import('../Screens/Decks/crewDeck')),
+                component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
                 name: 'Crit% Data Per Class',

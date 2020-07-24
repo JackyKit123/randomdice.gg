@@ -9,7 +9,6 @@ import fetchCreditReducer from './Fetch Firebase/Credit/reducer';
 import fetchUserDataReducer from './Fetch Firebase/User/reducer';
 import fetchPatreonListReducer from './Fetch Firebase/Patreon List/reducer';
 import authReducer from './Firebase Auth/reducer';
-import filterReducer from './Deck Filter/reducer';
 import popupReducer from './PopUp Overlay/reducer';
 import fetchGAPIresponseFormReducer from './Google API Fetch Response Form/reducers';
 
@@ -22,7 +21,6 @@ const rootReducer = combineReducers({
     fetchDecksGuideReducer,
     fetchCreditReducer,
     fetchPatreonListReducer,
-    filterReducer,
     authReducer,
     popupReducer,
     fetchGAPIresponseFormReducer,
