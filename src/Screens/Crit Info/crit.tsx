@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     VictoryChart,
@@ -381,6 +382,18 @@ export default function critData(): JSX.Element {
     }
     return (
         <Main title='Crit% Data' className='crit-data'>
+            <Helmet>
+                <title>Random Dice Crit% Data</title>
+                <meta property='og:title' content='Random Dice Crit% Data' />
+                <meta
+                    name='og:description'
+                    content='Data gathered from the Random Dice community for their respective crit% across different ranks! Compare your own crit% to the majority of the player base.'
+                />
+                <meta
+                    name='description'
+                    content='Data gathered from the Random Dice community for their respective crit% across different ranks! Compare your own crit% to the majority of the player base.'
+                />
+            </Helmet>
             {jsx}
         </Main>
     );

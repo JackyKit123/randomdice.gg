@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -847,6 +848,18 @@ export default function EnergyCalculator(): JSX.Element {
     }
     return (
         <Main title='Energy Damage Calculator' className='energy-dmg-cal cal'>
+            <Helmet>
+                <title>Random Dice Calculator</title>
+                <meta property='og:title' content='Random Dice Calculator' />
+                <meta
+                    name='og:description'
+                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
+                />
+                <meta
+                    name='description'
+                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
+                />
+            </Helmet>
             {jsx}
         </Main>
     );

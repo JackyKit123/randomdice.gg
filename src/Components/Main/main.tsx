@@ -1,4 +1,6 @@
 import React, { useState, useEffect, ReactNode } from 'react';
+import { Helmet } from 'react-helmet';
+import { useLocation } from 'react-router-dom';
 import AdUnit from '../Ad Unit/ad';
 import './main.less';
 
@@ -9,6 +11,7 @@ export default function Main(props: {
 }): JSX.Element {
     const { title, className, children } = props;
     const [online, setOnline] = useState(navigator.onLine);
+    const location = useLocation();
 
     useEffect(() => {
         const updateOnlineState = (): void => setOnline(navigator.onLine);
@@ -22,6 +25,16 @@ export default function Main(props: {
 
     return (
         <main>
+            <Helmet>
+                <meta
+                    property='og:url'
+                    content={`https://${process.env.REACT_APP_DOMAIN}${location.pathname}`}
+                />
+                <link
+                    rel='canonical'
+                    href={`https://${process.env.REACT_APP_DOMAIN}${location.pathname}`}
+                />
+            </Helmet>
             <div className={`banner ${!online ? 'offline' : ''}`}>
                 <div className='title-container'>
                     <h2 className='title'>{title}</h2>

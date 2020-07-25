@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import ReactHtmlParser from 'react-html-parser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -46,6 +47,18 @@ export default function Intro({
     }
     return (
         <Main title={`${type} Introduction`} className='wiki intro'>
+            <Helmet>
+                <title>Random Dice Wiki</title>
+                <meta property='og:title' content='Random Dice Wiki' />
+                <meta
+                    name='og:description'
+                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+                />
+                <meta
+                    name='description'
+                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+                />
+            </Helmet>
             {jsx}
         </Main>
     );

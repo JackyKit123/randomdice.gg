@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useState, Fragment } from 'react';
+import { Helmet } from 'react-helmet';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactHtmlParser from 'react-html-parser';
@@ -131,6 +132,18 @@ export default function DiceMechanic(): JSX.Element {
     }
     return (
         <Main title='Dice Mechanics' className='wiki dice-mechanics'>
+            <Helmet>
+                <title>Random Dice Wiki</title>
+                <meta property='og:title' content='Random Dice Wiki' />
+                <meta
+                    name='og:description'
+                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+                />
+                <meta
+                    name='description'
+                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+                />
+            </Helmet>
             {jsx}
         </Main>
     );

@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import ReactHtmlParser from 'react-html-parser';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -118,6 +119,18 @@ export default function BoxGuide(): JSX.Element {
     }
     return (
         <Main title='Box Guide' className='wiki box-guide'>
+            <Helmet>
+                <title>Random Dice Wiki</title>
+                <meta property='og:title' content='Random Dice Wiki' />
+                <meta
+                    name='og:description'
+                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+                />
+                <meta
+                    name='description'
+                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+                />
+            </Helmet>
             {jsx}
         </Main>
     );

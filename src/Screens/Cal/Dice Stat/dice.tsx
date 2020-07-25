@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Main from '../../../Components/Main/main';
@@ -463,6 +464,18 @@ export default function DiceStat(): JSX.Element {
     }
     return (
         <Main title='Dice Stat Calculator' className='dice-stat-cal cal'>
+            <Helmet>
+                <title>Random Dice Calculator</title>
+                <meta property='og:title' content='Random Dice Calculator' />
+                <meta
+                    name='og:description'
+                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
+                />
+                <meta
+                    name='description'
+                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
+                />
+            </Helmet>
             {jsx}
         </Main>
     );

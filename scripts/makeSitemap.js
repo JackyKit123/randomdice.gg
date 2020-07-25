@@ -29,14 +29,13 @@ const out = path.join(__dirname, '..', 'public', 'sitemap.txt');
                         'childNode'
                     ):
                         return drawPath(item.childNode);
+                    case item.privateRoute || !item.path:
+                        return '';
                     case item.path.match(/\/:\w+$/) !== null:
                         return `https://randomdice.gg${item.path.replace(
                             /\/:\w+$/,
                             '/*'
                         )}`;
-
-                    case item.privateRoute:
-                        return '';
                     default:
                         return `https://randomdice.gg${item.path}`;
                 }

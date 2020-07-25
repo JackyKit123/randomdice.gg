@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
+import { Helmet } from 'react-helmet';
 import { useHistory } from 'react-router-dom';
 import Main from '../../Components/Main/main';
 import Dice from '../../Components/Dice/dice';
 import './nomatch.less';
 
-export default function NoMatch(props: { title?: string }): JSX.Element {
+export default function NoMatch(props: {
+    title?: string;
+    children?: ReactNode;
+}): JSX.Element {
     const history = useHistory();
     const { title } = props;
     return (
         <Main title={title || '404 Not found'} className='NoMatch'>
+            <Helmet>
+                <title>{title || '404 Not found'}</title>
+            </Helmet>
             <img
                 id='assassin-cross'
                 alt='assassinate effect'

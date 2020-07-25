@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
+import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -63,14 +64,20 @@ export default function SolarCalculator(): JSX.Element {
         !Number.isInteger(filter.duration) || filter.duration <= 0;
     const invalidInput = isInvalidCrit || isInvalidDuration;
 
-    if (dices) {
-        const diceData = {
-            solar: dices.find(dice => dice.name === 'Solar') as DiceType,
-            light: dices.find(dice => dice.name === 'Light') as DiceType,
-            crit: dices.find(dice => dice.name === 'Critical') as DiceType,
-            moon: dices.find(dice => dice.name === 'Moon') as DiceType,
-        };
+    const diceData = {
+        solar: dices?.find(dice => dice.name === 'Solar') as
+            | DiceType
+            | undefined,
+        light: dices?.find(dice => dice.name === 'Light') as
+            | DiceType
+            | undefined,
+        crit: dices?.find(dice => dice.name === 'Critical') as
+            | DiceType
+            | undefined,
+        moon: dices?.find(dice => dice.name === 'Moon') as DiceType | undefined,
+    };
 
+    if (diceData.solar && diceData.light && diceData.crit && diceData.moon) {
         const basicDmgPerHit =
             (filter.solar.class - 7) * diceData.solar.cupAtk +
             diceData.solar.atk +
@@ -1367,6 +1374,18 @@ export default function SolarCalculator(): JSX.Element {
     }
     return (
         <Main title='Solar Damage Calculator' className='solar-cal cal'>
+            <Helmet>
+                <title>Random Dice Calculator</title>
+                <meta property='og:title' content='Random Dice Calculator' />
+                <meta
+                    name='og:description'
+                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
+                />
+                <meta
+                    name='description'
+                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
+                />
+            </Helmet>
             {jsx}
         </Main>
     );

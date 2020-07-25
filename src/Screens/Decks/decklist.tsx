@@ -1,7 +1,8 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -27,7 +28,9 @@ export default function DeckList(): JSX.Element {
     const { error } =
         selection.fetchDecksReducer || selection.fetchDicesReducer;
     const { decks } = selection.fetchDecksReducer;
-    const { dices } = selection.fetchDicesReducer;
+    const { dices } = useSelector(
+        (state: RootState) => state.fetchDicesReducer
+    );
     const { filter } = selection.filterReducer;
     const deckType = location.pathname
         .replace(/^\/decks\//i, '')
@@ -51,12 +54,36 @@ export default function DeckList(): JSX.Element {
         }
     }, [dices]);
 
-    const checkboxRefs = Array(dices?.length)
-        .fill('')
-        .map(() => useRef(null as null | HTMLInputElement));
-
     let jsx;
     if (dices && decks && decks.length > 0) {
+        const Checkbox = ({
+            legendary,
+        }: {
+            legendary: string;
+        }): JSX.Element => (
+            <input
+                name={legendary}
+                type='checkbox'
+                defaultChecked={filter.legendary.includes(legendary)}
+                onChange={(evt): void => {
+                    if (evt.target.checked) {
+                        filter.legendary = [
+                            ...filter.legendary,
+                            evt.target.name,
+                        ];
+                    } else {
+                        filter.legendary = filter.legendary.filter(
+                            l => l !== evt.target.name
+                        );
+                    }
+                    dispatch({
+                        type: FILTER_ACTION,
+                        payload: { ...filter },
+                    });
+                }}
+            />
+        );
+
         const options = [
             dices.find(alt => alt.name === findAlt[0]),
             dices.find(alt => alt.name === findAlt[1]),
@@ -240,18 +267,11 @@ export default function DeckList(): JSX.Element {
                                         ).length
                                     }
                                     onClick={(): void => {
-                                        const selectedAll =
+                                        filter.legendary =
                                             filter.legendary.length ===
-                                            legendaryList.length;
-                                        filter.legendary = selectedAll
-                                            ? []
-                                            : legendaryList;
-                                        checkboxRefs.forEach(ref => {
-                                            const currentRef = ref.current;
-                                            if (currentRef) {
-                                                currentRef.checked = !selectedAll;
-                                            }
-                                        });
+                                            legendaryList.length
+                                                ? []
+                                                : legendaryList;
                                         dispatch({
                                             type: FILTER_ACTION,
                                             payload: { ...filter },
@@ -264,34 +284,13 @@ export default function DeckList(): JSX.Element {
                                         : 'Select All'}
                                 </button>
                             </div>
-                            {legendaryList.map((legendary: string, i) => (
+                            {legendaryList.map((legendary: string) => (
                                 <div
                                     className='legendary-filter'
                                     key={legendary}
                                 >
                                     <Dice dice={legendary} />
-                                    <input
-                                        ref={checkboxRefs[i]}
-                                        name={legendary}
-                                        type='checkbox'
-                                        defaultChecked
-                                        onChange={(evt): void => {
-                                            if (evt.target.checked) {
-                                                filter.legendary = [
-                                                    ...filter.legendary,
-                                                    evt.target.name,
-                                                ];
-                                            } else {
-                                                filter.legendary = filter.legendary.filter(
-                                                    l => l !== evt.target.name
-                                                );
-                                            }
-                                            dispatch({
-                                                type: FILTER_ACTION,
-                                                payload: { ...filter },
-                                            });
-                                        }}
-                                    />
+                                    <Checkbox legendary={legendary} />
                                     <span className='checkbox-styler'>
                                         <FontAwesomeIcon icon={faCheck} />
                                     </span>
@@ -396,6 +395,45 @@ export default function DeckList(): JSX.Element {
             })`}
             className='deck-list'
         >
+            <Helmet>
+                <title>
+                    Random Dice{' '}
+                    {`Deck List (${
+                        deckType === 'pvp'
+                            ? 'PvP'
+                            : deckType === 'pve'
+                            ? 'PvE'
+                            : 'Crew'
+                    })`}
+                </title>
+                <meta
+                    property='og:title'
+                    content={`Random Dice ${
+                        deckType === 'pvp'
+                            ? 'PvP'
+                            : deckType === 'pve'
+                            ? 'PvE'
+                            : 'Crew'
+                    } Deck List`}
+                />
+                <meta
+                    property='og:url'
+                    content={`https://${process.env.REACT_APP_DOMAIN}${location.pathname}`}
+                />
+                <meta
+                    name='og:description'
+                    content='An Interactive Deck List to build your deck for Random Dice! Put your missing legendary and find the best deck for you!'
+                />
+                <meta
+                    name='description'
+                    content='An Interactive Deck List to build your deck for Random Dice! Put your missing legendary and find the best deck for you!'
+                />
+
+                <link
+                    rel='canonical'
+                    href={`https://${process.env.REACT_APP_DOMAIN}${location.pathname}`}
+                />
+            </Helmet>
             {jsx}
         </Main>
     );

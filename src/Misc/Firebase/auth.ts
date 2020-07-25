@@ -8,7 +8,11 @@ import * as ga from '../customGaEvent';
 import { fetchUser } from './fetchData';
 
 const auth = firebase.apps.length ? firebase.auth() : firebase.auth(initApp());
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+try {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+} catch {
+    //
+}
 
 export function logout(): void {
     auth.signOut();

@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useRef } from 'react';
+import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import * as math from 'mathjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -487,6 +488,19 @@ export default function ArenaDraft(): JSX.Element {
     }
     return (
         <Main title='Arena Draft Tool' className='arena-draft'>
+            <Helmet>
+                <title>Random Dice Arena Draft</title>
+                <meta property='og:title' content='Random Dice Arena Draft' />
+                <meta
+                    name='og:description'
+                    content='An Interactive Arena Drafter to assist you on building your arena deck for Random Dice! Put your options and compare the values, make your best deck for your 12wins game.'
+                />
+                <meta
+                    name='description'
+                    content='An Interactive Arena Drafter to assist you on building your arena deck for Random Dice! Put your options and compare the values, make your best deck for your 12wins game.'
+                />
+                <meta name='robots' content='follow' />
+            </Helmet>
             {jsx}
         </Main>
     );

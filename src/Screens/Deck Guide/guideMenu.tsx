@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Main from '../../Components/Main/main';
@@ -100,6 +101,19 @@ export default function DeckGuideMenu(): JSX.Element {
     }
     return (
         <Main title='Meta Decks Guide' className='meta-deck-guide'>
+            <Helmet>
+                <title>Random Dice Decks Guide</title>
+                <meta property='og:title' content='Random Dice Decks Guide' />
+                <meta
+                    name='og:description'
+                    content='In-depth Random Dice meta decks explanations, guides teaching you the usage of different meta decks in the game.'
+                />
+                <meta
+                    name='description'
+                    content='In-depth Random Dice meta decks explanations, guides teaching you the usage of different meta decks in the game.'
+                />
+                <meta name='robots' content='follow' />
+            </Helmet>
             {jsx}
         </Main>
     );

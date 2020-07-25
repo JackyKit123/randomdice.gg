@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
@@ -115,6 +116,18 @@ export default function BossGuide(): JSX.Element {
     }
     return (
         <Main title='Boss Mechanics' className='boss-guide'>
+            <Helmet>
+                <title>Random Dice Wiki</title>
+                <meta property='og:title' content='Random Dice Wiki' />
+                <meta
+                    name='og:description'
+                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+                />
+                <meta
+                    name='description'
+                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+                />
+            </Helmet>
             {jsx}
         </Main>
     );

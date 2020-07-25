@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import './loading.less';
@@ -13,6 +14,9 @@ export default function Loading(): JSX.Element {
     }, []);
     return (
         <>
+            <Helmet>
+                <title>Loading...</title>
+            </Helmet>
             <h3>Loading...</h3>
             <FontAwesomeIcon className='loading' icon={faSpinner} />
             {loadingTime >= 10 ? (
