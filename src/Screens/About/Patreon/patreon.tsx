@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Helmet } from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 import { faPatreon } from '@fortawesome/free-brands-svg-icons';
@@ -20,6 +21,9 @@ export default function PatreonIntro(): JSX.Element {
     if (list) {
         jsx = (
             <>
+                <Helmet>
+                    <meta name='robots' content='follow' />
+                </Helmet>
                 <div className='patreon-icon'>
                     <div className='container'>
                         <FontAwesomeIcon icon={faPatreon} />
