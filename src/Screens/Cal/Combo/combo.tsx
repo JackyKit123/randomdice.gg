@@ -101,7 +101,8 @@ export default function ComboCalculator(): JSX.Element {
             const moonSpdBuff =
                 1 -
                 ((data.moon.eff1 +
-                    data.moon.cupEff1 * (filter.moon.class - 7)) *
+                    data.moon.cupEff1 * (filter.moon.class - 7) +
+                    (filter.moon.active ? 3 : 0)) *
                     filter.moon.pip +
                     data.moon.pupEff1 * (filter.moon.level - 1)) /
                     100;

@@ -100,7 +100,8 @@ export default function SolarCalculator(): JSX.Element {
             diceData.light.pupEff1 * (filter.light.level - 1);
         const moonSpdBuff =
             ((filter.moon.class - 7) * diceData.moon.cupEff1 +
-                diceData.moon.eff1) *
+                diceData.moon.eff1 +
+                (filter.moon.active ? 3 : 0)) *
                 filter.moon.pip +
             diceData.moon.pupEff1 * (filter.moon.level - 1);
         const critBuff =
