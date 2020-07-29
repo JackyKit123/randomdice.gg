@@ -64,13 +64,15 @@ export default function PatreonIntro(): JSX.Element {
                                             alt={`icon of ${patron.name}`}
                                         />
                                     </figure>
-                                    <div>
-                                        <Link
-                                            to={`/about/patreon/${patron.name}`}
-                                        >
-                                            Message from {patron.name}
-                                        </Link>
-                                    </div>
+                                    {tier >= 2 ? (
+                                        <div>
+                                            <Link
+                                                to={`/about/patreon/${patron.name}`}
+                                            >
+                                                Message from {patron.name}
+                                            </Link>
+                                        </div>
+                                    ) : null}
                                 </div>
                             ))}
                     </Fragment>

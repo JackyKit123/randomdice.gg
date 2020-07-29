@@ -385,8 +385,8 @@ export const fetchPatreon = functions.pubsub
                     );
                     let tier;
                     for (let i = tierList.length; i > 0; i -= 1) {
-                        if (tierArr.includes(tierList[i])) {
-                            tier = i + 1;
+                        if (tierArr.includes(tierList[i - 1])) {
+                            tier = i;
                         }
                     }
                     const userData = (
