@@ -44,7 +44,7 @@ export default function DpsCalculator(): JSX.Element {
             level: 1,
             pip: 1,
         },
-        moon: {
+        lunar: {
             enable: false,
             active: false,
             class: 7,
@@ -78,7 +78,7 @@ export default function DpsCalculator(): JSX.Element {
         typhoon: dices?.find(dice => dice.name === 'Typhoon'),
         critical: dices?.find(dice => dice.name === 'Critical'),
         light: dices?.find(dice => dice.name === 'Light'),
-        moon: dices?.find(dice => dice.name === 'Moon'),
+        lunar: dices?.find(dice => dice.name === 'Lunar'),
     } as { [key: string]: DiceType };
 
     if (Object.values(data).every(d => d !== undefined)) {
@@ -88,11 +88,12 @@ export default function DpsCalculator(): JSX.Element {
                   filter.light.pip +
               data.light.pupEff1 * (filter.light.level - 1)
             : 0;
-        const moonSpdBuff = filter.moon.enable
-            ? ((filter.moon.class - 7) * data.moon.cupEff1 + data.moon.eff1) *
-                  filter.moon.pip +
-              (filter.moon.active ? 3 : 0) +
-              data.moon.pupEff1 * (filter.moon.level - 1)
+        const lunarSpdBuff = filter.lunar.enable
+            ? ((filter.lunar.class - 7) * data.lunar.cupEff1 +
+                  data.lunar.eff1) *
+                  filter.lunar.pip +
+              (filter.lunar.active ? 3 : 0) +
+              data.lunar.pupEff1 * (filter.lunar.level - 1)
             : 0;
         const critBuff = filter.critical.enable
             ? (((filter.critical.class - 3) * data.critical.cupEff1 +
@@ -102,11 +103,11 @@ export default function DpsCalculator(): JSX.Element {
                   5) /
               100
             : 0;
-        const moonCritBuff =
-            filter.moon.enable && filter.moon.active
-                ? (5 * filter.moon.pip) / 100
+        const lunarCritBuff =
+            filter.lunar.enable && filter.lunar.active
+                ? (5 * filter.lunar.pip) / 100
                 : 0;
-        const critBuffSum = Math.max(critBuff, moonCritBuff) + 0.05;
+        const critBuffSum = Math.max(critBuff, lunarCritBuff) + 0.05;
         const critMultiplier =
             1 - critBuffSum + critBuffSum * (filter.crit / 100);
 
@@ -138,17 +139,17 @@ export default function DpsCalculator(): JSX.Element {
                 dice.atk +
                 dice.cupAtk * (diceClass - minClass) +
                 dice.pupAtk * (level - 1);
-            const moonAtkBuffMultiplier =
-                filter.moon.enable && filter.moon.active
-                    ? (10 * filter.moon.pip) / 100 + 1
+            const lunarAtkBuffMultiplier =
+                filter.lunar.enable && filter.lunar.active
+                    ? (10 * filter.lunar.pip) / 100 + 1
                     : 1;
-            return atk * moonAtkBuffMultiplier;
+            return atk * lunarAtkBuffMultiplier;
         };
 
         const atkSpd = (dice: DiceType, diceClass = 0): number => {
             const atkSpdMultiplier = Math.min(
                 1 - lightBuff / 100,
-                1 - moonSpdBuff / 100
+                1 - lunarSpdBuff / 100
             );
             let minClass = 1;
             switch (dice.rarity) {
@@ -738,14 +739,14 @@ export default function DpsCalculator(): JSX.Element {
                         </form>
                     </div>
                     <div className='dice-container'>
-                        <Dice dice='Moon' />
-                        <h3 className='desc'>{data.moon?.desc}</h3>
+                        <Dice dice='Lunar' />
+                        <h3 className='desc'>{data.lunar?.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
                         >
                             <label
-                                htmlFor='moon-enable'
+                                htmlFor='lunar-enable'
                                 className='checkbox-label'
                             >
                                 <span>Enabled : </span>
@@ -754,7 +755,8 @@ export default function DpsCalculator(): JSX.Element {
                                     onChange={(
                                         evt: React.ChangeEvent<HTMLInputElement>
                                     ): void => {
-                                        filter.moon.enable = evt.target.checked;
+                                        filter.lunar.enable =
+                                            evt.target.checked;
                                         setFilter({ ...filter });
                                     }}
                                 />
@@ -763,7 +765,7 @@ export default function DpsCalculator(): JSX.Element {
                                 </span>
                             </label>
                             <label
-                                htmlFor='moon-active'
+                                htmlFor='lunar-active'
                                 className='checkbox-label'
                             >
                                 <span>Active : </span>
@@ -772,7 +774,8 @@ export default function DpsCalculator(): JSX.Element {
                                     onChange={(
                                         evt: React.ChangeEvent<HTMLInputElement>
                                     ): void => {
-                                        filter.moon.active = evt.target.checked;
+                                        filter.lunar.active =
+                                            evt.target.checked;
                                         setFilter({ ...filter });
                                     }}
                                 />
@@ -780,17 +783,17 @@ export default function DpsCalculator(): JSX.Element {
                                     <FontAwesomeIcon icon={faCheck} />
                                 </span>
                             </label>
-                            <label htmlFor='moon-class'>
+                            <label htmlFor='lunar-class'>
                                 <span>Class :</span>
                                 <select
-                                    name='moon-class'
+                                    name='lunar-class'
                                     defaultValue={7}
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.class = Number(
+                                        filter.lunar.class = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -807,16 +810,16 @@ export default function DpsCalculator(): JSX.Element {
                                     <option>15</option>
                                 </select>
                             </label>
-                            <label htmlFor='moon-level'>
+                            <label htmlFor='lunar-level'>
                                 <span>Level :</span>
                                 <select
-                                    name='moon-level'
+                                    name='lunar-level'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.level = Number(
+                                        filter.lunar.level = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -829,16 +832,16 @@ export default function DpsCalculator(): JSX.Element {
                                     <option>5</option>
                                 </select>
                             </label>
-                            <label htmlFor='moon-pip'>
+                            <label htmlFor='lunar-pip'>
                                 <span>Pip :</span>
                                 <select
-                                    name='moon-pip'
+                                    name='lunar-pip'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.pip = Number(
+                                        filter.lunar.pip = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });

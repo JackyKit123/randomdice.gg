@@ -137,7 +137,7 @@ export default function GoldCalculator(): JSX.Element {
             <p>
                 By default, there are 4 modes: Gear deck wave 30 run (10 mins),
                 Solar/Time wave 56 runs(18mins), Combo Mirror wave 76
-                run(25mins), Solar Moon wave 106 (43mins). You can also enter a
+                run(25mins), Solar Lunar wave 106 (43mins). You can also enter a
                 custom target wave goal.
             </p>
             <p>
@@ -389,7 +389,7 @@ export default function GoldCalculator(): JSX.Element {
                             <option value={30}>Gear 30s</option>
                             <option value={56}>Solar / Time 56s</option>
                             <option value={76}>Combo Mirror 76s</option>
-                            <option value={106}>Solar Moon 106s</option>
+                            <option value={106}>Solar Lunar 106s</option>
                             <option>Custom</option>
                         </select>
                         {filter.custom ? (

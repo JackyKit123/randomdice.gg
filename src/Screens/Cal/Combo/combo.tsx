@@ -41,7 +41,7 @@ export default function ComboCalculator(): JSX.Element {
             level: 1,
             pip: 1,
         },
-        moon: {
+        lunar: {
             active: false,
             class: 7,
             level: 1,
@@ -52,7 +52,7 @@ export default function ComboCalculator(): JSX.Element {
     const data = {
         combo: dices?.find(dice => dice.name === 'Combo'),
         crit: dices?.find(dice => dice.name === 'Critical'),
-        moon: dices?.find(dice => dice.name === 'Moon'),
+        lunar: dices?.find(dice => dice.name === 'Lunar'),
     } as {
         [key: string]: DiceType;
     };
@@ -67,7 +67,7 @@ export default function ComboCalculator(): JSX.Element {
 
     if (Object.values(data).every(d => d !== undefined)) {
         const dpsPerComboCount = (
-            mode: 'raw' | 'crit' | 'moon' | 'moon+crit',
+            mode: 'raw' | 'crit' | 'lunar' | 'lunar+crit',
             count = filter.combo.count
         ): { dmg: number; dps: number } => {
             const dmgPerCombo =
@@ -96,18 +96,18 @@ export default function ComboCalculator(): JSX.Element {
                         filter.critical.pip +
                     data.crit.pupEff1 * (filter.critical.level - 1)) /
                 100;
-            const moonCritMultiplier =
-                (5 + (filter.moon.active ? filter.moon.pip * 5 : 0)) / 100;
-            const moonSpdBuff =
+            const lunarCritMultiplier =
+                (5 + (filter.lunar.active ? filter.lunar.pip * 5 : 0)) / 100;
+            const lunarSpdBuff =
                 1 -
-                ((data.moon.eff1 +
-                    data.moon.cupEff1 * (filter.moon.class - 7)) *
-                    filter.moon.pip +
-                    (filter.moon.active ? 3 : 0) +
-                    data.moon.pupEff1 * (filter.moon.level - 1)) /
+                ((data.lunar.eff1 +
+                    data.lunar.cupEff1 * (filter.lunar.class - 7)) *
+                    filter.lunar.pip +
+                    (filter.lunar.active ? 3 : 0) +
+                    data.lunar.pupEff1 * (filter.lunar.level - 1)) /
                     100;
-            const moonBuffedDmg = filter.moon.active
-                ? (filter.moon.pip * 0.1 + 1) * dmg
+            const lunarBuffedDmg = filter.lunar.active
+                ? (filter.lunar.pip * 0.1 + 1) * dmg
                 : dmg;
             switch (mode) {
                 case 'raw':
@@ -129,40 +129,40 @@ export default function ComboCalculator(): JSX.Element {
                         ),
                     };
                 }
-                case 'moon': {
+                case 'lunar': {
                     const atkSpd =
-                        moonSpdBuff * data.combo.spd <= 0.1
+                        lunarSpdBuff * data.combo.spd <= 0.1
                             ? 0.1
-                            : moonSpdBuff * data.combo.spd;
+                            : lunarSpdBuff * data.combo.spd;
                     return {
-                        dmg: roundTo3Sf(moonBuffedDmg),
+                        dmg: roundTo3Sf(lunarBuffedDmg),
                         dps: roundTo3Sf(
-                            (moonBuffedDmg * (1 - moonCritMultiplier) +
-                                (moonBuffedDmg *
-                                    moonCritMultiplier *
+                            (lunarBuffedDmg * (1 - lunarCritMultiplier) +
+                                (lunarBuffedDmg *
+                                    lunarCritMultiplier *
                                     filter.crit) /
                                     100) /
                                 atkSpd
                         ),
                     };
                 }
-                case 'moon+crit': {
+                case 'lunar+crit': {
                     const atkSpd =
-                        moonSpdBuff * data.combo.spd <= 0.1
+                        lunarSpdBuff * data.combo.spd <= 0.1
                             ? 0.1
-                            : moonSpdBuff * data.combo.spd;
+                            : lunarSpdBuff * data.combo.spd;
                     return {
-                        dmg: roundTo3Sf(moonBuffedDmg),
+                        dmg: roundTo3Sf(lunarBuffedDmg),
                         dps: roundTo3Sf(
-                            (moonBuffedDmg *
+                            (lunarBuffedDmg *
                                 (1 -
                                     Math.max(
-                                        moonCritMultiplier,
+                                        lunarCritMultiplier,
                                         criticalCritMultiplier
                                     )) +
-                                (moonBuffedDmg *
+                                (lunarBuffedDmg *
                                     Math.max(
-                                        moonCritMultiplier,
+                                        lunarCritMultiplier,
                                         criticalCritMultiplier
                                     ) *
                                     filter.crit) /
@@ -184,7 +184,7 @@ export default function ComboCalculator(): JSX.Element {
                 <p>
                     This is a calculator for calculating the Combo Dice damage.
                     You can see the dps of combo raw damage and the dps of combo
-                    when it is buffed by Critical and Moon Dice.
+                    when it is buffed by Critical and Lunar Dice.
                 </p>
                 <p>
                     Do Remember that damage and dps shown is per pip. You will
@@ -356,14 +356,14 @@ export default function ComboCalculator(): JSX.Element {
                         </form>
                     </div>
                     <div className='dice-container'>
-                        <Dice dice='Moon' />
-                        <h3 className='desc'>{data.moon?.desc}</h3>
+                        <Dice dice='Lunar' />
+                        <h3 className='desc'>{data.lunar?.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
                         >
                             <label
-                                htmlFor='moon-active'
+                                htmlFor='lunar-active'
                                 className='checkbox-label'
                             >
                                 <span>Active : </span>
@@ -372,7 +372,8 @@ export default function ComboCalculator(): JSX.Element {
                                     onChange={(
                                         evt: React.ChangeEvent<HTMLInputElement>
                                     ): void => {
-                                        filter.moon.active = evt.target.checked;
+                                        filter.lunar.active =
+                                            evt.target.checked;
                                         setFilter({ ...filter });
                                     }}
                                 />
@@ -380,17 +381,17 @@ export default function ComboCalculator(): JSX.Element {
                                     <FontAwesomeIcon icon={faCheck} />
                                 </span>
                             </label>
-                            <label htmlFor='moon-class'>
+                            <label htmlFor='lunar-class'>
                                 <span>Class :</span>
                                 <select
-                                    name='moon-class'
+                                    name='lunar-class'
                                     defaultValue={7}
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.class = Number(
+                                        filter.lunar.class = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -407,16 +408,16 @@ export default function ComboCalculator(): JSX.Element {
                                     <option>15</option>
                                 </select>
                             </label>
-                            <label htmlFor='moon-level'>
+                            <label htmlFor='lunar-level'>
                                 <span>Level :</span>
                                 <select
-                                    name='moon-level'
+                                    name='lunar-level'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.level = Number(
+                                        filter.lunar.level = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -429,16 +430,16 @@ export default function ComboCalculator(): JSX.Element {
                                     <option>5</option>
                                 </select>
                             </label>
-                            <label htmlFor='moon-pip'>
+                            <label htmlFor='lunar-pip'>
                                 <span>Pip :</span>
                                 <select
-                                    name='moon-pip'
+                                    name='lunar-pip'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.pip = Number(
+                                        filter.lunar.pip = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -538,14 +539,14 @@ export default function ComboCalculator(): JSX.Element {
                             />
                         </label>
                         <label htmlFor='result'>
-                            <span className='type'>Moon Buffed</span>
+                            <span className='type'>Lunar Buffed</span>
                             <input
                                 type='textbox'
                                 className={invalidInput ? 'invalid' : ''}
                                 value={
                                     invalidInput
                                         ? 'Check Input'
-                                        : dpsPerComboCount('moon').dmg
+                                        : dpsPerComboCount('lunar').dmg
                                 }
                                 disabled
                             />
@@ -580,14 +581,14 @@ export default function ComboCalculator(): JSX.Element {
                             />
                         </label>
                         <label htmlFor='result'>
-                            <span className='type'>Moon Buffed</span>
+                            <span className='type'>Lunar Buffed</span>
                             <input
                                 type='textbox'
                                 className={invalidInput ? 'invalid' : ''}
                                 value={
                                     invalidInput
                                         ? 'Check Input'
-                                        : dpsPerComboCount('moon').dps
+                                        : dpsPerComboCount('lunar').dps
                                 }
                                 disabled
                             />
@@ -600,7 +601,7 @@ export default function ComboCalculator(): JSX.Element {
                         maxDomain={{
                             x: filter.combo.count + 10 || 10,
                             y: dpsPerComboCount(
-                                'moon+crit',
+                                'lunar+crit',
                                 filter.combo.count + 10
                             ).dps,
                         }}
@@ -663,21 +664,21 @@ export default function ComboCalculator(): JSX.Element {
                                 '#111111',
                             ]}
                             data={[
-                                { name: 'Moon + Crit' },
-                                { name: 'Moon Buffed' },
+                                { name: 'Lunar + Crit' },
+                                { name: 'Lunar Buffed' },
                                 { name: 'Crit Buffed' },
                                 { name: 'No Buff' },
                             ]}
                         />
                         <VictoryLine
-                            name='Moon + Crit'
+                            name='Lunar + Crit'
                             samples={100}
                             style={{
                                 data: { stroke: '#d178ff', strokeWidth: 1 },
                             }}
                             y={useCallback(
                                 (d: { x: number }): number =>
-                                    dpsPerComboCount('moon+crit', d.x).dps,
+                                    dpsPerComboCount('lunar+crit', d.x).dps,
                                 [
                                     filter.combo.class,
                                     filter.combo.level,
@@ -685,28 +686,28 @@ export default function ComboCalculator(): JSX.Element {
                                     filter.critical.class,
                                     filter.critical.level,
                                     filter.critical.pip,
-                                    filter.moon.active,
-                                    filter.moon.class,
-                                    filter.moon.level,
-                                    filter.moon.pip,
+                                    filter.lunar.active,
+                                    filter.lunar.class,
+                                    filter.lunar.level,
+                                    filter.lunar.pip,
                                     filter.crit,
                                 ]
                             )}
                         />
                         <VictoryLine
-                            name='Moon Buffed'
+                            name='Lunar Buffed'
                             samples={100}
                             style={{
                                 data: { stroke: '#197cf0', strokeWidth: 1 },
                             }}
                             y={useCallback(
                                 (d: { x: number }): number =>
-                                    dpsPerComboCount('moon', d.x).dps,
+                                    dpsPerComboCount('lunar', d.x).dps,
                                 [
-                                    filter.moon.active,
-                                    filter.moon.class,
-                                    filter.moon.level,
-                                    filter.moon.pip,
+                                    filter.lunar.active,
+                                    filter.lunar.class,
+                                    filter.lunar.level,
+                                    filter.lunar.pip,
                                     filter.combo.class,
                                     filter.combo.level,
                                     filter.combo.count,

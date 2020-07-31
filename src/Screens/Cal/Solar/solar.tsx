@@ -47,7 +47,7 @@ export default function SolarCalculator(): JSX.Element {
             level: 1,
             pip: 1,
         },
-        moon: {
+        lunar: {
             active: false,
             class: 7,
             level: 1,
@@ -74,10 +74,12 @@ export default function SolarCalculator(): JSX.Element {
         crit: dices?.find(dice => dice.name === 'Critical') as
             | DiceType
             | undefined,
-        moon: dices?.find(dice => dice.name === 'Moon') as DiceType | undefined,
+        lunar: dices?.find(dice => dice.name === 'Lunar') as
+            | DiceType
+            | undefined,
     };
 
-    if (diceData.solar && diceData.light && diceData.crit && diceData.moon) {
+    if (diceData.solar && diceData.light && diceData.crit && diceData.lunar) {
         const basicDmgPerHit =
             (filter.solar.class - 7) * diceData.solar.cupAtk +
             diceData.solar.atk +
@@ -86,11 +88,11 @@ export default function SolarCalculator(): JSX.Element {
             (filter.solar.class - 7) * diceData.solar.cupEff1 +
             diceData.solar.eff1 +
             diceData.solar.pupEff1 * (filter.solar.level - 1);
-        const moonBuffedDmgPerHit = filter.moon.active
-            ? ((filter.moon.pip * 10) / 100 + 1) * basicDmgPerHit
+        const lunarBuffedDmgPerHit = filter.lunar.active
+            ? ((filter.lunar.pip * 10) / 100 + 1) * basicDmgPerHit
             : basicDmgPerHit;
-        const moonBuffedDmgPerSplash = filter.moon.active
-            ? ((filter.moon.pip * 10) / 100 + 1) * basicDmgPerSplash
+        const lunarBuffedDmgPerSplash = filter.lunar.active
+            ? ((filter.lunar.pip * 10) / 100 + 1) * basicDmgPerSplash
             : basicDmgPerSplash;
 
         const lightBuff =
@@ -98,35 +100,35 @@ export default function SolarCalculator(): JSX.Element {
                 diceData.light.eff1) *
                 filter.light.pip +
             diceData.light.pupEff1 * (filter.light.level - 1);
-        const moonSpdBuff =
-            ((filter.moon.class - 7) * diceData.moon.cupEff1 +
-                diceData.moon.eff1) *
-                filter.moon.pip +
-            (filter.moon.active ? 3 : 0) +
-            diceData.moon.pupEff1 * (filter.moon.level - 1);
+        const lunarSpdBuff =
+            ((filter.lunar.class - 7) * diceData.lunar.cupEff1 +
+                diceData.lunar.eff1) *
+                filter.lunar.pip +
+            (filter.lunar.active ? 3 : 0) +
+            diceData.lunar.pupEff1 * (filter.lunar.level - 1);
         const critBuff =
             ((filter.critical.class - 3) * diceData.crit.cupEff1 +
                 diceData.crit.eff1) *
                 filter.critical.pip +
             diceData.crit.pupEff1 * (filter.critical.level - 1);
-        const moonCritBuff = filter.moon.active ? filter.moon.pip * 5 : 0;
+        const lunarCritBuff = filter.lunar.active ? filter.lunar.pip * 5 : 0;
 
         const atkSpdMultiplier = 1 - lightBuff / 100;
-        const moonAtkSpdMultiplier = 1 - moonSpdBuff / 100;
+        const lunarAtkSpdMultiplier = 1 - lunarSpdBuff / 100;
         const basicAtkSpd = diceData.solar.spd;
         let buffedAtkSpd = diceData.solar.spd * atkSpdMultiplier;
         buffedAtkSpd = buffedAtkSpd <= 0.1 ? 0.1 : buffedAtkSpd;
-        let moonBuffedAtkSpd = diceData.solar.spd * moonAtkSpdMultiplier;
-        moonBuffedAtkSpd = moonBuffedAtkSpd <= 0.1 ? 0.1 : moonBuffedAtkSpd;
+        let lunarBuffedAtkSpd = diceData.solar.spd * lunarAtkSpdMultiplier;
+        lunarBuffedAtkSpd = lunarBuffedAtkSpd <= 0.1 ? 0.1 : lunarBuffedAtkSpd;
 
         const critMultiplier = (5 + critBuff) / 100;
-        const moonCritMultiplier = (5 + moonCritBuff) / 100;
+        const lunarCritMultiplier = (5 + lunarCritBuff) / 100;
         const basicCrit = 0.95 + 0.05 * (filter.crit / 100);
         const buffedCrit =
             1 - critMultiplier + critMultiplier * (filter.crit / 100);
-        const moonBuffedCrit =
-            1 - moonCritMultiplier + moonCritMultiplier * (filter.crit / 100);
-        const moonCritDoubleBuffedCrit = Math.max(buffedCrit, moonBuffedCrit);
+        const lunarBuffedCrit =
+            1 - lunarCritMultiplier + lunarCritMultiplier * (filter.crit / 100);
+        const lunarCritDoubleBuffedCrit = Math.max(buffedCrit, lunarBuffedCrit);
 
         const dps = (
             sourceDmgPerHit: number,
@@ -265,13 +267,13 @@ export default function SolarCalculator(): JSX.Element {
                     filter.crit,
                 ]
             ),
-            moonBuffAtk: useMemo(
+            lunarBuffAtk: useMemo(
                 () =>
                     Math.round(
                         dps(
-                            moonBuffedDmgPerHit,
-                            moonBuffedAtkSpd,
-                            moonBuffedCrit,
+                            lunarBuffedDmgPerHit,
+                            lunarBuffedAtkSpd,
+                            lunarBuffedCrit,
                             filter.duration
                         ) * 100
                     ) / 100,
@@ -279,21 +281,21 @@ export default function SolarCalculator(): JSX.Element {
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
-                    filter.moon.active,
-                    filter.moon.class,
-                    filter.moon.level,
-                    filter.moon.pip,
+                    filter.lunar.active,
+                    filter.lunar.class,
+                    filter.lunar.level,
+                    filter.lunar.pip,
                     filter.duration,
                     filter.crit,
                 ]
             ),
-            moonBuffSplash: useMemo(
+            lunarBuffSplash: useMemo(
                 () =>
                     Math.round(
                         dps(
-                            moonBuffedDmgPerSplash,
-                            moonBuffedAtkSpd,
-                            moonBuffedCrit,
+                            lunarBuffedDmgPerSplash,
+                            lunarBuffedAtkSpd,
+                            lunarBuffedCrit,
                             filter.duration
                         ) * 100
                     ) / 100,
@@ -301,10 +303,10 @@ export default function SolarCalculator(): JSX.Element {
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
-                    filter.moon.active,
-                    filter.moon.class,
-                    filter.moon.level,
-                    filter.moon.pip,
+                    filter.lunar.active,
+                    filter.lunar.class,
+                    filter.lunar.level,
+                    filter.lunar.pip,
                     filter.duration,
                     filter.crit,
                 ]
@@ -414,14 +416,14 @@ export default function SolarCalculator(): JSX.Element {
                         </form>
                     </div>
                     <div className='dice-container'>
-                        <Dice dice='Moon' />
-                        <h3 className='desc'>{diceData.moon.desc}</h3>
+                        <Dice dice='Lunar' />
+                        <h3 className='desc'>{diceData.lunar.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
                         >
                             <label
-                                htmlFor='moon-active'
+                                htmlFor='lunar-active'
                                 className='checkbox-label'
                             >
                                 <span>Active : </span>
@@ -430,7 +432,8 @@ export default function SolarCalculator(): JSX.Element {
                                     onChange={(
                                         evt: React.ChangeEvent<HTMLInputElement>
                                     ): void => {
-                                        filter.moon.active = evt.target.checked;
+                                        filter.lunar.active =
+                                            evt.target.checked;
                                         setFilter({ ...filter });
                                     }}
                                 />
@@ -438,17 +441,17 @@ export default function SolarCalculator(): JSX.Element {
                                     <FontAwesomeIcon icon={faCheck} />
                                 </span>
                             </label>
-                            <label htmlFor='moon-class'>
+                            <label htmlFor='lunar-class'>
                                 <span>Class :</span>
                                 <select
-                                    name='moon-class'
+                                    name='lunar-class'
                                     defaultValue={7}
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.class = Number(
+                                        filter.lunar.class = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -465,16 +468,16 @@ export default function SolarCalculator(): JSX.Element {
                                     <option>15</option>
                                 </select>
                             </label>
-                            <label htmlFor='moon-level'>
+                            <label htmlFor='lunar-level'>
                                 <span>Level :</span>
                                 <select
-                                    name='moon-level'
+                                    name='lunar-level'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.level = Number(
+                                        filter.lunar.level = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -487,16 +490,16 @@ export default function SolarCalculator(): JSX.Element {
                                     <option>5</option>
                                 </select>
                             </label>
-                            <label htmlFor='moon-pip'>
+                            <label htmlFor='lunar-pip'>
                                 <span>Pip :</span>
                                 <select
-                                    name='moon-pip'
+                                    name='lunar-pip'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.pip = Number(
+                                        filter.lunar.pip = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -770,9 +773,9 @@ export default function SolarCalculator(): JSX.Element {
                                     filter.duration
                                 ),
                                 dps(
-                                    moonBuffedDmgPerHit,
-                                    moonBuffedAtkSpd,
-                                    moonCritDoubleBuffedCrit,
+                                    lunarBuffedDmgPerHit,
+                                    lunarBuffedAtkSpd,
+                                    lunarCritDoubleBuffedCrit,
                                     filter.duration
                                 )
                             ),
@@ -838,9 +841,9 @@ export default function SolarCalculator(): JSX.Element {
                                 '#111111',
                             ]}
                             data={[
-                                { name: 'Moon + Crit' },
+                                { name: 'Lunar + Crit' },
                                 { name: 'Light + Crit' },
-                                { name: 'Moon Buffed' },
+                                { name: 'Lunar Buffed' },
                                 { name: 'Light Buffed' },
                                 { name: 'Crit Buffed' },
                                 { name: 'No Buff' },
@@ -922,7 +925,7 @@ export default function SolarCalculator(): JSX.Element {
                             )}
                         />
                         <VictoryLine
-                            name='Moon Buffed'
+                            name='Lunar Buffed'
                             samples={100}
                             style={{
                                 data: { stroke: '#197cf0', strokeWidth: 1 },
@@ -930,19 +933,19 @@ export default function SolarCalculator(): JSX.Element {
                             y={useCallback(
                                 (d: { x: number }): number =>
                                     dps(
-                                        moonBuffedDmgPerHit,
-                                        moonBuffedAtkSpd,
-                                        moonBuffedCrit,
+                                        lunarBuffedDmgPerHit,
+                                        lunarBuffedAtkSpd,
+                                        lunarBuffedCrit,
                                         d.x
                                     ),
                                 [
                                     filter.solar.class,
                                     filter.solar.level,
                                     filter.solar.pip,
-                                    filter.moon.active,
-                                    filter.moon.class,
-                                    filter.moon.level,
-                                    filter.moon.pip,
+                                    filter.lunar.active,
+                                    filter.lunar.class,
+                                    filter.lunar.level,
+                                    filter.lunar.pip,
                                     filter.duration,
                                     filter.crit,
                                 ]
@@ -978,7 +981,7 @@ export default function SolarCalculator(): JSX.Element {
                             )}
                         />
                         <VictoryLine
-                            name='Moon + Crit'
+                            name='Lunar + Crit'
                             samples={100}
                             style={{
                                 data: { stroke: '#d178ff', strokeWidth: 1 },
@@ -986,9 +989,9 @@ export default function SolarCalculator(): JSX.Element {
                             y={useCallback(
                                 (d: { x: number }): number =>
                                     dps(
-                                        moonBuffedDmgPerHit,
-                                        moonBuffedAtkSpd,
-                                        moonCritDoubleBuffedCrit,
+                                        lunarBuffedDmgPerHit,
+                                        lunarBuffedAtkSpd,
+                                        lunarCritDoubleBuffedCrit,
                                         d.x
                                     ),
                                 [
@@ -998,10 +1001,10 @@ export default function SolarCalculator(): JSX.Element {
                                     filter.critical.class,
                                     filter.critical.level,
                                     filter.critical.pip,
-                                    filter.moon.active,
-                                    filter.moon.class,
-                                    filter.moon.level,
-                                    filter.moon.pip,
+                                    filter.lunar.active,
+                                    filter.lunar.class,
+                                    filter.lunar.level,
+                                    filter.lunar.pip,
                                     filter.duration,
                                     filter.crit,
                                 ]
@@ -1019,9 +1022,9 @@ export default function SolarCalculator(): JSX.Element {
                                     filter.duration
                                 ),
                                 dps(
-                                    moonBuffedDmgPerHit,
-                                    moonBuffedAtkSpd,
-                                    moonCritDoubleBuffedCrit,
+                                    lunarBuffedDmgPerHit,
+                                    lunarBuffedAtkSpd,
+                                    lunarCritDoubleBuffedCrit,
                                     filter.duration
                                 )
                             ),
@@ -1149,7 +1152,7 @@ export default function SolarCalculator(): JSX.Element {
                             )}
                         />
                         <VictoryLine
-                            name='Moon Buffed'
+                            name='Lunar Buffed'
                             samples={100}
                             style={{
                                 data: { stroke: '#197cf0', strokeWidth: 1 },
@@ -1157,19 +1160,19 @@ export default function SolarCalculator(): JSX.Element {
                             y={useCallback(
                                 (d: { x: number }): number =>
                                     dps(
-                                        moonBuffedDmgPerSplash,
-                                        moonBuffedAtkSpd,
-                                        moonBuffedCrit,
+                                        lunarBuffedDmgPerSplash,
+                                        lunarBuffedAtkSpd,
+                                        lunarBuffedCrit,
                                         d.x
                                     ),
                                 [
                                     filter.solar.class,
                                     filter.solar.level,
                                     filter.solar.pip,
-                                    filter.moon.active,
-                                    filter.moon.class,
-                                    filter.moon.level,
-                                    filter.moon.pip,
+                                    filter.lunar.active,
+                                    filter.lunar.class,
+                                    filter.lunar.level,
+                                    filter.lunar.pip,
                                     filter.duration,
                                     filter.crit,
                                 ]
@@ -1205,7 +1208,7 @@ export default function SolarCalculator(): JSX.Element {
                             )}
                         />
                         <VictoryLine
-                            name='Moon + Crit'
+                            name='Lunar + Crit'
                             samples={100}
                             style={{
                                 data: { stroke: '#d178ff', strokeWidth: 1 },
@@ -1213,9 +1216,9 @@ export default function SolarCalculator(): JSX.Element {
                             y={useCallback(
                                 (d: { x: number }): number =>
                                     dps(
-                                        moonBuffedDmgPerSplash,
-                                        moonBuffedAtkSpd,
-                                        moonCritDoubleBuffedCrit,
+                                        lunarBuffedDmgPerSplash,
+                                        lunarBuffedAtkSpd,
+                                        lunarCritDoubleBuffedCrit,
                                         d.x
                                     ),
                                 [
@@ -1225,10 +1228,10 @@ export default function SolarCalculator(): JSX.Element {
                                     filter.critical.class,
                                     filter.critical.level,
                                     filter.critical.pip,
-                                    filter.moon.active,
-                                    filter.moon.class,
-                                    filter.moon.level,
-                                    filter.moon.pip,
+                                    filter.lunar.active,
+                                    filter.lunar.class,
+                                    filter.lunar.level,
+                                    filter.lunar.pip,
                                     filter.duration,
                                     filter.crit,
                                 ]
@@ -1248,9 +1251,9 @@ export default function SolarCalculator(): JSX.Element {
                                 '#111111',
                             ]}
                             data={[
-                                { name: 'Moon + Crit' },
+                                { name: 'Lunar + Crit' },
                                 { name: 'Light + Crit' },
-                                { name: 'Moon Buffed' },
+                                { name: 'Lunar Buffed' },
                                 { name: 'Light Buffed' },
                                 { name: 'Crit Buffed' },
                                 { name: 'No Buff' },
@@ -1334,25 +1337,25 @@ export default function SolarCalculator(): JSX.Element {
                         />
                     </label>
                     <label htmlFor='result'>
-                        <span>Moon Buffed Basic Atk</span>
+                        <span>Lunar Buffed Basic Atk</span>
                         <input
                             type='textbox'
                             className={invalidInput ? 'invalid' : ''}
                             value={
                                 invalidInput
                                     ? 'Check Input'
-                                    : result.moonBuffAtk
+                                    : result.lunarBuffAtk
                             }
                             disabled
                         />
-                        <span>Moon Buffed Splash Dmg</span>
+                        <span>Lunar Buffed Splash Dmg</span>
                         <input
                             type='textbox'
                             className={invalidInput ? 'invalid' : ''}
                             value={
                                 invalidInput
                                     ? 'Check Input'
-                                    : result.moonBuffSplash
+                                    : result.lunarBuffSplash
                             }
                             disabled
                         />

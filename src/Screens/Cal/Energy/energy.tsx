@@ -46,7 +46,7 @@ export default function EnergyCalculator(): JSX.Element {
             level: 1,
             pip: 1,
         },
-        moon: {
+        lunar: {
             active: false,
             class: 7,
             level: 1,
@@ -58,7 +58,7 @@ export default function EnergyCalculator(): JSX.Element {
         energy: dices?.find(dice => dice.name === 'Energy'),
         crit: dices?.find(dice => dice.name === 'Critical'),
         light: dices?.find(dice => dice.name === 'Light'),
-        moon: dices?.find(dice => dice.name === 'Moon'),
+        lunar: dices?.find(dice => dice.name === 'Lunar'),
     } as {
         [key: string]: DiceType;
     };
@@ -73,7 +73,7 @@ export default function EnergyCalculator(): JSX.Element {
 
     if (Object.values(data).every(d => d !== undefined)) {
         const dpsPerSpCount = (
-            mode: 'raw' | 'crit' | 'light' | 'moon',
+            mode: 'raw' | 'crit' | 'light' | 'lunar',
             sp = filter.energy.sp
         ): { dmg: number; dps: number } => {
             const dmgPerSp =
@@ -141,24 +141,24 @@ export default function EnergyCalculator(): JSX.Element {
                         ),
                     };
                 }
-                case 'moon': {
+                case 'lunar': {
                     const critMultiplier =
-                        (5 + (filter.moon.active ? filter.moon.pip * 5 : 0)) /
+                        (5 + (filter.lunar.active ? filter.lunar.pip * 5 : 0)) /
                         100;
                     const spdBuff =
                         1 -
-                        ((data.moon.eff1 +
-                            data.moon.cupEff1 * (filter.moon.class - 7)) *
-                            filter.moon.pip +
-                            (filter.moon.active ? 3 : 0) +
-                            data.moon.pupEff1 * (filter.moon.level - 1)) /
+                        ((data.lunar.eff1 +
+                            data.lunar.cupEff1 * (filter.lunar.class - 7)) *
+                            filter.lunar.pip +
+                            (filter.lunar.active ? 3 : 0) +
+                            data.lunar.pupEff1 * (filter.lunar.level - 1)) /
                             100;
                     const atkSpd =
                         spdBuff * data.energy.spd <= 0.1
                             ? 0.1
                             : spdBuff * data.energy.spd;
-                    const buffedDmg = filter.moon.active
-                        ? (filter.moon.pip * 0.1 + 1) * dmg
+                    const buffedDmg = filter.lunar.active
+                        ? (filter.lunar.pip * 0.1 + 1) * dmg
                         : dmg;
                     return {
                         dmg: roundTo3Sf(buffedDmg),
@@ -183,7 +183,7 @@ export default function EnergyCalculator(): JSX.Element {
                 <p>
                     This is a calculator for calculating the Energy Dice damage.
                     You can see the dps of energy raw damage and the dps of
-                    energy when it is buffed by Light, Critical or Moon Dice.
+                    energy when it is buffed by Light, Critical or Lunar Dice.
                 </p>
                 <p>
                     Do Remember that damage and dps shown is per pip. You will
@@ -279,14 +279,14 @@ export default function EnergyCalculator(): JSX.Element {
                         </form>
                     </div>
                     <div className='dice-container'>
-                        <Dice dice='Moon' />
-                        <h3 className='desc'>{data.moon?.desc}</h3>
+                        <Dice dice='Lunar' />
+                        <h3 className='desc'>{data.lunar?.desc}</h3>
                         <form
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
                         >
                             <label
-                                htmlFor='moon-active'
+                                htmlFor='lunar-active'
                                 className='checkbox-label'
                             >
                                 <span>Active : </span>
@@ -295,7 +295,8 @@ export default function EnergyCalculator(): JSX.Element {
                                     onChange={(
                                         evt: React.ChangeEvent<HTMLInputElement>
                                     ): void => {
-                                        filter.moon.active = evt.target.checked;
+                                        filter.lunar.active =
+                                            evt.target.checked;
                                         setFilter({ ...filter });
                                     }}
                                 />
@@ -303,17 +304,17 @@ export default function EnergyCalculator(): JSX.Element {
                                     <FontAwesomeIcon icon={faCheck} />
                                 </span>
                             </label>
-                            <label htmlFor='moon-class'>
+                            <label htmlFor='lunar-class'>
                                 <span>Class :</span>
                                 <select
-                                    name='moon-class'
+                                    name='lunar-class'
                                     defaultValue={7}
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.class = Number(
+                                        filter.lunar.class = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -330,16 +331,16 @@ export default function EnergyCalculator(): JSX.Element {
                                     <option>15</option>
                                 </select>
                             </label>
-                            <label htmlFor='moon-level'>
+                            <label htmlFor='lunar-level'>
                                 <span>Level :</span>
                                 <select
-                                    name='moon-level'
+                                    name='lunar-level'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.level = Number(
+                                        filter.lunar.level = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -352,16 +353,16 @@ export default function EnergyCalculator(): JSX.Element {
                                     <option>5</option>
                                 </select>
                             </label>
-                            <label htmlFor='moon-pip'>
+                            <label htmlFor='lunar-pip'>
                                 <span>Pip :</span>
                                 <select
-                                    name='moon-pip'
+                                    name='lunar-pip'
                                     onChange={(
                                         evt: React.ChangeEvent<
                                             HTMLSelectElement
                                         >
                                     ): void => {
-                                        filter.moon.pip = Number(
+                                        filter.lunar.pip = Number(
                                             evt.target.value
                                         );
                                         setFilter({ ...filter });
@@ -639,14 +640,14 @@ export default function EnergyCalculator(): JSX.Element {
                             />
                         </label>
                         <label htmlFor='result'>
-                            <span className='type'>Moon Buffed</span>
+                            <span className='type'>Lunar Buffed</span>
                             <input
                                 type='textbox'
                                 className={invalidInput ? 'invalid' : ''}
                                 value={
                                     invalidInput
                                         ? 'Check Input'
-                                        : dpsPerSpCount('moon').dmg
+                                        : dpsPerSpCount('lunar').dmg
                                 }
                                 disabled
                             />
@@ -694,14 +695,14 @@ export default function EnergyCalculator(): JSX.Element {
                             />
                         </label>
                         <label htmlFor='result'>
-                            <span className='type'>Moon Buffed</span>
+                            <span className='type'>Lunar Buffed</span>
                             <input
                                 type='textbox'
                                 className={invalidInput ? 'invalid' : ''}
                                 value={
                                     invalidInput
                                         ? 'Check Input'
-                                        : dpsPerSpCount('moon').dps
+                                        : dpsPerSpCount('lunar').dps
                                 }
                                 disabled
                             />
@@ -720,7 +721,7 @@ export default function EnergyCalculator(): JSX.Element {
                                         filter.energy.sp + 100
                                     ).dps,
                                     dpsPerSpCount(
-                                        'moon',
+                                        'lunar',
                                         filter.energy.sp + 100
                                     ).dps
                                 ) + 10,
@@ -784,20 +785,20 @@ export default function EnergyCalculator(): JSX.Element {
                                 '#111111',
                             ]}
                             data={[
-                                { name: 'Moon Buffed' },
+                                { name: 'Lunar Buffed' },
                                 { name: 'Crit Buffed' },
                                 { name: 'Light Buffed' },
                                 { name: 'No Buff' },
                             ]}
                         />
                         <VictoryLine
-                            name='Moon Buffed'
+                            name='Lunar Buffed'
                             samples={100}
                             style={{
                                 data: { stroke: '#197cf0', strokeWidth: 1 },
                             }}
                             y={(d: { x: number }): number =>
-                                dpsPerSpCount('moon', d.x).dps
+                                dpsPerSpCount('lunar', d.x).dps
                             }
                         />
                         <VictoryLine
