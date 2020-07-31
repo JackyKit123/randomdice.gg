@@ -1,15 +1,24 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "outDir": "lib",
-    "sourceMap": true,
-    "strict": true,
-    "target": "es2018"
-  },
-  "compileOnSave": true,
-  "include": [
-    "src"
-  ]
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "outDir": "lib",
+        "sourceMap": true,
+        "strict": true,
+        "target": "es2018",
+        "esModuleInterop": true,
+        "noEmit": false,
+        "moduleResolution": "node",
+        "jsx": "preserve",
+        "lib": [],
+        "skipLibCheck": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true
+    },
+    "compileOnSave": true,
+    "include": ["src"]
 }

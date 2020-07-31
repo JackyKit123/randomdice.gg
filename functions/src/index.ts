@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import * as cors from 'cors';
+import cors from 'cors';
 import axios from 'axios';
 
 const corsHandler = cors({ origin: true });
@@ -383,7 +383,7 @@ export const fetchPatreon = functions.pubsub
                     const tierArr = member.relationships.currently_entitled_tiers.data.map(
                         t => t.id
                     );
-                    let tier;
+                    let tier = 0;
                     for (let i = tierList.length; i > 0; i -= 1) {
                         if (tierArr.includes(tierList[i - 1])) {
                             tier = i;
@@ -449,7 +449,8 @@ export const fetchPatreon = functions.pubsub
                             if (
                                 patreonList[i].name !==
                                     prevPatreonProfile?.name ||
-                                patreonList[i].img !== prevPatreonProfile?.img
+                                patreonList[i].img !== prevPatreonProfile?.img ||
+                                patreonList[i].tier !== prevPatreonProfile?.tier
                             ) {
                                 anyProfileUpdated = true;
                             }
