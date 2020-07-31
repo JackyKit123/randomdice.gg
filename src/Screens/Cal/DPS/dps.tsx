@@ -89,10 +89,9 @@ export default function DpsCalculator(): JSX.Element {
               data.light.pupEff1 * (filter.light.level - 1)
             : 0;
         const moonSpdBuff = filter.moon.enable
-            ? ((filter.moon.class - 7) * data.moon.cupEff1 +
-                  data.moon.eff1 +
-                  (filter.moon.active ? 3 : 0)) *
+            ? ((filter.moon.class - 7) * data.moon.cupEff1 + data.moon.eff1) *
                   filter.moon.pip +
+              (filter.moon.active ? 3 : 0) +
               data.moon.pupEff1 * (filter.moon.level - 1)
             : 0;
         const critBuff = filter.critical.enable

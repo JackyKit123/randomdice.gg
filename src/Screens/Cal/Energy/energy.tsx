@@ -148,9 +148,9 @@ export default function EnergyCalculator(): JSX.Element {
                     const spdBuff =
                         1 -
                         ((data.moon.eff1 +
-                            data.moon.cupEff1 * (filter.moon.class - 7) +
-                            (filter.moon.active ? 3 : 0)) *
+                            data.moon.cupEff1 * (filter.moon.class - 7)) *
                             filter.moon.pip +
+                            (filter.moon.active ? 3 : 0) +
                             data.moon.pupEff1 * (filter.moon.level - 1)) /
                             100;
                     const atkSpd =
