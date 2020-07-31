@@ -54,12 +54,12 @@ export default function SpeedCalculator(): JSX.Element {
 
     if (data.blizzard && data.ice && data.flow && data.sand) {
         const blizzardSlow = Math.min(
-            data.blizzard.cupEff1 * (filter.blizzard.class - 7) +
+            (data.blizzard.cupEff1 * (filter.blizzard.class - 7) +
                 data.blizzard.pupEff1 * (filter.blizzard.level - 1) +
-                +data.blizzard.eff1 *
-                    (filter.blizzard.dice1Pips +
-                        filter.blizzard.dice2Pips +
-                        filter.blizzard.dice3Pips),
+                data.blizzard.eff1) *
+                (filter.blizzard.dice1Pips +
+                    filter.blizzard.dice2Pips +
+                    filter.blizzard.dice3Pips),
             50
         );
         const iceSlow = Math.min(
