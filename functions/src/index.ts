@@ -449,7 +449,8 @@ export const fetchPatreon = functions.pubsub
                             if (
                                 patreonList[i].name !==
                                     prevPatreonProfile?.name ||
-                                patreonList[i].img !== prevPatreonProfile?.img ||
+                                patreonList[i].img !==
+                                    prevPatreonProfile?.img ||
                                 patreonList[i].tier !== prevPatreonProfile?.tier
                             ) {
                                 anyProfileUpdated = true;

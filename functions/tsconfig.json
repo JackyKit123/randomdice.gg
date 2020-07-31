@@ -20,5 +20,4 @@
         "isolatedModules": true
     },
     "compileOnSave": true,
-    "include": ["src"]
 }
