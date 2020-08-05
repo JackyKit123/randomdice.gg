@@ -149,13 +149,6 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Patch Note',
-                path: '/wiki/patch_note',
-                component: lazy(() =>
-                    import('../Screens/Wiki/Patch Note/patchNote')
-                ),
-            },
-            {
                 name: 'The Store',
                 path: '/wiki/store',
                 component: lazy(() =>
