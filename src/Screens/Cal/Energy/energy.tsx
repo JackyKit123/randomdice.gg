@@ -130,8 +130,8 @@ export default function EnergyCalculator(): JSX.Element {
                             data.light.pupEff1 * (filter.light.level - 1)) /
                             100;
                     const atkSpd =
-                        spdBuff * data.energy.spd <= 0.1
-                            ? 0.1
+                        spdBuff * data.energy.spd <= 0.01
+                            ? 0.01
                             : spdBuff * data.energy.spd;
                     return {
                         dmg: roundTo3Sf(dmg),
@@ -154,8 +154,8 @@ export default function EnergyCalculator(): JSX.Element {
                             data.lunar.pupEff1 * (filter.lunar.level - 1)) /
                             100;
                     const atkSpd =
-                        spdBuff * data.energy.spd <= 0.1
-                            ? 0.1
+                        spdBuff * data.energy.spd <= 0.01
+                            ? 0.01
                             : spdBuff * data.energy.spd;
                     const buffedDmg = filter.lunar.active
                         ? (filter.lunar.pip * 0.1 + 1) * dmg

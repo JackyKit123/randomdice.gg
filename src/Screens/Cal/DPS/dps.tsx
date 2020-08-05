@@ -173,7 +173,7 @@ export default function DpsCalculator(): JSX.Element {
                 ? dice.cupSpd * (diceClass - minClass)
                 : 0;
             const buffedSpd = (baseAtkSpd + cupAtkSpd) * atkSpdMultiplier;
-            return buffedSpd <= 0.1 ? 0.1 : buffedSpd;
+            return buffedSpd <= 0.01 ? 0.01 : buffedSpd;
         };
 
         const windDps = (level = filter.level): number => {

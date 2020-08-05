@@ -117,9 +117,10 @@ export default function SolarCalculator(): JSX.Element {
         const lunarAtkSpdMultiplier = 1 - lunarSpdBuff / 100;
         const basicAtkSpd = diceData.solar.spd;
         let buffedAtkSpd = diceData.solar.spd * atkSpdMultiplier;
-        buffedAtkSpd = buffedAtkSpd <= 0.1 ? 0.1 : buffedAtkSpd;
+        buffedAtkSpd = buffedAtkSpd <= 0.01 ? 0.01 : buffedAtkSpd;
         let lunarBuffedAtkSpd = diceData.solar.spd * lunarAtkSpdMultiplier;
-        lunarBuffedAtkSpd = lunarBuffedAtkSpd <= 0.1 ? 0.1 : lunarBuffedAtkSpd;
+        lunarBuffedAtkSpd =
+            lunarBuffedAtkSpd <= 0.01 ? 0.01 : lunarBuffedAtkSpd;
 
         const critMultiplier = (5 + critBuff) / 100;
         const lunarCritMultiplier = (5 + lunarCritBuff) / 100;

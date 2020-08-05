@@ -131,8 +131,8 @@ export default function ComboCalculator(): JSX.Element {
                 }
                 case 'lunar': {
                     const atkSpd =
-                        lunarSpdBuff * data.combo.spd <= 0.1
-                            ? 0.1
+                        lunarSpdBuff * data.combo.spd <= 0.01
+                            ? 0.01
                             : lunarSpdBuff * data.combo.spd;
                     return {
                         dmg: roundTo3Sf(lunarBuffedDmg),
@@ -148,8 +148,8 @@ export default function ComboCalculator(): JSX.Element {
                 }
                 case 'lunar+crit': {
                     const atkSpd =
-                        lunarSpdBuff * data.combo.spd <= 0.1
-                            ? 0.1
+                        lunarSpdBuff * data.combo.spd <= 0.01
+                            ? 0.01
                             : lunarSpdBuff * data.combo.spd;
                     return {
                         dmg: roundTo3Sf(lunarBuffedDmg),
