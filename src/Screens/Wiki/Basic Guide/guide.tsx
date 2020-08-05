@@ -14,6 +14,8 @@ import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import { fetchWiki } from '../../../Misc/Firebase/fetchData';
 import { WikiContent } from '../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
 import replaceAnchorWithHistory from '../../../Misc/HTMLAnchorNavigation';
+import PopUp from '../../../Components/PopUp Overlay/popup';
+import { OPEN_POPUP } from '../../../Misc/Redux Storage/PopUp Overlay/types';
 
 export default function Basic(): JSX.Element {
     const dispatch = useDispatch();
@@ -46,6 +48,11 @@ export default function Basic(): JSX.Element {
     if (tips) {
         jsx = (
             <>
+                {tips.map(tip => (
+                    <PopUp key={tip.id} popUpTarget={`guide-img-${tip.id}`}>
+                        <img src={tip.img} alt='Tip and trick' />
+                    </PopUp>
+                ))}
                 <p>
                     Here you will find the some tips and trick to guide you off
                     the beginning of the game.
@@ -70,7 +77,23 @@ export default function Basic(): JSX.Element {
                             <Fragment key={tip.id}>
                                 <hr className='divisor' />
                                 <div className='tip'>
-                                    <figure>
+                                    {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+                                    <figure
+                                        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                                        tabIndex={0}
+                                        onClick={(): void => {
+                                            dispatch({
+                                                type: OPEN_POPUP,
+                                                payload: `guide-img-${tip.id}`,
+                                            });
+                                        }}
+                                        onKeyDown={(): void => {
+                                            dispatch({
+                                                type: OPEN_POPUP,
+                                                payload: `guide-img-${tip.id}`,
+                                            });
+                                        }}
+                                    >
                                         <img
                                             src={tip.img}
                                             alt='Tip and trick'
