@@ -15,6 +15,7 @@ export default function NoMatch(props: {
         <Main title={title || '404 Not found'} className='NoMatch'>
             <Helmet>
                 <title>{title || '404 Not found'}</title>
+                <meta name='robots' content='noindex' />
             </Helmet>
             <img
                 id='assassin-cross'
