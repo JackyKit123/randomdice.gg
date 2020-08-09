@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
-import { sanitize } from 'dompurify';
-import ReactHtmlParser from 'react-html-parser';
 import replaceAnchorWithHistory from '../../Misc/HTMLAnchorNavigation';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
@@ -14,6 +12,7 @@ import './guide.less';
 import { RootState } from '../../Misc/Redux Storage/store';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import { fetchDecksGuide, fetchDices } from '../../Misc/Firebase/fetchData';
+import ConvertEmbed from '../../Components/Youtube Embed/embed';
 
 export default function DeckGuideMenu(): JSX.Element | null {
     const history = useHistory();
@@ -62,7 +61,7 @@ export default function DeckGuideMenu(): JSX.Element | null {
                         dimension='970x90'
                     />
                     <hr className='divisor' />
-                    {ReactHtmlParser(sanitize(thisGuide?.guide || ''))}
+                    <ConvertEmbed htmlString={thisGuide?.guide || ''} />
                 </div>
                 <SMshare name={`Decks Guide (${name})`} />
                 <button

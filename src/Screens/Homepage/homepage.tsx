@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import ReactHtmlParser from 'react-html-parser';
@@ -9,6 +9,7 @@ import './homepage.less';
 import { menu } from '../../Misc/menuConfig';
 import replaceAnchorWithHistory from '../../Misc/HTMLAnchorNavigation';
 import { RootState } from '../../Misc/Redux Storage/store';
+import ConvertEmbed from '../../Components/Youtube Embed/embed';
 
 export default function Homepage(): JSX.Element {
     const history = useHistory();
@@ -16,20 +17,6 @@ export default function Homepage(): JSX.Element {
     const { news, error } = useSelector(
         (state: RootState) => state.fetchNewsReducer
     );
-
-    useEffect(() => {
-        const ele = document.getElementById('game-news-youtube');
-        const container = document.querySelector('.main > .content');
-        const resizeIframe = (): void => {
-            if (ele && container) {
-                ele.style.height = `${((container.clientWidth - 40) * 9) /
-                    16}px`;
-            }
-        };
-        resizeIframe();
-        window.addEventListener('resize', resizeIframe);
-        return (): void => window.removeEventListener('resize', resizeIframe);
-    }, [news]);
 
     return (
         <Main className='homepage' title='Random Dice Unofficial Site'>
@@ -88,25 +75,13 @@ export default function Homepage(): JSX.Element {
             <section>
                 <h3>Game News</h3>
                 {/* eslint-disable-next-line no-nested-ternary */}
-                {news
-                    ? ReactHtmlParser(
-                          news.game
-                              .replace(
-                                  /<figure class="media"><oembed url="/g,
-                                  '<iframe title="YouTube Video" width="100%" id="game-news-youtube" src="'
-                              )
-                              .replace(
-                                  /youtube.com\/watch\?v=/g,
-                                  'youtube.com/embed/'
-                              )
-                              .replace(
-                                  /"><\/oembed><\/figure>/g,
-                                  '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
-                              )
-                      )
-                    : error
-                    ? `Unable to load the latest news : ${error}`
-                    : 'Loading News...'}
+                {news ? (
+                    <ConvertEmbed htmlString={news.game} />
+                ) : error ? (
+                    `Unable to load the latest news : ${error}`
+                ) : (
+                    'Loading News...'
+                )}
             </section>
             <section>
                 <h3>Website News</h3>

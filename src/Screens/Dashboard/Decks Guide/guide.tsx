@@ -296,6 +296,7 @@ export default function updateDecksGuide(): JSX.Element {
                                                     'italic',
                                                     '|',
                                                     'link',
+                                                    'mediaembed',
                                                 ],
                                             }}
                                             onChange={(
