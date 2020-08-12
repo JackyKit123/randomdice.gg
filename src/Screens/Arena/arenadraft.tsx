@@ -171,7 +171,9 @@ export default function ArenaDraft(): JSX.Element {
                     This is a Tool for assisting to draft an arena deck. To
                     start drafting, input you 3 dice in the section below. Once
                     all 3 dices are input into the picks section, you can
-                    compare the value and pick into one of them.
+                    compare the value and pick into one of them. Or if you are
+                    confident, you can skip comparing and use the bypass option
+                    below the table.
                 </p>
                 <p>
                     Usually, highest synergy value will result in the best pick.
@@ -187,6 +189,11 @@ export default function ArenaDraft(): JSX.Element {
                     Once you finished picking you deck, we will show a rough
                     estimated win rate on the deck based on the deck score of
                     your deck.
+                </p>
+                <p>
+                    Lastly, do be reminded that the legendary dice is not
+                    available for the first 2 slots in your deck while Growth is
+                    never available, the same thing applies for this tool.
                 </p>
                 <hr className='divisor' />
                 <section className='pick'>
