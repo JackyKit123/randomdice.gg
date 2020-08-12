@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
 import Loading from '../../../Components/Loading/loading';
-import AdUnit from '../../../Components/Ad Unit/ad';
+import GoogleAds from '../../../Components/Ad Unit/ad';
 import { RootState } from '../../../Misc/Redux Storage/store';
 import replaceTextWithImgTag from '../../../Misc/replaceTextWithImg';
 import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
@@ -65,16 +65,7 @@ export default function BoxGuide(): JSX.Element {
                         box.img === 'ad' ? (
                             <Fragment key='ad'>
                                 <hr className='divisor' />
-                                <AdUnit
-                                    provider='Media.net'
-                                    unitId='227378933'
-                                    dimension='300x250'
-                                />
-                                <AdUnit
-                                    provider='Media.net'
-                                    unitId='219055766'
-                                    dimension='970x90'
-                                />
+                                <GoogleAds unitId='1144871846' />
                             </Fragment>
                         ) : (
                             <Fragment key={box.name}>

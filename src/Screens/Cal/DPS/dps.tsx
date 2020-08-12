@@ -20,7 +20,7 @@ import Dice from '../../../Components/Dice/dice';
 import { RootState } from '../../../Misc/Redux Storage/store';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import '../cal.less';
-import AdUnit from '../../../Components/Ad Unit/ad';
+import GoogleAds from '../../../Components/Ad Unit/ad';
 
 export default function DpsCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -965,16 +965,7 @@ export default function DpsCalculator(): JSX.Element {
                     </div>
                 </div>
                 <hr className='divisor' />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='227378933'
-                    dimension='300x250'
-                />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='219055766'
-                    dimension='970x90'
-                />
+                <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
                 <div className='result vertical'>
                     <div className='wave-dmg'>

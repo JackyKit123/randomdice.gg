@@ -10,7 +10,7 @@ import './guide.less';
 import { RootState } from '../../Misc/Redux Storage/store';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import { fetchDecksGuide, fetchDices } from '../../Misc/Firebase/fetchData';
-import AdUnit from '../../Components/Ad Unit/ad';
+import GoogleAds from '../../Components/Ad Unit/ad';
 
 export default function DeckGuideMenu(): JSX.Element {
     const dispatch = useDispatch();
@@ -41,16 +41,7 @@ export default function DeckGuideMenu(): JSX.Element {
                             deck.guide === 'ad' ? (
                                 <tr key='ad' className='ad'>
                                     <td colSpan={2}>
-                                        <AdUnit
-                                            provider='Media.net'
-                                            unitId='227378933'
-                                            dimension='300x250'
-                                        />
-                                        <AdUnit
-                                            provider='Media.net'
-                                            unitId='219055766'
-                                            dimension='970x90'
-                                        />
+                                        <GoogleAds unitId='1144871846' />
                                     </td>
                                 </tr>
                             ) : (

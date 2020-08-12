@@ -13,7 +13,7 @@ import Dice from '../../Components/Dice/dice';
 import { fetchDices } from '../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import './arenadraft.less';
-import AdUnit from '../../Components/Ad Unit/ad';
+import GoogleAds from '../../Components/Ad Unit/ad';
 import ShareButtons from '../../Components/Social Media Share/share';
 
 export default function ArenaDraft(): JSX.Element {
@@ -391,16 +391,7 @@ export default function ArenaDraft(): JSX.Element {
                     </button>
                 </section>
                 <hr className='divisor' />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='227378933'
-                    dimension='300x250'
-                />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='219055766'
-                    dimension='970x90'
-                />
+                <GoogleAds unitId='1144871846' />
                 <section className='deck'>
                     <hr className='divisor' />
                     <h3>Your Deck</h3>

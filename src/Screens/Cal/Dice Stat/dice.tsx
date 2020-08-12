@@ -11,7 +11,7 @@ import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import '../cal.less';
 import './dice.less';
-import AdUnit from '../../../Components/Ad Unit/ad';
+import GoogleAds from '../../../Components/Ad Unit/ad';
 
 export default function DiceStat(): JSX.Element {
     const dispatch = useDispatch();
@@ -185,16 +185,7 @@ export default function DiceStat(): JSX.Element {
                     </div>
                 </div>
                 <hr className='divisor' />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='227378933'
-                    dimension='300x250'
-                />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='219055766'
-                    dimension='970x90'
-                />
+                <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
                 <p>
                     The table below shows the information of upgrading a dice

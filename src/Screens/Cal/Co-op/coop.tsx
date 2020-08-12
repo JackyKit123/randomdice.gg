@@ -6,7 +6,7 @@ import Main from '../../../Components/Main/main';
 import replaceTextWithImgTag from '../../../Misc/replaceTextWithImg';
 import '../cal.less';
 import './coop.less';
-import AdUnit from '../../../Components/Ad Unit/ad';
+import GoogleAds from '../../../Components/Ad Unit/ad';
 
 export default function GoldCalculator(): JSX.Element {
     const [filter, setFilter] = useState({
@@ -442,16 +442,7 @@ export default function GoldCalculator(): JSX.Element {
                 </form>
             </section>
             <hr className='divisor' />
-            <AdUnit
-                provider='Media.net'
-                unitId='227378933'
-                dimension='300x250'
-            />
-            <AdUnit
-                provider='Media.net'
-                unitId='219055766'
-                dimension='970x90'
-            />
+            <GoogleAds unitId='1144871846' />
             <hr className='divisor' />
             <div className='result'>
                 <label htmlFor='result'>

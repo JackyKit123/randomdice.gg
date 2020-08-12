@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
-import AdUnit from '../Ad Unit/ad';
+import GoogleAds from '../Ad Unit/ad';
 import './main.less';
 
 export default function Main(props: {
@@ -47,12 +47,7 @@ export default function Main(props: {
                 ) : null}
             </div>
             <div className={`main ${className}`}>
-                <AdUnit
-                    provider='Google'
-                    unitId='3944820222'
-                    dimension='mobile'
-                    style={{ display: 'block' }}
-                />
+                <GoogleAds unitId='3944820222' />
                 <div className='content'>{children}</div>
             </div>
         </main>

@@ -10,7 +10,7 @@ import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
-import AdUnit from '../../Components/Ad Unit/ad';
+import GoogleAds from '../../Components/Ad Unit/ad';
 import Dice from '../../Components/Dice/dice';
 import PopUp from '../../Components/PopUp Overlay/popup';
 import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
@@ -300,16 +300,7 @@ export default function DeckList(): JSX.Element {
                     </div>
                 </form>
                 <hr className='divisor' />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='227378933'
-                    dimension='300x250'
-                />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='219055766'
-                    dimension='970x90'
-                />
+                <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
                 <div className='table-container'>
                     <table>

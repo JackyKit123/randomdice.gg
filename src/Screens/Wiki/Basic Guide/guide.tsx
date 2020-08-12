@@ -7,7 +7,7 @@ import { sanitize } from 'dompurify';
 import Main from '../../../Components/Main/main';
 import Error from '../../../Components/Error/error';
 import LoadingScreen from '../../../Components/Loading/loading';
-import AdUnit from '../../../Components/Ad Unit/ad';
+import GoogleAds from '../../../Components/Ad Unit/ad';
 import { RootState } from '../../../Misc/Redux Storage/store';
 import './guide.less';
 import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
@@ -62,16 +62,7 @@ export default function Basic(): JSX.Element {
                         tip.img === 'ad' ? (
                             <Fragment key='ad'>
                                 <hr className='divisor' />
-                                <AdUnit
-                                    provider='Media.net'
-                                    unitId='227378933'
-                                    dimension='300x250'
-                                />
-                                <AdUnit
-                                    provider='Media.net'
-                                    unitId='219055766'
-                                    dimension='970x90'
-                                />
+                                <GoogleAds unitId='1144871846' />
                             </Fragment>
                         ) : (
                             <Fragment key={tip.id}>

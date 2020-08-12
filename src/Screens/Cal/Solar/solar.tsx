@@ -21,7 +21,7 @@ import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import '../cal.less';
 import './solar.less';
-import AdUnit from '../../../Components/Ad Unit/ad';
+import GoogleAds from '../../../Components/Ad Unit/ad';
 
 export default function SolarCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -751,16 +751,7 @@ export default function SolarCalculator(): JSX.Element {
                     ''
                 )}
                 <hr className='divisor' />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='227378933'
-                    dimension='300x250'
-                />
-                <AdUnit
-                    provider='Media.net'
-                    unitId='219055766'
-                    dimension='970x90'
-                />
+                <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
                 <div className='chart-container'>
                     <VictoryChart
