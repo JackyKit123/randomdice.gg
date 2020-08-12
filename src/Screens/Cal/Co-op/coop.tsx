@@ -45,6 +45,15 @@ export default function GoldCalculator(): JSX.Element {
         20: 2222,
     };
 
+    const coopWaveMode: {
+        [key: number]: string;
+    } = {
+        30: 'Gear',
+        40: 'Landmine',
+        56: 'Solar Time',
+        76: 'Combo Mirror',
+    };
+
     const isInvalidCurrentGold =
         !Number.isInteger(filter.currentGold) || filter.currentGold < 0;
     const isInvalidCurrentDiamond =
@@ -135,10 +144,18 @@ export default function GoldCalculator(): JSX.Element {
                 time.
             </p>
             <p>
-                By default, there are 4 modes: Gear deck wave 30 run (10 mins),
-                Solar/Time wave 56 runs(18mins), Combo Mirror wave 76
-                run(25mins), Solar Lunar wave 106 (43mins). You can also enter a
-                custom target wave goal.
+                By default, there are {Object.keys(coopWaveMode).length} modes:{' '}
+                {Object.entries(coopWaveMode)
+                    .map(
+                        ([wave, mode]) =>
+                            `${mode} wave ${wave} run(${Math.round(
+                                (Number(wave) > 60
+                                    ? (Number(wave) - 60) / 2 + 20
+                                    : Number(wave) / 3) * 100
+                            ) / 100} mins)`
+                    )
+                    .join(', ')}
+                . You can also enter a custom target wave goal.
             </p>
             <p>
                 Keep in mind that the calculator assume average 20 seconds per
@@ -386,10 +403,14 @@ export default function GoldCalculator(): JSX.Element {
                                 setFilter({ ...filter });
                             }}
                         >
-                            <option value={30}>Gear 30s</option>
-                            <option value={56}>Solar / Time 56s</option>
-                            <option value={76}>Combo Mirror 76s</option>
-                            <option value={106}>Solar Lunar 106s</option>
+                            {Object.entries(coopWaveMode).map(
+                                ([wave, name]) => (
+                                    <option
+                                        key={name}
+                                        value={wave}
+                                    >{`${name} Wave ${wave}`}</option>
+                                )
+                            )}
                             <option>Custom</option>
                         </select>
                         {filter.custom ? (
