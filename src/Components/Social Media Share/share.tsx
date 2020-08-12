@@ -58,13 +58,13 @@ export default function ShareButtons({ name }: { name: string }): JSX.Element {
                 aria-label='Share'
                 type='button'
                 onClick={async (): Promise<void> => {
+                    ga.share();
                     if (navigator.share === undefined) {
                         await navigator.clipboard.writeText(
                             window.location.href
                         );
                         dispatch({ type: OPEN_POPUP, payload: 'copied' });
                     } else {
-                        ga.share();
                         navigator.share({
                             title: name,
                             text: name,
