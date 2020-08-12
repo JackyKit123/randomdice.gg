@@ -248,6 +248,7 @@ export default function updateDeck(): JSX.Element {
                             className={invalidVersionToAdd ? 'invalid' : ''}
                             type='textbox'
                             placeholder='1.0.0'
+                            defaultValue={deckToAdd.added}
                             onChange={(evt): void => {
                                 const clone = {
                                     ...deckToAdd,
@@ -459,6 +460,18 @@ export default function updateDeck(): JSX.Element {
                 <button
                     type='button'
                     onClick={(): void => {
+                        setDeckToAdd({
+                            id: -1,
+                            rating: 0,
+                            type: 'PvP',
+                            slot1: 'Fire',
+                            slot2: 'Electric',
+                            slot3: 'Poison',
+                            slot4: 'Ice',
+                            slot5: 'Wind',
+                            added: currentGameVersion || deckToAdd.added || '',
+                            updated: null,
+                        });
                         dispatch({
                             type: OPEN_POPUP,
                             payload: 'add-deck',
