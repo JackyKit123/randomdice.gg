@@ -277,15 +277,6 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Patch Note',
-                privateRoute: true,
-                path: '/dashboard/patch_note',
-                excludeFromMenu: true,
-                component: lazy(() =>
-                    import('../Screens/Dashboard/Wiki/Patch Note/patchNote')
-                ),
-            },
-            {
                 name: 'News',
                 privateRoute: true,
                 path: '/dashboard/news',
