@@ -131,134 +131,283 @@ export default function updateDecksGuide(): JSX.Element {
                 deck of the guide. Once you are done, hit save and the deck
                 guide will immediately go live.
             </p>
-            {activeEdit ? null : (
-                <label htmlFor='add-guide'>
-                    Add a Deck Guide :{' '}
-                    <button
-                        type='button'
-                        onClick={(): void => {
-                            const clone = [...guides];
-                            clone.sort((a, b) => (a.id > b.id ? 1 : -1));
-                            let newId = clone.findIndex(
-                                (guide, i) => guide.id !== i
-                            );
-                            if (newId === -1) {
-                                newId = clone.length;
-                            }
-                            setActiveEdit({
-                                id: newId,
-                                type: 'PvP',
-                                name: '',
-                                diceList: [Array(5).fill('?')],
-                                guide: '',
-                            });
-                        }}
-                    >
-                        <FontAwesomeIcon icon={faPlusCircle} />
-                    </button>
-                </label>
-            )}
-            <table>
-                <tbody>
-                    {activeEdit ? (
-                        <>
-                            {activeEdit.diceList.map((dicelist, i, arr) => (
-                                <tr
-                                    className='dice-container'
-                                    /* eslint-disable-next-line react/no-array-index-key */
-                                    key={`dice-container-${i}`}
-                                >
-                                    {i === 0 ? (
-                                        <>
-                                            <td rowSpan={arr.length}>
-                                                <input
-                                                    type='textbox'
-                                                    className={
-                                                        invalidGuideName
-                                                            ? 'invalid'
-                                                            : ''
-                                                    }
-                                                    defaultValue={
-                                                        activeEdit.name
-                                                    }
-                                                    onChange={(evt): void => {
-                                                        if (
-                                                            /(;|\/|\?|:|@|=|&)/.test(
-                                                                evt.target.value
-                                                            )
-                                                        ) {
-                                                            setInvalidGuideName(
-                                                                true
-                                                            );
-                                                        } else {
-                                                            if (
-                                                                invalidGuideName
-                                                            ) {
-                                                                setInvalidGuideName(
-                                                                    false
-                                                                );
-                                                            }
-                                                            activeEdit.name =
-                                                                evt.target.value;
-
-                                                            setActiveEdit({
-                                                                ...activeEdit,
-                                                            });
-                                                        }
-                                                    }}
-                                                />
-                                                {invalidGuideName ? (
-                                                    <span className='invalid-warning'>
-                                                        You entered an invalid
-                                                        character,{' '}
-                                                        <strong>
-                                                            ; / ? : @ = & are
-                                                        </strong>
-                                                        forbidden characters
-                                                    </span>
-                                                ) : null}
-                                            </td>
-                                        </>
-                                    ) : null}
-                                    <td>
-                                        {dicelist.map((dice, j) => (
-                                            <select
-                                                /* eslint-disable-next-line react/no-array-index-key */
-                                                key={`${i}-${j}`}
-                                                defaultValue={dice}
+            {activeEdit ? (
+                <table>
+                    <tbody>
+                        {activeEdit.diceList.map((dicelist, i, arr) => (
+                            <tr
+                                className='dice-container'
+                                /* eslint-disable-next-line react/no-array-index-key */
+                                key={`dice-container-${i}`}
+                            >
+                                {i === 0 ? (
+                                    <>
+                                        <td rowSpan={arr.length}>
+                                            <input
+                                                type='textbox'
+                                                className={
+                                                    invalidGuideName
+                                                        ? 'invalid'
+                                                        : ''
+                                                }
+                                                defaultValue={activeEdit.name}
                                                 onChange={(evt): void => {
-                                                    activeEdit.diceList[i][j] =
-                                                        evt.target.value;
-                                                    setActiveEdit({
-                                                        ...activeEdit,
-                                                    });
+                                                    if (
+                                                        /(;|\/|\?|:|@|=|&)/.test(
+                                                            evt.target.value
+                                                        )
+                                                    ) {
+                                                        setInvalidGuideName(
+                                                            true
+                                                        );
+                                                    } else {
+                                                        if (invalidGuideName) {
+                                                            setInvalidGuideName(
+                                                                false
+                                                            );
+                                                        }
+                                                        activeEdit.name =
+                                                            evt.target.value;
+
+                                                        setActiveEdit({
+                                                            ...activeEdit,
+                                                        });
+                                                    }
                                                 }}
+                                            />
+                                            {invalidGuideName ? (
+                                                <span className='invalid-warning'>
+                                                    You entered an invalid
+                                                    character,{' '}
+                                                    <strong>
+                                                        ; / ? : @ = & are
+                                                    </strong>
+                                                    forbidden characters
+                                                </span>
+                                            ) : null}
+                                        </td>
+                                    </>
+                                ) : null}
+                                <td>
+                                    {dicelist.map((dice, j) => (
+                                        <select
+                                            /* eslint-disable-next-line react/no-array-index-key */
+                                            key={`${i}-${j}`}
+                                            defaultValue={dice}
+                                            onChange={(evt): void => {
+                                                activeEdit.diceList[i][j] =
+                                                    evt.target.value;
+                                                setActiveEdit({
+                                                    ...activeEdit,
+                                                });
+                                            }}
+                                        >
+                                            <option>?</option>
+                                            {dices.map(diceOption => (
+                                                <option key={diceOption.name}>
+                                                    {diceOption.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ))}
+                                </td>
+                                <td>
+                                    <button
+                                        disabled={
+                                            activeEdit.diceList.length <= 1
+                                        }
+                                        type='button'
+                                        className='delete'
+                                        onClick={(): void => {
+                                            activeEdit.diceList.splice(i, 1);
+                                            setActiveEdit({
+                                                ...activeEdit,
+                                            });
+                                        }}
+                                    >
+                                        <FontAwesomeIcon icon={faTrashAlt} />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        <tr>
+                            <td>
+                                <select
+                                    onChange={(evt): void => {
+                                        activeEdit.type = evt.target.value as
+                                            | 'PvP'
+                                            | 'PvE'
+                                            | 'Crew';
+                                        setActiveEdit({
+                                            ...activeEdit,
+                                        });
+                                    }}
+                                >
+                                    <option>PvP</option>
+                                    <option>PvE</option>
+                                    <option>Crew</option>
+                                </select>
+                            </td>
+                            <td colSpan={2}>
+                                <button
+                                    type='button'
+                                    className='add'
+                                    onClick={(): void => {
+                                        activeEdit.diceList.push(
+                                            Array(5).fill('?')
+                                        );
+                                        setActiveEdit({
+                                            ...activeEdit,
+                                        });
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faPlusCircle} />
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={3}>
+                                <div className='ckeditor-container'>
+                                    <CKEditor
+                                        editor={ClassicEditor}
+                                        data={activeEdit.guide}
+                                        config={{
+                                            removePlugins: ['Heading'],
+                                            toolbar: [
+                                                'undo',
+                                                'redo',
+                                                '|',
+                                                'bold',
+                                                'italic',
+                                                '|',
+                                                'link',
+                                                'mediaembed',
+                                            ],
+                                        }}
+                                        onChange={(
+                                            _: unknown,
+                                            editor: {
+                                                getData: () => string;
+                                            }
+                                        ): void => {
+                                            activeEdit.guide = editor.getData();
+                                            setActiveEdit({
+                                                ...activeEdit,
+                                            });
+                                        }}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={3}>
+                                <button
+                                    type='button'
+                                    className='submit'
+                                    disabled={invalidGuideName}
+                                    onClick={(): void => {
+                                        dispatch({
+                                            type: OPEN_POPUP,
+                                            payload: 'confirm-submit',
+                                        });
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faCheck} />
+                                </button>
+                                <button
+                                    type='button'
+                                    className='back'
+                                    onClick={(): void => {
+                                        dispatch({
+                                            type: OPEN_POPUP,
+                                            payload: 'confirm-discard',
+                                        });
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faUndo} />
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            ) : (
+                <>
+                    <label htmlFor='add-guide'>
+                        Add a Deck Guide :{' '}
+                        <button
+                            type='button'
+                            onClick={(): void => {
+                                const clone = [...guides];
+                                clone.sort((a, b) => (a.id > b.id ? 1 : -1));
+                                let newId = clone.findIndex(
+                                    (guide, i) => guide.id !== i
+                                );
+                                if (newId === -1) {
+                                    newId = clone.length;
+                                }
+                                setActiveEdit({
+                                    id: newId,
+                                    type: 'PvP',
+                                    name: '',
+                                    diceList: [Array(5).fill('?')],
+                                    guide: '',
+                                });
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faPlusCircle} />
+                        </button>
+                    </label>
+                    <table className='guide-menu'>
+                        <tbody>
+                            {guides.map((guide, i) => (
+                                <tr key={guide.id}>
+                                    <td>{guide.type}</td>
+                                    <td>{guide.name}</td>
+                                    <td>
+                                        {guide.diceList.map(dicelist => (
+                                            <div
+                                                className='dice-container'
+                                                /* eslint-disable-next-line react/no-array-index-key */
+                                                key={`${dicelist.join()}${i}`}
                                             >
-                                                <option>?</option>
-                                                {dices.map(diceOption => (
-                                                    <option
-                                                        key={diceOption.name}
-                                                    >
-                                                        {diceOption.name}
-                                                    </option>
+                                                {dicelist.map((dice, j) => (
+                                                    <Dice
+                                                        /* eslint-disable-next-line react/no-array-index-key */
+                                                        key={`${dicelist.join()}-${dice}${j}`}
+                                                        dice={dice}
+                                                    />
                                                 ))}
-                                            </select>
+                                            </div>
                                         ))}
                                     </td>
                                     <td>
                                         <button
-                                            disabled={
-                                                activeEdit.diceList.length <= 1
-                                            }
+                                            type='button'
+                                            className='edit'
+                                            onClick={(): void => {
+                                                setActiveEdit({
+                                                    id: guide.id,
+                                                    type: guide.type,
+                                                    name: guide.name,
+                                                    diceList: guide.diceList,
+                                                    guide: guide.guide,
+                                                });
+                                            }}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faPencilAlt}
+                                            />
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button
                                             type='button'
                                             className='delete'
                                             onClick={(): void => {
-                                                activeEdit.diceList.splice(
-                                                    i,
-                                                    1
-                                                );
-                                                setActiveEdit({
-                                                    ...activeEdit,
+                                                setGuideToDelete(i);
+                                                dispatch({
+                                                    type: OPEN_POPUP,
+                                                    payload: 'confirm-delete',
                                                 });
                                             }}
                                         >
@@ -269,165 +418,10 @@ export default function updateDecksGuide(): JSX.Element {
                                     </td>
                                 </tr>
                             ))}
-                            <tr>
-                                <td>
-                                    <select
-                                        onChange={(evt): void => {
-                                            activeEdit.type = evt.target
-                                                .value as
-                                                | 'PvP'
-                                                | 'PvE'
-                                                | 'Crew';
-                                            setActiveEdit({
-                                                ...activeEdit,
-                                            });
-                                        }}
-                                    >
-                                        <option>PvP</option>
-                                        <option>PvE</option>
-                                        <option>Crew</option>
-                                    </select>
-                                </td>
-                                <td colSpan={2}>
-                                    <button
-                                        type='button'
-                                        className='add'
-                                        onClick={(): void => {
-                                            activeEdit.diceList.push(
-                                                Array(5).fill('?')
-                                            );
-                                            setActiveEdit({
-                                                ...activeEdit,
-                                            });
-                                        }}
-                                    >
-                                        <FontAwesomeIcon icon={faPlusCircle} />
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan={3}>
-                                    <div className='ckeditor-container'>
-                                        <CKEditor
-                                            editor={ClassicEditor}
-                                            data={activeEdit.guide}
-                                            config={{
-                                                removePlugins: ['Heading'],
-                                                toolbar: [
-                                                    'undo',
-                                                    'redo',
-                                                    '|',
-                                                    'bold',
-                                                    'italic',
-                                                    '|',
-                                                    'link',
-                                                    'mediaembed',
-                                                ],
-                                            }}
-                                            onChange={(
-                                                _: unknown,
-                                                editor: {
-                                                    getData: () => string;
-                                                }
-                                            ): void => {
-                                                activeEdit.guide = editor.getData();
-                                                setActiveEdit({
-                                                    ...activeEdit,
-                                                });
-                                            }}
-                                        />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan={3}>
-                                    <button
-                                        type='button'
-                                        className='submit'
-                                        disabled={invalidGuideName}
-                                        onClick={(): void => {
-                                            dispatch({
-                                                type: OPEN_POPUP,
-                                                payload: 'confirm-submit',
-                                            });
-                                        }}
-                                    >
-                                        <FontAwesomeIcon icon={faCheck} />
-                                    </button>
-                                    <button
-                                        type='button'
-                                        className='back'
-                                        onClick={(): void => {
-                                            dispatch({
-                                                type: OPEN_POPUP,
-                                                payload: 'confirm-discard',
-                                            });
-                                        }}
-                                    >
-                                        <FontAwesomeIcon icon={faUndo} />
-                                    </button>
-                                </td>
-                            </tr>
-                        </>
-                    ) : (
-                        guides.map((guide, i) => (
-                            <tr key={guide.name}>
-                                <td>{guide.type}</td>
-                                <td>{guide.name}</td>
-                                <td>
-                                    {guide.diceList.map(dicelist => (
-                                        <div
-                                            className='dice-container'
-                                            /* eslint-disable-next-line react/no-array-index-key */
-                                            key={`${dicelist.join()}${i}`}
-                                        >
-                                            {dicelist.map((dice, j) => (
-                                                <Dice
-                                                    /* eslint-disable-next-line react/no-array-index-key */
-                                                    key={`${dicelist.join()}-${dice}${j}`}
-                                                    dice={dice}
-                                                />
-                                            ))}
-                                        </div>
-                                    ))}
-                                </td>
-                                <td>
-                                    <button
-                                        type='button'
-                                        className='edit'
-                                        onClick={(): void => {
-                                            setActiveEdit({
-                                                id: guide.id,
-                                                type: guide.type,
-                                                name: guide.name,
-                                                diceList: guide.diceList,
-                                                guide: guide.guide,
-                                            });
-                                        }}
-                                    >
-                                        <FontAwesomeIcon icon={faPencilAlt} />
-                                    </button>
-                                </td>
-                                <td>
-                                    <button
-                                        type='button'
-                                        className='delete'
-                                        onClick={(): void => {
-                                            setGuideToDelete(i);
-                                            dispatch({
-                                                type: OPEN_POPUP,
-                                                payload: 'confirm-delete',
-                                            });
-                                        }}
-                                    >
-                                        <FontAwesomeIcon icon={faTrashAlt} />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </>
+            )}
         </Dashboard>
     );
 }
