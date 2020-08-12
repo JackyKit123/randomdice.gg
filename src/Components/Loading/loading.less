@@ -2,11 +2,11 @@
 
 @keyframes spin {
     from {
-        .transform(rotate(0deg));
+        .transform(scale(0.45) rotate(0deg));
     }
 
     to {
-        .transform(rotate(360deg));
+        .transform(scale(0.45) rotate(360deg));
     }
 }
 
@@ -16,6 +16,46 @@
     font-size: 160px;
     color: #6ba4a5;
     .animation(spin 900ms steps(10, end) infinite);
+}
+
+.loading-animation {
+    @keyframes spawnTime {
+        from {
+            .scale(0.1);
+        }
+
+        to {
+            .scale(1);
+        }
+    }
+    margin: 0 auto;
+    width: 135px;
+    height: 135px;
+    position: relative;
+    .animation(spawnTime 0.1s ease-out);
+
+    & > img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        &[alt='Clock'] {
+            .scale(0.55);
+        }
+
+        &[alt='ClockHand'] {
+            width: initial;
+            height: initial;
+            left: 51px;
+            top: 9px;
+            .animation(spin 900ms linear infinite);
+            .transform-origin(bottom);
+        }
+    }
 }
 
 .warning {

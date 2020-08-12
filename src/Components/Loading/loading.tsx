@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import './loading.less';
 
 export default function Loading(): JSX.Element {
@@ -18,7 +16,20 @@ export default function Loading(): JSX.Element {
                 <title>Loading...</title>
             </Helmet>
             <h3>Loading...</h3>
-            <FontAwesomeIcon className='loading' icon={faSpinner} />
+            <div className='loading-animation'>
+                <img
+                    src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FTime.png?alt=media&token=863fd294-d0b7-4af1-bcca-797ae50dcca2'
+                    alt='Time Dice'
+                />
+                <img
+                    src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FClock.png?alt=media&token=ebf5ec16-192d-4bde-b86c-c99d9f24ed3d'
+                    alt='Clock'
+                />
+                <img
+                    src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FClock%20Hand.png?alt=media&token=3f46eced-baf8-40a5-94a4-224e08a170d0'
+                    alt='ClockHand'
+                />
+            </div>
             {loadingTime >= 10 ? (
                 <h4 className='warning'>
                     You seem to be stuck loading.{' '}
