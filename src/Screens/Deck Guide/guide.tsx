@@ -54,6 +54,7 @@ export default function DeckGuideMenu(): JSX.Element | null {
                     <hr className='divisor' />
                     <ConvertEmbed htmlString={thisGuide?.guide || ''} />
                 </div>
+                <hr className='divisor' />
                 <SMshare name={`Decks Guide (${name})`} />
                 <button
                     type='button'
