@@ -23,6 +23,7 @@ export default function DeckGuideMenu(): JSX.Element {
         if (!guide.find(g => g.guide === 'ad')) {
             guide.splice(Math.min(Math.floor(guide.length / 2), 10), 0, {
                 id: -10,
+                type: 'PvP',
                 diceList: [],
                 guide: 'ad',
                 name: 'ad',
@@ -40,12 +41,17 @@ export default function DeckGuideMenu(): JSX.Element {
                         {guide.map(deck =>
                             deck.guide === 'ad' ? (
                                 <tr key='ad' className='ad'>
-                                    <td colSpan={2}>
+                                    <td colSpan={3}>
                                         <GoogleAds unitId='1144871846' />
                                     </td>
                                 </tr>
                             ) : (
                                 <tr key={deck.id}>
+                                    <td>
+                                        <Link to={`/decks/guide/${deck.name}`}>
+                                            <span>{deck.type}</span>
+                                        </Link>
+                                    </td>
                                     <td>
                                         <Link to={`/decks/guide/${deck.name}`}>
                                             <span>{deck.name}</span>
