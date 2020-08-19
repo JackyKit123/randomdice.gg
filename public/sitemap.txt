@@ -5,6 +5,7 @@ https://randomdice.gg/decks/crew
 https://randomdice.gg/critData
 https://randomdice.gg/decks/guide
 https://randomdice.gg/arenadraft
+https://randomdice.gg/youtube
 https://randomdice.gg/decks/guide/*
 https://randomdice.gg/calculator/speed
 https://randomdice.gg/calculator/combo
@@ -24,6 +25,7 @@ https://randomdice.gg/wiki/guide
 https://randomdice.gg/wiki/store
 https://randomdice.gg/wiki/box_guide
 https://randomdice.gg/about/us
+https://randomdice.gg/about/community
 https://randomdice.gg/about/credit
 https://randomdice.gg/about/privacy
 https://randomdice.gg/about/patreon

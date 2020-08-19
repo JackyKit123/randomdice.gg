@@ -10,8 +10,9 @@ export const FAIL = 'FETCH_PATREON_FAIL';
 
 export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
-interface Message {
+export interface Info {
     [key: string]: {
+        youtubeId: string | undefined;
         message: string;
     };
 }
@@ -23,7 +24,7 @@ export interface Patreon {
     tier: number;
 }
 
-type PatreonList = (Message & Patreon)[];
+export type PatreonList = (Info & Patreon)[];
 
 export interface FetchState {
     list: PatreonList | undefined;

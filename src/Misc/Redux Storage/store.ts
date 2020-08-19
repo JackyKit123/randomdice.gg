@@ -11,7 +11,8 @@ import fetchPatreonListReducer from './Fetch Firebase/Patreon List/reducer';
 import authReducer from './Firebase Auth/reducer';
 import popupReducer from './PopUp Overlay/reducer';
 import filterReducer from './Deck Filter/reducer';
-import fetchGAPIresponseFormReducer from './Google API Fetch Response Form/reducers';
+import fetchGAPIresponseFormReducer from './Google API/Google Form/reducer';
+import fetchGAPIyoutubeChannelsReducer from './Google API/Youtube Channels/reducer';
 
 const rootReducer = combineReducers({
     fetchDecksReducer,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
     authReducer,
     popupReducer,
     fetchGAPIresponseFormReducer,
+    fetchGAPIyoutubeChannelsReducer,
 });
 export type RootState = ReturnType<typeof rootReducer>;
 export const store = createStore(

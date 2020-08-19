@@ -375,6 +375,7 @@ export const fetchPatreon = functions.pubsub
             } & {
                 [key: string]: {
                     message: string;
+                    youtubeId: string | undefined;
                 };
             };
 
@@ -445,6 +446,7 @@ export const fetchPatreon = functions.pubsub
                             patreonList[i][uid] = {
                                 message:
                                     prevPatreonProfile?.[uid].message || '',
+                                youtubeId: prevPatreonProfile?.[uid].youtubeId,
                             };
                             if (
                                 patreonList[i].name !==

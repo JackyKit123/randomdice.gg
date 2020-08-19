@@ -1,0 +1,82 @@
+@import '../../cross_import_lesshat.less';
+
+.youtube .content {
+    p > button {
+        display: inline-block;
+    }
+
+    .popup {
+        text-align: center;
+
+        input {
+            width: 100%;
+            display: block;
+            font-size: 25px;
+            font-weight: 200;
+            background-color: #6ba4a5;
+            .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+            border: 0;
+            border-radius: 3px;
+            padding: 2px 4px;
+            vertical-align: middle;
+        }
+
+        button {
+            margin: 10px;
+            display: inline-block;
+        }
+    }
+
+    .block {
+        & > div {
+            text-align: center;
+            margin: 15px 0;
+
+            & > a {
+                line-height: 30px;
+                font-size: 24px;
+
+                & > figure {
+                    display: inline-block;
+                    margin-left: 20px;
+                    border-radius: 50%;
+                    .box-shadow(0 0 5px 5px rgba(0, 0, 0, 0.3));
+                    overflow: hidden;
+                    height: 100px;
+                    width: 100px;
+                    vertical-align: middle;
+
+                    @media @mobile {
+                        display: block;
+                        margin: 10px auto;
+                    }
+
+                    & > img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        figure {
+            max-height: 300px;
+            overflow: auto;
+
+            img {
+                width: 100%;
+
+                @media @mobile {
+                    &.desktop {
+                        display: none;
+                    }
+                }
+
+                @media @desktop {
+                    &.mobile {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}

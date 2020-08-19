@@ -29,6 +29,7 @@ async function fetch(
     errorAction: ActionType,
     dbPath: string,
     localStorageKey: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<void> {
     // apply local storage cache before fetching database
     const localCache = localStorage.getItem(localStorageKey);

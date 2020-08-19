@@ -14,8 +14,8 @@ import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
-import fetchResponseForm from '../../Misc/Redux Storage/Google API Fetch Response Form/fetchData';
-import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Google API Fetch Response Form/types';
+import { fetchResponseForm } from '../../Misc/Redux Storage/Google API/fetchData';
+import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Google API/Google Form/types';
 import './crit.less';
 import ShareButtons from '../../Components/Social Media Share/share';
 

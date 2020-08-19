@@ -60,6 +60,9 @@
                 "$uid": {
                     "message": {
                         ".write": "auth.uid === $uid"
+                    },
+                    "youtubeId": {
+                        ".write": "auth.uid === $uid"
                     }
                 }
             }

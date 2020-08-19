@@ -7,7 +7,7 @@ import Header from './Header & Footer/header';
 import Footer from './Header & Footer/footer';
 import mapRouter from './Router/router';
 import * as ga from '../Misc/customGaEvent';
-import fetchResponseForm from '../Misc/Redux Storage/Google API Fetch Response Form/fetchData';
+import loadGAPI from '../Misc/Redux Storage/Google API/init';
 import fetchFirebase from '../Misc/Firebase/fetchData';
 import { authStateDispatch } from '../Misc/Firebase/auth';
 import { menu } from '../Misc/menuConfig';
@@ -18,7 +18,7 @@ export default function App(): JSX.Element {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchResponseForm(dispatch, true);
+        loadGAPI(dispatch);
         fetchFirebase(dispatch);
         authStateDispatch(dispatch);
         ga.installEvent.mountListener();

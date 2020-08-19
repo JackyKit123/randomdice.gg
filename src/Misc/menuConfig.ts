@@ -53,6 +53,11 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Arena/arenadraft')),
             },
             {
+                name: 'YouTube Channels',
+                path: '/youtube',
+                component: lazy(() => import('../Screens/YoutubeListing/yt')),
+            },
+            {
                 path: '/decks/guide/:name',
                 excludeFromMenu: true,
                 component: lazy(() => import('../Screens/Deck Guide/guide')),
