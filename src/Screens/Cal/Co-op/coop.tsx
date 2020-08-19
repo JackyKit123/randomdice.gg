@@ -76,10 +76,7 @@ export default function GoldCalculator(): JSX.Element {
         invalidDiamondRelationship ||
         isInvalidWave;
 
-    const minutesPerRun =
-        filter.targetWave > 60
-            ? (filter.targetWave - 60) / 2 + 20 + 1
-            : filter.targetWave / 3 + 1;
+    const minutesPerRun = filter.targetWave / 3.333 + 1;
     const cardsPerRun =
         filter.targetWave > 50
             ? (filter.targetWave - 50) * 3 + 50
@@ -149,18 +146,15 @@ export default function GoldCalculator(): JSX.Element {
                     .map(
                         ([wave, mode]) =>
                             `${mode} wave ${wave} run(${Math.round(
-                                (Number(wave) > 60
-                                    ? (Number(wave) - 60) / 2 + 20
-                                    : Number(wave) / 3) * 100
+                                (Number(wave) / 3.333) * 100
                             ) / 100} mins)`
                     )
                     .join(', ')}
                 . You can also enter a custom target wave goal.
             </p>
             <p>
-                Keep in mind that the calculator assume average 20 seconds per
-                wave for wave 1 - 60. Then average 30 seconds per wave beyond
-                wave 60. And extra 60 seconds between every games.
+                Keep in mind that the calculator assumes in average
+                approximation of 18 seconds per wave.
             </p>
             <hr className='divisor' />
             <section className='filter'>
