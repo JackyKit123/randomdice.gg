@@ -20,19 +20,23 @@ export default function CommunityListing(): JSX.Element {
         {
             name: 'Main Discord',
             url: 'https://discord.gg/randomdice',
-            serverId: 717500464975052883,
+            serverId: '717500464975052883',
         },
         {
             name: 'Portuguese Discord',
             url: 'https://discord.gg/262YzUq',
-            serverID: 685228114649153536,
+            serverId: '685228114649153536',
         },
         {
             name: 'Spanish Discord',
             url: 'https://discord.gg/77NjNAd',
-            serverID: 683850754662072328,
+            serverId: '683850754662072328',
         },
-    ];
+    ] as {
+        name: string;
+        url: string;
+        serverId: string;
+    }[];
 
     return (
         <Main title='Community' className='community'>
@@ -43,7 +47,7 @@ export default function CommunityListing(): JSX.Element {
             </p>
             <hr className='divisor' />
             {discordCommunities.map(community => (
-                <div key={community.serverID} className='block'>
+                <div key={community.serverId} className='block'>
                     <h3>
                         <a
                             href={community.url}
