@@ -173,6 +173,13 @@ export const menu: Menu[] = [
                 ),
             },
             {
+                name: 'Community',
+                path: '/about/community',
+                component: lazy(() =>
+                    import('../Screens/About/Community/community')
+                ),
+            },
+            {
                 name: 'Credit',
                 path: '/about/credit',
                 component: lazy(() => import('../Screens/About/Credit/credit')),
