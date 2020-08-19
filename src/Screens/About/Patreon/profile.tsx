@@ -33,9 +33,9 @@ export default function PatreonProfile(): JSX.Element {
     const [editing, setEditing] = useState(false);
     const [content, setContent] = useState('');
     const [submitLoading, setSubmitLoading] = useState(false);
+    const user = firebase.auth().currentUser;
 
     useEffect(() => {
-        const user = firebase.auth().currentUser;
         if (list && user) {
             const patreon = list.find(
                 patron =>
@@ -45,7 +45,7 @@ export default function PatreonProfile(): JSX.Element {
             );
             setIsPatreonPageOwner(Boolean(patreon));
         }
-    }, [list]);
+    }, [list, user]);
 
     let jsx;
     if (list) {
