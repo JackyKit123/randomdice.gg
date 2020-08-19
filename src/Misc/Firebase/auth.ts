@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import firebase from 'firebase/app';
 import axios from 'axios';
-import { Dispatch } from 'react';
+import { useDispatch } from 'react-redux';
 import initApp from './init';
-import { AUTH, Action, ERROR } from '../Redux Storage/Firebase Auth/types';
+import { AUTH, ERROR } from '../Redux Storage/Firebase Auth/types';
 import * as ga from '../customGaEvent';
 import { fetchUser } from './fetchData';
 
@@ -18,7 +18,9 @@ export function logout(): void {
     auth.signOut();
 }
 
-export function authStateDispatch(dispatch: Dispatch<Action>): void {
+export function authStateDispatch(
+    dispatch: ReturnType<typeof useDispatch>
+): void {
     auth.onAuthStateChanged(userAuth => {
         if (userAuth && userAuth.emailVerified) {
             fetchUser(dispatch as never, userAuth.uid);
@@ -36,7 +38,7 @@ async function oauth(
     endPoint: string,
     scope: string[],
     callbackStorage: string,
-    dispatch: Dispatch<Action>,
+    dispatch: ReturnType<typeof useDispatch>,
     provider: string,
     linkAccount: boolean
 ): Promise<void> {
@@ -126,7 +128,10 @@ async function oauth(
     }
 }
 
-export function discord(dispatch: Dispatch<Action>, linkAccount = false): void {
+export function discord(
+    dispatch: ReturnType<typeof useDispatch>,
+    linkAccount = false
+): void {
     oauth(
         'https://discord.com/api/oauth2/authorize',
         process.env.REACT_APP_DISCORD_CLIENT_ID as string,
@@ -140,7 +145,7 @@ export function discord(dispatch: Dispatch<Action>, linkAccount = false): void {
 }
 
 export async function patreon(
-    dispatch: Dispatch<Action>,
+    dispatch: ReturnType<typeof useDispatch>,
     linkAccount = false
 ): Promise<void> {
     oauth(

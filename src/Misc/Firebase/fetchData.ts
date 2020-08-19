@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import { Dispatch } from 'redux';
+import { useDispatch } from 'react-redux';
 import initApp from './init';
 import * as FETCH_DICES from '../Redux Storage/Fetch Firebase/Dices/types';
 import * as FETCH_DECKS from '../Redux Storage/Fetch Firebase/Decks/types';
@@ -24,7 +24,7 @@ type ActionType =
     | FETCH_PATREON.ActionType;
 
 async function fetch(
-    dispatch: Dispatch,
+    dispatch: ReturnType<typeof useDispatch>,
     successAction: ActionType,
     errorAction: ActionType,
     dbPath: string,
@@ -80,20 +80,20 @@ async function fetch(
     }
 }
 
-export function fetchDecks(dispatch: Dispatch<FETCH_DICES.Action>): void {
+export function fetchDecks(dispatch: ReturnType<typeof useDispatch>): void {
     fetch(dispatch, FETCH_DECKS.SUCCESS, FETCH_DECKS.FAIL, '/decks', 'decks');
 }
 
-export function fetchDices(dispatch: Dispatch<FETCH_DECKS.Action>): void {
+export function fetchDices(dispatch: ReturnType<typeof useDispatch>): void {
     fetch(dispatch, FETCH_DICES.SUCCESS, FETCH_DICES.FAIL, '/dice', 'dices');
 }
 
-export function fetchWiki(dispatch: Dispatch<FETCH_WIKI.Action>): void {
+export function fetchWiki(dispatch: ReturnType<typeof useDispatch>): void {
     fetch(dispatch, FETCH_WIKI.SUCCESS, FETCH_WIKI.FAIL, '/wiki', 'wiki');
 }
 
 export function fetchDecksGuide(
-    dispatch: Dispatch<FETCH_DECKS_GUIDE.Action>
+    dispatch: ReturnType<typeof useDispatch>
 ): void {
     fetch(
         dispatch,
@@ -104,7 +104,7 @@ export function fetchDecksGuide(
     );
 }
 
-export function fetchCredit(dispatch: Dispatch<FETCH_CREDIT.Action>): void {
+export function fetchCredit(dispatch: ReturnType<typeof useDispatch>): void {
     fetch(
         dispatch,
         FETCH_CREDIT.SUCCESS,
@@ -115,7 +115,7 @@ export function fetchCredit(dispatch: Dispatch<FETCH_CREDIT.Action>): void {
 }
 
 export function fetchUser(
-    dispatch: Dispatch<FETCH_USER.Action>,
+    dispatch: ReturnType<typeof useDispatch>,
     uid: string
 ): void {
     fetch(
@@ -127,11 +127,11 @@ export function fetchUser(
     );
 }
 
-export function fetchNews(dispatch: Dispatch<FETCH_NEWS.Action>): void {
+export function fetchNews(dispatch: ReturnType<typeof useDispatch>): void {
     fetch(dispatch, FETCH_NEWS.SUCCESS, FETCH_NEWS.FAIL, '/news', 'news');
 }
 
-export function fetchPatreon(dispatch: Dispatch<FETCH_PATREON.Action>): void {
+export function fetchPatreon(dispatch: ReturnType<typeof useDispatch>): void {
     fetch(
         dispatch,
         FETCH_PATREON.SUCCESS,
@@ -141,7 +141,9 @@ export function fetchPatreon(dispatch: Dispatch<FETCH_PATREON.Action>): void {
     );
 }
 
-export default function fetchAll(dispatch: Dispatch): void {
+export default function fetchAll(
+    dispatch: ReturnType<typeof useDispatch>
+): void {
     fetchDecks(dispatch);
     fetchDecksGuide(dispatch);
     fetchDices(dispatch);
