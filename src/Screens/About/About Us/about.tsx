@@ -42,8 +42,16 @@ export default function AboutUs(): JSX.Element {
                 or you can ping me on Discord.
             </p>
             <p>
-                My discord tag is JackyKit#0333. You can find me and play games
-                with me. I am also a fan of Random Dice!
+                My discord tag is{' '}
+                <a
+                    href='https://discordapp.com/users/195174308052467712'
+                    target='_blank'
+                    rel='noopener noreferrer'
+                >
+                    JackyKit#0333
+                </a>
+                . You can find me and play games with me. I am also a fan of
+                Random Dice!
             </p>
             <p>
                 Lastly, this website runs off my personal pocket, it costs me

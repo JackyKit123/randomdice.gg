@@ -65,7 +65,15 @@ export default function Homepage(): JSX.Element {
                         Reddit
                     </a>
                     . If you find any issues, please contact the webmaster
-                    through Discord on JackyKit#0333 or by emailing{' '}
+                    through Discord on{' '}
+                    <a
+                        href='https://discordapp.com/users/195174308052467712'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >
+                        JackyKit#0333
+                    </a>{' '}
+                    or by emailing{' '}
                     <a href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}>
                         {`admin@${process.env.REACT_APP_DOMAIN}`}
                     </a>{' '}
