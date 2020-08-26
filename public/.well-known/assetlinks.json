@@ -1,0 +1,14 @@
+[
+      {
+            "relation": [
+                  "delegate_permission/common.handle_all_urls"
+            ],
+            "target": {
+                  "namespace": "android_app",
+                  "package_name": "gg.randomdice.twa",
+                  "sha256_cert_fingerprints": [
+                        "FE:17:C4:F3:69:F2:6F:0A:07:CB:1F:8B:BE:8D:1C:48:89:5E:9C:5A:43:94:42:07:12:4E:6E:0B:D9:B5:D8:97"
+                  ]
+            }
+      }
+]

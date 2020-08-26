@@ -31,3 +31,6 @@ yarn-error.log*
 
 # firebase
 /.firebase
+
+# Google Play App Key
+/.key
