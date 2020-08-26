@@ -40,6 +40,7 @@ export default function SpeedCalculator(): JSX.Element {
             class: 7,
             level: 1,
             sign: 1,
+            count: 0,
             pip: 0,
         },
     });
@@ -72,11 +73,12 @@ export default function SpeedCalculator(): JSX.Element {
         );
         const sandSlow = filter.sand.enable ? 40 : 0;
         const flowSpeed = Math.max(
-            (data.flow.cupEff1 * (filter.flow.class - 7) +
-                data.flow.pupEff1 * (filter.flow.level - 1) +
-                +data.flow.eff1) *
-                filter.flow.pip *
-                filter.flow.sign,
+            (data.flow.cupEff1 * (filter.flow.class - 7) + data.flow.eff1) *
+                filter.flow.pip +
+                data.flow.pupEff1 *
+                    (filter.flow.level - 1) *
+                    filter.flow.count *
+                    filter.flow.sign,
             -40
         );
         const totalSlow = Math.max(
@@ -85,6 +87,9 @@ export default function SpeedCalculator(): JSX.Element {
         );
 
         const invalidFlowPip = filter.flow.pip < 0 || filter.flow.pip > 105;
+        const invalidFlowCount =
+            filter.flow.pip / 7 > filter.flow.count ||
+            filter.flow.pip < filter.flow.count;
 
         jsx = (
             <>
@@ -289,6 +294,37 @@ export default function SpeedCalculator(): JSX.Element {
                                 }}
                             />
                         </label>
+                        <label htmlFor='flow-counter'>
+                            <span>Total Numbers of Flow dice:</span>
+                            <select
+                                className={invalidFlowCount ? 'invalid' : ''}
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.flow.count = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+                        </label>
                     </div>
                     <div className='dice-container'>
                         <Dice dice='Sand Swamp' />
@@ -378,6 +414,15 @@ export default function SpeedCalculator(): JSX.Element {
                             <strong>0-105.</strong>
                         </span>
                     ) : null}
+                    {invalidFlowCount ? (
+                        <span className='invalid-warning'>
+                            The number of flow dice should be at{' '}
+                            {filter.flow.pip < filter.flow.count
+                                ? `most ${filter.flow.pip} `
+                                : `least ${Math.ceil(filter.flow.pip / 7)} `}
+                            for {filter.flow.pip} pips of flow.
+                        </span>
+                    ) : null}
                 </form>
                 <hr className='divisor' />
                 <GoogleAds unitId='1144871846' />
@@ -398,10 +443,14 @@ export default function SpeedCalculator(): JSX.Element {
                     <label htmlFor='result'>
                         <span>Speed Effect of Flow:</span>
                         <input
-                            className={invalidFlowPip ? 'invalid' : ''}
+                            className={
+                                invalidFlowPip || invalidFlowCount
+                                    ? 'invalid'
+                                    : ''
+                            }
                             type='textbox'
                             value={
-                                invalidFlowPip
+                                invalidFlowPip || invalidFlowCount
                                     ? 'Check Input'
                                     : `${flowSpeed * filter.flow.sign}%`
                             }
@@ -411,10 +460,14 @@ export default function SpeedCalculator(): JSX.Element {
                     <label htmlFor='result'>
                         <span>Mob Speed:</span>
                         <input
-                            className={invalidFlowPip ? 'invalid' : ''}
+                            className={
+                                invalidFlowPip || invalidFlowCount
+                                    ? 'invalid'
+                                    : ''
+                            }
                             type='textbox'
                             value={
-                                invalidFlowPip
+                                invalidFlowPip || invalidFlowCount
                                     ? 'Check Input'
                                     : `${totalSlow > 0 ? '+' : ''}${totalSlow}%`
                             }
