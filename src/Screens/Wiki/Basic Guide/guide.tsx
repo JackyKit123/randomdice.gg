@@ -16,6 +16,7 @@ import { WikiContent } from '../../../Misc/Redux Storage/Fetch Firebase/Wiki/typ
 import replaceAnchorWithHistory from '../../../Misc/HTMLAnchorNavigation';
 import PopUp from '../../../Components/PopUp Overlay/popup';
 import { OPEN_POPUP } from '../../../Misc/Redux Storage/PopUp Overlay/types';
+import ShareButtons from '../../../Components/Social Media Share/share';
 
 export default function Basic(): JSX.Element {
     const dispatch = useDispatch();
@@ -51,6 +52,7 @@ export default function Basic(): JSX.Element {
                 {tips.map(tip => (
                     <PopUp key={tip.id} popUpTarget={`guide-img-${tip.id}`}>
                         <img src={tip.img} alt='Tip and trick' />
+                        <ShareButtons name='' url={tip.img} />
                     </PopUp>
                 ))}
                 <p>

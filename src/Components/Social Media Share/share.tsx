@@ -17,7 +17,11 @@ import { OPEN_POPUP } from '../../Misc/Redux Storage/PopUp Overlay/types';
 
 import PopUp from '../PopUp Overlay/popup';
 
-export default function ShareButtons({ name }: { name: string }): JSX.Element {
+export default function ShareButtons(props: {
+    name: string;
+    url?: string;
+}): JSX.Element {
+    const { name, url } = props;
     const dispatch = useDispatch();
     return (
         <div className='share'>
@@ -27,7 +31,7 @@ export default function ShareButtons({ name }: { name: string }): JSX.Element {
             </PopUp>
             <h4>Share This</h4>
             <FacebookShareButton
-                url={window.location.href}
+                url={url || window.location.href}
                 quote={name}
                 onClick={(): void => {
                     ga.share();
@@ -36,7 +40,7 @@ export default function ShareButtons({ name }: { name: string }): JSX.Element {
                 <FacebookIcon round />
             </FacebookShareButton>
             <TwitterShareButton
-                url={window.location.href}
+                url={url || window.location.href}
                 title={name}
                 onClick={(): void => {
                     ga.share();
@@ -45,7 +49,7 @@ export default function ShareButtons({ name }: { name: string }): JSX.Element {
                 <TwitterIcon round />
             </TwitterShareButton>
             <RedditShareButton
-                url={window.location.href}
+                url={url || window.location.href}
                 title={name}
                 onClick={(): void => {
                     ga.share();
@@ -61,14 +65,14 @@ export default function ShareButtons({ name }: { name: string }): JSX.Element {
                     ga.share();
                     if (navigator.share === undefined) {
                         await navigator.clipboard.writeText(
-                            window.location.href
+                            url || window.location.href
                         );
                         dispatch({ type: OPEN_POPUP, payload: 'copied' });
                     } else {
                         navigator.share({
                             title: name,
                             text: name,
-                            url: window.location.href,
+                            url: url || window.location.href,
                         });
                     }
                 }}
