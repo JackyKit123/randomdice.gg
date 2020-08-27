@@ -31,10 +31,10 @@ export default function DpsCalculator(): JSX.Element {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [filter, setFilter] = useState({
+        electricClass: 1,
         windClass: 1,
         ironClass: 1,
         brokenClass: 1,
-        electricClass: 1,
         gambleClass: 1,
         arrowClass: 3,
         mwindClass: 5,
@@ -71,8 +71,8 @@ export default function DpsCalculator(): JSX.Element {
     const invalidInput = isInvalidCrit;
 
     const data = {
-        wind: dices?.find(dice => dice.name === 'Wind'),
         electric: dices?.find(dice => dice.name === 'Electric'),
+        wind: dices?.find(dice => dice.name === 'Wind'),
         iron: dices?.find(dice => dice.name === 'Iron'),
         broken: dices?.find(dice => dice.name === 'Broken'),
         gamble: dices?.find(dice => dice.name === 'Gamble'),
@@ -180,21 +180,6 @@ export default function DpsCalculator(): JSX.Element {
             return buffedSpd <= 0.01 ? 0.01 : buffedSpd;
         };
 
-        const windDps = (level = filter.level): number => {
-            const windSpdBuff =
-                1 +
-                (data.wind.eff1 +
-                    data.wind.pupEff1 * (level - 1) +
-                    data.wind.cupEff1 * (filter.windClass - 1)) /
-                    100;
-            const dpsPerPip =
-                (baseAtkDmg(data.wind, filter.windClass, level) /
-                    (atkSpd(data.wind) / windSpdBuff)) *
-                critMultiplier;
-            const dps = dpsPerPip * filter.pip;
-            return invalidInput ? 0 : roundTo3Sf(dps);
-        };
-
         const electricDps = (boss = false, level = filter.level): number => {
             const basicDpsPerPip =
                 (baseAtkDmg(data.electric, filter.electricClass, level) /
@@ -210,6 +195,21 @@ export default function DpsCalculator(): JSX.Element {
                 ? (basicDpsPerPip + lightingDPSPerPip) * filter.pip
                 : (basicDpsPerPip + lightingDPSPerPip * (0.7 + 0.3 + 0.3)) *
                   filter.pip;
+            return invalidInput ? 0 : roundTo3Sf(dps);
+        };
+
+        const windDps = (level = filter.level): number => {
+            const windSpdBuff =
+                1 +
+                (data.wind.eff1 +
+                    data.wind.pupEff1 * (level - 1) +
+                    data.wind.cupEff1 * (filter.windClass - 1)) /
+                    100;
+            const dpsPerPip =
+                (baseAtkDmg(data.wind, filter.windClass, level) /
+                    (atkSpd(data.wind) / windSpdBuff)) *
+                critMultiplier;
+            const dps = dpsPerPip * filter.pip;
             return invalidInput ? 0 : roundTo3Sf(dps);
         };
 
@@ -318,8 +318,9 @@ export default function DpsCalculator(): JSX.Element {
         const maxDps = invalidInput
             ? 1000
             : Math.max(
-                  windDps(5),
                   electricDps(false, 5),
+                  windDps(5),
+
                   ironDps(true, 5),
                   brokenDps(5),
                   gambleDps(5),
@@ -353,41 +354,6 @@ export default function DpsCalculator(): JSX.Element {
                 <h3>DPS Dice</h3>
                 <div className='multiple-dice'>
                     <div className='dice-container'>
-                        <Dice dice='Wind' />
-                        <h3 className='desc'>{data.wind.desc}</h3>
-                        <form
-                            className='filter'
-                            onSubmit={(evt): void => evt.preventDefault()}
-                        >
-                            <label htmlFor='class'>
-                                <span>Class :</span>
-                                <select
-                                    name='class'
-                                    defaultValue={filter.windClass}
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.windClass = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    {Array(15)
-                                        .fill('')
-                                        .map((_, i) => (
-                                            // eslint-disable-next-line react/no-array-index-key
-                                            <option key={`wind-${i}`}>
-                                                {i + 1}
-                                            </option>
-                                        ))}
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                    <div className='dice-container'>
                         <Dice dice='Electric' />
                         <h3 className='desc'>{data.electric.desc}</h3>
                         <form
@@ -415,6 +381,41 @@ export default function DpsCalculator(): JSX.Element {
                                         .map((_, i) => (
                                             // eslint-disable-next-line react/no-array-index-key
                                             <option key={`electric-${i}`}>
+                                                {i + 1}
+                                            </option>
+                                        ))}
+                                </select>
+                            </label>
+                        </form>
+                    </div>
+                    <div className='dice-container'>
+                        <Dice dice='Wind' />
+                        <h3 className='desc'>{data.wind.desc}</h3>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
+                            <label htmlFor='class'>
+                                <span>Class :</span>
+                                <select
+                                    name='class'
+                                    defaultValue={filter.windClass}
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.windClass = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    {Array(15)
+                                        .fill('')
+                                        .map((_, i) => (
+                                            // eslint-disable-next-line react/no-array-index-key
+                                            <option key={`wind-${i}`}>
                                                 {i + 1}
                                             </option>
                                         ))}
@@ -1072,15 +1073,6 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='wave-dmg'>
                         <h4>DPS on wave :</h4>
                         <label htmlFor='result'>
-                            <span className='dice-name'>Wind</span>
-                            <input
-                                type='textbox'
-                                className={invalidInput ? 'invalid' : ''}
-                                value={invalidInput ? 'Check Input' : windDps()}
-                                disabled
-                            />
-                        </label>
-                        <label htmlFor='result'>
                             <span className='dice-name'>Electric</span>
                             <input
                                 type='textbox'
@@ -1088,6 +1080,15 @@ export default function DpsCalculator(): JSX.Element {
                                 value={
                                     invalidInput ? 'Check Input' : electricDps()
                                 }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Wind</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={invalidInput ? 'Check Input' : windDps()}
                                 disabled
                             />
                         </label>
@@ -1170,15 +1171,6 @@ export default function DpsCalculator(): JSX.Element {
                     <div className='boss-dmg'>
                         <h4>DPS on boss :</h4>
                         <label htmlFor='result'>
-                            <span className='dice-name'>Wind</span>
-                            <input
-                                type='textbox'
-                                className={invalidInput ? 'invalid' : ''}
-                                value={invalidInput ? 'Check Input' : windDps()}
-                                disabled
-                            />
-                        </label>
-                        <label htmlFor='result'>
                             <span className='dice-name'>Electric</span>
                             <input
                                 type='textbox'
@@ -1188,6 +1180,15 @@ export default function DpsCalculator(): JSX.Element {
                                         ? 'Check Input'
                                         : electricDps(true)
                                 }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Wind</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={invalidInput ? 'Check Input' : windDps()}
                                 disabled
                             />
                         </label>
@@ -1336,19 +1337,19 @@ export default function DpsCalculator(): JSX.Element {
                             name='No Buff'
                             samples={4}
                             style={{
-                                data: { stroke: '#a9efe6', strokeWidth: 1 },
-                            }}
-                            y={(d: { x: number }): number => windDps(d.x)}
-                        />
-                        <VictoryLine
-                            name='No Buff'
-                            samples={4}
-                            style={{
                                 data: { stroke: '#f9b912', strokeWidth: 1 },
                             }}
                             y={(d: { x: number }): number =>
                                 electricDps(false, d.x)
                             }
+                        />
+                        <VictoryLine
+                            name='No Buff'
+                            samples={4}
+                            style={{
+                                data: { stroke: '#a9efe6', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number => windDps(d.x)}
                         />
                         <VictoryLine
                             name='No Buff'
@@ -1430,7 +1431,7 @@ export default function DpsCalculator(): JSX.Element {
                             ]}
                             data={[
                                 { name: 'Modified Electric' },
-                                { name: 'Eletric' },
+                                { name: 'Electric' },
                                 { name: 'Iron' },
                                 { name: 'Broken' },
                                 { name: 'Gamble' },
@@ -1498,19 +1499,19 @@ export default function DpsCalculator(): JSX.Element {
                             name='No Buff'
                             samples={4}
                             style={{
-                                data: { stroke: '#a9efe6', strokeWidth: 1 },
-                            }}
-                            y={(d: { x: number }): number => windDps(d.x)}
-                        />
-                        <VictoryLine
-                            name='No Buff'
-                            samples={4}
-                            style={{
                                 data: { stroke: '#f9b912', strokeWidth: 1 },
                             }}
                             y={(d: { x: number }): number =>
                                 electricDps(true, d.x)
                             }
+                        />
+                        <VictoryLine
+                            name='No Buff'
+                            samples={4}
+                            style={{
+                                data: { stroke: '#a9efe6', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number => windDps(d.x)}
                         />
                         <VictoryLine
                             name='No Buff'
@@ -1590,7 +1591,7 @@ export default function DpsCalculator(): JSX.Element {
                             ]}
                             data={[
                                 { name: 'Modified Electric' },
-                                { name: 'Eletric' },
+                                { name: 'Electric' },
                                 { name: 'Iron' },
                                 { name: 'Broken' },
                                 { name: 'Gamble' },
