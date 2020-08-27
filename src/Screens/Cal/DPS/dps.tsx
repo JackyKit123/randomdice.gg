@@ -224,8 +224,8 @@ export default function DpsCalculator(): JSX.Element {
 
         const brokenDps = (level = filter.level): number => {
             const dpsPerPip =
-                (baseAtkDmg(data.iron, filter.ironClass, level) /
-                    atkSpd(data.iron)) *
+                (baseAtkDmg(data.broken, filter.brokenClass, level) /
+                    atkSpd(data.broken)) *
                 critMultiplier;
             const dps = dpsPerPip * filter.pip;
             return invalidInput ? 0 : roundTo3Sf(dps);
