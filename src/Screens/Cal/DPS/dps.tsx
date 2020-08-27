@@ -1334,7 +1334,6 @@ export default function DpsCalculator(): JSX.Element {
                             }}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#f9b912', strokeWidth: 1 },
@@ -1344,7 +1343,6 @@ export default function DpsCalculator(): JSX.Element {
                             }
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#a9efe6', strokeWidth: 1 },
@@ -1352,7 +1350,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => windDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#898989', strokeWidth: 1 },
@@ -1362,7 +1359,6 @@ export default function DpsCalculator(): JSX.Element {
                             }
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#9f0ff4', strokeWidth: 1 },
@@ -1370,7 +1366,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => brokenDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#6f25d6', strokeWidth: 1 },
@@ -1378,7 +1373,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => gambleDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#fa762c', strokeWidth: 1 },
@@ -1386,7 +1380,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => arrowDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#22e7e3', strokeWidth: 1 },
@@ -1394,7 +1387,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => mwindDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#f8390f', strokeWidth: 1 },
@@ -1404,7 +1396,6 @@ export default function DpsCalculator(): JSX.Element {
                             }
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#061b1c', strokeWidth: 1 },
@@ -1496,7 +1487,6 @@ export default function DpsCalculator(): JSX.Element {
                             }}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#f9b912', strokeWidth: 1 },
@@ -1506,7 +1496,6 @@ export default function DpsCalculator(): JSX.Element {
                             }
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#a9efe6', strokeWidth: 1 },
@@ -1514,7 +1503,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => windDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#898989', strokeWidth: 1 },
@@ -1522,7 +1510,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => ironDps(true, d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#9f0ff4', strokeWidth: 1 },
@@ -1530,7 +1517,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => brokenDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#6f25d6', strokeWidth: 1 },
@@ -1538,7 +1524,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => gambleDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#fa762c', strokeWidth: 1 },
@@ -1546,7 +1531,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => arrowDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#22e7e3', strokeWidth: 1 },
@@ -1554,7 +1538,6 @@ export default function DpsCalculator(): JSX.Element {
                             y={(d: { x: number }): number => mwindDps(d.x)}
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#f8390f', strokeWidth: 1 },
@@ -1564,7 +1547,6 @@ export default function DpsCalculator(): JSX.Element {
                             }
                         />
                         <VictoryLine
-                            name='No Buff'
                             samples={4}
                             style={{
                                 data: { stroke: '#061b1c', strokeWidth: 1 },
