@@ -33,6 +33,7 @@ export default function DpsCalculator(): JSX.Element {
     const [filter, setFilter] = useState({
         windClass: 1,
         ironClass: 1,
+        brokenClass: 1,
         electricClass: 1,
         gambleClass: 1,
         arrowClass: 3,
@@ -73,6 +74,7 @@ export default function DpsCalculator(): JSX.Element {
         wind: dices?.find(dice => dice.name === 'Wind'),
         electric: dices?.find(dice => dice.name === 'Electric'),
         iron: dices?.find(dice => dice.name === 'Iron'),
+        broken: dices?.find(dice => dice.name === 'Broken'),
         gamble: dices?.find(dice => dice.name === 'Gamble'),
         arrow: dices?.find(dice => dice.name === 'Arrow'),
         mwind: dices?.find(dice => dice.name === 'Mighty Wind'),
@@ -220,8 +222,16 @@ export default function DpsCalculator(): JSX.Element {
             return invalidInput ? 0 : roundTo3Sf(boss ? dps * 2 : dps);
         };
 
+        const brokenDps = (level = filter.level): number => {
+            const dpsPerPip =
+                (baseAtkDmg(data.iron, filter.ironClass, level) /
+                    atkSpd(data.iron)) *
+                critMultiplier;
+            const dps = dpsPerPip * filter.pip;
+            return invalidInput ? 0 : roundTo3Sf(dps);
+        };
+
         const gambleDps = (level = filter.level): number => {
-            data.gamble.atk = 7;
             const dpsPerPip =
                 (baseAtkDmg(data.gamble, filter.gambleClass, level) *
                     critMultiplier +
@@ -309,7 +319,9 @@ export default function DpsCalculator(): JSX.Element {
             ? 1000
             : Math.max(
                   windDps(5),
+                  electricDps(false, 5),
                   ironDps(true, 5),
+                  brokenDps(5),
                   gambleDps(5),
                   arrowDps(5),
                   mwindDps(5),
@@ -437,6 +449,40 @@ export default function DpsCalculator(): JSX.Element {
                                         .map((_, i) => (
                                             // eslint-disable-next-line react/no-array-index-key
                                             <option key={`iron-${i}`}>
+                                                {i + 1}
+                                            </option>
+                                        ))}
+                                </select>
+                            </label>
+                        </form>
+                    </div>
+                    <div className='dice-container'>
+                        <Dice dice='Broken' />
+                        <h3 className='desc'>{data.broken.desc}</h3>
+                        <form
+                            className='filter'
+                            onSubmit={(evt): void => evt.preventDefault()}
+                        >
+                            <label htmlFor='class'>
+                                <span>Class :</span>
+                                <select
+                                    name='class'
+                                    onChange={(
+                                        evt: React.ChangeEvent<
+                                            HTMLSelectElement
+                                        >
+                                    ): void => {
+                                        filter.brokenClass = Number(
+                                            evt.target.value
+                                        );
+                                        setFilter({ ...filter });
+                                    }}
+                                >
+                                    {Array(15)
+                                        .fill('')
+                                        .map((_, i) => (
+                                            // eslint-disable-next-line react/no-array-index-key
+                                            <option key={`broken-${i}`}>
                                                 {i + 1}
                                             </option>
                                         ))}
@@ -1055,6 +1101,17 @@ export default function DpsCalculator(): JSX.Element {
                             />
                         </label>
                         <label htmlFor='result'>
+                            <span className='dice-name'>Broken</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : brokenDps()
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
                             <span className='dice-name'>Gamble</span>
                             <input
                                 type='textbox'
@@ -1141,6 +1198,17 @@ export default function DpsCalculator(): JSX.Element {
                                 className={invalidInput ? 'invalid' : ''}
                                 value={
                                     invalidInput ? 'Check Input' : ironDps(true)
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='dice-name'>Broken</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput ? 'Check Input' : brokenDps()
                                 }
                                 disabled
                             />
@@ -1296,6 +1364,14 @@ export default function DpsCalculator(): JSX.Element {
                             name='No Buff'
                             samples={4}
                             style={{
+                                data: { stroke: '#9f0ff4', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number => brokenDps(d.x)}
+                        />
+                        <VictoryLine
+                            name='No Buff'
+                            samples={4}
+                            style={{
                                 data: { stroke: '#6f25d6', strokeWidth: 1 },
                             }}
                             y={(d: { x: number }): number => gambleDps(d.x)}
@@ -1345,6 +1421,7 @@ export default function DpsCalculator(): JSX.Element {
                                 '#f8390f',
                                 '#f9b912',
                                 '#898989',
+                                '#9f0ff4',
                                 '#6f25d6',
                                 '#fa762c',
                                 '#22e7e3',
@@ -1355,6 +1432,7 @@ export default function DpsCalculator(): JSX.Element {
                                 { name: 'Modified Electric' },
                                 { name: 'Eletric' },
                                 { name: 'Iron' },
+                                { name: 'Broken' },
                                 { name: 'Gamble' },
                                 { name: 'Arrow' },
                                 { name: 'Mighty Wind' },
@@ -1446,6 +1524,14 @@ export default function DpsCalculator(): JSX.Element {
                             name='No Buff'
                             samples={4}
                             style={{
+                                data: { stroke: '#9f0ff4', strokeWidth: 1 },
+                            }}
+                            y={(d: { x: number }): number => brokenDps(d.x)}
+                        />
+                        <VictoryLine
+                            name='No Buff'
+                            samples={4}
+                            style={{
                                 data: { stroke: '#6f25d6', strokeWidth: 1 },
                             }}
                             y={(d: { x: number }): number => gambleDps(d.x)}
@@ -1495,6 +1581,7 @@ export default function DpsCalculator(): JSX.Element {
                                 '#f8390f',
                                 '#f9b912',
                                 '#898989',
+                                '#9f0ff4',
                                 '#6f25d6',
                                 '#fa762c',
                                 '#22e7e3',
@@ -1505,6 +1592,7 @@ export default function DpsCalculator(): JSX.Element {
                                 { name: 'Modified Electric' },
                                 { name: 'Eletric' },
                                 { name: 'Iron' },
+                                { name: 'Broken' },
                                 { name: 'Gamble' },
                                 { name: 'Arrow' },
                                 { name: 'Mighty Wind' },
