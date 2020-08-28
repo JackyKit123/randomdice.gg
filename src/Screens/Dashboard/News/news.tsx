@@ -1,10 +1,10 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import firebase from 'firebase/app';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import CustomEditor from '../../../lib/ckeditor';
 import Dashboard from '../../../Components/Dashboard/dashboard';
 import LoadingScreen from '../../../Components/Loading/loading';
 import PopUp from '../../../Components/PopUp Overlay/popup';
@@ -55,7 +55,7 @@ export default function editPatchNote(): JSX.Element {
                 <Fragment key={type}>
                     <h3>Update {type} News</h3>
                     <CKEditor
-                        editor={ClassicEditor}
+                        editor={CustomEditor}
                         data={content[type.toLowerCase() as 'game' | 'website']}
                         config={{
                             removePlugins: ['heading'],
@@ -69,7 +69,11 @@ export default function editPatchNote(): JSX.Element {
                                 'bulletedList',
                                 '|',
                                 'link',
-                            ].concat(type === 'Game' ? ['mediaembed'] : []),
+                            ].concat(
+                                type === 'Game'
+                                    ? ['imageUpload', 'mediaembed']
+                                    : []
+                            ),
                         }}
                         onBlur={(
                             _: unknown,
