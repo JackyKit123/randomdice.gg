@@ -20,6 +20,10 @@ main > .dashboard {
         .calc(min-height, ~'100vh - 315px');
         width: 100%;
 
+        & > .session-expired-warning {
+            color: #ff0000;
+        }
+
         & > .menu {
             .display(flex);
             .flex-direction(row);

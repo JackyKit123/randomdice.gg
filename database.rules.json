@@ -1,6 +1,10 @@
 {
     "rules": {
         ".write": false,
+        "auth_test": {
+            ".read": false,
+            ".write": "auth.token.isEditor === true"
+        },
         "last_updated": {
             ".read": true,
             ".write": "auth.token.isEditor === true",

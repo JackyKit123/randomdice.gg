@@ -14,9 +14,7 @@ try {
     //
 }
 
-export function logout(): void {
-    auth.signOut();
-}
+export const logout = (): Promise<void> => auth.signOut();
 
 export function authStateDispatch(
     dispatch: ReturnType<typeof useDispatch>

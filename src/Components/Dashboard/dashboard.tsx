@@ -1,19 +1,24 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import firebase from 'firebase/app';
 import { useLocation, Link } from 'react-router-dom';
+import * as auth from '../../Misc/Firebase/auth';
 import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../Main/main';
 import LoadingScreen from '../Loading/loading';
 import NoMatch from '../../Screens/NoMatch/NoMatch';
 import { menu } from '../../Misc/menuConfig';
 import './dashboard.less';
+import { OPEN_POPUP } from '../../Misc/Redux Storage/PopUp Overlay/types';
 
 export default function Dashboard(props: {
     className?: string;
     children?: ReactNode;
 }): JSX.Element {
     const location = useLocation();
+    const dispatch = useDispatch();
+    const database = firebase.database();
     const { className, children } = props;
     const selector = useSelector((state: RootState) => state);
     const { user, error } = selector.authReducer;
@@ -21,6 +26,19 @@ export default function Dashboard(props: {
     const [authorized, setAuthorized] = useState<'loading' | boolean>(
         'loading'
     );
+    const [sessionExpired, setSessionExpired] = useState(false);
+
+    useEffect(() => {
+        const checkSessionValid = async (): Promise<void> => {
+            try {
+                setSessionExpired(false);
+                await database.ref('/auth_test').set(0);
+            } catch (err) {
+                setSessionExpired(err.code === 'PERMISSION_DENIED');
+            }
+        };
+        checkSessionValid();
+    }, [children, authorized]);
 
     useEffect(() => {
         if (user !== 'awaiting auth state') {
@@ -58,7 +76,28 @@ export default function Dashboard(props: {
             </Helmet>
             <div className={`dashboard ${className}`}>
                 <div className='content'>
-                    <div className='menu'>
+                    {sessionExpired ? (
+                        <>
+                            <h3 className='session-expired-warning'>
+                                Your login session has expired. Edits will not
+                                be saved, relog to continue editing.
+                            </h3>
+                            <button
+                                type='button'
+                                onClick={async (): Promise<void> => {
+                                    await auth.logout();
+                                    dispatch({
+                                        type: OPEN_POPUP,
+                                        payload: 'login',
+                                    });
+                                }}
+                            >
+                                Relog Now
+                            </button>
+                            <hr className='divisor' />
+                        </>
+                    ) : null}
+                    <nav className='menu'>
                         {menu
                             .find(item => item.name === 'Dashboard')
                             ?.childNode?.map(item =>
@@ -71,7 +110,7 @@ export default function Dashboard(props: {
                                     </Link>
                                 ) : null
                             )}
-                    </div>
+                    </nav>
                     <hr className='divisor' />
                     {children || (
                         <>
