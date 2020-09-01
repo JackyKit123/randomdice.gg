@@ -101,12 +101,14 @@ export async function fetchYouTube(
                     return {
                         id,
                         bannerImg: {
-                            default:
-                                res.result.items[0].brandingSettings.image
-                                    .bannerImageUrl,
-                            mobile:
-                                res.result.items[0].brandingSettings.image
-                                    .bannerMobileImageUrl,
+                            default: res.result.items[0].brandingSettings.image.bannerImageUrl?.replace(
+                                'http://',
+                                'https://'
+                            ),
+                            mobile: res.result.items[0].brandingSettings.image.bannerMobileImageUrl?.replace(
+                                'http://',
+                                'https://'
+                            ),
                         },
                         title: res.result.items[0].snippet.title,
                         description: res.result.items[0].snippet.description,
