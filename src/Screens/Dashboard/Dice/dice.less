@@ -7,11 +7,65 @@
         margin-bottom: 10px;
         width: 400px;
         max-width: 100%;
+        position: relative;
 
         & > select,
         & > input {
             width: 50%;
             float: right;
+
+            &[type='checkbox'] {
+                width: 20px;
+                height: 20px;
+                float: none;
+                position: absolute;
+                .calc(right, ~'50% - 20px');
+                margin: 0;
+                z-index: 2;
+                cursor: pointer;
+                visibility: none;
+                background: transparent;
+            }
+
+            &:hover,
+            &:focus {
+                & ~ .checkbox-styler {
+                    background-color: #525252;
+                }
+            }
+
+            &:focus ~ .checkbox-styler {
+                border: 2px solid #ffffff;
+            }
+
+            &:checked ~ .checkbox-styler {
+                background-color: #6ba4a5;
+
+                & > .fa-check {
+                    display: block;
+                }
+            }
+        }
+
+        & > .checkbox-styler {
+            position: absolute;
+            border-radius: 5px;
+            .calc(right, ~'50% - 20px');
+            margin: 0 auto;
+            height: 20px;
+            width: 20px;
+            background-color: #eeeeee;
+            .box-shadow(inset 0 0 6px 0 rgba(0, 0, 0, 0.75));
+            .transition(all 0.2s ease-in-out);
+
+            & > .fa-check {
+                display: none;
+                position: absolute;
+                bottom: 3px;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+            }
         }
 
         img {

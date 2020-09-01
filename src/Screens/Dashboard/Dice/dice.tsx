@@ -19,6 +19,25 @@ import {
 } from '../../../Misc/Redux Storage/Fetch Firebase/Dices/types';
 import './dice.less';
 
+interface CoopStat {
+    atk: number;
+    spd: number;
+    eff1: number;
+    eff2: number;
+    nameEff1: string;
+    nameEff2: string;
+    unitEff1: string;
+    unitEff2: string;
+    cupAtk: number;
+    cupSpd: number;
+    cupEff1: number;
+    cupEff2: number;
+    pupAtk: number;
+    pupSpd: number;
+    pupEff1: number;
+    pupEff2: number;
+}
+
 export default function editDice(): JSX.Element {
     const dispatch = useDispatch();
     const selectRef = useRef(null as null | HTMLSelectElement);
@@ -617,6 +636,308 @@ export default function editDice(): JSX.Element {
                                 }}
                             />
                         </label>
+                        <label htmlFor='coop-stat'>
+                            Enable Coop Stat:
+                            <input
+                                key={`dice${activeEdit.id}-coop-stat`}
+                                defaultChecked={Object.prototype.hasOwnProperty.call(
+                                    activeEdit,
+                                    'coop'
+                                )}
+                                type='checkbox'
+                                onChange={(evt): void => {
+                                    if (evt.target.checked) {
+                                        activeEdit.coop = activeEdit.coop || {
+                                            atk: activeEdit.atk,
+                                            spd: activeEdit.spd,
+                                            eff1: activeEdit.eff1,
+                                            eff2: activeEdit.eff2,
+                                            nameEff1: activeEdit.nameEff1,
+                                            nameEff2: activeEdit.nameEff2,
+                                            unitEff1: activeEdit.unitEff1,
+                                            unitEff2: activeEdit.unitEff2,
+                                            cupAtk: activeEdit.cupAtk,
+                                            cupSpd: activeEdit.cupSpd,
+                                            cupEff1: activeEdit.cupEff1,
+                                            cupEff2: activeEdit.cupEff2,
+                                            pupAtk: activeEdit.pupAtk,
+                                            pupSpd: activeEdit.pupSpd,
+                                            pupEff1: activeEdit.pupEff1,
+                                            pupEff2: activeEdit.pupEff2,
+                                        };
+                                    } else {
+                                        delete activeEdit.coop;
+                                    }
+                                    setActiveEdit({ ...activeEdit });
+                                }}
+                            />
+                            <span className='checkbox-styler'>
+                                <FontAwesomeIcon icon={faCheck} />
+                            </span>
+                        </label>
+                        {activeEdit.coop ? (
+                            <>
+                                <h4>Coop Stat</h4>
+                                <label htmlFor='dice-coop-atk'>
+                                    Base Attack:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-atk`}
+                                        defaultValue={activeEdit.coop.atk}
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).atk = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-cupAtk'>
+                                    Class Up Attack:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-cupAtk`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat).cupAtk
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).cupAtk = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-pupAtk'>
+                                    Level Up Attack:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-pupAtk`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat).pupAtk
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).pupAtk = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-spd'>
+                                    Base Attack Speed:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-spd`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat).spd
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).spd = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-cupSpd'>
+                                    Class Up Attack Speed:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-cupSpd`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat).cupSpd
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).cupSpd = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-pupSpd'>
+                                    Level Up Attack Speed:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-pupSpd`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat).pupSpd
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).pupSpd = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-nameEff1'>
+                                    Effect 1 Name:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-nameEff1`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat)
+                                                .nameEff1
+                                        }
+                                        type='textbox'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).nameEff1 =
+                                                evt.target.value;
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-unitEff1'>
+                                    Effect 1 Unit:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-unitEff1`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat)
+                                                .unitEff1
+                                        }
+                                        type='textbox'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).unitEff1 =
+                                                evt.target.value;
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-eff1'>
+                                    Base Effect 1 Value:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-eff1`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat).eff1
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).eff1 = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-cupEff1'>
+                                    Class Up Effect 1 Value:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-cupEff1`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat)
+                                                .cupEff1
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).cupEff1 = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-pupEff1'>
+                                    Level Up Effect 1 Value:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-pupEff1`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat)
+                                                .pupEff1
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).pupEff1 = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-nameEff2'>
+                                    Effect 2 Name:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-nameEff2`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat)
+                                                .nameEff2
+                                        }
+                                        type='textbox'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).nameEff2 =
+                                                evt.target.value;
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-unitEff2'>
+                                    Effect 2 Unit:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-unitEff2`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat)
+                                                .unitEff2
+                                        }
+                                        type='textbox'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).unitEff2 =
+                                                evt.target.value;
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-eff2'>
+                                    Base Effect 2 Value:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-eff2`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat).eff2
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).eff2 = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-cupEff2'>
+                                    Class Up Effect 2 Value:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-cupEff2`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat)
+                                                .cupEff2
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).cupEff2 = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                                <label htmlFor='dice-coop-pupEff2'>
+                                    Level Up Effect 2 Value:
+                                    <input
+                                        key={`dice-coop${activeEdit.id}-pupEff2`}
+                                        defaultValue={
+                                            (activeEdit.coop as CoopStat)
+                                                .pupEff2
+                                        }
+                                        type='number'
+                                        onChange={(evt): void => {
+                                            (activeEdit.coop as CoopStat).pupEff2 = Number(
+                                                evt.target.value
+                                            );
+                                            setActiveEdit({ ...activeEdit });
+                                        }}
+                                    />
+                                </label>
+                            </>
+                        ) : null}
                         {activeEdit.name === 'Growth' ? null : (
                             <>
                                 <hr className='divisor' />

@@ -48,6 +48,24 @@ export interface Dice {
     pupSpd: number;
     pupEff1: number;
     pupEff2: number;
+    coop?: {
+        atk: number;
+        spd: number;
+        eff1: number;
+        eff2: number;
+        nameEff1: string;
+        nameEff2: string;
+        unitEff1: string;
+        unitEff2: string;
+        cupAtk: number;
+        cupSpd: number;
+        cupEff1: number;
+        cupEff2: number;
+        pupAtk: number;
+        pupSpd: number;
+        pupEff1: number;
+        pupEff2: number;
+    };
     alternatives?: Alternatives;
     arenaValue: ArenaValue;
 }
