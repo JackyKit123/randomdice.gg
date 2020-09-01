@@ -71,7 +71,7 @@ export default function SpeedCalculator(): JSX.Element {
                 Number(filter.ice.enable),
             50
         );
-        const sandSlow = filter.sand.enable ? 40 : 0;
+        const sandSlow = filter.sand.enable ? -40 : 0;
         const flowSpeed = Math.max(
             (data.flow.cupEff1 * (filter.flow.class - 7) + data.flow.eff1) *
                 filter.flow.pip +
@@ -82,7 +82,7 @@ export default function SpeedCalculator(): JSX.Element {
             -40
         );
         const totalSlow = Math.max(
-            flowSpeed - Math.max(blizzardSlow, iceSlow) - sandSlow,
+            flowSpeed + Math.max(blizzardSlow, iceSlow) + sandSlow,
             -100
         );
 
