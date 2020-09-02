@@ -27,7 +27,7 @@ yarn-error.log*
 *.vscode
 
 # image source
-/imagelookup
+/Sprite
 
 # firebase
 /.firebase
