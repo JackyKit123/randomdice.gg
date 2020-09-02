@@ -73,9 +73,7 @@ export default function editDice(): JSX.Element {
         );
     }
 
-    const invalidName = !/^[A-Z][a-z]*( [A-Z][a-z]*){0,}$/.test(
-        activeEdit.name
-    );
+    const invalidName = !/^\w+( \w+){0,}$/.test(activeEdit.name);
     const invalidImg = activeEdit.img.length <= 0;
     const invalidDescription = activeEdit.desc.length <= 0;
     const invalidArenaDps =
@@ -336,7 +334,8 @@ export default function editDice(): JSX.Element {
                         </label>
                         {invalidName ? (
                             <div className='invalid-warning'>
-                                Dice Name has to be a capitalized word.
+                                Do not include the word &apos;dice&apos; in the
+                                name, trim the space before and after the word.
                             </div>
                         ) : null}
                         <label htmlFor='dice-type'>
