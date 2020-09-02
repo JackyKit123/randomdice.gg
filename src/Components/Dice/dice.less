@@ -1,0 +1,10 @@
+@import '../../cross_import_lesshat.less';
+
+img {
+    &[data-dice-rarity='Common'],
+    &[data-dice-rarity='Rare'],
+    &[data-dice-rarity='Unique'] {
+        .scale(0.9);
+        .transform-origin(bottom);
+    }
+}
