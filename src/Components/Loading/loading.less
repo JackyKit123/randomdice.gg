@@ -30,7 +30,7 @@
     }
     margin: 0 auto;
     width: 135px;
-    height: 135px;
+    height: 158px;
     position: relative;
     .animation(spawnTime 0.1s ease-out);
 
@@ -44,14 +44,14 @@
         bottom: 0;
 
         &[alt='Clock'] {
-            .scale(0.55);
+            .transform(scale(0.6, 0.52) translate(3px, 16px));
         }
 
         &[alt='ClockHand'] {
             width: initial;
             height: initial;
-            left: 51px;
-            top: 9px;
+            left: 54px;
+            top: 29px;
             .animation(spin 900ms linear infinite);
             .transform-origin(bottom);
         }
