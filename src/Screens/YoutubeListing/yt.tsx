@@ -48,13 +48,12 @@ export default function YoutubeList(): JSX.Element {
                     page. We have 3000 daily visitors on this website, if you
                     are a Random Dice Youtuber and want to advertise your
                     Youtube channel, you can become a tier 3 patreon on our{' '}
-                    <a
+                    {/* <a
                         href='https://www.patreon.com/RandomDiceCommunityWebsite'
                         target='_blank'
                         rel='noreferrer noopener'
-                    >
-                        Patreon Page
-                    </a>{' '}
+                    > */}
+                    Patreon Page {/* </a>{' '} */}
                     then add your YouTube channel here.
                 </p>
 
