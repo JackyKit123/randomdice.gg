@@ -8,7 +8,7 @@ export interface YouTubeInfo {
     id: string;
     bannerImg: {
         default: string;
-        mobile: string | undefined;
+        mobile: string | false | undefined;
     };
     title: string;
     description: string;
