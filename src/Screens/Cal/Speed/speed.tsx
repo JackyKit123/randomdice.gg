@@ -39,7 +39,7 @@ export default function SpeedCalculator(): JSX.Element {
         flow: {
             class: 7,
             level: 1,
-            sign: 1,
+            mode: 'PvP',
             count: 0,
             pip: 0,
         },
@@ -72,15 +72,22 @@ export default function SpeedCalculator(): JSX.Element {
             50
         );
         const sandSlow = filter.sand.enable ? -40 : 0;
-        const flowSpeed = Math.max(
-            (data.flow.cupEff1 * (filter.flow.class - 7) + data.flow.eff1) *
-                filter.flow.pip +
-                data.flow.pupEff1 *
-                    (filter.flow.level - 1) *
-                    filter.flow.count *
-                    filter.flow.sign,
-            -40
-        );
+        const flowSpeed =
+            filter.flow.mode === 'PvP'
+                ? data.flow.cupEff1 * (filter.flow.class - 7) +
+                  data.flow.eff1 * filter.flow.pip +
+                  data.flow.pupEff1 *
+                      (filter.flow.level - 1) *
+                      filter.flow.count
+                : Math.max(
+                      -1 *
+                          (data.flow.cupEff2 * (filter.flow.class - 7) +
+                              data.flow.eff2 * filter.flow.pip +
+                              data.flow.pupEff2 *
+                                  (filter.flow.level - 1) *
+                                  filter.flow.count),
+                      -40
+                  );
         const totalSlow = Math.max(
             flowSpeed + Math.max(blizzardSlow, iceSlow) + sandSlow,
             -100
@@ -269,12 +276,12 @@ export default function SpeedCalculator(): JSX.Element {
                                 onChange={(
                                     evt: React.ChangeEvent<HTMLSelectElement>
                                 ): void => {
-                                    filter.flow.sign = Number(evt.target.value);
+                                    filter.flow.mode = evt.target.value;
                                     setFilter({ ...filter });
                                 }}
                             >
-                                <option value={1}>PvP (speed up)</option>
-                                <option value={-1}>PvE (slow down)</option>
+                                <option value='PvP'>PvP (speed up)</option>
+                                <option value='PvE'>PvE (slow down)</option>
                             </select>
                         </label>
                         <label htmlFor='flow-dot'>
@@ -452,7 +459,7 @@ export default function SpeedCalculator(): JSX.Element {
                             value={
                                 invalidFlowPip || invalidFlowCount
                                     ? 'Check Input'
-                                    : `${flowSpeed * filter.flow.sign}%`
+                                    : `${flowSpeed}%`
                             }
                             disabled
                         />
