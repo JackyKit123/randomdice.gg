@@ -16,22 +16,16 @@
         vertical-align: middle;
 
         &[alt^='dice '] {
-            height: 72px;
+            width: 72px;
         }
 
         &[alt='Gold'],
         &[alt='Diamond'] {
-            height: 36px;
+            height: 72px;
         }
 
-        &[alt='Common Dice'],
-        &[alt='Legendary Dice'] {
-            height: 36px;
-        }
-
-        &[alt='Rare Dice'],
-        &[alt='Unique Dice'] {
-            height: 51px;
+        &[alt$=' Dice'] {
+            height: 72px;
         }
     }
 }
