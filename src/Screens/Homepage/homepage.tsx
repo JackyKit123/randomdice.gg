@@ -25,25 +25,24 @@ export default function Homepage(): JSX.Element {
                 <p>
                     Hello all, this is a Random Dice community created website.
                     You will find useful resources for the game such as deck
-                    lists, calculators, and game tips. This website uses a
-                    modern framework and can be served while having no internet
-                    connection; it can also be easily installed onto your device
-                    for convenient access, you can check out how to install in
-                    the links here for{' '}
+                    lists, calculators, and game tips. For your convenient, you
+                    can install this website onto your device for direct access.
+                    If you are using Android, you can install the website via{' '}
                     <a
-                        href='https://www.howtogeek.com/fyi/how-to-install-progressive-web-apps-pwas-in-chrome/'
+                        href='https://play.google.com/store/apps/details?id=gg.randomdice.twa'
                         target='_blank'
                         rel='noopener noreferrer'
                     >
-                        Desktop
-                    </a>{' '}
-                    and{' '}
+                        Google Play Store
+                    </a>
+                    otherwise, if you are using other platforms such as iOS,
+                    Windows or MacOS, you can refer to this{' '}
                     <a
                         href='https://medium.com/progressivewebapps/how-to-install-a-pwa-to-your-device-68a8d37fadc1'
                         target='_blank'
                         rel='noopener noreferrer'
                     >
-                        Mobile
+                        Guide to install a Progressive Web App
                     </a>
                     .
                 </p>
