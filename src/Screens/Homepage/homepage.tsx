@@ -19,7 +19,7 @@ export default function Homepage(): JSX.Element {
     );
 
     return (
-        <Main className='homepage' title='Random Dice Unofficial Site'>
+        <Main className='homepage' title='Random Dice Community Website'>
             <section>
                 <h3>Welcome</h3>
                 <p>
