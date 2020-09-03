@@ -1,6 +1,7 @@
 {
   "name": "rdweb",
   "version": "0.1.0",
+  "homepage": "https://randomdice.gg",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.10.4",
