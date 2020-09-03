@@ -12,7 +12,8 @@
             padding: 0;
         }
 
-        img {
+        figure {
+            display: inline-block;
             max-width: 20%;
         }
 
@@ -47,8 +48,9 @@
                     font-size: inherit;
                 }
 
-                & > img {
-                    height: 50px;
+                & > figure {
+                    display: inline-block;
+                    width: 50px;
                     vertical-align: middle;
                     margin-left: 15px;
                 }
@@ -94,12 +96,12 @@
                     -moz-user-select: none;
                     -ms-user-select: none;
                     user-select: none;
-                    height: 90px;
+                    height: 100px;
                     margin-bottom: 10px;
 
-                    & > img {
+                    & > figure {
                         display: block;
-                        height: 60px;
+                        width: 60px;
                     }
 
                     & > input {
@@ -195,8 +197,8 @@
                     & > td {
                         vertical-align: middle;
 
-                        img {
-                            height: 50px;
+                        figure {
+                            width: 50px;
                         }
 
                         button {

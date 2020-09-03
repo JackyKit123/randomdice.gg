@@ -294,7 +294,13 @@ export default function editDice(): JSX.Element {
                         <h3>Dice Stat</h3>
                         <label htmlFor='dice-image'>
                             Image:
-                            <img src={activeEdit.img} alt='dice' />
+                            <figure className='dice'>
+                                <img
+                                    src={activeEdit.img}
+                                    alt='dice'
+                                    data-dice-rarity={activeEdit.rarity}
+                                />
+                            </figure>
                             <input
                                 key={`dice${activeEdit.id}-img`}
                                 type='file'

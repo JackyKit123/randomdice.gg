@@ -1,7 +1,7 @@
 .box-guide {
     text-align: center;
 
-    figure {
+    & > figure {
         height: 200px;
 
         & > img {
@@ -10,22 +10,16 @@
         }
     }
 
-    p img {
-        width: auto;
-        display: inline;
-        vertical-align: middle;
+    p {
+        figure {
+            display: inline-block;
+            vertical-align: middle;
+        }
 
-        &[alt^='dice '] {
+        img {
+            display: inline-block;
+            vertical-align: middle;
             width: 72px;
-        }
-
-        &[alt='Gold'],
-        &[alt='Diamond'] {
-            height: 72px;
-        }
-
-        &[alt$=' Dice'] {
-            height: 72px;
         }
     }
 }

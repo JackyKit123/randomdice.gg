@@ -2,7 +2,8 @@
 
 .dashboard.deck {
     .popup-overlay > .popup > .container {
-        &.delete img {
+        &.delete figure {
+            display: inline-block;
             width: 20%;
         }
 
@@ -78,12 +79,12 @@
                     -moz-user-select: none;
                     -ms-user-select: none;
                     user-select: none;
-                    height: 90px;
+                    height: 100px;
                     margin-bottom: 10px;
 
-                    & > img {
+                    & > figure {
                         display: block;
-                        height: 60px;
+                        width: 60px;
                     }
 
                     & > input {
@@ -190,8 +191,8 @@
                             width: 30px;
                         }
 
-                        img {
-                            height: 50px;
+                        figure {
+                            width: 50px;
                         }
 
                         button {

@@ -12,9 +12,10 @@ export default function replaceTextWithImgTag(
             ) as Dice;
             const nullDiceUrl =
                 'https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty.png?alt=media&token=193f9435-4c38-4ef0-95cd-317d9fbe6efe';
-            return `<img src="${img || nullDiceUrl}" alt="${
+            return `<figure class="dice"><img src="${img ||
+                nullDiceUrl}" alt="${
                 img ? `dice ${diceName}` : 'dice ?'
-            }" data-dice-rarity=${rarity || '?'} />`;
+            }" data-dice-rarity=${rarity || '?'} /></figure>`;
         })
         .replace(
             /({Gold}|{Diamond}|{Common Dice}|{Rare Dice}|{Unique Dice}|{Legendary Dice})/g,
