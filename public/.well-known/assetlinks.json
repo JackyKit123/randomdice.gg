@@ -7,7 +7,8 @@
                   "namespace": "android_app",
                   "package_name": "gg.randomdice.twa",
                   "sha256_cert_fingerprints": [
-                        "FE:17:C4:F3:69:F2:6F:0A:07:CB:1F:8B:BE:8D:1C:48:89:5E:9C:5A:43:94:42:07:12:4E:6E:0B:D9:B5:D8:97"
+                        "FE:17:C4:F3:69:F2:6F:0A:07:CB:1F:8B:BE:8D:1C:48:89:5E:9C:5A:43:94:42:07:12:4E:6E:0B:D9:B5:D8:97",
+                        "80:81:10:6B:6A:B1:3B:76:88:DA:85:FD:99:81:4E:00:03:66:E9:4B:38:E7:40:12:10:31:A0:49:54:38:F2:3B"
                   ]
             }
       }
