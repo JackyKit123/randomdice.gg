@@ -11,7 +11,7 @@ export default function replaceTextWithImgTag(
                 dice => dice.name === diceName
             ) as Dice;
             const nullDiceUrl =
-                'https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty.png?alt=media&token=193f9435-4c38-4ef0-95cd-317d9fbe6efe';
+                'https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty.png?alt=media&token=60b222f0-33b0-4cfa-afa0-7655ecbdb8a8';
             return `<figure class="dice"><img src="${img ||
                 nullDiceUrl}" alt="${
                 img ? `dice ${diceName}` : 'dice ?'
