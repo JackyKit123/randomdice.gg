@@ -445,11 +445,42 @@ export default function ArenaDraft(): JSX.Element {
                     className={`winrate ${currentPick === 6 ? 'show' : ''}`}
                 >
                     <hr className='divisor' />
+                    <h3>Your Estimated Win Rate</h3>
                     <label htmlFor='win-rate'>
-                        <h3>Your Estimated Win Rate</h3>
                         <input
                             type='textbox'
                             value={`${Math.round(winrate * 10000) / 100}%`}
+                            disabled
+                        />
+                    </label>
+                    <h3>Your Estimated Rewards</h3>
+                    <label htmlFor='legendary-reward'>
+                        Number of Legendary
+                        <input
+                            type='textbox'
+                            value={
+                                Math.round(
+                                    (winProb[4] * 0.1 +
+                                        winProb[7] * 0.4 +
+                                        winProb[11] * 1) *
+                                        10000
+                                ) / 10000
+                            }
+                            disabled
+                        />
+                    </label>
+                    <label htmlFor='diamond-reward'>
+                        Diamond Reward
+                        <input
+                            type='textbox'
+                            value={
+                                Math.round(
+                                    (winProb[1] * 20 +
+                                        winProb[6] * 80 +
+                                        winProb[9]) *
+                                        100
+                                ) / 100
+                            }
                             disabled
                         />
                     </label>

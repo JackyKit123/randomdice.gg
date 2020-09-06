@@ -42,7 +42,8 @@
         }
 
         &.deck {
-            img {
+            figure {
+                display: inline-block;
                 max-width: 20%;
             }
         }
@@ -54,6 +55,18 @@
 
             &.show {
                 max-height: 1000px;
+
+                & > label {
+                    &[for$='reward'] {
+                        font-size: 20px;
+
+                        & > input {
+                            display: block;
+                            margin-top: 6px;
+                        }
+                    }
+                    display: block;
+                }
             }
         }
     }
