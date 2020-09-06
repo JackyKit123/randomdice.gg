@@ -3,8 +3,8 @@ import { Dice } from '../Fetch Firebase/Dices/types';
 export const FILTER_ACTION = 'FILTER_ACTION';
 
 interface Filter {
-    legendary: Dice['name'][];
-    customSearch: string;
+    legendary: Dice['id'][];
+    customSearch: Dice['id'];
 }
 
 export interface FilterState {

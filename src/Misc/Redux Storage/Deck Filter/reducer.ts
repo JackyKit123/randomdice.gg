@@ -3,7 +3,7 @@ import { FILTER_ACTION, Action, FilterState } from './types';
 const initialState: FilterState = {
     filter: {
         legendary: [],
-        customSearch: '?',
+        customSearch: -1,
     },
 };
 

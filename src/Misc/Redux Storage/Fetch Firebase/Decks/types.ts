@@ -10,11 +10,7 @@ export interface Deck {
     id: number;
     type: 'PvP' | 'PvE' | 'Crew' | '-';
     rating: number;
-    slot1: Dice['name'];
-    slot2: Dice['name'];
-    slot3: Dice['name'];
-    slot4: Dice['name'];
-    slot5: Dice['name'];
+    decks: Dice['id'][][];
     added: string;
     updated: string | null;
 }

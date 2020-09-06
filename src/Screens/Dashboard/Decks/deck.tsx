@@ -16,6 +16,7 @@ import {
     Decks,
 } from '../../../Misc/Redux Storage/Fetch Firebase/Decks/types';
 import { RootState } from '../../../Misc/Redux Storage/store';
+import { Dice as DiceType } from '../../../Misc/Redux Storage/Fetch Firebase/Dices/types';
 import './deck.less';
 import PopUp from '../../../Components/PopUp Overlay/popup';
 import {
@@ -24,36 +25,31 @@ import {
 } from '../../../Misc/Redux Storage/PopUp Overlay/types';
 
 function DeckRow({
-    deck,
+    deckInfo,
     setActiveEdit,
 }: {
-    deck: Deck;
-    setActiveEdit: (deck: Deck) => void;
+    deckInfo: Deck;
+    setActiveEdit: (deckInfo: Deck) => void;
 }): JSX.Element {
     return (
         <>
-            <td>{deck.rating}</td>
-            <td>{deck.type}</td>
+            <td>{deckInfo.rating}</td>
+            <td>{deckInfo.type}</td>
             <td>
-                <Dice dice={deck.slot1} />
-            </td>
-            <td>
-                <Dice dice={deck.slot2} />
-            </td>
-            <td>
-                <Dice dice={deck.slot3} />
-            </td>
-            <td>
-                <Dice dice={deck.slot4} />
-            </td>
-            <td>
-                <Dice dice={deck.slot5} />
+                {deckInfo.decks.map((deck, i) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div className='deck-container' key={i}>
+                        {deck.map(die => (
+                            <Dice dice={die} key={die} />
+                        ))}
+                    </div>
+                ))}
             </td>
             <td>
                 <button
                     type='button'
-                    disabled={deck.id < 0}
-                    onClick={(): void => setActiveEdit(deck)}
+                    disabled={deckInfo.id < 0}
+                    onClick={(): void => setActiveEdit(deckInfo)}
                 >
                     <FontAwesomeIcon icon={faPencilAlt} />
                 </button>
@@ -78,39 +74,30 @@ export default function updateDeck(): JSX.Element {
     const initialNewDeckState = {
         id: -1,
         rating: 0,
-        type: 'PvP' as 'PvP' | 'PvE' | 'Crew',
-        slot1: 'Fire',
-        slot2: 'Electric',
-        slot3: 'Poison',
-        slot4: 'Ice',
-        slot5: 'Wind',
+        type: 'PvP' as 'PvP' | 'PvE' | 'PvE (Solo)' | 'PvE (Pair)' | 'Crew',
+        decks: [[0, 1, 2, 3, 4]] as DiceType['id'][][],
         added: '',
         updated: null,
     };
     const [deckToAdd, setDeckToAdd] = useState({ ...initialNewDeckState });
     const [deckToDelete, setDeckToDelete] = useState({
         id: -1,
-        dice: [] as string[],
+        dice: [[]] as DiceType['id'][][],
     });
     const [filter, setFilter] = useState({
         type: '?' as '?' | 'PvP' | 'PvE' | 'Crew',
-        dice: dices?.map(dice => dice.name) || [],
+        dice: dices?.map(dice => dice.id) || [],
     });
 
     const initialEditState = {
         id: -1,
         rating: 0,
         type: '-' as '-' | 'PvP' | 'PvE' | 'Crew',
-        slot1: '',
-        slot2: '',
-        slot3: '',
-        slot4: '',
-        slot5: '',
+        decks: [[]] as DiceType['id'][][],
         added: '',
         updated: null as string | null,
     };
     const [activeEdit, setActiveEdit] = useState({ ...initialEditState });
-    const diceList = dices?.map(dice => dice.name);
     const invalidVersion = currentGameVersion
         ? !/^[1-9][0-9]{0,}\.(0|[1-9][0-9]{0,})\.[0-9]{1,}$/.test(
               currentGameVersion
@@ -165,7 +152,7 @@ export default function updateDeck(): JSX.Element {
     const deleteDeck = (): void => {
         const deleted = decks.filter(deck => deck.id !== deckToDelete.id);
         sortDecksAndUpdate([...deleted]);
-        setDeckToDelete({ id: -1, dice: [] as string[] });
+        setDeckToDelete({ id: -1, dice: [[]] as DiceType['id'][][] });
     };
 
     const addDeck = (): void => {
@@ -187,17 +174,31 @@ export default function updateDeck(): JSX.Element {
         } else {
             clone.id = newId + 1;
         }
-        sortDecksAndUpdate([...decks, clone]);
+        if (clone.type === 'PvE (Pair)' || clone.type === 'PvE (Solo)') {
+            clone.type = 'PvE';
+        }
+        sortDecksAndUpdate([
+            ...decks,
+            clone as {
+                id: number;
+                rating: number;
+                type: 'PvP' | 'PvE' | 'Crew';
+                decks: DiceType['id'][][];
+                added: string;
+                updated: string | null;
+            },
+        ]);
         dispatch({ type: CLOSE_POPUP });
     };
 
-    if (!dices || !decks.length || !diceList) {
+    if (!dices?.length || !decks?.length) {
         return (
             <Dashboard>
                 <LoadingScreen />
             </Dashboard>
         );
     }
+
     return (
         <Dashboard className='deck'>
             <PopUp popUpTarget='error'>
@@ -225,8 +226,13 @@ export default function updateDeck(): JSX.Element {
             <PopUp popUpTarget='delete' className='delete'>
                 <h3>Please confirm</h3>
                 <p>Are you sure you want to delete this deck?</p>
-                {deckToDelete.dice.map(dice => (
-                    <Dice key={dice} dice={dice} />
+                {deckToDelete.dice.map((deck, i) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div key={i}>
+                        {deck.map(die => (
+                            <Dice key={die} dice={die} />
+                        ))}
+                    </div>
                 ))}
                 <button
                     type='button'
@@ -284,135 +290,97 @@ export default function updateDeck(): JSX.Element {
                             };
                             clone.type = evt.target.value as
                                 | 'PvP'
-                                | 'PvE'
+                                | 'PvE (Solo)'
+                                | 'PvE (Pair)'
                                 | 'Crew';
+                            if (clone.type === 'PvE (Pair)') {
+                                clone.decks = [...clone.decks, [0, 1, 2, 3, 4]];
+                            } else {
+                                clone.decks = [...clone.decks];
+                            }
                             setDeckToAdd(clone);
                         }}
                     >
                         <option>PvP</option>
-                        <option>PvE</option>
+                        <option>PvE (Solo)</option>
+                        <option>PvE (Pair)</option>
                         <option>Crew</option>
                     </select>
-                    <select
-                        defaultValue='Fire'
-                        onChange={(evt): void => {
-                            const clone = {
-                                ...deckToAdd,
-                            };
-                            clone.slot1 = evt.target.value;
-                            setDeckToAdd(clone);
-                        }}
-                    >
-                        {diceList
-                            ?.filter(
-                                dice =>
-                                    !(
-                                        dice === deckToAdd.slot2 ||
-                                        dice === deckToAdd.slot3 ||
-                                        dice === deckToAdd.slot4 ||
-                                        dice === deckToAdd.slot5
+                    {Array(5)
+                        .fill('')
+                        .map((_, i) => (
+                            <select
+                                // eslint-disable-next-line react/no-array-index-key
+                                key={i}
+                                defaultValue={i}
+                                onChange={(evt): void => {
+                                    const clone = {
+                                        ...deckToAdd,
+                                    };
+                                    clone.decks[0][i] = Number(
+                                        evt.target.value
+                                    );
+                                    setDeckToAdd(clone);
+                                }}
+                            >
+                                {dices
+                                    .filter(
+                                        die =>
+                                            !deckToAdd.decks[0].find(
+                                                (dieId, j) =>
+                                                    dieId === die.id && i !== j
+                                            )
                                     )
-                            )
-                            .map(name => (
-                                <option key={`slot1${name}`}>{name}</option>
-                            ))}
-                    </select>
-                    <select
-                        defaultValue='Electric'
-                        onChange={(evt): void => {
-                            const clone = {
-                                ...deckToAdd,
-                            };
-                            clone.slot2 = evt.target.value;
-                            setDeckToAdd(clone);
-                        }}
-                    >
-                        {diceList
-                            ?.filter(
-                                dice =>
-                                    !(
-                                        dice === deckToAdd.slot1 ||
-                                        dice === deckToAdd.slot3 ||
-                                        dice === deckToAdd.slot4 ||
-                                        dice === deckToAdd.slot5
-                                    )
-                            )
-                            .map(name => (
-                                <option key={`slot2${name}`}>{name}</option>
-                            ))}
-                    </select>
-                    <select
-                        defaultValue='Poison'
-                        onChange={(evt): void => {
-                            const clone = {
-                                ...deckToAdd,
-                            };
-                            clone.slot3 = evt.target.value;
-                            setDeckToAdd(clone);
-                        }}
-                    >
-                        {diceList
-                            ?.filter(
-                                dice =>
-                                    !(
-                                        dice === deckToAdd.slot1 ||
-                                        dice === deckToAdd.slot2 ||
-                                        dice === deckToAdd.slot4 ||
-                                        dice === deckToAdd.slot5
-                                    )
-                            )
-                            .map(name => (
-                                <option key={`slot3${name}`}>{name}</option>
-                            ))}
-                    </select>
-                    <select
-                        defaultValue='Ice'
-                        onChange={(evt): void => {
-                            const clone = {
-                                ...deckToAdd,
-                            };
-                            clone.slot4 = evt.target.value;
-                            setDeckToAdd(clone);
-                        }}
-                    >
-                        {diceList
-                            ?.filter(
-                                dice =>
-                                    !(
-                                        dice === deckToAdd.slot1 ||
-                                        dice === deckToAdd.slot2 ||
-                                        dice === deckToAdd.slot3 ||
-                                        dice === deckToAdd.slot5
-                                    )
-                            )
-                            .map(name => (
-                                <option key={`slot4${name}`}>{name}</option>
-                            ))}
-                    </select>
-                    <select
-                        defaultValue='Wind'
-                        onChange={(evt): void => {
-                            const clone = {
-                                ...deckToAdd,
-                            };
-                            clone.slot5 = evt.target.value;
-                            setDeckToAdd(clone);
-                        }}
-                    >
-                        {diceList
-                            ?.filter(
-                                dice =>
-                                    !(
-                                        dice === deckToAdd.slot1 ||
-                                        dice === deckToAdd.slot2 ||
-                                        dice === deckToAdd.slot3 ||
-                                        dice === deckToAdd.slot4
-                                    )
-                            )
-                            .map(name => (
-                                <option key={`slot5${name}`}>{name}</option>
-                            ))}
-                    </select>
+                                    .map(die => (
+                                        <option value={die.id} key={die.id}>
+                                            {die.name}
+                                        </option>
+                                    ))}
+                            </select>
+                        ))}
+
+                    {deckToAdd.type === 'PvE (Pair)' ? (
+                        <>
+                            <h3>Co-op Deck Pair</h3>
+                            {Array(5)
+                                .fill('')
+                                .map((_, i) => (
+                                    <select
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        key={i}
+                                        defaultValue={i}
+                                        onChange={(evt): void => {
+                                            const clone = {
+                                                ...deckToAdd,
+                                            };
+                                            clone.decks[1][i] = Number(
+                                                evt.target.value
+                                            );
+                                            setDeckToAdd(clone);
+                                        }}
+                                    >
+                                        {dices
+                                            .filter(
+                                                die =>
+                                                    !deckToAdd.decks[1].find(
+                                                        (dieId, j) =>
+                                                            dieId === die.id &&
+                                                            i !== j
+                                                    )
+                                            )
+                                            .map(die => (
+                                                <option
+                                                    value={die.id}
+                                                    key={die.id}
+                                                >
+                                                    {die.name}
+                                                </option>
+                                            ))}
+                                    </select>
+                                ))}
+                        </>
+                    ) : null}
+
                     {invalidVersionToAdd ? (
                         <span className='invalid-warning'>
                             Current game version input is invalid.
@@ -463,13 +431,9 @@ export default function updateDeck(): JSX.Element {
                         setDeckToAdd({
                             id: -1,
                             rating: 0,
-                            type: 'PvP',
-                            slot1: 'Fire',
-                            slot2: 'Electric',
-                            slot3: 'Poison',
-                            slot4: 'Ice',
-                            slot5: 'Wind',
-                            added: currentGameVersion || deckToAdd.added || '',
+                            type: 'PvP' as 'PvP' | 'PvE' | 'Crew',
+                            decks: [[0, 1, 2, 3, 4]] as DiceType['id'][][],
+                            added: '',
                             updated: null,
                         });
                         dispatch({
@@ -514,83 +478,96 @@ export default function updateDeck(): JSX.Element {
                     <option>Crew</option>
                 </select>
             </label>
-            <label htmlFor='dice-filter'>
-                <span>Dice : </span>
-                <button
-                    data-select-all={dices?.every(dice =>
-                        filter.dice.includes(dice.name)
-                    )}
-                    type='button'
-                    onClick={(evt): void => {
-                        const target = evt.target as HTMLButtonElement;
-                        if (checkboxRef) {
-                            checkboxRef.forEach(eachRef => {
-                                if (eachRef.current)
-                                    // eslint-disable-next-line no-param-reassign
-                                    eachRef.current.checked =
-                                        target.innerText === 'Select All';
-                            });
+            {typeof filter.dice !== 'undefined' ? (
+                <label htmlFor='dice-filter'>
+                    <span>Dice : </span>
+                    <button
+                        data-select-all={
+                            (filter.dice.length || 0) <
+                            dices.filter(die => die.rarity === 'Legendary')
+                                .length
                         }
-                        filter.dice =
-                            target.innerText === 'Select All'
-                                ? dices?.map(dice => dice.name) || []
-                                : [];
-                        setFilter({ ...filter });
-                    }}
-                >
-                    {dices?.every(dice => filter.dice.includes(dice.name))
-                        ? 'Deselect All'
-                        : 'Select All'}
-                </button>
-                <div>
-                    {dices?.map((dice, i) => (
-                        <div key={dice.id} className='dice-container'>
-                            <Dice dice={dice.name} />
-                            <input
-                                name={dice.name}
-                                type='checkbox'
-                                defaultChecked
-                                ref={checkboxRef ? checkboxRef[i] : null}
-                                onChange={(evt): void => {
-                                    if (evt.target.checked) {
-                                        if (
-                                            !filter.dice.includes(
-                                                evt.target.name
-                                            )
-                                        ) {
-                                            filter.dice = [
-                                                ...filter.dice,
-                                                evt.target.name,
-                                            ];
-                                            setFilter({ ...filter });
+                        type='button'
+                        onClick={(evt): void => {
+                            const target = evt.target as HTMLButtonElement;
+                            if (checkboxRef) {
+                                checkboxRef.forEach(eachRef => {
+                                    if (eachRef.current)
+                                        // eslint-disable-next-line no-param-reassign
+                                        eachRef.current.checked =
+                                            target.innerText === 'Select All';
+                                });
+                            }
+                            filter.dice =
+                                target.innerText === 'Select All'
+                                    ? dices
+                                          .filter(
+                                              die => die.rarity === 'Legendary'
+                                          )
+                                          .map(dice => dice.id)
+                                    : [];
+                            setFilter({ ...filter });
+                        }}
+                    >
+                        {(filter.dice.length || 0) ===
+                        dices.filter(die => die.rarity === 'Legendary').length
+                            ? 'Deselect All'
+                            : 'Select All'}
+                    </button>
+                    <div>
+                        {dices
+                            ?.filter(die => die.rarity === 'Legendary')
+                            .map((dice, i) => (
+                                <div key={dice.id} className='dice-container'>
+                                    <Dice dice={dice.id} />
+                                    <input
+                                        value={dice.id}
+                                        type='checkbox'
+                                        defaultChecked
+                                        ref={
+                                            checkboxRef ? checkboxRef[i] : null
                                         }
-                                    } else {
-                                        filter.dice = filter.dice.filter(
-                                            d => d !== evt.target.name
-                                        );
-                                        setFilter({ ...filter });
-                                    }
-                                }}
-                            />
-                            <span className='checkbox-styler'>
-                                <FontAwesomeIcon icon={faCheck} />
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            </label>
+                                        onChange={(evt): void => {
+                                            if (evt.target.checked) {
+                                                if (
+                                                    !filter.dice.includes(
+                                                        Number(evt.target.value)
+                                                    )
+                                                ) {
+                                                    filter.dice = [
+                                                        ...filter.dice,
+                                                        Number(
+                                                            evt.target.value
+                                                        ),
+                                                    ];
+                                                    setFilter({ ...filter });
+                                                }
+                                            } else {
+                                                filter.dice = filter.dice.filter(
+                                                    dieId =>
+                                                        dieId !==
+                                                        Number(evt.target.value)
+                                                );
+                                                setFilter({ ...filter });
+                                            }
+                                        }}
+                                    />
+                                    <span className='checkbox-styler'>
+                                        <FontAwesomeIcon icon={faCheck} />
+                                    </span>
+                                </div>
+                            ))}
+                    </div>
+                </label>
+            ) : null}
             <div className='table-container'>
                 <table>
                     <thead>
                         <tr>
-                            <th>id</th>
-                            <th>rating</th>
-                            <th>type</th>
-                            <th>slot1</th>
-                            <th>slot2</th>
-                            <th>slot3</th>
-                            <th>slot4</th>
-                            <th>slot5</th>
+                            <th>ID</th>
+                            <th>Rating</th>
+                            <th>Type</th>
+                            <th>Deck</th>
                             <th>Toggle Edit</th>
                             <th>Remove Deck</th>
                         </tr>
@@ -602,13 +579,10 @@ export default function updateDeck(): JSX.Element {
                                     filter.type === '?' ||
                                     filter.type === deck.type
                             )
-                            .filter(
-                                deck =>
-                                    filter.dice.includes(deck.slot1) &&
-                                    filter.dice.includes(deck.slot2) &&
-                                    filter.dice.includes(deck.slot3) &&
-                                    filter.dice.includes(deck.slot4) &&
-                                    filter.dice.includes(deck.slot5)
+                            .filter(deckInfo =>
+                                deckInfo.decks.some(deck =>
+                                    deck.every(die => filter.dice.includes(die))
+                                )
                             )
                             .concat(
                                 Array(9)
@@ -617,20 +591,18 @@ export default function updateDeck(): JSX.Element {
                                         id: i - j,
                                         rating: 0,
                                         type: '-',
-                                        slot1: '?',
-                                        slot2: '?',
-                                        slot3: '?',
-                                        slot4: '?',
-                                        slot5: '?',
+                                        decks: [[]],
                                         added: '-',
                                         updated: '-',
                                     }))
                             )
                             .filter((deck, i) => !(deck.id < 0 && i > 8))
-                            .map(deck => (
-                                <tr key={deck.id}>
-                                    <td>{deck.id < 0 ? '-' : deck.id}</td>
-                                    {activeEdit.id === deck.id ? (
+                            .map(deckInfo => (
+                                <tr key={deckInfo.id}>
+                                    <td>
+                                        {deckInfo.id < 0 ? '-' : deckInfo.id}
+                                    </td>
+                                    {activeEdit.id === deckInfo.id ? (
                                         <>
                                             <td>
                                                 <input
@@ -638,7 +610,9 @@ export default function updateDeck(): JSX.Element {
                                                     min={0}
                                                     max={10}
                                                     step={0.25}
-                                                    defaultValue={deck.rating}
+                                                    defaultValue={
+                                                        deckInfo.rating
+                                                    }
                                                     className={
                                                         invalidRating
                                                             ? 'invalid'
@@ -657,7 +631,7 @@ export default function updateDeck(): JSX.Element {
                                             </td>
                                             <td>
                                                 <select
-                                                    defaultValue={deck.type}
+                                                    defaultValue={deckInfo.type}
                                                     onChange={(evt): void => {
                                                         const clone = {
                                                             ...activeEdit,
@@ -676,179 +650,102 @@ export default function updateDeck(): JSX.Element {
                                                 </select>
                                             </td>
                                             <td>
-                                                <select
-                                                    defaultValue={deck.slot1}
-                                                    onChange={(evt): void => {
-                                                        const clone = {
-                                                            ...activeEdit,
-                                                        };
-                                                        clone.slot1 =
-                                                            evt.target.value;
-                                                        setActiveEdit(clone);
-                                                    }}
-                                                >
-                                                    {diceList
-                                                        .filter(
-                                                            dice =>
-                                                                !(
-                                                                    dice ===
-                                                                        activeEdit.slot2 ||
-                                                                    dice ===
-                                                                        activeEdit.slot3 ||
-                                                                    dice ===
-                                                                        activeEdit.slot4 ||
-                                                                    dice ===
-                                                                        activeEdit.slot5
+                                                {deckInfo.decks.map(
+                                                    (deck, i) => (
+                                                        <div
+                                                            className='edit-container'
+                                                            // eslint-disable-next-line react/no-array-index-key
+                                                            key={i}
+                                                        >
+                                                            {deck.map(
+                                                                (die, j) => (
+                                                                    <select
+                                                                        // eslint-disable-next-line react/no-array-index-key
+                                                                        key={`${i}-${j}`}
+                                                                        defaultValue={
+                                                                            die
+                                                                        }
+                                                                        onChange={(
+                                                                            evt
+                                                                        ): void => {
+                                                                            const clone = {
+                                                                                ...activeEdit,
+                                                                            };
+                                                                            clone.decks = clone.decks.map(
+                                                                                (
+                                                                                    clonedDeck,
+                                                                                    ii
+                                                                                ) => {
+                                                                                    if (
+                                                                                        ii ===
+                                                                                        i
+                                                                                    ) {
+                                                                                        return clonedDeck.map(
+                                                                                            (
+                                                                                                cloneDie,
+                                                                                                jj
+                                                                                            ) => {
+                                                                                                if (
+                                                                                                    jj ===
+                                                                                                    j
+                                                                                                ) {
+                                                                                                    return Number(
+                                                                                                        evt
+                                                                                                            .target
+                                                                                                            .value
+                                                                                                    );
+                                                                                                }
+                                                                                                return cloneDie;
+                                                                                            }
+                                                                                        );
+                                                                                    }
+                                                                                    return clonedDeck;
+                                                                                }
+                                                                            );
+                                                                            setActiveEdit(
+                                                                                clone
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        {dices
+                                                                            .filter(
+                                                                                d => {
+                                                                                    const findExisted = activeEdit.decks[
+                                                                                        i
+                                                                                    ].findIndex(
+                                                                                        dieId =>
+                                                                                            dieId ===
+                                                                                            d.id
+                                                                                    );
+                                                                                    return (
+                                                                                        findExisted ===
+                                                                                            -1 ||
+                                                                                        findExisted ===
+                                                                                            j
+                                                                                    );
+                                                                                }
+                                                                            )
+                                                                            .map(
+                                                                                d => (
+                                                                                    <option
+                                                                                        value={
+                                                                                            d.id
+                                                                                        }
+                                                                                        // eslint-disable-next-line react/no-array-index-key
+                                                                                        key={`${i}-${j}-${d.id}`}
+                                                                                    >
+                                                                                        {
+                                                                                            d.name
+                                                                                        }
+                                                                                    </option>
+                                                                                )
+                                                                            )}
+                                                                    </select>
                                                                 )
-                                                        )
-                                                        .map(name => (
-                                                            <option
-                                                                key={`slot1${name}`}
-                                                            >
-                                                                {name}
-                                                            </option>
-                                                        ))}
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select
-                                                    defaultValue={deck.slot2}
-                                                    onChange={(evt): void => {
-                                                        const clone = {
-                                                            ...activeEdit,
-                                                        };
-                                                        clone.slot2 =
-                                                            evt.target.value;
-                                                        setActiveEdit(clone);
-                                                    }}
-                                                >
-                                                    {diceList
-                                                        .filter(
-                                                            dice =>
-                                                                !(
-                                                                    dice ===
-                                                                        activeEdit.slot1 ||
-                                                                    dice ===
-                                                                        activeEdit.slot3 ||
-                                                                    dice ===
-                                                                        activeEdit.slot4 ||
-                                                                    dice ===
-                                                                        activeEdit.slot5
-                                                                )
-                                                        )
-                                                        .map(name => (
-                                                            <option
-                                                                key={`slot2${name}`}
-                                                            >
-                                                                {name}
-                                                            </option>
-                                                        ))}
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select
-                                                    defaultValue={deck.slot3}
-                                                    onChange={(evt): void => {
-                                                        const clone = {
-                                                            ...activeEdit,
-                                                        };
-                                                        clone.slot3 =
-                                                            evt.target.value;
-                                                        setActiveEdit(clone);
-                                                    }}
-                                                >
-                                                    {diceList
-                                                        .filter(
-                                                            dice =>
-                                                                !(
-                                                                    dice ===
-                                                                        activeEdit.slot1 ||
-                                                                    dice ===
-                                                                        activeEdit.slot2 ||
-                                                                    dice ===
-                                                                        activeEdit.slot4 ||
-                                                                    dice ===
-                                                                        activeEdit.slot5
-                                                                )
-                                                        )
-                                                        .map(name => (
-                                                            <option
-                                                                key={`slot3${name}`}
-                                                            >
-                                                                {name}
-                                                            </option>
-                                                        ))}
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select
-                                                    defaultValue={deck.slot4}
-                                                    onChange={(evt): void => {
-                                                        const clone = {
-                                                            ...activeEdit,
-                                                        };
-                                                        clone.slot4 =
-                                                            evt.target.value;
-                                                        setActiveEdit(clone);
-                                                    }}
-                                                >
-                                                    {diceList
-                                                        .filter(
-                                                            dice =>
-                                                                !(
-                                                                    dice ===
-                                                                        activeEdit.slot1 ||
-                                                                    dice ===
-                                                                        activeEdit.slot2 ||
-                                                                    dice ===
-                                                                        activeEdit.slot3 ||
-                                                                    dice ===
-                                                                        activeEdit.slot5
-                                                                )
-                                                        )
-                                                        .map(name => (
-                                                            <option
-                                                                key={`slot4${name}`}
-                                                            >
-                                                                {name}
-                                                            </option>
-                                                        ))}
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select
-                                                    defaultValue={deck.slot5}
-                                                    onChange={(evt): void => {
-                                                        const clone = {
-                                                            ...activeEdit,
-                                                        };
-                                                        clone.slot5 =
-                                                            evt.target.value;
-                                                        setActiveEdit(clone);
-                                                    }}
-                                                >
-                                                    {diceList
-                                                        .filter(
-                                                            dice =>
-                                                                !(
-                                                                    dice ===
-                                                                        activeEdit.slot1 ||
-                                                                    dice ===
-                                                                        activeEdit.slot2 ||
-                                                                    dice ===
-                                                                        activeEdit.slot3 ||
-                                                                    dice ===
-                                                                        activeEdit.slot4
-                                                                )
-                                                        )
-                                                        .map(name => (
-                                                            <option
-                                                                key={`slot5${name}`}
-                                                            >
-                                                                {name}
-                                                            </option>
-                                                        ))}
-                                                </select>
+                                                            )}
+                                                        </div>
+                                                    )
+                                                )}
                                             </td>
                                             <td>
                                                 <button
@@ -856,19 +753,24 @@ export default function updateDeck(): JSX.Element {
                                                     onClick={(): void => {
                                                         if (
                                                             activeEdit.rating !==
-                                                                deck.rating ||
-                                                            activeEdit.type !==
-                                                                deck.type ||
-                                                            activeEdit.slot1 !==
-                                                                deck.slot1 ||
-                                                            activeEdit.slot2 !==
-                                                                deck.slot2 ||
-                                                            activeEdit.slot3 !==
-                                                                deck.slot3 ||
-                                                            activeEdit.slot4 !==
-                                                                deck.slot4 ||
-                                                            activeEdit.slot5 !==
-                                                                deck.slot5
+                                                                deckInfo.rating ||
+                                                            activeEdit.decks.some(
+                                                                (
+                                                                    editedDeck,
+                                                                    i
+                                                                ) =>
+                                                                    editedDeck.some(
+                                                                        (
+                                                                            editedDie,
+                                                                            j
+                                                                        ) =>
+                                                                            editedDie !==
+                                                                            deckInfo
+                                                                                .decks[
+                                                                                i
+                                                                            ][j]
+                                                                    )
+                                                            )
                                                         ) {
                                                             if (
                                                                 invalidVersion ||
@@ -898,24 +800,18 @@ export default function updateDeck(): JSX.Element {
                                         </>
                                     ) : (
                                         <MemoRow
-                                            deck={deck}
+                                            deckInfo={deckInfo}
                                             setActiveEdit={setActiveEdit}
                                         />
                                     )}
                                     <td>
                                         <button
-                                            disabled={deck.id < 0}
+                                            disabled={deckInfo.id < 0}
                                             type='button'
                                             onClick={(): void => {
                                                 setDeckToDelete({
-                                                    id: deck.id,
-                                                    dice: [
-                                                        deck.slot1,
-                                                        deck.slot2,
-                                                        deck.slot3,
-                                                        deck.slot4,
-                                                        deck.slot5,
-                                                    ],
+                                                    id: deckInfo.id,
+                                                    dice: deckInfo.decks,
                                                 });
                                                 dispatch({
                                                     type: OPEN_POPUP,

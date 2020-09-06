@@ -180,6 +180,17 @@
                     & > td {
                         vertical-align: middle;
 
+                        .deck-container,
+                        .edit-container {
+                            .display(flex);
+                            .flex-direction(row);
+                            .justify-content(space-between);
+
+                            figure {
+                                width: 50px;
+                            }
+                        }
+
                         select,
                         input {
                             height: 32px;

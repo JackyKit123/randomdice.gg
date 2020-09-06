@@ -16,6 +16,7 @@ import PopUp from '../../Components/PopUp Overlay/popup';
 import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
 import { fetchDecks, fetchDices } from '../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
+import { Dice as DiceType } from '../../Misc/Redux Storage/Fetch Firebase/Dices/types';
 import './decklist.less';
 import { OPEN_POPUP } from '../../Misc/Redux Storage/PopUp Overlay/types';
 import ShareButtons from '../../Components/Social Media Share/share';
@@ -39,8 +40,8 @@ export default function DeckList(): JSX.Element {
     const legendaryList =
         dices
             ?.filter(dice => dice.rarity === 'Legendary')
-            .map(dice => dice.name) || [];
-    const [findAlt, setFindAlt] = useState([] as string[]);
+            .map(dice => dice.id) || [];
+    const [findAlt, setFindAlt] = useState([] as DiceType['id'][]);
 
     useEffect(() => {
         if (legendaryList.length > 0 && filter.legendary.length === 0) {
@@ -59,21 +60,21 @@ export default function DeckList(): JSX.Element {
         const Checkbox = ({
             legendary,
         }: {
-            legendary: string;
+            legendary: DiceType['id'];
         }): JSX.Element => (
             <input
-                name={legendary}
+                value={legendary}
                 type='checkbox'
                 defaultChecked={filter.legendary.includes(legendary)}
                 onChange={(evt): void => {
                     if (evt.target.checked) {
                         filter.legendary = [
                             ...filter.legendary,
-                            evt.target.name,
+                            Number(evt.target.value),
                         ];
                     } else {
                         filter.legendary = filter.legendary.filter(
-                            l => l !== evt.target.name
+                            l => l !== Number(evt.target.value)
                         );
                     }
                     dispatch({
@@ -84,47 +85,23 @@ export default function DeckList(): JSX.Element {
             />
         );
 
-        const options = [
-            dices.find(alt => alt.name === findAlt[0]),
-            dices.find(alt => alt.name === findAlt[1]),
-            dices.find(alt => alt.name === findAlt[2]),
-            dices.find(alt => alt.name === findAlt[3]),
-            dices.find(alt => alt.name === findAlt[4]),
-        ];
-
-        const deckKeys = [
-            'id',
-            'type',
-            'rating',
-            'slot1',
-            'slot2',
-            'slot3',
-            'slot4',
-            'slot5',
-            'alternatives',
-            'added',
-            'updated',
-        ];
-
         const filteredDeck = decks
             .filter(deckData => {
-                const deck = [
-                    deckData.slot1,
-                    deckData.slot2,
-                    deckData.slot3,
-                    deckData.slot4,
-                    deckData.slot5,
-                ];
                 return (
-                    deck.every(dice =>
-                        dices.find(d => d.name === dice)?.rarity === 'Legendary'
-                            ? filter.legendary.includes(dice)
-                            : true
+                    deckData.decks.some(deck =>
+                        deck.every(dice =>
+                            dices.find(d => d.id === dice)?.rarity ===
+                            'Legendary'
+                                ? filter.legendary.includes(dice)
+                                : true
+                        )
                     ) &&
                     deckData.type.toLowerCase() === deckType &&
-                    (filter.customSearch === '?'
+                    (filter.customSearch === -1
                         ? true
-                        : deck.includes(filter.customSearch))
+                        : deckData.decks.some(deck =>
+                              deck.includes(filter.customSearch)
+                          ))
                 );
             })
             .map(deck => {
@@ -132,33 +109,19 @@ export default function DeckList(): JSX.Element {
                     id: deck.id,
                     type: deck.type,
                     rating: deck.rating,
-                    slot1: deck.slot1,
-                    slot2: deck.slot2,
-                    slot3: deck.slot3,
-                    slot4: deck.slot4,
-                    slot5: deck.slot5,
-                    alternatives: [
-                        deck.slot1,
-                        deck.slot2,
-                        deck.slot3,
-                        deck.slot4,
-                        deck.slot5,
-                    ],
+                    decks: deck.decks,
+                    alternatives: deck.decks,
                     added: deck.added,
                     updated: deck.updated ? deck.updated : '-',
                 };
             });
-        while (filteredDeck.length < 9 && filteredDeck.length !== 0) {
+        while (filteredDeck.length < 7 && filteredDeck.length !== 0) {
             filteredDeck.push({
                 id: filteredDeck.length,
                 type: '-',
                 rating: 0,
-                slot1: '?',
-                slot2: '?',
-                slot3: '?',
-                slot4: '?',
-                slot5: '?',
-                alternatives: [],
+                decks: [[-1, -2, -3, -4, -5]],
+                alternatives: [[]],
                 added: '-',
                 updated: '-',
             });
@@ -190,28 +153,38 @@ export default function DeckList(): JSX.Element {
                         <Dice dice={findAlt[3]} />
                         <Dice dice={findAlt[4]} />
                     </div>
-                    {options?.map((alt, i) => (
-                        <div key={Number(new Date()) + Math.random() + i}>
-                            <Dice dice={findAlt[i]} />
-                            <h4>
-                                {alt?.alternatives?.desc
-                                    ? alt?.alternatives?.desc
-                                    : 'You should not need to replace this.'}
-                            </h4>
-                            {alt?.alternatives?.desc ? (
-                                <h5>Alternatives :</h5>
-                            ) : null}
-                            <div className='replacement'>
-                                {options[
-                                    i
-                                ]?.alternatives?.list.map((altDice: string) =>
-                                    altDice ? (
-                                        <Dice dice={altDice} key={altDice} />
-                                    ) : null
+                    {findAlt
+                        .map(alt => ({
+                            id: alt,
+                            alternatives: dices.find(die => die.id === alt)
+                                ?.alternatives,
+                        }))
+                        .map(die => (
+                            <div key={die.id}>
+                                <Dice dice={die.id} />
+                                {die.alternatives ? (
+                                    <>
+                                        <h4>{die.alternatives.desc}</h4>
+                                        <h5>Alternatives :</h5>
+                                        <div className='replacement'>
+                                            {die.alternatives.list.map(
+                                                (altDice: string) =>
+                                                    altDice ? (
+                                                        <Dice
+                                                            dice={altDice}
+                                                            key={altDice}
+                                                        />
+                                                    ) : null
+                                            )}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <h4>
+                                        You should not need to replace this.
+                                    </h4>
                                 )}
                             </div>
-                        </div>
-                    ))}
+                        ))}
                 </PopUp>
                 <form className='filter'>
                     <div className='top-label'>
@@ -236,7 +209,9 @@ export default function DeckList(): JSX.Element {
                                 name='Custom Search'
                                 defaultValue={filter.customSearch}
                                 onChange={(evt): void => {
-                                    filter.customSearch = evt.target.value;
+                                    filter.customSearch = Number(
+                                        evt.target.value
+                                    );
                                     dispatch({
                                         type: FILTER_ACTION,
                                         payload: { ...filter },
@@ -244,9 +219,9 @@ export default function DeckList(): JSX.Element {
                                 }}
                                 data-value={filter.customSearch}
                             >
-                                <option value='?'>?</option>
+                                <option value={-1}>?</option>
                                 {dices.map(dice => (
-                                    <option value={dice.name} key={dice.name}>
+                                    <option value={dice.id} key={dice.name}>
                                         {dice.name}
                                     </option>
                                 ))}
@@ -284,7 +259,7 @@ export default function DeckList(): JSX.Element {
                                         : 'Select All'}
                                 </button>
                             </div>
-                            {legendaryList.map((legendary: string) => (
+                            {legendaryList.map((legendary: DiceType['id']) => (
                                 <div
                                     className='legendary-filter'
                                     key={legendary}
@@ -306,51 +281,82 @@ export default function DeckList(): JSX.Element {
                     <table>
                         <thead>
                             <tr>
-                                {deckKeys.map(key => {
-                                    return <th key={key}>{key}</th>;
-                                })}
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Rating</th>
+                                <th>Deck</th>
+                                <th>Alternatives</th>
+                                <th>Added</th>
+                                <th>Updated</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredDeck.length > 0 ? (
-                                filteredDeck.map(deck => (
-                                    <tr key={`deck-${deck.id}`}>
-                                        {Object.values(deck).map((data, i) => (
-                                            <td
-                                                key={`deck-${deck.id}-datapoint-${deckKeys[i]}`}
-                                            >
-                                                {deckKeys[i].match(
-                                                    /^slot[1-5]$/
-                                                ) ? (
-                                                    <Dice
-                                                        dice={data as string}
-                                                    />
-                                                ) : deck.type === '-' ? (
-                                                    '-'
-                                                ) : deckKeys[i] ===
-                                                  'alternatives' ? (
-                                                    <button
-                                                        aria-label='see alternatives'
-                                                        type='button'
-                                                        onClick={(): void => {
-                                                            dispatch({
-                                                                type: OPEN_POPUP,
-                                                                payload: 'alt',
-                                                            });
-                                                            setFindAlt(
-                                                                data as string[]
-                                                            );
-                                                        }}
-                                                    >
-                                                        <FontAwesomeIcon
-                                                            icon={faExchangeAlt}
+                                filteredDeck.map(deckInfo => (
+                                    <tr key={`deck-${deckInfo.id}`}>
+                                        <td>
+                                            {deckInfo.type === '-'
+                                                ? '-'
+                                                : deckInfo.id}
+                                        </td>
+                                        <td>{deckInfo.type}</td>
+                                        <td>
+                                            {deckInfo.type === '-'
+                                                ? '-'
+                                                : deckInfo.rating}
+                                        </td>
+                                        <td>
+                                            {deckInfo.decks.map((deck, i) => (
+                                                <div
+                                                    className='deck-container'
+                                                    // eslint-disable-next-line react/no-array-index-key
+                                                    key={i}
+                                                >
+                                                    {deck.map(die => (
+                                                        <Dice
+                                                            key={die}
+                                                            dice={die}
                                                         />
-                                                    </button>
-                                                ) : (
-                                                    data
+                                                    ))}
+                                                </div>
+                                            ))}
+                                        </td>
+                                        <td>
+                                            <div className='button-container'>
+                                                {deckInfo.decks.map(
+                                                    (deck, i) => (
+                                                        <button
+                                                            // eslint-disable-next-line react/no-array-index-key
+                                                            key={i}
+                                                            disabled={
+                                                                deckInfo.type ===
+                                                                '-'
+                                                            }
+                                                            aria-label='see alternatives'
+                                                            type='button'
+                                                            onClick={(): void => {
+                                                                dispatch({
+                                                                    type: OPEN_POPUP,
+                                                                    payload:
+                                                                        'alt',
+                                                                });
+                                                                setFindAlt(
+                                                                    deck
+                                                                );
+                                                            }}
+                                                        >
+                                                            <FontAwesomeIcon
+                                                                icon={
+                                                                    faExchangeAlt
+                                                                }
+                                                            />
+                                                        </button>
+                                                    )
                                                 )}
-                                            </td>
-                                        ))}
+                                            </div>
+                                        </td>
+                                        <td>{deckInfo.added}</td>
+                                        <td>{deckInfo.updated}</td>
                                     </tr>
                                 ))
                             ) : (
