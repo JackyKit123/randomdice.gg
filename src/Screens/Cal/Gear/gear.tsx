@@ -19,7 +19,7 @@ export default function GearCalculator(): JSX.Element {
     const [filter, setFilter] = useState({
         class: 5,
         level: 1,
-        chain: 0,
+        chain: 1,
         pip: 1,
         crit: 111,
     });
@@ -32,29 +32,19 @@ export default function GearCalculator(): JSX.Element {
     const isInvalidPip =
         !Number.isInteger(filter.pip) || filter.pip < 1 || filter.pip > 7 * 15;
     const isInvalidChain =
-        filter.pip < filter.chain + 1 || filter.pip > (filter.chain + 1) * 7;
+        filter.pip < filter.chain || filter.pip > filter.chain * 7;
     const invalidInput = isInvalidCrit || isInvalidChain || isInvalidPip;
 
     if (data) {
-        const gearDiceData = {
-            baseAtk: data.atk,
-            baseAtkPerClass: data.cupAtk,
-            baseAtkPerLevel: data.pupAtk,
-            atkSpd: data.spd,
-            baseChainBuff: data.eff1,
-            chainBuffPerClass: data.cupEff1,
-            chainBuffPerLevel: data.pupEff1,
-        };
-
         const atkDmg =
-            gearDiceData.baseAtk +
-            gearDiceData.baseAtkPerClass * (filter.class - 5) +
-            gearDiceData.baseAtkPerLevel * (filter.level - 1);
+            data.atk +
+            data.cupAtk * (filter.class - 5) +
+            data.pupAtk * (filter.level - 1);
         const rawBuff =
-            gearDiceData.baseChainBuff +
-            gearDiceData.chainBuffPerClass * (filter.class - 5) +
-            gearDiceData.chainBuffPerLevel * (filter.level - 1);
-        const dmgPerPip = atkDmg * (1 + (rawBuff / 100) * filter.chain);
+            data.eff1 +
+            data.cupEff1 * (filter.class - 5) +
+            data.pupEff1 * (filter.level - 1);
+        const dmgPerPip = atkDmg * (1 + (rawBuff / 100) * (filter.chain - 1));
         const dps =
             Math.round(
                 dmgPerPip *
@@ -68,7 +58,7 @@ export default function GearCalculator(): JSX.Element {
                 <p>
                     This is a calculator for calculating the damage per pip and
                     the total dps of the Gear Dice. The chain length start with
-                    0 (1 dice on board) and maxed at 14 chain length (board full
+                    1 (1 dice on board) and maxed at 15 chain length (board full
                     of dice).
                 </p>
                 <hr className='divisor' />
@@ -136,7 +126,6 @@ export default function GearCalculator(): JSX.Element {
                                 setFilter({ ...filter });
                             }}
                         >
-                            <option>0</option>
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -151,6 +140,7 @@ export default function GearCalculator(): JSX.Element {
                             <option>12</option>
                             <option>13</option>
                             <option>14</option>
+                            <option>15</option>
                         </select>
                     </label>
                     <label htmlFor='pip'>
