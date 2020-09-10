@@ -308,7 +308,30 @@ export default function DeckList(): JSX.Element {
                                         <td>
                                             {deckInfo.decks.map((deck, i) => (
                                                 <div
-                                                    className='deck-container'
+                                                    className={`deck-container ${
+                                                        !(
+                                                            deck.every(dice =>
+                                                                dices.find(
+                                                                    d =>
+                                                                        d.id ===
+                                                                        dice
+                                                                )?.rarity ===
+                                                                'Legendary'
+                                                                    ? filter.legendary.includes(
+                                                                          dice
+                                                                      )
+                                                                    : true
+                                                            ) &&
+                                                            (filter.customSearch ===
+                                                            -1
+                                                                ? true
+                                                                : deck.includes(
+                                                                      filter.customSearch
+                                                                  ))
+                                                        )
+                                                            ? 'grey-out'
+                                                            : ''
+                                                    }`}
                                                     // eslint-disable-next-line react/no-array-index-key
                                                     key={i}
                                                 >
