@@ -85,7 +85,7 @@ export default function GoogleAds({
                         data-ad-format='auto'
                         data-full-width-responsive='true'
                     />
-                    <h6 className='label'>Advertisement</h6>
+                    <span className='label'>Advertisement</span>
                 </>
             )}
         </div>
