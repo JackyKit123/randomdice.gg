@@ -5,6 +5,7 @@ import 'firebase/database';
 import { detected } from 'adblockdetect';
 import './ad.less';
 import { RootState } from '../../Misc/Redux Storage/store';
+import { adblocked } from '../../Misc/customGaEvent';
 
 export default function GoogleAds({
     unitId,
@@ -29,6 +30,9 @@ export default function GoogleAds({
                         'script[src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"][data-ad-client="ca-pub-3031422008949072"]'
                     )
                 ) {
+                    if (detected()) {
+                        adblocked();
+                    }
                     const script = document.createElement('script');
                     script.src =
                         'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';

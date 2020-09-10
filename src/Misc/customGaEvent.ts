@@ -16,3 +16,6 @@ export const auth = {
 
 export const share = (): void =>
     window.ga('send', 'event', 'Social Media Share', 'share');
+
+export const adblocked = (): void =>
+    window.ga('send', 'event', 'Ad Blocked Browsing', 'adblocked');
