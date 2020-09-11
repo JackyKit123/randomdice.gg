@@ -259,7 +259,7 @@ export default function editDice(): JSX.Element {
                             setActiveEdit({ ...initialState });
                         } else {
                             const foundDice = dices.find(
-                                dice => dice.name === evt.target.value
+                                dice => dice.id === Number(evt.target.value)
                             );
                             if (foundDice) {
                                 setActiveEdit({ ...foundDice });
@@ -280,7 +280,11 @@ export default function editDice(): JSX.Element {
                 >
                     <option>?</option>
                     {dices.map(dice => (
-                        <option key={dice.name} id={dice.id.toString()}>
+                        <option
+                            key={dice.id}
+                            value={dice.id}
+                            id={dice.id.toString()}
+                        >
                             {dice.name}
                         </option>
                     ))}
@@ -773,7 +777,10 @@ export default function editDice(): JSX.Element {
                                     >
                                         <option>?</option>
                                         {dices.map(dice => (
-                                            <option key={dice.name}>
+                                            <option
+                                                key={dice.id}
+                                                value={dice.id}
+                                            >
                                                 {dice.name}
                                             </option>
                                         ))}
@@ -799,7 +806,10 @@ export default function editDice(): JSX.Element {
                                     >
                                         <option>?</option>
                                         {dices.map(dice => (
-                                            <option key={dice.name}>
+                                            <option
+                                                key={dice.name}
+                                                value={dice.id}
+                                            >
                                                 {dice.name}
                                             </option>
                                         ))}
@@ -825,7 +835,10 @@ export default function editDice(): JSX.Element {
                                     >
                                         <option>?</option>
                                         {dices.map(dice => (
-                                            <option key={dice.name}>
+                                            <option
+                                                key={dice.name}
+                                                value={dice.id}
+                                            >
                                                 {dice.name}
                                             </option>
                                         ))}
@@ -851,7 +864,10 @@ export default function editDice(): JSX.Element {
                                     >
                                         <option>?</option>
                                         {dices.map(dice => (
-                                            <option key={dice.name}>
+                                            <option
+                                                key={dice.name}
+                                                value={dice.id}
+                                            >
                                                 {dice.name}
                                             </option>
                                         ))}
@@ -877,7 +893,10 @@ export default function editDice(): JSX.Element {
                                     >
                                         <option>?</option>
                                         {dices.map(dice => (
-                                            <option key={dice.name}>
+                                            <option
+                                                key={dice.name}
+                                                value={dice.id}
+                                            >
                                                 {dice.name}
                                             </option>
                                         ))}

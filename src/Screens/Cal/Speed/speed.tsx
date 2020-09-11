@@ -47,10 +47,10 @@ export default function SpeedCalculator(): JSX.Element {
     let jsx;
 
     const data = {
-        blizzard: dices?.find(dice => dice.name === 'Blizzard'),
-        ice: dices?.find(dice => dice.name === 'Ice'),
-        flow: dices?.find(dice => dice.name === 'Flow'),
-        sand: dices?.find(dice => dice.name === 'Sand Swamp'),
+        blizzard: dices?.find(dice => dice.id === 35),
+        ice: dices?.find(dice => dice.id === 4),
+        flow: dices?.find(dice => dice.id === 48),
+        sand: dices?.find(dice => dice.id === 30),
     };
 
     if (data.blizzard && data.ice && data.flow && data.sand) {

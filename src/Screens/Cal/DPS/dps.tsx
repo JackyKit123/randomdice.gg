@@ -71,18 +71,18 @@ export default function DpsCalculator(): JSX.Element {
     const invalidInput = isInvalidCrit;
 
     const data = {
-        electric: dices?.find(dice => dice.name === 'Electric'),
-        wind: dices?.find(dice => dice.name === 'Wind'),
-        iron: dices?.find(dice => dice.name === 'Iron'),
-        broken: dices?.find(dice => dice.name === 'Broken'),
-        gamble: dices?.find(dice => dice.name === 'Gamble'),
-        arrow: dices?.find(dice => dice.name === 'Arrow'),
-        mwind: dices?.find(dice => dice.name === 'Mighty Wind'),
-        melec: dices?.find(dice => dice.name === 'Modified Electric'),
-        typhoon: dices?.find(dice => dice.name === 'Typhoon'),
-        critical: dices?.find(dice => dice.name === 'Critical'),
-        light: dices?.find(dice => dice.name === 'Light'),
-        lunar: dices?.find(dice => dice.name === 'Lunar'),
+        electric: dices?.find(dice => dice.id === 1),
+        wind: dices?.find(dice => dice.id === 2),
+        iron: dices?.find(dice => dice.id === 5),
+        broken: dices?.find(dice => dice.id === 6),
+        gamble: dices?.find(dice => dice.id === 7),
+        arrow: dices?.find(dice => dice.id === 16),
+        mwind: dices?.find(dice => dice.id === 24),
+        melec: dices?.find(dice => dice.id === 2),
+        typhoon: dices?.find(dice => dice.id === 43),
+        critical: dices?.find(dice => dice.id === 13),
+        light: dices?.find(dice => dice.id === 10),
+        lunar: dices?.find(dice => dice.id === 47),
     } as { [key: string]: DiceType };
 
     if (Object.values(data).every(d => d !== undefined)) {

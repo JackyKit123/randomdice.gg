@@ -221,7 +221,7 @@ export default function DeckList(): JSX.Element {
                             >
                                 <option value={-1}>?</option>
                                 {dices.map(dice => (
-                                    <option value={dice.id} key={dice.name}>
+                                    <option value={dice.id} key={dice.id}>
                                         {dice.name}
                                     </option>
                                 ))}

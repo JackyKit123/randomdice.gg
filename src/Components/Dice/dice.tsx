@@ -8,6 +8,7 @@ export default function Dice({ dice }: { dice: number | string }): JSX.Element {
         (state: RootState) => state.fetchDicesReducer
     );
     const targetDice = dices?.find(d => d.id === dice || d.name === dice);
+
     return (
         <figure className='dice'>
             <img

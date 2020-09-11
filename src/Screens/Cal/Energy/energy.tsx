@@ -55,10 +55,10 @@ export default function EnergyCalculator(): JSX.Element {
     });
     let jsx;
     const data = {
-        energy: dices?.find(dice => dice.name === 'Energy'),
-        crit: dices?.find(dice => dice.name === 'Critical'),
-        light: dices?.find(dice => dice.name === 'Light'),
-        lunar: dices?.find(dice => dice.name === 'Lunar'),
+        energy: dices?.find(dice => dice.id === 14),
+        crit: dices?.find(dice => dice.id === 13),
+        light: dices?.find(dice => dice.id === 10),
+        lunar: dices?.find(dice => dice.id === 47),
     } as {
         [key: string]: DiceType;
     };

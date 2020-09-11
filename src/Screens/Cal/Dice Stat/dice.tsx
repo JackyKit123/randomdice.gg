@@ -88,7 +88,7 @@ export default function DiceStat(): JSX.Element {
                 <hr className='divisor' />
                 <div className='container'>
                     <div className='upper'>
-                        <Dice dice={dice.name} />
+                        <Dice dice={dice.id} />
 
                         <label htmlFor='class'>
                             Class :{' '}

@@ -50,9 +50,9 @@ export default function ComboCalculator(): JSX.Element {
     });
     let jsx;
     const data = {
-        combo: dices?.find(dice => dice.name === 'Combo'),
-        crit: dices?.find(dice => dice.name === 'Critical'),
-        lunar: dices?.find(dice => dice.name === 'Lunar'),
+        combo: dices?.find(dice => dice.id === 46),
+        crit: dices?.find(dice => dice.id === 13),
+        lunar: dices?.find(dice => dice.id === 47),
     } as {
         [key: string]: DiceType;
     };

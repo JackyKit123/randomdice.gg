@@ -24,7 +24,7 @@ export default function GearCalculator(): JSX.Element {
         crit: 111,
     });
     let jsx = <div />;
-    const data = dices?.find(dice => dice.name === 'Gear');
+    const data = dices?.find(dice => dice.id === 26);
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||

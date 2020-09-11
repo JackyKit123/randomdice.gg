@@ -221,10 +221,8 @@ export default function ArenaDraft(): JSX.Element {
                                                             currentPick < 3
                                                                 ? dice.rarity !==
                                                                       'Legendary' &&
-                                                                  dice.name !==
-                                                                      'Growth'
-                                                                : dice.name !==
-                                                                  'Growth'
+                                                                  dice.id !== 36
+                                                                : dice.id !== 36
                                                         )
                                                         .filter(dice => {
                                                             const activePicks = {

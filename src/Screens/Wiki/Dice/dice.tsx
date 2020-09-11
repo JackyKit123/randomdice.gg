@@ -27,6 +27,7 @@ export default function DiceMechanic(): JSX.Element {
     const [mechanics, setMechanics] = useState<
         (
             | {
+                  id: number;
                   name: string;
                   detail: string;
               }
@@ -57,10 +58,12 @@ export default function DiceMechanic(): JSX.Element {
     useEffect(() => {
         if (dices && !mechanics?.includes('ad')) {
             const tmp = dices.map(dice => ({
+                id: dice.id,
                 name: dice.name,
                 detail: dice.detail,
             })) as (
                 | {
+                      id: number;
                       name: string;
                       detail: string;
                   }
@@ -93,12 +96,12 @@ export default function DiceMechanic(): JSX.Element {
                                 <GoogleAds unitId='1144871846' />
                             </Fragment>
                         ) : (
-                            <Fragment key={dice.name}>
+                            <Fragment key={dice.id}>
                                 <hr className='divisor' />
                                 <div className='row' id={dice.name}>
                                     <h3>{dice.name}</h3>
                                     <figure>
-                                        <Dice dice={dice.name || ''} />
+                                        <Dice dice={dice.id} />
                                     </figure>
                                     {ReactHtmlParser(sanitize(dice.detail))}
                                 </div>

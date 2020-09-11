@@ -65,18 +65,10 @@ export default function SolarCalculator(): JSX.Element {
     const invalidInput = isInvalidCrit || isInvalidDuration;
 
     const diceData = {
-        solar: dices?.find(dice => dice.name === 'Solar') as
-            | DiceType
-            | undefined,
-        light: dices?.find(dice => dice.name === 'Light') as
-            | DiceType
-            | undefined,
-        crit: dices?.find(dice => dice.name === 'Critical') as
-            | DiceType
-            | undefined,
-        lunar: dices?.find(dice => dice.name === 'Lunar') as
-            | DiceType
-            | undefined,
+        solar: dices?.find(dice => dice.id === 38) as DiceType | undefined,
+        light: dices?.find(dice => dice.id === 10) as DiceType | undefined,
+        crit: dices?.find(dice => dice.id === 13) as DiceType | undefined,
+        lunar: dices?.find(dice => dice.id === 47) as DiceType | undefined,
     };
 
     if (diceData.solar && diceData.light && diceData.crit && diceData.lunar) {
