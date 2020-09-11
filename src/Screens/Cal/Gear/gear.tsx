@@ -28,7 +28,7 @@ export default function GearCalculator(): JSX.Element {
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
-        filter.crit > 2185;
+        filter.crit > 2225;
     const isInvalidPip =
         !Number.isInteger(filter.pip) || filter.pip < 1 || filter.pip > 7 * 15;
     const isInvalidChain =
@@ -170,7 +170,7 @@ export default function GearCalculator(): JSX.Element {
                             type='number'
                             name='crit dmg'
                             min={111}
-                            max={2185}
+                            max={2225}
                             step={1}
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
@@ -206,7 +206,7 @@ export default function GearCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2185</strong>.
+                        <strong>111-2225</strong>.
                     </span>
                 ) : (
                     ''
