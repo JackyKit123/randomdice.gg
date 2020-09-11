@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { unregister } from '../../serviceWorker';
 import './loading.less';
 
 export default function Loading(): JSX.Element {
@@ -35,7 +36,11 @@ export default function Loading(): JSX.Element {
                     You seem to be stuck loading.{' '}
                     <button
                         type='button'
-                        onClick={(): void => window.location.reload()}
+                        onClick={(): void => {
+                            localStorage.clear();
+                            unregister();
+                            window.location.reload();
+                        }}
                     >
                         Click Here to refresh
                     </button>
