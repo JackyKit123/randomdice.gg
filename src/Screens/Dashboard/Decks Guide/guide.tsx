@@ -195,16 +195,20 @@ export default function updateDecksGuide(): JSX.Element {
                                             key={`${i}-${j}`}
                                             defaultValue={dice}
                                             onChange={(evt): void => {
-                                                activeEdit.diceList[i][j] =
-                                                    evt.target.value;
+                                                activeEdit.diceList[i][
+                                                    j
+                                                ] = Number(evt.target.value);
                                                 setActiveEdit({
                                                     ...activeEdit,
                                                 });
                                             }}
                                         >
-                                            <option>?</option>
+                                            <option value={-1}>?</option>
                                             {dices.map(diceOption => (
-                                                <option key={diceOption.name}>
+                                                <option
+                                                    key={diceOption.id}
+                                                    value={diceOption.id}
+                                                >
                                                     {diceOption.name}
                                                 </option>
                                             ))}

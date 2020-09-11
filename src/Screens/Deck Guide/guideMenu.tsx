@@ -67,7 +67,7 @@ export default function DeckGuideMenu(): JSX.Element {
                                                     {dicelist.map((dice, i) => (
                                                         <Dice
                                                             /* eslint-disable-next-line react/no-array-index-key */
-                                                            key={`filter-${dicelist.join()}-${dice}${i}`}
+                                                            key={`filter-${dicelist.join()}-${dice}-${i}`}
                                                             dice={dice}
                                                         />
                                                     ))}

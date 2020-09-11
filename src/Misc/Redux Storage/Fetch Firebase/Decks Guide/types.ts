@@ -4,6 +4,7 @@ import {
     FailureAction,
     ClearErrorAction,
 } from '../types';
+import { Dice } from '../Dices/types';
 
 export const SUCCESS = 'FETCH_DECKS_GUIDE_SUCCESS';
 export const FAIL = 'FETCH_DECKS_GUIDE_FAIL';
@@ -14,7 +15,7 @@ export interface DeckGuide {
     id: number;
     name: string;
     type: 'PvP' | 'PvE' | 'Crew';
-    diceList: string[][];
+    diceList: Dice['id'][][];
     guide: string;
 }
 
