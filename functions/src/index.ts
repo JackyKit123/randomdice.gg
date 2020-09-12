@@ -27,7 +27,9 @@ export const discord_login = functions.https.onRequest((req, res) => {
             try {
                 const tokenExchange = await axios.post(
                     'https://discord.com/api/v6/oauth2/token',
-                    `client_id=723917706641801316&client_secret=***REMOVED***&grant_type=authorization_code&code=${code}&redirect_uri=${req.header(
+                    `client_id=723917706641801316&client_secret=${
+                        functions.config().discord.secret
+                    }&grant_type=authorization_code&code=${code}&redirect_uri=${req.header(
                         'Origin'
                     )}/discord_login&scope=identify%20email`,
                     {
@@ -166,7 +168,9 @@ export const patreon_login = functions.https.onRequest((req, res) => {
             try {
                 const tokenExchange = await axios.post(
                     'https://www.patreon.com/api/oauth2/token',
-                    `client_id=mcsy6u4brWts2SHqlVuV4jo_BVLO3Ynfa0HJsnYcozdqkOYv-lWhLz1x6BZzwQTq&client_secret=***REMOVED***&grant_type=authorization_code&code=${code}&scope=identity%20identity%5Bemail%5D&redirect_uri=${req.header(
+                    `client_id=mcsy6u4brWts2SHqlVuV4jo_BVLO3Ynfa0HJsnYcozdqkOYv-lWhLz1x6BZzwQTq&client_secret=${
+                        functions.config().patreon.secret
+                    }&grant_type=authorization_code&code=${code}&scope=identity%20identity%5Bemail%5D&redirect_uri=${req.header(
                         'Origin'
                     )}/patreon_login`,
                     {
@@ -318,7 +322,7 @@ export const fetchPatreon = functions.pubsub
                 'grant_type=refresh_token' +
                     `&refresh_token=${refresh_token}` +
                     '&client_id=mcsy6u4brWts2SHqlVuV4jo_BVLO3Ynfa0HJsnYcozdqkOYv-lWhLz1x6BZzwQTq' +
-                    '&client_secret=***REMOVED***',
+                    `&client_secret=${functions.config().patreon.secret}`,
                 {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
