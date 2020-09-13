@@ -1,5 +1,20 @@
 {
   "projects": {
     "default": "random-dice-web"
+  },
+  "targets": {
+    "random-dice-web": {
+      "hosting": {
+        "website": [
+          "random-dice-web"
+        ],
+        "discord": [
+          "random-dice-discord"
+        ],
+        "github": [
+          "random-dice-github"
+        ]
+      }
+    }
   }
 }

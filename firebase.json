@@ -2,40 +2,77 @@
     "database": {
         "rules": "database.rules.json"
     },
-    "hosting": {
-        "public": "build",
-        "ignore": [
-            "firebase.json",
-            "**/.*",
-            "**/node_modules/**"
-        ],
-        "rewrites": [
-            {
-                "source": "**",
-                "destination": "/index.html"
-            }
-        ],
-        "headers": [
-            {
-                "source": "/service-worker.js",
-                "headers": [
-                    {
-                        "key": "Cache-Control",
-                        "value": "no-cache"
-                    }
-                ]
-            },
-            {
-                "source": "/index.html",
-                "headers": [
-                    {
-                        "key": "Cache-Control",
-                        "value": "no-cache"
-                    }
-                ]
-            }
-        ]
-    },
+    "hosting": [
+        {
+            "target": "discord",
+            "public": "empty",
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/"
+                }
+            ],
+            "redirects": [
+                {
+                    "source": "/", 
+                    "destination": "https://discord.com/invite/zQj6tCM/",
+                    "type": 301
+                }
+            ]
+        },
+        {
+            "target": "github",
+            "public": "empty",
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/"
+                }
+            ],
+            "redirects": [
+                {
+                    "source": "/", 
+                    "destination": "https://github.com/JackyKit123/randomdice.gg",
+                    "type": 301
+                }
+            ]
+        },
+        {
+            "target": "website",
+            "public": "build",
+            "ignore": [
+                "firebase.json",
+                "**/.*",
+                "**/node_modules/**"
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ],
+            "headers": [
+                {
+                    "source": "/service-worker.js",
+                    "headers": [
+                        {
+                            "key": "Cache-Control",
+                            "value": "no-cache"
+                        }
+                    ]
+                },
+                {
+                    "source": "/index.html",
+                    "headers": [
+                        {
+                            "key": "Cache-Control",
+                            "value": "no-cache"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
     "storage": {
         "rules": "storage.rules"
     },
