@@ -33,6 +33,12 @@
                 font-weight: 500;
                 font-size: 20px;
                 margin: 10px auto;
+
+                button {
+                    font-size: 15px;
+                    padding: 3px;
+                    margin: 0 0 0 10px;
+                }
             }
 
             button {
@@ -42,9 +48,21 @@
         }
 
         &.deck {
-            figure {
-                display: inline-block;
-                max-width: 20%;
+            & > .deck-list {
+                .display(flex);
+                .flex-direction(row);
+                .justify-content(center);
+                max-width: 100%;
+                width: 500px;
+                margin: 0 auto;
+
+                figure {
+                    width: 20%;
+
+                    & > img {
+                        width: 100%;
+                    }
+                }
             }
         }
 

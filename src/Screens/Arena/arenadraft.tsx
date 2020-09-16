@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import * as math from 'mathjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUndo, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUndo, faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
@@ -27,20 +27,21 @@ export default function ArenaDraft(): JSX.Element {
 
     const [currentPick, setCurrentPick] = useState(1);
     const emptyPick = {
-        1: '?',
-        2: '?',
-        3: '?',
+        1: -1,
+        2: -1,
+        3: -1,
     };
     const emptyDeck = {
-        1: '?',
-        2: '?',
-        3: '?',
-        4: '?',
-        5: '?',
+        1: -1,
+        2: -1,
+        3: -1,
+        4: -1,
+        5: -1,
     };
-    const [prevPick, setPrevPick] = useState<{ [key: number]: string }[]>([]);
-    const [pick, setPick] = useState<{ [key: number]: string }>(emptyPick);
-    const [deck, setDeck] = useState<{ [key: number]: string }>(emptyDeck);
+    const [prevPick, setPrevPick] = useState<{ [key: number]: number }[]>([]);
+    const [pick, setPick] = useState<{ [key: number]: number }>(emptyPick);
+    const [deck, setDeck] = useState<{ [key: number]: number }>(emptyDeck);
+    const [manualPick, setManualPick] = useState(-1 as number);
 
     let jsx;
     if (dices && dices.length > 0) {
@@ -51,8 +52,8 @@ export default function ArenaDraft(): JSX.Element {
             value: number;
         }
 
-        const findDiceValue = (diceName: string): DiceValue => {
-            const dice = dices.find(d => d.name === diceName);
+        const findDiceValue = (diceID: number): DiceValue => {
+            const dice = dices.find(d => d.id === diceID);
             return {
                 dps: dice?.arenaValue.dps || 0,
                 assist: dice?.arenaValue.assist || 0,
@@ -62,36 +63,37 @@ export default function ArenaDraft(): JSX.Element {
         };
 
         const pickDice = (i: number): void => {
-            if (!Object.values(pick).includes('?')) {
-                const nextPick = Object.values(deck).indexOf('?') + 1;
+            if (!Object.values(pick).includes(-1)) {
+                const nextPick = Object.values(deck).indexOf(-1) + 1;
                 if (nextPick >= 1 && nextPick <= 5) {
                     deck[nextPick] = pick[i];
                     setDeck({ ...deck });
                     setPrevPick([...prevPick, pick]);
                     setPick(emptyPick);
                     if (manualPickRef.current) {
-                        manualPickRef.current.value = '?';
+                        manualPickRef.current.value = '-1';
                     }
                     setCurrentPick(currentPick + 1);
                 }
             }
         };
 
-        const manualPickDice = (name: string): void => {
-            if (name === '?') {
+        const manualPickDice = (id: number): void => {
+            if (id < 0) {
                 return;
             }
-            const nextPick = Object.values(deck).indexOf('?') + 1;
+            const nextPick = Object.values(deck).indexOf(-1) + 1;
             if (nextPick >= 1 && nextPick <= 5) {
-                deck[nextPick] = name;
+                deck[nextPick] = id;
                 setDeck({ ...deck });
-                setPrevPick([...prevPick, { 1: '?', 2: '?', 3: '?' }]);
+                setPrevPick([...prevPick, { 1: -1, 2: -1, 3: -1 }]);
                 setPick(emptyPick);
                 if (manualPickRef.current) {
-                    manualPickRef.current.value = '?';
+                    manualPickRef.current.value = '-1';
                 }
                 setCurrentPick(currentPick + 1);
             }
+            setManualPick(-1);
         };
 
         const deckScore = <T extends keyof DiceValue>(type: T): number => {
@@ -100,11 +102,11 @@ export default function ArenaDraft(): JSX.Element {
                 .reduce((acc, curr) => acc + curr);
         };
 
-        const calSynergy = (diceName: string): number => {
-            if (!dices.find(d => d.name === diceName)) {
+        const calSynergy = (diceId: number): number => {
+            if (!dices.find(d => d.id === diceId)) {
                 return 0;
             }
-            const value = findDiceValue(diceName);
+            const value = findDiceValue(diceId);
             const maxValue = Object.entries(value).find(
                 entry => entry[1] === Math.max(...Object.values(value))
             );
@@ -207,15 +209,22 @@ export default function ArenaDraft(): JSX.Element {
                                             <label htmlFor='option'>
                                                 <div>Option {i + 1}</div>
                                                 <select
-                                                    data-value={pick[tdIndex]}
+                                                    data-value={
+                                                        pick[tdIndex] < 0
+                                                            ? '?'
+                                                            : pick[tdIndex]
+                                                    }
                                                     value={pick[tdIndex]}
                                                     onChange={(evt): void => {
-                                                        pick[tdIndex] =
-                                                            evt.target.value;
+                                                        pick[tdIndex] = Number(
+                                                            evt.target.value
+                                                        );
                                                         setPick({ ...pick });
                                                     }}
                                                 >
-                                                    <option>?</option>
+                                                    <option value={-1}>
+                                                        ?
+                                                    </option>
                                                     {dices
                                                         .filter(dice =>
                                                             currentPick < 3
@@ -238,13 +247,12 @@ export default function ArenaDraft(): JSX.Element {
                                                                 ...Object.values(
                                                                     activePicks
                                                                 ),
-                                                            ].includes(
-                                                                dice.name
-                                                            );
+                                                            ].includes(dice.id);
                                                         })
                                                         .map(dice => (
                                                             <option
-                                                                key={`pick-${tdIndex}-${dice.name}`}
+                                                                value={dice.id}
+                                                                key={`pick-${tdIndex}-${dice.id}`}
                                                             >
                                                                 {dice.name}
                                                             </option>
@@ -258,18 +266,14 @@ export default function ArenaDraft(): JSX.Element {
                                     {[1, 2, 3].map(tdIndex => (
                                         <td
                                             className={`dice-container ${
-                                                Object.values(pick).includes(
-                                                    '?'
-                                                )
+                                                Object.values(pick).includes(-1)
                                                     ? ''
                                                     : 'active'
                                             }`}
                                             key={tdIndex}
                                             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                                             tabIndex={
-                                                Object.values(pick).includes(
-                                                    '?'
-                                                )
+                                                Object.values(pick).includes(-1)
                                                     ? -1
                                                     : 0
                                             }
@@ -327,47 +331,61 @@ export default function ArenaDraft(): JSX.Element {
                         </table>
                     </div>
                     <div className='manual'>
-                        <label htmlFor='manual-select'>
-                            I do not need to compare the value, put this dice
-                            into the deck directly:{' '}
-                            <select
-                                ref={manualPickRef}
-                                data-value='?'
-                                onChange={(evt): void =>
-                                    manualPickDice(evt.target.value)
-                                }
-                            >
-                                <option>?</option>
-                                {dices
-                                    .filter(dice =>
-                                        currentPick < 3
-                                            ? dice.rarity !== 'Legendary' &&
-                                              dice.name !== 'Growth'
-                                            : dice.name !== 'Growth'
-                                    )
-                                    .filter(
-                                        dice =>
-                                            !Object.values(deck).includes(
-                                                dice.name
-                                            )
-                                    )
-                                    .map(dice => (
-                                        <option key={`pick--${dice.name}`}>
-                                            {dice.name}
-                                        </option>
-                                    ))}
-                            </select>
-                        </label>
+                        I do not need to compare the value, put this dice into
+                        the deck directly:{' '}
+                        <form
+                            onSubmit={(evt): void => {
+                                evt.preventDefault();
+                                manualPickDice(manualPick);
+                            }}
+                        >
+                            <label htmlFor='manual-select'>
+                                <select
+                                    ref={manualPickRef}
+                                    data-value={
+                                        manualPick <= 0 ? '?' : manualPick
+                                    }
+                                    defaultValue={manualPick}
+                                    onChange={(evt): void =>
+                                        setManualPick(Number(evt.target.value))
+                                    }
+                                >
+                                    <option value={-1}>?</option>
+                                    {dices
+                                        .filter(dice =>
+                                            currentPick < 3
+                                                ? dice.rarity !== 'Legendary' &&
+                                                  dice.id !== 36
+                                                : dice.id !== 36
+                                        )
+                                        .filter(
+                                            dice =>
+                                                !Object.values(deck).includes(
+                                                    dice.id
+                                                )
+                                        )
+                                        .map(dice => (
+                                            <option
+                                                value={dice.id}
+                                                key={`pick--${dice.id}`}
+                                            >
+                                                {dice.name}
+                                            </option>
+                                        ))}
+                                </select>
+                            </label>
+                            <button type='submit'>
+                                <FontAwesomeIcon icon={faCheck} />
+                            </button>
+                        </form>
                     </div>
                     <button
                         type='button'
                         disabled={prevPick.length === 0}
                         onClick={(): void => {
-                            setPick(
-                                prevPick.pop() || { 1: '?', 2: '?', 3: '?' }
-                            );
+                            setPick(prevPick.pop() || { 1: -1, 2: -1, 3: -1 });
                             if (currentPick > 1) {
-                                deck[currentPick - 1] = '?';
+                                deck[currentPick - 1] = -1;
                                 setPrevPick([...prevPick]);
                                 setDeck({ ...deck });
                                 setCurrentPick(currentPick - 1);
@@ -381,14 +399,14 @@ export default function ArenaDraft(): JSX.Element {
                         disabled={[
                             ...Object.values(deck),
                             ...Object.values(pick),
-                        ].every(val => val === '?')}
+                        ].every(val => val < 0)}
                         onClick={(): void => {
                             setPick(emptyPick);
                             setPrevPick([]);
                             setDeck(emptyDeck);
                             setCurrentPick(1);
                             if (manualPickRef.current) {
-                                manualPickRef.current.value = '?';
+                                manualPickRef.current.value = '-1';
                             }
                         }}
                     >
@@ -400,9 +418,11 @@ export default function ArenaDraft(): JSX.Element {
                 <section className='deck'>
                     <hr className='divisor' />
                     <h3>Your Deck</h3>
-                    {[1, 2, 3, 4, 5].map(i => (
-                        <Dice key={`deck${i}`} dice={deck[i]} />
-                    ))}
+                    <div className='deck-list'>
+                        {[1, 2, 3, 4, 5].map(i => (
+                            <Dice key={`deck${i}`} dice={deck[i]} />
+                        ))}
+                    </div>
                     <h3>Deck Score</h3>
                     <label htmlFor='Main-Dps'>
                         <h4>Main DPS (target score: 15)</h4>
