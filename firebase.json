@@ -14,7 +14,7 @@
             ],
             "redirects": [
                 {
-                    "source": "/", 
+                    "source": "/",
                     "destination": "https://discord.com/invite/zQj6tCM/",
                     "type": 301
                 }
@@ -31,7 +31,7 @@
             ],
             "redirects": [
                 {
-                    "source": "/", 
+                    "source": "/",
                     "destination": "https://github.com/JackyKit123/randomdice.gg",
                     "type": 301
                 }
@@ -44,6 +44,18 @@
                 "firebase.json",
                 "**/.*",
                 "**/node_modules/**"
+            ],
+            "redirects": [
+                {
+                    "source": "/discord",
+                    "destination": "https://discord.com/invite/zQj6tCM/",
+                    "type": 301
+                },
+                {
+                    "source": "/github",
+                    "destination": "https://github.com/JackyKit123/randomdice.gg",
+                    "type": 301
+                }
             ],
             "rewrites": [
                 {
