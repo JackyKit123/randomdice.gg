@@ -100,9 +100,9 @@ export default function DiceMechanic(): JSX.Element {
                                 <hr className='divisor' />
                                 <div className='row' id={dice.name}>
                                     <h3>{dice.name}</h3>
-                                    <figure>
-                                        <Dice dice={dice.id} />
-                                    </figure>
+
+                                    <Dice dice={dice.id} />
+
                                     {ReactHtmlParser(sanitize(dice.detail))}
                                 </div>
                             </Fragment>
