@@ -50,8 +50,7 @@ export default function GoldCalculator(): JSX.Element {
     } = {
         30: 'Gear',
         40: 'Landmine',
-        56: 'Solar Time',
-        76: 'Combo Mirror',
+        60: 'Generic Wave 60 Run',
     };
 
     const isInvalidCurrentGold =
