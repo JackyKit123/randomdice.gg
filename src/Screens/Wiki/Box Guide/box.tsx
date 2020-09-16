@@ -69,24 +69,22 @@ export default function BoxGuide(): JSX.Element {
                             </Fragment>
                         ) : (
                             <Fragment key={box.name}>
+                                <hr className='divisor' />
                                 <div id={box.name}>
-                                    <hr className='divisor' />
-                                    <div>
-                                        <h3>{box.name}</h3>
-                                        <figure>
-                                            <img src={box.img} alt={box.name} />
-                                        </figure>
-                                        <p>Obtained from: {box.from}</p>
-                                        <p>
-                                            Contains:{' '}
-                                            {ReactHtmlParser(
-                                                replaceTextWithImgTag(
-                                                    box.contain,
-                                                    dices
-                                                )
-                                            )}
-                                        </p>
-                                    </div>
+                                    <h3>{box.name}</h3>
+                                    <figure>
+                                        <img src={box.img} alt={box.name} />
+                                    </figure>
+                                    <p>Obtained from: {box.from}</p>
+                                    <p>
+                                        Contains:{' '}
+                                        {ReactHtmlParser(
+                                            replaceTextWithImgTag(
+                                                box.contain,
+                                                dices
+                                            )
+                                        )}
+                                    </p>
                                 </div>
                             </Fragment>
                         )
