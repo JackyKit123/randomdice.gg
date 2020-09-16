@@ -30,7 +30,7 @@ export interface Dice {
     desc: string;
     detail: string;
     img: string;
-    target: 'Front' | 'Strongest' | 'Random' | '-';
+    target: 'Front' | 'Strongest' | 'Random' | 'Weakest' | '-';
     rarity: 'Common' | 'Rare' | 'Unique' | 'Legendary';
     atk: number;
     spd: number;

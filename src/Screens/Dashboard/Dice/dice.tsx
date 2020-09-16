@@ -399,10 +399,11 @@ export default function editDice(): JSX.Element {
                                 <option>Front</option>
                                 <option>Strongest</option>
                                 <option>Random</option>
+                                <option>Weakest</option>
                             </select>
                         </label>
                         <label htmlFor='dice-rarity'>
-                            Type:
+                            Rarity:
                             <select
                                 key={`dice${activeEdit.id}-rarity`}
                                 defaultValue={activeEdit.rarity}
