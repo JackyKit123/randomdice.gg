@@ -57,15 +57,14 @@ export default function AboutUs(): JSX.Element {
                 Lastly, this website runs off my personal pocket, it costs me
                 some money monthly to operate the website. If you appreciate
                 what I am doing, you can consider supporting me on patreon,
-                details can be inquired through contacting me in Discord.
-                {/* details can be seen on the Patreon page at{' '}
+                details can be seen on the Patreon page at{' '}
                 <a
                     target='_blank'
                     href='https://www.patreon.com/RandomDiceCommunityWebsite'
                     rel='noopener noreferrer'
                 >
                     https://www.patreon.com/RandomDiceCommunityWebsite
-                </a> */}
+                </a>
                 .
             </p>
         </Main>

@@ -32,16 +32,11 @@ export default function PatreonIntro(): JSX.Element {
                 <p>
                     This website is served for free to the community but it does
                     not run for free. If you appreciate what we are doing, feel
-                    free to drop a support. It is completely voluntary!
-                    {/*  In return, you can enjoy benefits
+                    free to drop a support. In return, you can enjoy benefits
                     like ad free browsing. Or a dedicated page for you to leave
-                    your message to the community. */}
+                    your message to the community.
                 </p>
                 <p>
-                    Feel free to inquire JackyKit for Patreon related questions
-                    in Discord.
-                </p>
-                {/* <p>
                     You can become a patreon at{' '}
                     <a
                         href='https://www.patreon.com/RandomDiceCommunityWebsite'
@@ -51,7 +46,7 @@ export default function PatreonIntro(): JSX.Element {
                         https://www.patreon.com/RandomDiceCommunityWebsite
                     </a>
                     .
-                </p> */}
+                </p>
                 <hr className='divisor' />
                 {[3, 2, 1].map(tier => (
                     <Fragment key={tier}>
