@@ -2,21 +2,18 @@
     text-align: center;
 
     div > figure {
-        height: 200px;
+        width: 200px;
+        margin: 0 auto;
 
         & > img {
-            height: 100%;
-            width: auto;
+            width: 100%;
+            height: auto;
         }
     }
 
     p {
-        figure {
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        img {
+        & > figure,
+        & > img {
             display: inline-block;
             vertical-align: middle;
             width: 72px;
