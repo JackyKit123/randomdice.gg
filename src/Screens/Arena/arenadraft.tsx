@@ -343,7 +343,7 @@ export default function ArenaDraft(): JSX.Element {
                                 <select
                                     ref={manualPickRef}
                                     data-value={
-                                        manualPick <= 0 ? '?' : manualPick
+                                        manualPick < 0 ? '?' : manualPick
                                     }
                                     defaultValue={manualPick}
                                     onChange={(evt): void =>
@@ -374,7 +374,7 @@ export default function ArenaDraft(): JSX.Element {
                                         ))}
                                 </select>
                             </label>
-                            <button type='submit'>
+                            <button type='submit' disabled={manualPick < 0}>
                                 <FontAwesomeIcon icon={faCheck} />
                             </button>
                         </form>
