@@ -22,6 +22,7 @@ import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import '../cal.less';
 import './solar.less';
 import GoogleAds from '../../../Components/Ad Unit/ad';
+import findMaxCrit from '../../../Misc/findMaxCrit';
 
 export default function SolarCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -55,15 +56,6 @@ export default function SolarCalculator(): JSX.Element {
         },
     });
     let jsx;
-
-    const isInvalidCrit =
-        !Number.isInteger(filter.crit) ||
-        filter.crit < 111 ||
-        filter.crit > 2225;
-    const isInvalidDuration =
-        !Number.isInteger(filter.duration) || filter.duration <= 0;
-    const invalidInput = isInvalidCrit || isInvalidDuration;
-
     const diceData = {
         solar: dices?.find(dice => dice.id === 38) as DiceType | undefined,
         light: dices?.find(dice => dice.id === 10) as DiceType | undefined,
@@ -71,7 +63,22 @@ export default function SolarCalculator(): JSX.Element {
         lunar: dices?.find(dice => dice.id === 47) as DiceType | undefined,
     };
 
-    if (diceData.solar && diceData.light && diceData.crit && diceData.lunar) {
+    if (
+        dices &&
+        diceData.solar &&
+        diceData.light &&
+        diceData.crit &&
+        diceData.lunar
+    ) {
+        const maxCrit = findMaxCrit(dices);
+        const isInvalidCrit =
+            !Number.isInteger(filter.crit) ||
+            filter.crit < 111 ||
+            filter.crit > maxCrit;
+        const isInvalidDuration =
+            !Number.isInteger(filter.duration) || filter.duration <= 0;
+        const invalidInput = isInvalidCrit || isInvalidDuration;
+
         const basicDmgPerHit =
             (filter.solar.class - 7) * diceData.solar.cupAtk +
             diceData.solar.atk +
@@ -687,7 +694,7 @@ export default function SolarCalculator(): JSX.Element {
                             type='number'
                             name='crit dmg'
                             min={111}
-                            max={2225}
+                            max={maxCrit}
                             step={1}
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
@@ -729,7 +736,7 @@ export default function SolarCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2225</strong>.
+                        <strong>111-{maxCrit}</strong>.
                     </span>
                 ) : (
                     ''

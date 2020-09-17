@@ -18,11 +18,15 @@ import { fetchResponseForm } from '../../Misc/Redux Storage/Google API/fetchData
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Google API/Google Form/types';
 import './crit.less';
 import ShareButtons from '../../Components/Social Media Share/share';
+import findMaxCrit from '../../Misc/findMaxCrit';
 
 export default function critData(): JSX.Element {
     const dispatch = useDispatch();
     const selection = useSelector(
         (state: RootState) => state.fetchGAPIresponseFormReducer
+    );
+    const { dices } = useSelector(
+        (state: RootState) => state.fetchDicesReducer
     );
     const { error, formData } = selection;
     type GraphData = {
@@ -31,7 +35,8 @@ export default function critData(): JSX.Element {
     }[];
 
     let jsx;
-    if (formData && formData.raw?.length > 0) {
+    if (dices && formData && formData.raw?.length > 0) {
+        const maxCrit = findMaxCrit(dices);
         const scatterData = formData.raw.map(row => ({
             x: row[0],
             y: row[1],
@@ -110,7 +115,7 @@ export default function critData(): JSX.Element {
                         theme={VictoryTheme.material}
                         domain={{
                             x: [1, 20],
-                            y: [0, 2225],
+                            y: [0, maxCrit],
                         }}
                         domainPadding={{ x: [0, 5] }}
                     >
@@ -175,7 +180,7 @@ export default function critData(): JSX.Element {
                         theme={VictoryTheme.material}
                         domain={{
                             x: [0, 40000],
-                            y: [0, 2225],
+                            y: [0, maxCrit],
                         }}
                         domainPadding={{ x: [0, 5] }}
                     >

@@ -9,6 +9,7 @@ import { RootState } from '../../../Misc/Redux Storage/store';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import '../cal.less';
+import findMaxCrit from '../../../Misc/findMaxCrit';
 
 export default function GearCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -25,17 +26,20 @@ export default function GearCalculator(): JSX.Element {
     });
     let jsx = <div />;
     const data = dices?.find(dice => dice.id === 26);
-    const isInvalidCrit =
-        !Number.isInteger(filter.crit) ||
-        filter.crit < 111 ||
-        filter.crit > 2225;
-    const isInvalidPip =
-        !Number.isInteger(filter.pip) || filter.pip < 1 || filter.pip > 7 * 15;
-    const isInvalidChain =
-        filter.pip < filter.chain || filter.pip > filter.chain * 7;
-    const invalidInput = isInvalidCrit || isInvalidChain || isInvalidPip;
 
-    if (data) {
+    if (dices && data) {
+        const maxCrit = findMaxCrit(dices);
+        const isInvalidCrit =
+            !Number.isInteger(filter.crit) ||
+            filter.crit < 111 ||
+            filter.crit > maxCrit;
+        const isInvalidPip =
+            !Number.isInteger(filter.pip) ||
+            filter.pip < 1 ||
+            filter.pip > 7 * 15;
+        const isInvalidChain =
+            filter.pip < filter.chain || filter.pip > filter.chain * 7;
+        const invalidInput = isInvalidCrit || isInvalidChain || isInvalidPip;
         const atkDmg =
             data.atk +
             data.cupAtk * (filter.class - 5) +
@@ -170,7 +174,7 @@ export default function GearCalculator(): JSX.Element {
                             type='number'
                             name='crit dmg'
                             min={111}
-                            max={2225}
+                            max={maxCrit}
                             step={1}
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
@@ -206,7 +210,7 @@ export default function GearCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2225</strong>.
+                        <strong>111-{maxCrit}</strong>.
                     </span>
                 ) : (
                     ''

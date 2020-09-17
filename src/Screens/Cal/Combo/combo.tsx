@@ -22,6 +22,7 @@ import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import '../cal.less';
 import './combo.less';
+import findMaxCrit from '../../../Misc/findMaxCrit';
 
 export default function ComboCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -57,15 +58,16 @@ export default function ComboCalculator(): JSX.Element {
         [key: string]: DiceType;
     };
 
-    const isInvalidCrit =
-        !Number.isInteger(filter.crit) ||
-        filter.crit < 111 ||
-        filter.crit > 2225;
-    const isInvalidCombo =
-        !Number.isInteger(filter.combo.count) || filter.combo.count < 1;
-    const invalidInput = isInvalidCombo || isInvalidCrit;
+    if (dices && Object.values(data).every(d => d !== undefined)) {
+        const maxCrit = findMaxCrit(dices);
+        const isInvalidCrit =
+            !Number.isInteger(filter.crit) ||
+            filter.crit < 111 ||
+            filter.crit > maxCrit;
+        const isInvalidCombo =
+            !Number.isInteger(filter.combo.count) || filter.combo.count < 1;
+        const invalidInput = isInvalidCombo || isInvalidCrit;
 
-    if (Object.values(data).every(d => d !== undefined)) {
         const dpsPerComboCount = (
             mode: 'raw' | 'crit' | 'lunar' | 'lunar+crit',
             count = filter.combo.count
@@ -467,7 +469,7 @@ export default function ComboCalculator(): JSX.Element {
                             type='number'
                             min={111}
                             step={1}
-                            max={2225}
+                            max={maxCrit}
                             name='crit dmg'
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
@@ -492,7 +494,7 @@ export default function ComboCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2225</strong>.
+                        <strong>111-{maxCrit}</strong>.
                     </span>
                 ) : (
                     ''

@@ -21,6 +21,7 @@ import { RootState } from '../../../Misc/Redux Storage/store';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import '../cal.less';
 import GoogleAds from '../../../Components/Ad Unit/ad';
+import findMaxCrit from '../../../Misc/findMaxCrit';
 
 export default function DpsCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -64,12 +65,6 @@ export default function DpsCalculator(): JSX.Element {
         crit: 111,
     });
     let jsx = <div />;
-    const isInvalidCrit =
-        !Number.isInteger(filter.crit) ||
-        filter.crit < 111 ||
-        filter.crit > 2225;
-    const invalidInput = isInvalidCrit;
-
     const data = {
         electric: dices?.find(dice => dice.id === 1),
         wind: dices?.find(dice => dice.id === 2),
@@ -78,14 +73,20 @@ export default function DpsCalculator(): JSX.Element {
         gamble: dices?.find(dice => dice.id === 7),
         arrow: dices?.find(dice => dice.id === 16),
         mwind: dices?.find(dice => dice.id === 24),
-        melec: dices?.find(dice => dice.id === 2),
+        melec: dices?.find(dice => dice.id === 22),
         typhoon: dices?.find(dice => dice.id === 43),
         critical: dices?.find(dice => dice.id === 13),
         light: dices?.find(dice => dice.id === 10),
         lunar: dices?.find(dice => dice.id === 47),
     } as { [key: string]: DiceType };
 
-    if (Object.values(data).every(d => d !== undefined)) {
+    if (dices && Object.values(data).every(d => d !== undefined)) {
+        const maxCrit = findMaxCrit(dices);
+        const isInvalidCrit =
+            !Number.isInteger(filter.crit) ||
+            filter.crit < 111 ||
+            filter.crit > maxCrit;
+        const invalidInput = isInvalidCrit;
         const lightBuff = filter.light.enable
             ? ((filter.light.class - 3) * data.light.cupEff1 +
                   data.light.eff1) *
@@ -665,7 +666,7 @@ export default function DpsCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2225</strong>.
+                        <strong>111-{maxCrit}</strong>.
                     </span>
                 ) : (
                     ''
@@ -718,7 +719,7 @@ export default function DpsCalculator(): JSX.Element {
                             type='number'
                             name='crit dmg'
                             min={111}
-                            max={2225}
+                            max={maxCrit}
                             step={1}
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}

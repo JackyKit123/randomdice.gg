@@ -22,6 +22,7 @@ import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
 import { fetchDices } from '../../../Misc/Firebase/fetchData';
 import '../cal.less';
 import './energy.less';
+import findMaxCrit from '../../../Misc/findMaxCrit';
 
 export default function EnergyCalculator(): JSX.Element {
     const dispatch = useDispatch();
@@ -63,15 +64,15 @@ export default function EnergyCalculator(): JSX.Element {
         [key: string]: DiceType;
     };
 
-    const isInvalidCrit =
-        !Number.isInteger(filter.crit) ||
-        filter.crit < 111 ||
-        filter.crit > 2225;
-    const isInvalidSp =
-        !Number.isInteger(filter.energy.sp) || filter.energy.sp < 0;
-    const invalidInput = isInvalidSp || isInvalidCrit;
-
-    if (Object.values(data).every(d => d !== undefined)) {
+    if (dices && Object.values(data).every(d => d !== undefined)) {
+        const maxCrit = findMaxCrit(dices);
+        const isInvalidCrit =
+            !Number.isInteger(filter.crit) ||
+            filter.crit < 111 ||
+            filter.crit > maxCrit;
+        const isInvalidSp =
+            !Number.isInteger(filter.energy.sp) || filter.energy.sp < 0;
+        const invalidInput = isInvalidSp || isInvalidCrit;
         const dpsPerSpCount = (
             mode: 'raw' | 'crit' | 'light' | 'lunar',
             sp = filter.energy.sp
@@ -555,7 +556,7 @@ export default function EnergyCalculator(): JSX.Element {
                             type='number'
                             min={111}
                             step={1}
-                            max={2225}
+                            max={maxCrit}
                             name='crit dmg'
                             defaultValue={111}
                             className={isInvalidCrit ? 'invalid' : ''}
@@ -580,7 +581,7 @@ export default function EnergyCalculator(): JSX.Element {
                 {isInvalidCrit ? (
                     <span className='invalid-warning'>
                         Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-2225</strong>.
+                        <strong>111-{maxCrit}</strong>.
                     </span>
                 ) : (
                     ''
