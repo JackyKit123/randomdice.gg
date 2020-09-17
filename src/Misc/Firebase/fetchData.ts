@@ -9,24 +9,16 @@ import * as FETCH_CREDIT from '../Redux Storage/Fetch Firebase/Credit/types';
 import * as FETCH_USER from '../Redux Storage/Fetch Firebase/User/types';
 import * as FETCH_NEWS from '../Redux Storage/Fetch Firebase/News/types';
 import * as FETCH_PATREON from '../Redux Storage/Fetch Firebase/Patreon List/types';
+import * as FETCH_CRIT from '../Redux Storage/Fetch Firebase/Crit/types';
 
 const database = firebase.apps.length
     ? firebase.database()
     : firebase.database(initApp());
-type ActionType =
-    | FETCH_DICES.ActionType
-    | FETCH_DECKS.ActionType
-    | FETCH_WIKI.ActionType
-    | FETCH_DECKS_GUIDE.ActionType
-    | FETCH_USER.ActionType
-    | FETCH_NEWS.ActionType
-    | FETCH_CREDIT.ActionType
-    | FETCH_PATREON.ActionType;
 
 async function fetch(
     dispatch: ReturnType<typeof useDispatch>,
-    successAction: ActionType,
-    errorAction: ActionType,
+    successAction: string,
+    errorAction: string,
     dbPath: string,
     localStorageKey: string
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,6 +134,16 @@ export function fetchPatreon(dispatch: ReturnType<typeof useDispatch>): void {
     );
 }
 
+export function fetchCrit(dispatch: ReturnType<typeof useDispatch>): void {
+    fetch(
+        dispatch,
+        FETCH_CRIT.SUCCESS,
+        FETCH_CRIT.FAIL,
+        '/critData',
+        'critData'
+    );
+}
+
 export default function fetchAll(
     dispatch: ReturnType<typeof useDispatch>
 ): void {
@@ -152,4 +154,5 @@ export default function fetchAll(
     fetchNews(dispatch);
     fetchCredit(dispatch);
     fetchPatreon(dispatch);
+    fetchCrit(dispatch);
 }

@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { fetchResponseForm, fetchYouTube } from './fetchData';
+import { fetchYouTube } from './fetchData';
 
 export default function init(dispatch: ReturnType<typeof useDispatch>): void {
     const script = document.createElement('script');
@@ -11,11 +11,9 @@ export default function init(dispatch: ReturnType<typeof useDispatch>): void {
                     apiKey: process.env.REACT_APP_GAPI_KEY,
                     discoveryDocs: [
                         'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
-                        'https://sheets.googleapis.com/$discovery/rest?version=v4',
                     ],
                 });
             } finally {
-                fetchResponseForm(dispatch);
                 fetchYouTube(dispatch);
             }
         });

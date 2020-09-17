@@ -91,8 +91,7 @@ export default function Header(): JSX.Element {
                 <span>
                     Only Discord Login and Patreon Login are supported at the
                     current moment. You may not need to login to use this
-                    website. Logging in is only for content managers to manage
-                    content or patreon supporters to enjoy ad free browsing.
+                    website. There is no hidden content requiring a login.
                 </span>
                 <span>
                     By sining up, you agree to our{' '}

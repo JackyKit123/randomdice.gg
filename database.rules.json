@@ -10,6 +10,22 @@
             ".write": "auth.token.isEditor === true",
             "patreon_list": {
                 ".write": "auth.uid !== null || auth.uid === 'my-service-worker'"
+            },
+            "critData": {
+                ".write": "auth.uid !== null"
+            }
+        },
+        "critData": {
+            ".read": true,
+            "$uid": {
+                "trophies": {
+                    ".write": "auth.uid === $uid",
+                    ".validate": "typeof newData === 'number' && newData >= 0"
+                },
+                "crit": {
+                    ".write": "auth.uid === $uid",
+                    ".validate": "typeof newData === 'number' && newData >= 0"
+                }
             }
         },
         "decks": {

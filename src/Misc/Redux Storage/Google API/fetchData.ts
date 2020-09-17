@@ -2,10 +2,6 @@ import { useDispatch } from 'react-redux';
 import { fetchPatreon } from '../../Firebase/fetchData';
 import { PatreonList } from '../Fetch Firebase/Patreon List/types';
 import {
-    FETCH_GAPI_RESPONSE_FORM_FAIL,
-    FETCH_GAPI_RESPONSE_FORM_SUCCESS,
-} from './Google Form/types';
-import {
     FETCH_GAPI_YOUTUBE_CHANNEL_FAIL,
     FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
     YouTubeInfo,
@@ -20,54 +16,7 @@ function corruptedStorage(item: string): boolean {
     }
 }
 
-export async function fetchResponseForm(
-    dispatch: ReturnType<typeof useDispatch>
-): Promise<void> {
-    const localCache = localStorage.getItem('critData');
-    if (localCache) {
-        if (corruptedStorage(localCache)) {
-            localStorage.removeItem('critData');
-        } else {
-            dispatch({
-                type: FETCH_GAPI_RESPONSE_FORM_SUCCESS,
-                payload: JSON.parse(localCache),
-            });
-        }
-    }
-    try {
-        const res = await window.gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: process.env.REACT_APP_CRIT_RESPONSE_SPREADSHEET_ID,
-            range: 'Responses!D2:E',
-        });
-        const rawData = res.result.values
-            .map((row: string[]) => row.map((cell: string) => Number(cell)))
-            .filter(
-                (row: number[]) => row.some(data => data) && row.length === 2
-            );
-        const res2 = await window.gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: process.env.REACT_APP_CRIT_RESPONSE_SPREADSHEET_ID,
-            range: 'Results!C2:D21',
-        });
-        const summarizedData = res2.result.values.map((row: string[]) =>
-            row.map((cell: string) => Number(cell))
-        );
-        const payload = {
-            raw: rawData,
-            summarized: summarizedData,
-        };
-        dispatch({
-            type: FETCH_GAPI_RESPONSE_FORM_SUCCESS,
-            payload,
-        });
-        localStorage.setItem('critData', JSON.stringify(payload));
-    } catch (err) {
-        dispatch({
-            type: FETCH_GAPI_RESPONSE_FORM_FAIL,
-            payload: err.error,
-        });
-    }
-}
-
+// eslint-disable-next-line import/prefer-default-export
 export async function fetchYouTube(
     dispatch: ReturnType<typeof useDispatch>
 ): Promise<void> {

@@ -1,6 +1,49 @@
 @import '../../cross_import_lesshat.less';
 
 .crit-data {
+    p {
+        & > button {
+            display: inline;
+            text-decoration: underline;
+            padding: 0;
+            background: none;
+            border: 0;
+            font: inherit;
+            font-size: 24px;
+            color: #1b00b2;
+            word-break: break-word;
+            .transition(all 0.2s ease-in-out);
+
+            &:hover,
+            &:focus {
+                color: #ffffff;
+            }
+        }
+    }
+
+    form {
+        .display(flex);
+        .flex-direction(row);
+        .justify-content(center);
+        .flex-wrap(wrap);
+
+        & > label {
+            font-size: 20px;
+
+            & > input {
+                margin: 10px;
+                width: 70px;
+            }
+
+            &[for='my-rank'] {
+                & > input {
+                    width: 40px;
+                    background: #eeeeee;
+                }
+            }
+        }
+    }
+
     .chart-container {
         @media @desktop {
             .display(flex);

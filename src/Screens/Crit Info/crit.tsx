@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -10,52 +10,41 @@ import {
     VictoryLine,
     VictoryLegend,
 } from 'victory';
+import * as math from 'mathjs';
+import firebase from 'firebase/app';
 import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
-import { fetchResponseForm } from '../../Misc/Redux Storage/Google API/fetchData';
-import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Google API/Google Form/types';
 import './crit.less';
 import ShareButtons from '../../Components/Social Media Share/share';
 import findMaxCrit from '../../Misc/findMaxCrit';
+import { fetchCrit, fetchDices } from '../../Misc/Firebase/fetchData';
+import { OPEN_POPUP } from '../../Misc/Redux Storage/PopUp Overlay/types';
+import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 
-export default function critData(): JSX.Element {
+export default function critDataCollection(): JSX.Element {
     const dispatch = useDispatch();
     const selection = useSelector(
-        (state: RootState) => state.fetchGAPIresponseFormReducer
+        (state: RootState) => state.fetchCritDataReducer
     );
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
-    const { error, formData } = selection;
-    type GraphData = {
-        x: number;
-        y: number;
-    }[];
+    const { critData, error } = selection;
+    const { user } = useSelector((state: RootState) => state.authReducer);
+    const database = firebase.database();
+    const [myTrophies, setMyTrophies] = useState(0);
+    const [myCrit, setMyCrit] = useState(111);
 
     let jsx;
-    if (dices && formData && formData.raw?.length > 0) {
+    if (dices && critData) {
         const maxCrit = findMaxCrit(dices);
-        const scatterData = formData.raw.map(row => ({
-            x: row[0],
-            y: row[1],
+        const critDataArr = Object.values(critData);
+        const scatterDataByTrophies = critDataArr.map(data => ({
+            x: data.trophies > 40000 ? 40000 : data.trophies,
+            y: data.crit,
         }));
-
-        const avgData = formData.summarized
-            .map((row, i) => ({
-                x: i + 1,
-                y: row[0],
-            }))
-            .filter(data => data.y);
-
-        const medData = formData.summarized
-            .map((row, i) => ({
-                x: i + 1,
-                y: row[1],
-            }))
-            .filter(data => data.y);
-
         const trophiesForClass: {
             [key: number]: number;
         } = {
@@ -80,35 +69,177 @@ export default function critData(): JSX.Element {
             19: 35000,
             20: 40000,
         };
+        const scatterDataRoundedDownToClass = critDataArr.map(data => {
+            const rank =
+                Number(
+                    Object.entries(trophiesForClass)
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        .sort(([_, a], [__, b]) =>
+                            // eslint-disable-next-line no-nested-ternary
+                            a > b ? -1 : a < b ? 1 : 0
+                        )
+                        .find(
+                            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                            ([_, trophies]) => trophies <= data.trophies
+                        )?.[0]
+                ) || 1;
+            return {
+                rank,
+                crit: data.crit,
+            };
+        });
 
-        const convertToTrophiesData = (classData: GraphData): GraphData => {
-            return classData.map(row => {
-                const clone = { ...row };
-                clone.x = trophiesForClass[row.x];
-                return clone;
-            });
-        };
-
-        const scatterDataPerTrophies = convertToTrophiesData(scatterData);
-        const avgDataPerTrophies = convertToTrophiesData(avgData);
-        const medDataPerTrophies = convertToTrophiesData(medData);
+        const processedData: {
+            [key: number]: {
+                avg: number;
+                median: number;
+                trophies: number;
+            };
+        } = {};
+        for (let i = 1; i <= 20; i += 1) {
+            let critDataPerClass = scatterDataRoundedDownToClass
+                .filter(data => data.rank === i)
+                .map(data => data.crit);
+            critDataPerClass = critDataPerClass.length ? critDataPerClass : [0];
+            const avg = math.mean(critDataPerClass);
+            const median = math.median(critDataPerClass);
+            const trophies = trophiesForClass[i];
+            processedData[i] = {
+                avg,
+                median,
+                trophies,
+            };
+        }
 
         jsx = (
             <>
                 <p>
                     The following data is collected through the community.
                     Please consider contributing by giving us your crit data in
-                    this{' '}
-                    <a
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        href='https://docs.google.com/forms/d/e/1FAIpQLSceQ9wJM5i5OhRO55NV_ycnfPbDvmmkH-9Or2o3ZGFDxUILQg/viewform?usp=sf_link'
-                    >
-                        Google Form
-                    </a>
-                    . The data you submitted will be immediately added below
-                    upon refreshing.
+                    here. The data collected is anonymous.
                 </p>
+                {user && user !== 'awaiting auth state' ? (
+                    <>
+                        <p>
+                            Please enter your data in the following form. The
+                            data you entered will go live immediately. You do
+                            not need to enter your rank, it is calculated
+                            automatically based on your trophies.
+                        </p>
+                        <p>
+                            Note that your trophies count should be a positive
+                            integer while your crit damage should be between 111
+                            - {maxCrit}. If you are class 20 or above, your
+                            trophies count will be rounded down to 40,000
+                            trophies.
+                        </p>
+                        <form>
+                            <label htmlFor='my-trophies'>
+                                Your Trophies:
+                                <input
+                                    type='number'
+                                    className={myTrophies < 0 ? 'invalid' : ''}
+                                    min={0}
+                                    step={1}
+                                    defaultValue={
+                                        critData[user.uid]?.trophies ||
+                                        myTrophies
+                                    }
+                                    onChange={async (evt): Promise<void> => {
+                                        const trophies = Number(
+                                            evt.target.value
+                                        );
+                                        setMyTrophies(trophies);
+                                        if (trophies >= 0 && user) {
+                                            database
+                                                .ref('/last_updated/critData')
+                                                .set(new Date().toISOString());
+                                            await database
+                                                .ref(
+                                                    `/critData/${user.uid}/trophies`
+                                                )
+                                                .set(trophies);
+                                            fetchCrit(dispatch);
+                                        }
+                                    }}
+                                />
+                            </label>
+                            <label htmlFor='my-rank'>
+                                Your Rank:
+                                <input
+                                    type='number'
+                                    value={
+                                        Number(
+                                            Object.entries(trophiesForClass)
+                                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                                .sort(([_, a], [__, b]) =>
+                                                    // eslint-disable-next-line no-nested-ternary
+                                                    a > b ? -1 : a < b ? 1 : 0
+                                                )
+                                                .find(
+                                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                                    ([_, trophies]) =>
+                                                        trophies <=
+                                                            critData[user.uid]
+                                                                ?.trophies ||
+                                                        myTrophies
+                                                )?.[0]
+                                        ) || 1
+                                    }
+                                    disabled
+                                />
+                            </label>
+                            <label htmlFor='my-trophies'>
+                                Your Crit:
+                                <input
+                                    type='number'
+                                    className={
+                                        myCrit < 111 || myCrit > maxCrit
+                                            ? 'invalid'
+                                            : ''
+                                    }
+                                    min={111}
+                                    step={1}
+                                    max={maxCrit}
+                                    defaultValue={
+                                        critData[user.uid]?.crit || myCrit
+                                    }
+                                    onChange={async (evt): Promise<void> => {
+                                        const crit = Number(evt.target.value);
+                                        setMyCrit(crit);
+                                        if (crit >= 0 && user) {
+                                            database
+                                                .ref('/last_updated/critData')
+                                                .set(new Date().toISOString());
+                                            await database
+                                                .ref(
+                                                    `/critData/${user.uid}/crit`
+                                                )
+                                                .set(crit);
+                                            fetchCrit(dispatch);
+                                        }
+                                    }}
+                                />
+                            </label>
+                        </form>
+                    </>
+                ) : (
+                    <p>
+                        Please{' '}
+                        <button
+                            type='button'
+                            onClick={(): void => {
+                                dispatch({
+                                    type: OPEN_POPUP,
+                                    payload: 'login',
+                                });
+                            }}
+                        >
+                            Login
+                        </button>{' '}
+                        to enter your data.
+                    </p>
+                )}
                 <hr className='divisor' />
                 <div className='chart-container'>
                     <VictoryChart
@@ -147,7 +278,10 @@ export default function critData(): JSX.Element {
                         <VictoryScatter
                             name='No Buff'
                             size={1}
-                            data={scatterData}
+                            data={scatterDataRoundedDownToClass.map(data => ({
+                                x: data.rank,
+                                y: data.crit,
+                            }))}
                             symbol='plus'
                             style={{
                                 data: {
@@ -163,7 +297,12 @@ export default function critData(): JSX.Element {
                                     strokeWidth: 1,
                                 },
                             }}
-                            data={avgData}
+                            data={Object.entries(processedData).map(
+                                ([rank, data]) => ({
+                                    x: rank,
+                                    y: data.avg,
+                                })
+                            )}
                         />
                         <VictoryLine
                             interpolation='bundle'
@@ -173,13 +312,23 @@ export default function critData(): JSX.Element {
                                     strokeWidth: 1,
                                 },
                             }}
-                            data={medData}
+                            data={Object.entries(processedData).map(
+                                ([rank, data]) => ({
+                                    x: rank,
+                                    y: data.median,
+                                })
+                            )}
                         />
                     </VictoryChart>
                     <VictoryChart
                         theme={VictoryTheme.material}
                         domain={{
-                            x: [0, 40000],
+                            x: [
+                                0,
+                                Math.max(
+                                    ...critDataArr.map(data => data.trophies)
+                                ),
+                            ],
                             y: [0, maxCrit],
                         }}
                         domainPadding={{ x: [0, 5] }}
@@ -211,7 +360,7 @@ export default function critData(): JSX.Element {
                         <VictoryScatter
                             name='No Buff'
                             size={1}
-                            data={scatterDataPerTrophies}
+                            data={scatterDataByTrophies}
                             symbol='plus'
                             style={{
                                 data: {
@@ -227,7 +376,10 @@ export default function critData(): JSX.Element {
                                     strokeWidth: 1,
                                 },
                             }}
-                            data={avgDataPerTrophies}
+                            data={Object.values(processedData).map(data => ({
+                                x: data.trophies,
+                                y: data.avg,
+                            }))}
                         />
                         <VictoryLine
                             interpolation='bundle'
@@ -237,7 +389,10 @@ export default function critData(): JSX.Element {
                                     strokeWidth: 1,
                                 },
                             }}
-                            data={medDataPerTrophies}
+                            data={Object.values(processedData).map(data => ({
+                                x: data.trophies,
+                                y: data.median,
+                            }))}
                         />
                     </VictoryChart>
                 </div>
@@ -271,23 +426,30 @@ export default function critData(): JSX.Element {
                             </tr>
                             <tr>
                                 <th scope='row'>Average</th>
-                                {formData.summarized.slice(0, 10).map(row => (
-                                    <td key={`crit-table-avg-${row[0]}`}>
-                                        {Math.round(row[0])
-                                            ? Math.round(row[0] * 100) / 100
-                                            : ''}
-                                    </td>
-                                ))}
+                                {Object.entries(processedData)
+                                    .slice(0, 10)
+                                    .map(([rank, data]) => (
+                                        <td key={`crit-table-avg-${rank}`}>
+                                            {Math.round(data.avg)
+                                                ? Math.round(data.avg * 100) /
+                                                  100
+                                                : ''}
+                                        </td>
+                                    ))}
                             </tr>
                             <tr>
                                 <th scope='row'>Median</th>
-                                {formData.summarized.slice(0, 10).map(row => (
-                                    <td key={`crit-table-med-${row[1]}`}>
-                                        {Math.round(row[1])
-                                            ? Math.round(row[1] * 100) / 100
-                                            : ''}
-                                    </td>
-                                ))}
+                                {Object.entries(processedData)
+                                    .slice(0, 10)
+                                    .map(([rank, data]) => (
+                                        <td key={`crit-table-med-${rank}`}>
+                                            {Math.round(data.median)
+                                                ? Math.round(
+                                                      data.median * 100
+                                                  ) / 100
+                                                : ''}
+                                        </td>
+                                    ))}
                             </tr>
                         </tbody>
                     </table>
@@ -319,23 +481,30 @@ export default function critData(): JSX.Element {
                             </tr>
                             <tr>
                                 <th scope='row'>Average</th>
-                                {formData.summarized.slice(10, 20).map(row => (
-                                    <td key={`crit-table-avg-${row[0]}`}>
-                                        {Math.round(row[0])
-                                            ? Math.round(row[0] * 100) / 100
-                                            : ''}
-                                    </td>
-                                ))}
+                                {Object.entries(processedData)
+                                    .slice(10, 20)
+                                    .map(([rank, data]) => (
+                                        <td key={`crit-table-avg-${rank}`}>
+                                            {Math.round(data.avg)
+                                                ? Math.round(data.avg * 100) /
+                                                  100
+                                                : ''}
+                                        </td>
+                                    ))}
                             </tr>
                             <tr>
                                 <th scope='row'>Median</th>
-                                {formData.summarized.slice(10, 20).map(row => (
-                                    <td key={`crit-table-med-${row[1]}`}>
-                                        {Math.round(row[1])
-                                            ? Math.round(row[1] * 100) / 100
-                                            : ''}
-                                    </td>
-                                ))}
+                                {Object.entries(processedData)
+                                    .slice(10, 20)
+                                    .map(([rank, data]) => (
+                                        <td key={`crit-table-med-${rank}`}>
+                                            {Math.round(data.median)
+                                                ? Math.round(
+                                                      data.median * 100
+                                                  ) / 100
+                                                : ''}
+                                        </td>
+                                    ))}
                             </tr>
                         </tbody>
                     </table>
@@ -349,22 +518,27 @@ export default function critData(): JSX.Element {
                             </tr>
                         </thead>
                         <tbody>
-                            {formData.summarized.map((row, i) => (
-                                <tr key={`crit-table-row-${i + 1}`}>
-                                    <td>{i + 1}</td>
-                                    <td>{trophiesForClass[i + 1]}</td>
-                                    <td key={`crit-table-avg-${row[0]}`}>
-                                        {Math.round(row[0])
-                                            ? Math.round(row[0] * 100) / 100
-                                            : ''}
-                                    </td>
-                                    <td key={`crit-table-med-${row[1]}`}>
-                                        {Math.round(row[1])
-                                            ? Math.round(row[1] * 100) / 100
-                                            : ''}
-                                    </td>
-                                </tr>
-                            ))}
+                            {Object.entries(processedData).map(
+                                ([rank, data]) => (
+                                    <tr key={`crit-table-row-${rank}`}>
+                                        <td>{rank}</td>
+                                        <td>{data.trophies}</td>
+                                        <td key={`crit-table-avg-${rank}`}>
+                                            {Math.round(data.avg)
+                                                ? Math.round(data.avg * 100) /
+                                                  100
+                                                : ''}
+                                        </td>
+                                        <td key={`crit-table-med-${rank}`}>
+                                            {Math.round(data.median)
+                                                ? Math.round(
+                                                      data.median * 100
+                                                  ) / 100
+                                                : ''}
+                                        </td>
+                                    </tr>
+                                )
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -378,7 +552,8 @@ export default function critData(): JSX.Element {
                 error={error}
                 retryFn={(): void => {
                     dispatch({ type: CLEAR_ERRORS });
-                    fetchResponseForm(dispatch);
+                    fetchCrit(dispatch);
+                    fetchDices(dispatch);
                 }}
             />
         );
