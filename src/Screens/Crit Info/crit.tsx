@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -115,6 +115,13 @@ export default function critDataCollection(): JSX.Element {
             };
         }
 
+        useEffect(() => {
+            if (user && user !== 'awaiting auth state' && critData[user.uid]) {
+                setMyCrit(critData[user.uid].crit);
+                setMyTrophies(critData[user.uid]?.trophies);
+            }
+        }, [user]);
+
         jsx = (
             <>
                 <p>
@@ -167,17 +174,14 @@ export default function critDataCollection(): JSX.Element {
                                                 .ref(
                                                     `/critData/${user.uid}/crit`
                                                 )
-                                                .set(
-                                                    critData[user.uid]?.crit ||
-                                                        myCrit
-                                                );
+                                                .set(myCrit);
                                             fetchCrit(dispatch);
                                         }
                                     }}
                                 />
                             </label>
                             <label htmlFor='my-rank'>
-                                Your Rank:
+                                Your PvP Rank:
                                 <input
                                     type='number'
                                     value={
@@ -191,10 +195,7 @@ export default function critDataCollection(): JSX.Element {
                                                 .find(
                                                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                                     ([_, trophies]) =>
-                                                        trophies <=
-                                                            critData[user.uid]
-                                                                ?.trophies ||
-                                                        myTrophies
+                                                        trophies <= myTrophies
                                                 )?.[0]
                                         ) || 1
                                     }
@@ -232,10 +233,7 @@ export default function critDataCollection(): JSX.Element {
                                                 .ref(
                                                     `/critData/${user.uid}/trophies`
                                                 )
-                                                .set(
-                                                    critData[user.uid]
-                                                        ?.trophies || myTrophies
-                                                );
+                                                .set(myTrophies);
                                             fetchCrit(dispatch);
                                         }
                                     }}
