@@ -86,7 +86,10 @@ export default function updateDeck(): JSX.Element {
     });
     const [filter, setFilter] = useState({
         type: '?' as '?' | 'PvP' | 'PvE' | 'Crew',
-        dice: dices?.map(dice => dice.id) || [],
+        dice:
+            dices
+                ?.filter(dice => dice.rarity === 'Legendary')
+                .map(dice => dice.id) || [],
     });
 
     const initialEditState = {
@@ -581,7 +584,12 @@ export default function updateDeck(): JSX.Element {
                             )
                             .filter(deckInfo =>
                                 deckInfo.decks.some(deck =>
-                                    deck.every(die => filter.dice.includes(die))
+                                    deck.every(dice =>
+                                        dices.find(d => d.id === dice)
+                                            ?.rarity === 'Legendary'
+                                            ? filter.dice.includes(dice)
+                                            : true
+                                    )
                                 )
                             )
                             .concat(
