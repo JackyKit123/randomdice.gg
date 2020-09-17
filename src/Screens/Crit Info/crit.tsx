@@ -97,12 +97,14 @@ export default function critDataCollection(): JSX.Element {
             };
         } = {};
         for (let i = 1; i <= 20; i += 1) {
-            let critDataPerClass = scatterDataRoundedDownToClass
+            const critDataPerClass = scatterDataRoundedDownToClass
                 .filter(data => data.rank === i)
                 .map(data => data.crit);
-            critDataPerClass = critDataPerClass.length ? critDataPerClass : [0];
-            const avg = math.mean(critDataPerClass);
-            const median = math.median(critDataPerClass);
+
+            const avg =
+                critDataPerClass.length > 0 ? math.mean(critDataPerClass) : 0;
+            const median =
+                critDataPerClass.length > 0 ? math.median(critDataPerClass) : 0;
             const trophies = trophiesForClass[i];
             processedData[i] = {
                 avg,
@@ -159,6 +161,14 @@ export default function critDataCollection(): JSX.Element {
                                                     `/critData/${user.uid}/trophies`
                                                 )
                                                 .set(trophies);
+                                            await database
+                                                .ref(
+                                                    `/critData/${user.uid}/crit`
+                                                )
+                                                .set(
+                                                    critData[user.uid]?.crit ||
+                                                        111
+                                                );
                                             fetchCrit(dispatch);
                                         }
                                     }}
@@ -216,6 +226,14 @@ export default function critDataCollection(): JSX.Element {
                                                     `/critData/${user.uid}/crit`
                                                 )
                                                 .set(crit);
+                                            await database
+                                                .ref(
+                                                    `/critData/${user.uid}/trophies`
+                                                )
+                                                .set(
+                                                    critData[user.uid]
+                                                        ?.trophies || 0
+                                                );
                                             fetchCrit(dispatch);
                                         }
                                     }}
