@@ -20,11 +20,11 @@
             "$uid": {
                 "trophies": {
                     ".write": "auth.uid === $uid",
-                    ".validate": "typeof newData === 'number' && newData >= 0"
+                    ".validate": "newData.isNumber() && newData.val() >= 0"
                 },
                 "crit": {
                     ".write": "auth.uid === $uid",
-                    ".validate": "typeof newData === 'number' && newData >= 0"
+                    ".validate": "newData.isNumber() && newData.val() >= 111"
                 }
             }
         },
