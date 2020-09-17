@@ -38,6 +38,23 @@
             ]
         },
         {
+            "target": "patreon",
+            "public": "empty",
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/"
+                }
+            ],
+            "redirects": [
+                {
+                    "source": "/",
+                    "destination": "https://www.patreon.com/RandomDiceCommunityWebsite",
+                    "type": 301
+                }
+            ]
+        },
+        {
             "target": "website",
             "public": "build",
             "ignore": [
@@ -54,6 +71,11 @@
                 {
                     "source": "/github",
                     "destination": "https://github.com/JackyKit123/randomdice.gg",
+                    "type": 301
+                },
+                {
+                    "source": "/patreon",
+                    "destination": "https://www.patreon.com/RandomDiceCommunityWebsite",
                     "type": 301
                 }
             ],
