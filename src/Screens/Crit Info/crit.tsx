@@ -38,7 +38,7 @@ export default function critDataCollection(): JSX.Element {
     const [myCrit, setMyCrit] = useState(111);
 
     let jsx;
-    if (dices && critData) {
+    if (dices && dices.length && critData && !critData.raw) {
         const maxCrit = findMaxCrit(dices);
         const critDataArr = Object.values(critData);
         const scatterDataByTrophies = critDataArr.map(data => ({
