@@ -40,7 +40,9 @@ export default function critDataCollection(): JSX.Element {
     let jsx;
     if (dices && dices.length && critData && !critData.raw) {
         const maxCrit = findMaxCrit(dices);
-        const critDataArr = Object.values(critData);
+        const critDataArr = Object.values(critData).filter(
+            data => data.trophies && data.crit
+        );
         const scatterDataByTrophies = critDataArr.map(data => ({
             x: data.trophies > 40000 ? 40000 : data.trophies,
             y: data.crit,
@@ -167,7 +169,7 @@ export default function critDataCollection(): JSX.Element {
                                                 )
                                                 .set(
                                                     critData[user.uid]?.crit ||
-                                                        111
+                                                        myCrit
                                                 );
                                             fetchCrit(dispatch);
                                         }
@@ -232,7 +234,7 @@ export default function critDataCollection(): JSX.Element {
                                                 )
                                                 .set(
                                                     critData[user.uid]
-                                                        ?.trophies || 0
+                                                        ?.trophies || myTrophies
                                                 );
                                             fetchCrit(dispatch);
                                         }
