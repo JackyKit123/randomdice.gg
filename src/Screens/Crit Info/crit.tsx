@@ -343,12 +343,7 @@ export default function critDataCollection(): JSX.Element {
                     <VictoryChart
                         theme={VictoryTheme.material}
                         domain={{
-                            x: [
-                                0,
-                                Math.max(
-                                    ...critDataArr.map(data => data.trophies)
-                                ),
-                            ],
+                            x: [0, 40000],
                             y: [0, maxCrit],
                         }}
                         domainPadding={{ x: [0, 5] }}
