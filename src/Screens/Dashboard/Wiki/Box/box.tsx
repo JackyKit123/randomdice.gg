@@ -53,19 +53,19 @@ export default function editBox(): JSX.Element {
     const handleSubmit = async (): Promise<void> => {
         if (activeEdit) {
             const originalBox = boxInfo.find(box => box.id === activeEdit.id);
-            if (/^data:image\/png;base64,/.test(activeEdit.img)) {
+            if (/^data:image\/([a-zA-Z]*);base64,/.test(activeEdit.img)) {
                 if (originalBox) {
                     await storage
-                        .ref(`Box Images/${originalBox.name}.png`)
+                        .ref(`Box Images/${originalBox.name}`)
                         .delete();
                 }
                 await storage
-                    .ref(`Box Images/${activeEdit.name}.png`)
+                    .ref(`Box Images/${activeEdit.name}`)
                     .putString(activeEdit.img, 'data_url', {
                         cacheControl: 'public,max-age=31536000',
                     });
                 const newUrl = await storage
-                    .ref(`Box Images/${activeEdit.name}.png`)
+                    .ref(`Box Images/${activeEdit.name}`)
                     .getDownloadURL();
                 activeEdit.img = newUrl;
             } else if (originalBox && originalBox.name !== activeEdit.name) {
@@ -75,19 +75,17 @@ export default function editBox(): JSX.Element {
                         responseType: 'blob',
                     })
                 ).data;
-                await storage
-                    .ref(`Box Images/${originalBox.name}.png`)
-                    .delete();
+                await storage.ref(`Box Images/${originalBox.name}`).delete();
                 reader.readAsDataURL(img);
                 reader.onloadend = async (): Promise<void> => {
                     const base64 = reader.result as string;
                     await storage
-                        .ref(`Box Images/${activeEdit.name}.png`)
+                        .ref(`Box Images/${activeEdit.name}`)
                         .putString(base64, 'data_url', {
                             cacheControl: 'public,max-age=31536000',
                         });
                     const newUrl = await storage
-                        .ref(`Box Images/${activeEdit.name}.png`)
+                        .ref(`Box Images/${activeEdit.name}`)
                         .getDownloadURL();
                     activeEdit.img = newUrl;
                     const result = boxInfo.map(box => {
@@ -132,7 +130,7 @@ export default function editBox(): JSX.Element {
     const handleDelete = async (): Promise<void> => {
         const originalBox = boxInfo.find(box => box.id === activeEdit.id);
         if (originalBox) {
-            await storage.ref(`Box Images/${originalBox.name}.png`).delete();
+            await storage.ref(`Box Images/${originalBox.name}`).delete();
             const result = boxInfo.filter(box => box.id !== activeEdit.id);
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
@@ -236,7 +234,7 @@ export default function editBox(): JSX.Element {
                                 key={`box${activeEdit.id}-img`}
                                 type='file'
                                 alt='box'
-                                accept='image/png'
+                                accept='image/*'
                                 className={invalidImg ? 'invalid' : ''}
                                 onChange={(evt): void => {
                                     if (evt.target.files) {
@@ -253,7 +251,7 @@ export default function editBox(): JSX.Element {
                         </label>
                         {invalidImg ? (
                             <div className='invalid-warning'>
-                                Please upload a box image in .png format.
+                                Please upload a box image in format.
                             </div>
                         ) : null}
                         <label htmlFor='box-from'>

@@ -53,19 +53,19 @@ export default function editBoss(): JSX.Element {
             const originalBoss = bossInfo.find(
                 boss => boss.id === activeEdit.id
             );
-            if (/^data:image\/png;base64,/.test(activeEdit.img)) {
+            if (/^data:image\/([a-zA-Z]*);base64,/.test(activeEdit.img)) {
                 if (originalBoss) {
                     await storage
-                        .ref(`Boss Images/${originalBoss.name}.png`)
+                        .ref(`Boss Images/${originalBoss.name}`)
                         .delete();
                 }
                 await storage
-                    .ref(`Boss Images/${activeEdit.name}.png`)
+                    .ref(`Boss Images/${activeEdit.name}`)
                     .putString(activeEdit.img, 'data_url', {
                         cacheControl: 'public,max-age=31536000',
                     });
                 const newUrl = await storage
-                    .ref(`Boss Images/${activeEdit.name}.png`)
+                    .ref(`Boss Images/${activeEdit.name}`)
                     .getDownloadURL();
                 activeEdit.img = newUrl;
             } else if (originalBoss && originalBoss.name !== activeEdit.name) {
@@ -75,19 +75,17 @@ export default function editBoss(): JSX.Element {
                         responseType: 'blob',
                     })
                 ).data;
-                await storage
-                    .ref(`Boss Images/${originalBoss.name}.png`)
-                    .delete();
+                await storage.ref(`Boss Images/${originalBoss.name}`).delete();
                 reader.readAsDataURL(img);
                 reader.onloadend = async (): Promise<void> => {
                     const base64 = reader.result as string;
                     await storage
-                        .ref(`Boss Images/${activeEdit.name}.png`)
+                        .ref(`Boss Images/${activeEdit.name}`)
                         .putString(base64, 'data_url', {
                             cacheControl: 'public,max-age=31536000',
                         });
                     const newUrl = await storage
-                        .ref(`Boss Images/${activeEdit.name}.png`)
+                        .ref(`Boss Images/${activeEdit.name}`)
                         .getDownloadURL();
                     activeEdit.img = newUrl;
                     const result = bossInfo.map(boss => {
@@ -129,7 +127,7 @@ export default function editBoss(): JSX.Element {
     const handleDelete = async (): Promise<void> => {
         const originalBoss = bossInfo.find(boss => boss.id === activeEdit.id);
         if (originalBoss) {
-            await storage.ref(`Boss Images/${originalBoss.name}.png`).delete();
+            await storage.ref(`Boss Images/${originalBoss.name}`).delete();
             const result = bossInfo.filter(boss => boss.id !== activeEdit.id);
             dbRef.set(result);
             setBossInfo(result);
@@ -233,7 +231,7 @@ export default function editBoss(): JSX.Element {
                                 key={`boss${activeEdit.id}-img`}
                                 type='file'
                                 alt='boss'
-                                accept='image/png'
+                                accept='image/*'
                                 className={invalidImg ? 'invalid' : ''}
                                 onChange={(evt): void => {
                                     if (evt.target.files) {
@@ -250,7 +248,7 @@ export default function editBoss(): JSX.Element {
                         </label>
                         {invalidImg ? (
                             <div className='invalid-warning'>
-                                Please upload a boss image in .png format.
+                                Please upload a boss image in format.
                             </div>
                         ) : null}
                         <CKEditor

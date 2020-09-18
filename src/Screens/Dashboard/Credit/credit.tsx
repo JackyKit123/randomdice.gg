@@ -127,7 +127,7 @@ export default function editCredit(): JSX.Element {
                             personUpdated => personUpdated.id === person.id
                         ) === undefined
                 ) {
-                    storage.ref(`People Images/${person.name}.png`).delete();
+                    storage.ref(`People Images/${person.name}`).delete();
                 }
             })
         );
@@ -136,21 +136,21 @@ export default function editCredit(): JSX.Element {
                 await Promise.all(
                     category.people.map(async person => {
                         const personEdited = edited(category.id, person.id);
-                        if (/^data:image\/png;base64,/.test(person.img)) {
+                        if (
+                            /^data:image\/([a-zA-Z]*);base64,/.test(person.img)
+                        ) {
                             if (personEdited) {
                                 await storage
-                                    .ref(
-                                        `People Images/${personEdited.name}.png`
-                                    )
+                                    .ref(`People Images/${personEdited.name}`)
                                     .delete();
                             }
                             await storage
-                                .ref(`People Images/${person.name}.png`)
+                                .ref(`People Images/${person.name}`)
                                 .putString(person.img, 'data_url', {
                                     cacheControl: 'public,max-age=31536000',
                                 });
                             const newUrl = await storage
-                                .ref(`People Images/${person.name}.png`)
+                                .ref(`People Images/${person.name}`)
                                 .getDownloadURL();
                             // eslint-disable-next-line no-param-reassign
                             person.img = newUrl;
@@ -164,19 +164,19 @@ export default function editCredit(): JSX.Element {
                                 })
                             ).data;
                             await storage
-                                .ref(`People Images/${personEdited.name}.png`)
+                                .ref(`People Images/${personEdited.name}`)
                                 .delete();
                             const reader = new FileReader();
                             reader.readAsDataURL(img);
                             reader.onloadend = async (): Promise<void> => {
                                 const base64 = reader.result as string;
                                 await storage
-                                    .ref(`People Images/${person.name}.png`)
+                                    .ref(`People Images/${person.name}`)
                                     .putString(base64, 'data_url', {
                                         cacheControl: 'public,max-age=31536000',
                                     });
                                 const newUrl = await storage
-                                    .ref(`People Images/${person.name}.png`)
+                                    .ref(`People Images/${person.name}`)
                                     .getDownloadURL();
                                 // eslint-disable-next-line no-param-reassign
                                 person.img = newUrl;
@@ -282,7 +282,7 @@ export default function editCredit(): JSX.Element {
                                     }
                                     type='file'
                                     alt='boss'
-                                    accept='image/png'
+                                    accept='image/*'
                                     onChange={(evt): void => {
                                         if (evt.target.files) {
                                             const reader = new FileReader();

@@ -47,14 +47,14 @@ export default function editTips(): JSX.Element {
 
     const handleSubmit = async (): Promise<void> => {
         if (activeEdit) {
-            if (/^data:image\/png;base64,/.test(activeEdit.img)) {
+            if (/^data:image\/([a-zA-Z]*);base64,/.test(activeEdit.img)) {
                 await storage
-                    .ref(`Tip Images/${activeEdit.id}.png`)
+                    .ref(`Tip Images/${activeEdit.id}`)
                     .putString(activeEdit.img, 'data_url', {
                         cacheControl: 'public,max-age=31536000',
                     });
                 const newUrl = await storage
-                    .ref(`Tip Images/${activeEdit.id}.png`)
+                    .ref(`Tip Images/${activeEdit.id}`)
                     .getDownloadURL();
                 activeEdit.img = newUrl;
             }
@@ -83,7 +83,7 @@ export default function editTips(): JSX.Element {
     const handleDelete = async (): Promise<void> => {
         const originalTips = tips.find(tip => tip.id === activeEdit.id);
         if (originalTips) {
-            await storage.ref(`Tip Images/${originalTips.id}.png`).delete();
+            await storage.ref(`Tip Images/${originalTips.id}`).delete();
             const result = tips.filter(tip => tip.id !== activeEdit.id);
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
@@ -171,7 +171,7 @@ export default function editTips(): JSX.Element {
                                 key={`tips${activeEdit.id}-img`}
                                 type='file'
                                 alt='tips'
-                                accept='image/png'
+                                accept='image/*'
                                 className={invalidImg ? 'invalid' : ''}
                                 onChange={(evt): void => {
                                     if (evt.target.files) {
@@ -191,7 +191,7 @@ export default function editTips(): JSX.Element {
                         </figure>
                         {invalidImg ? (
                             <div className='invalid-warning'>
-                                Please upload a tips image in .png format.
+                                Please upload an image to depict the tip.
                             </div>
                         ) : null}
                         <CKEditor

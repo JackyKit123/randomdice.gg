@@ -96,19 +96,19 @@ export default function editDice(): JSX.Element {
     const handleSubmit = async (): Promise<void> => {
         if (activeEdit) {
             const originalDice = dices.find(dice => dice.id === activeEdit.id);
-            if (/^data:image\/png;base64,/.test(activeEdit.img)) {
+            if (/^data:image\/([a-zA-Z]*);base64,/.test(activeEdit.img)) {
                 if (originalDice) {
                     await storage
                         .ref(`Dice Images/${originalDice.name}.png`)
                         .delete();
                 }
                 await storage
-                    .ref(`Dice Images/${activeEdit.name}.png`)
+                    .ref(`Dice Images/${activeEdit.name}`)
                     .putString(activeEdit.img, 'data_url', {
                         cacheControl: 'public,max-age=31536000',
                     });
                 const newUrl = await storage
-                    .ref(`Dice Images/${activeEdit.name}.png`)
+                    .ref(`Dice Images/${activeEdit.name}`)
                     .getDownloadURL();
                 activeEdit.img = newUrl;
             } else if (originalDice && originalDice.name !== activeEdit.name) {
@@ -118,19 +118,17 @@ export default function editDice(): JSX.Element {
                         responseType: 'blob',
                     })
                 ).data;
-                await storage
-                    .ref(`Dice Images/${originalDice.name}.png`)
-                    .delete();
+                await storage.ref(`Dice Images/${originalDice.name}`).delete();
                 reader.readAsDataURL(img);
                 reader.onloadend = async (): Promise<void> => {
                     const base64 = reader.result as string;
                     await storage
-                        .ref(`Dice Images/${activeEdit.name}.png`)
+                        .ref(`Dice Images/${activeEdit.name}`)
                         .putString(base64, 'data_url', {
                             cacheControl: 'public,max-age=31536000',
                         });
                     const newUrl = await storage
-                        .ref(`Dice Images/${activeEdit.name}.png`)
+                        .ref(`Dice Images/${activeEdit.name}`)
                         .getDownloadURL();
                     activeEdit.img = newUrl;
                     const result = dices.map(dice => {
@@ -205,7 +203,7 @@ export default function editDice(): JSX.Element {
     const handleDelete = async (): Promise<void> => {
         const originalDice = dices.find(dice => dice.id === activeEdit.id);
         if (originalDice) {
-            await storage.ref(`Dice Images/${originalDice.name}.png`).delete();
+            await storage.ref(`Dice Images/${originalDice.name}`).delete();
             const result = dices.filter(dice => dice.id !== activeEdit.id);
             dbRef.set(result);
             setDices(result);
@@ -309,7 +307,7 @@ export default function editDice(): JSX.Element {
                                 key={`dice${activeEdit.id}-img`}
                                 type='file'
                                 alt='dice'
-                                accept='image/png'
+                                accept='image/*'
                                 className={invalidImg ? 'invalid' : ''}
                                 onChange={(evt): void => {
                                     if (evt.target.files) {
@@ -326,7 +324,7 @@ export default function editDice(): JSX.Element {
                         </label>
                         {invalidImg ? (
                             <div className='invalid-warning'>
-                                Please upload a dice image in .png format.
+                                Please upload a dice image in format.
                             </div>
                         ) : null}
                         <label htmlFor='dice-name'>
