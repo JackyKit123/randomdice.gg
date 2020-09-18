@@ -36,9 +36,9 @@ export default function Loading(): JSX.Element {
                     You seem to be stuck loading.{' '}
                     <button
                         type='button'
-                        onClick={(): void => {
+                        onClick={async (): Promise<void> => {
                             localStorage.clear();
-                            unregister();
+                            await unregister();
                             window.location.reload();
                         }}
                     >
