@@ -1,4 +1,4 @@
-import { Dice, Dices } from './Redux Storage/Fetch Firebase/Dices/types';
+import { Dices } from './Redux Storage/Fetch Firebase/Dices/types';
 
 export default function replaceTextWithImgTag(
     text: string,
@@ -7,15 +7,25 @@ export default function replaceTextWithImgTag(
     return text
         .replace(/{Dice:\w*( \w*)*}/g, match => {
             const diceName = match.replace('{Dice:', '').replace('}', '');
-            const { img, rarity } = dices?.find(
-                dice => dice.name === diceName
-            ) as Dice;
-            const nullDiceUrl =
-                'https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty.png?alt=media&token=60b222f0-33b0-4cfa-afa0-7655ecbdb8a8';
-            return `<figure class="dice"><img src="${img ||
-                nullDiceUrl}" alt="${
-                img ? `dice ${diceName}` : 'dice ?'
-            }" data-dice-rarity=${rarity || '?'} /></figure>`;
+            const die = dices?.find(dice => dice.name === diceName);
+            if (die) {
+                const { img, rarity } = die;
+                return `<figure class="dice">
+                            <img
+                                src="${img}"
+                                alt="${`dice ${diceName}`}"
+                                data-dice-rarity=${rarity}
+                            />
+                        </figure>`;
+            }
+            return `<figure class="dice">
+                        <img
+                            src=
+                              "https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty.png?alt=media&token=60b222f0-33b0-4cfa-afa0-7655ecbdb8a8"
+                            alt="dice ?"
+                            data-dice-rarity='?'
+                        />
+                    </figure>`;
         })
         .replace(
             /({Gold}|{Diamond}|{Common Dice}|{Rare Dice}|{Unique Dice}|{Legendary Dice})/g,
