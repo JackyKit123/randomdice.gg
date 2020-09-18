@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -32,6 +32,9 @@ export default function DeckList(): JSX.Element {
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
+    const checkboxRef = dices?.map(() =>
+        useRef(null as null | HTMLInputElement)
+    );
     const { filter } = selection.filterReducer;
     const deckType = location.pathname
         .replace(/^\/decks\//i, '')
@@ -57,34 +60,6 @@ export default function DeckList(): JSX.Element {
 
     let jsx;
     if (dices && decks && decks.length > 0) {
-        const Checkbox = ({
-            legendary,
-        }: {
-            legendary: DiceType['id'];
-        }): JSX.Element => (
-            <input
-                value={legendary}
-                type='checkbox'
-                defaultChecked={filter.legendary.includes(legendary)}
-                onChange={(evt): void => {
-                    if (evt.target.checked) {
-                        filter.legendary = [
-                            ...filter.legendary,
-                            Number(evt.target.value),
-                        ];
-                    } else {
-                        filter.legendary = filter.legendary.filter(
-                            l => l !== Number(evt.target.value)
-                        );
-                    }
-                    dispatch({
-                        type: FILTER_ACTION,
-                        payload: { ...filter },
-                    });
-                }}
-            />
-        );
-
         const filteredDeck = decks
             .filter(deckData => {
                 return (
@@ -241,12 +216,27 @@ export default function DeckList(): JSX.Element {
                                             d => d.rarity === 'Legendary'
                                         ).length
                                     }
-                                    onClick={(): void => {
+                                    onClick={(evt): void => {
+                                        const target = evt.target as HTMLButtonElement;
+                                        if (checkboxRef) {
+                                            checkboxRef.forEach(eachRef => {
+                                                if (eachRef.current)
+                                                    // eslint-disable-next-line no-param-reassign
+                                                    eachRef.current.checked =
+                                                        target.innerText ===
+                                                        'Select All';
+                                            });
+                                        }
                                         filter.legendary =
-                                            filter.legendary.length ===
-                                            legendaryList.length
-                                                ? []
-                                                : legendaryList;
+                                            target.innerText === 'Select All'
+                                                ? dices
+                                                      .filter(
+                                                          die =>
+                                                              die.rarity ===
+                                                              'Legendary'
+                                                      )
+                                                      .map(dice => dice.id)
+                                                : [];
                                         dispatch({
                                             type: FILTER_ACTION,
                                             payload: { ...filter },
@@ -259,18 +249,65 @@ export default function DeckList(): JSX.Element {
                                         : 'Select All'}
                                 </button>
                             </div>
-                            {legendaryList.map((legendary: DiceType['id']) => (
-                                <div
-                                    className='legendary-filter'
-                                    key={legendary}
-                                >
-                                    <Dice dice={legendary} />
-                                    <Checkbox legendary={legendary} />
-                                    <span className='checkbox-styler'>
-                                        <FontAwesomeIcon icon={faCheck} />
-                                    </span>
-                                </div>
-                            ))}
+                            {legendaryList.map(
+                                (legendary: DiceType['id'], i) => (
+                                    <div
+                                        className='legendary-filter'
+                                        key={legendary}
+                                    >
+                                        <Dice dice={legendary} />
+                                        <input
+                                            value={legendary}
+                                            type='checkbox'
+                                            defaultChecked
+                                            ref={
+                                                checkboxRef
+                                                    ? checkboxRef[i]
+                                                    : null
+                                            }
+                                            onChange={(evt): void => {
+                                                if (evt.target.checked) {
+                                                    if (
+                                                        !filter.legendary.includes(
+                                                            Number(
+                                                                evt.target.value
+                                                            )
+                                                        )
+                                                    ) {
+                                                        filter.legendary = [
+                                                            ...filter.legendary,
+                                                            Number(
+                                                                evt.target.value
+                                                            ),
+                                                        ];
+                                                        dispatch({
+                                                            type: FILTER_ACTION,
+                                                            payload: {
+                                                                ...filter,
+                                                            },
+                                                        });
+                                                    }
+                                                } else {
+                                                    filter.legendary = filter.legendary.filter(
+                                                        dieId =>
+                                                            dieId !==
+                                                            Number(
+                                                                evt.target.value
+                                                            )
+                                                    );
+                                                    dispatch({
+                                                        type: FILTER_ACTION,
+                                                        payload: { ...filter },
+                                                    });
+                                                }
+                                            }}
+                                        />
+                                        <span className='checkbox-styler'>
+                                            <FontAwesomeIcon icon={faCheck} />
+                                        </span>
+                                    </div>
+                                )
+                            )}
                         </label>
                     </div>
                 </form>
