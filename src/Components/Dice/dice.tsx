@@ -16,7 +16,7 @@ export default function Dice({ dice }: { dice: number | string }): JSX.Element {
                 data-dice-rarity={targetDice?.rarity || '?'}
                 src={
                     targetDice?.img ||
-                    'https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty.png?alt=media&token=60b222f0-33b0-4cfa-afa0-7655ecbdb8a8'
+                    'https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty?alt=media&token=ccd57102-a890-44ba-b6f0-29e91c765f58'
                 }
             />
         </figure>
