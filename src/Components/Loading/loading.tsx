@@ -19,7 +19,7 @@ export default function Loading(): JSX.Element {
             <h3>Loading...</h3>
             <div className='loading-animation'>
                 <img
-                    src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FTime.png?alt=media&token=863fd294-d0b7-4af1-bcca-797ae50dcca2'
+                    src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FTime?alt=media&token=5c459fc5-4059-4099-b93d-f4bc86debf6d'
                     alt='Time Dice'
                 />
                 <img
