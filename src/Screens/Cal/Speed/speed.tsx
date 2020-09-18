@@ -104,7 +104,7 @@ export default function SpeedCalculator(): JSX.Element {
                     This calculator is for calculating the mob speed factor. Max
                     Slow from frost effect by ice and blizzard is 3 Frost
                     layers, which is 50% maxed. Flow has no speed cap in pvp
-                    while having 40% max slow in pve. We do not have accurate
+                    while having 40% max slow in co-op. We do not have accurate
                     data for the slow effect for sand swamp and we assumed it to
                     be 40%.
                 </p>
@@ -281,7 +281,7 @@ export default function SpeedCalculator(): JSX.Element {
                                 }}
                             >
                                 <option value='PvP'>PvP (speed up)</option>
-                                <option value='PvE'>PvE (slow down)</option>
+                                <option value='Co-op'>Co-op (slow down)</option>
                             </select>
                         </label>
                         <label htmlFor='flow-dot'>

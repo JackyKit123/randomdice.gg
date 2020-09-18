@@ -240,7 +240,7 @@ export default function updateDecksGuide(): JSX.Element {
                                     onChange={(evt): void => {
                                         activeEdit.type = evt.target.value as
                                             | 'PvP'
-                                            | 'PvE'
+                                            | 'Co-op'
                                             | 'Crew';
                                         setActiveEdit({
                                             ...activeEdit,
@@ -248,7 +248,7 @@ export default function updateDecksGuide(): JSX.Element {
                                     }}
                                 >
                                     <option>PvP</option>
-                                    <option>PvE</option>
+                                    <option>Co-op</option>
                                     <option>Crew</option>
                                 </select>
                             </td>

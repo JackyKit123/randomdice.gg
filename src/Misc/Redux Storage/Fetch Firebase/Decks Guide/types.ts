@@ -14,7 +14,7 @@ export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 export interface DeckGuide {
     id: number;
     name: string;
-    type: 'PvP' | 'PvE' | 'Crew';
+    type: 'PvP' | 'Co-op' | 'Crew';
     diceList: Dice['id'][][];
     guide: string;
 }

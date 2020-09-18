@@ -55,12 +55,12 @@ export default function editIntro(): JSX.Element {
                     Yes
                 </button>
             </PopUp>
-            {['PvP', 'PvE', 'Crew', 'Arena', 'Store'].map(type => (
+            {['PvP', 'Co-op', 'Crew', 'Arena', 'Store'].map(type => (
                 <div className='block' key={type}>
                     <h3>{type}</h3>
                     <CKEditor
                         editor={ClassicEditor}
-                        data={content[type as 'PvP' | 'PvE' | 'Crew']}
+                        data={content[type as 'PvP' | 'Co-op' | 'Crew']}
                         config={{
                             heading: {
                                 options: [
@@ -104,7 +104,7 @@ export default function editIntro(): JSX.Element {
                             }
                         ): void => {
                             content[
-                                type as 'PvP' | 'PvE' | 'Crew'
+                                type as 'PvP' | 'Co-op' | 'Crew'
                             ] = editor.getData();
                             setContent({
                                 ...content,

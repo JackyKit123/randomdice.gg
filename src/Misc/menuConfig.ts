@@ -26,8 +26,8 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
-                name: 'PvE Deck List',
-                path: '/decks/pve',
+                name: 'Co-op Deck List',
+                path: '/decks/co-op',
                 component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
@@ -118,9 +118,11 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Wiki/Game Intro/pvp')),
             },
             {
-                name: 'PvE  Introduction',
-                path: '/wiki/pve',
-                component: lazy(() => import('../Screens/Wiki/Game Intro/pve')),
+                name: 'Co-op  Introduction',
+                path: '/wiki/co-op',
+                component: lazy(() =>
+                    import('../Screens/Wiki/Game Intro/coop')
+                ),
             },
             {
                 name: 'Crew Introduction',

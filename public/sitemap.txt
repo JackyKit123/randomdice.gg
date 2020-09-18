@@ -1,6 +1,6 @@
 https://randomdice.gg/
 https://randomdice.gg/decks/pvp
-https://randomdice.gg/decks/pve
+https://randomdice.gg/decks/co-op
 https://randomdice.gg/decks/crew
 https://randomdice.gg/critData
 https://randomdice.gg/decks/guide
@@ -16,7 +16,7 @@ https://randomdice.gg/calculator/coop
 https://randomdice.gg/calculator/dps
 https://randomdice.gg/calculator/stat
 https://randomdice.gg/wiki/pvp
-https://randomdice.gg/wiki/pve
+https://randomdice.gg/wiki/co-op
 https://randomdice.gg/wiki/crew
 https://randomdice.gg/wiki/arena
 https://randomdice.gg/wiki/dice_mechanics

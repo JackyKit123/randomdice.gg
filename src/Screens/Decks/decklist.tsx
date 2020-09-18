@@ -38,7 +38,7 @@ export default function DeckList(): JSX.Element {
     const { filter } = selection.filterReducer;
     const deckType = location.pathname
         .replace(/^\/decks\//i, '')
-        .toLowerCase() as 'pvp' | 'pve' | 'crew';
+        .toLowerCase() as 'pvp' | 'co-op' | 'crew';
 
     const legendaryList =
         dices
@@ -163,7 +163,7 @@ export default function DeckList(): JSX.Element {
                 </PopUp>
                 <form className='filter'>
                     <div className='top-label'>
-                        <label htmlFor='pvePvp'>
+                        <label htmlFor='co-opPvp'>
                             <span>Deck Type :</span>
                             <select
                                 value={deckType}
@@ -174,7 +174,7 @@ export default function DeckList(): JSX.Element {
                                 }
                             >
                                 <option value='pvp'>PvP</option>
-                                <option value='pve'>PvE</option>
+                                <option value='co-op'>Co-op</option>
                                 <option value='crew'>Crew</option>
                             </select>
                         </label>
@@ -448,7 +448,11 @@ export default function DeckList(): JSX.Element {
     return (
         <Main
             title={`Deck List (${
-                deckType === 'pvp' ? 'PvP' : deckType === 'pve' ? 'PvE' : 'Crew'
+                deckType === 'pvp'
+                    ? 'PvP'
+                    : deckType === 'co-op'
+                    ? 'Co-op'
+                    : 'Crew'
             })`}
             className='deck-list'
         >
@@ -458,8 +462,8 @@ export default function DeckList(): JSX.Element {
                     {`Deck List (${
                         deckType === 'pvp'
                             ? 'PvP'
-                            : deckType === 'pve'
-                            ? 'PvE'
+                            : deckType === 'co-op'
+                            ? 'Co-op'
                             : 'Crew'
                     })`}
                 </title>
@@ -468,8 +472,8 @@ export default function DeckList(): JSX.Element {
                     content={`Random Dice ${
                         deckType === 'pvp'
                             ? 'PvP'
-                            : deckType === 'pve'
-                            ? 'PvE'
+                            : deckType === 'co-op'
+                            ? 'Co-op'
                             : 'Crew'
                     } Deck List`}
                 />

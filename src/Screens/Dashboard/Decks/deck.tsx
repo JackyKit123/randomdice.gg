@@ -74,7 +74,12 @@ export default function updateDeck(): JSX.Element {
     const initialNewDeckState = {
         id: -1,
         rating: 0,
-        type: 'PvP' as 'PvP' | 'PvE' | 'PvE (Solo)' | 'PvE (Pair)' | 'Crew',
+        type: 'PvP' as
+            | 'PvP'
+            | 'Co-op'
+            | 'Co-op (Solo)'
+            | 'Co-op (Pair)'
+            | 'Crew',
         decks: [[0, 1, 2, 3, 4]] as DiceType['id'][][],
         added: '',
         updated: null,
@@ -85,7 +90,7 @@ export default function updateDeck(): JSX.Element {
         dice: [[]] as DiceType['id'][][],
     });
     const [filter, setFilter] = useState({
-        type: '?' as '?' | 'PvP' | 'PvE' | 'Crew',
+        type: '?' as '?' | 'PvP' | 'Co-op' | 'Crew',
         dice:
             dices
                 ?.filter(dice => dice.rarity === 'Legendary')
@@ -95,7 +100,7 @@ export default function updateDeck(): JSX.Element {
     const initialEditState = {
         id: -1,
         rating: 0,
-        type: '-' as '-' | 'PvP' | 'PvE' | 'Crew',
+        type: '-' as '-' | 'PvP' | 'Co-op' | 'Crew',
         decks: [[]] as DiceType['id'][][],
         added: '',
         updated: null as string | null,
@@ -177,15 +182,15 @@ export default function updateDeck(): JSX.Element {
         } else {
             clone.id = newId + 1;
         }
-        if (clone.type === 'PvE (Pair)' || clone.type === 'PvE (Solo)') {
-            clone.type = 'PvE';
+        if (clone.type === 'Co-op (Pair)' || clone.type === 'Co-op (Solo)') {
+            clone.type = 'Co-op';
         }
         sortDecksAndUpdate([
             ...decks,
             clone as {
                 id: number;
                 rating: number;
-                type: 'PvP' | 'PvE' | 'Crew';
+                type: 'PvP' | 'Co-op' | 'Crew';
                 decks: DiceType['id'][][];
                 added: string;
                 updated: string | null;
@@ -293,10 +298,10 @@ export default function updateDeck(): JSX.Element {
                             };
                             clone.type = evt.target.value as
                                 | 'PvP'
-                                | 'PvE (Solo)'
-                                | 'PvE (Pair)'
+                                | 'Co-op (Solo)'
+                                | 'Co-op (Pair)'
                                 | 'Crew';
-                            if (clone.type === 'PvE (Pair)') {
+                            if (clone.type === 'Co-op (Pair)') {
                                 clone.decks = [...clone.decks, [0, 1, 2, 3, 4]];
                             } else {
                                 clone.decks = [...clone.decks];
@@ -305,8 +310,8 @@ export default function updateDeck(): JSX.Element {
                         }}
                     >
                         <option>PvP</option>
-                        <option>PvE (Solo)</option>
-                        <option>PvE (Pair)</option>
+                        <option>Co-op (Solo)</option>
+                        <option>Co-op (Pair)</option>
                         <option>Crew</option>
                     </select>
                     {Array(5)
@@ -342,7 +347,7 @@ export default function updateDeck(): JSX.Element {
                             </select>
                         ))}
 
-                    {deckToAdd.type === 'PvE (Pair)' ? (
+                    {deckToAdd.type === 'Co-op (Pair)' ? (
                         <>
                             <h3>Co-op Deck Pair</h3>
                             {Array(5)
@@ -434,7 +439,7 @@ export default function updateDeck(): JSX.Element {
                         setDeckToAdd({
                             id: -1,
                             rating: 0,
-                            type: 'PvP' as 'PvP' | 'PvE' | 'Crew',
+                            type: 'PvP' as 'PvP' | 'Co-op' | 'Crew',
                             decks: [[0, 1, 2, 3, 4]] as DiceType['id'][][],
                             added: '',
                             updated: null,
@@ -470,14 +475,14 @@ export default function updateDeck(): JSX.Element {
                         filter.type = evt.target.value as
                             | '?'
                             | 'PvP'
-                            | 'PvE'
+                            | 'Co-op'
                             | 'Crew';
                         setFilter({ ...filter });
                     }}
                 >
                     <option>?</option>
                     <option>PvP</option>
-                    <option>PvE</option>
+                    <option>Co-op</option>
                     <option>Crew</option>
                 </select>
             </label>
@@ -647,13 +652,13 @@ export default function updateDeck(): JSX.Element {
                                                         clone.type = evt.target
                                                             .value as
                                                             | 'PvP'
-                                                            | 'PvE'
+                                                            | 'Co-op'
                                                             | 'Crew';
                                                         setActiveEdit(clone);
                                                     }}
                                                 >
                                                     <option>PvP</option>
-                                                    <option>PvE</option>
+                                                    <option>Co-op</option>
                                                     <option>Crew</option>
                                                 </select>
                                             </td>

@@ -20,7 +20,7 @@ export interface WikiContent {
     }[];
     intro: {
         PvP: string;
-        PvE: string;
+        'Co-op': string;
         Crew: string;
         Arena: string;
         Store: string;
