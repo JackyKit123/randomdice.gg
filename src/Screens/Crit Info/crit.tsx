@@ -37,6 +37,18 @@ export default function critDataCollection(): JSX.Element {
     const [myTrophies, setMyTrophies] = useState(0);
     const [myCrit, setMyCrit] = useState(111);
 
+    useEffect(() => {
+        if (
+            user &&
+            user !== 'awaiting auth state' &&
+            critData &&
+            critData[user.uid]
+        ) {
+            setMyCrit(critData[user.uid].crit);
+            setMyTrophies(critData[user.uid].trophies);
+        }
+    }, [user, critData]);
+
     let jsx;
     if (dices && dices.length && critData && !critData.raw) {
         const maxCrit = findMaxCrit(dices);
@@ -114,13 +126,6 @@ export default function critDataCollection(): JSX.Element {
                 trophies,
             };
         }
-
-        useEffect(() => {
-            if (user && user !== 'awaiting auth state' && critData[user.uid]) {
-                setMyCrit(critData[user.uid].crit);
-                setMyTrophies(critData[user.uid]?.trophies);
-            }
-        }, [user]);
 
         jsx = (
             <>
