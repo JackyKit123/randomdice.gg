@@ -506,7 +506,7 @@ export default function ComboCalculator(): JSX.Element {
                     <div className='dmg'>
                         <h4>Damage per Combo pip:</h4>
                         <label htmlFor='result'>
-                            <span className='type'>No Buff</span>
+                            <span className='type'>Raw Damage</span>
                             <input
                                 type='textbox'
                                 className={invalidInput ? 'invalid' : ''}
@@ -519,14 +519,18 @@ export default function ComboCalculator(): JSX.Element {
                             />
                         </label>
                         <label htmlFor='result'>
-                            <span className='type'>Crit Buffed</span>
+                            <span className='type'>Crit Damage</span>
                             <input
                                 type='textbox'
                                 className={invalidInput ? 'invalid' : ''}
                                 value={
                                     invalidInput
                                         ? 'Check Input'
-                                        : dpsPerComboCount('crit').dmg
+                                        : Math.round(
+                                              (dpsPerComboCount('raw').dmg *
+                                                  filter.crit) /
+                                                  100
+                                          )
                                 }
                                 disabled
                             />
@@ -540,6 +544,23 @@ export default function ComboCalculator(): JSX.Element {
                                     invalidInput
                                         ? 'Check Input'
                                         : dpsPerComboCount('lunar').dmg
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='type'>Lunar Crit Damage</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput
+                                        ? 'Check Input'
+                                        : Math.round(
+                                              (dpsPerComboCount('lunar').dmg *
+                                                  filter.crit) /
+                                                  100
+                                          )
                                 }
                                 disabled
                             />

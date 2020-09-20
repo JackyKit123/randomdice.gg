@@ -593,40 +593,31 @@ export default function EnergyCalculator(): JSX.Element {
                     <div className='dmg'>
                         <h4>Damage per Energy pip:</h4>
                         <label htmlFor='result'>
-                            <span className='type'>No buff</span>
+                            <span className='type'>Raw Damage</span>
                             <input
                                 type='textbox'
                                 className={invalidInput ? 'invalid' : ''}
                                 value={
                                     invalidInput
                                         ? 'Check Input'
-                                        : dpsPerSpCount('raw').dmg
+                                        : Math.round(dpsPerSpCount('raw').dmg)
                                 }
                                 disabled
                             />
                         </label>
                         <label htmlFor='result'>
-                            <span className='type'>Crit Buffed</span>
+                            <span className='type'>Crit Damage</span>
                             <input
                                 type='textbox'
                                 className={invalidInput ? 'invalid' : ''}
                                 value={
                                     invalidInput
                                         ? 'Check Input'
-                                        : dpsPerSpCount('crit').dmg
-                                }
-                                disabled
-                            />
-                        </label>
-                        <label htmlFor='result'>
-                            <span className='type'>Light Buffed</span>
-                            <input
-                                type='textbox'
-                                className={invalidInput ? 'invalid' : ''}
-                                value={
-                                    invalidInput
-                                        ? 'Check Input'
-                                        : dpsPerSpCount('light').dmg
+                                        : Math.round(
+                                              (dpsPerSpCount('raw').dmg *
+                                                  filter.crit) /
+                                                  100
+                                          )
                                 }
                                 disabled
                             />
@@ -639,7 +630,24 @@ export default function EnergyCalculator(): JSX.Element {
                                 value={
                                     invalidInput
                                         ? 'Check Input'
-                                        : dpsPerSpCount('lunar').dmg
+                                        : Math.round(dpsPerSpCount('lunar').dmg)
+                                }
+                                disabled
+                            />
+                        </label>
+                        <label htmlFor='result'>
+                            <span className='type'>Lunar Crit Damage</span>
+                            <input
+                                type='textbox'
+                                className={invalidInput ? 'invalid' : ''}
+                                value={
+                                    invalidInput
+                                        ? 'Check Input'
+                                        : Math.round(
+                                              (dpsPerSpCount('lunar').dmg *
+                                                  filter.crit) /
+                                                  100
+                                          )
                                 }
                                 disabled
                             />
