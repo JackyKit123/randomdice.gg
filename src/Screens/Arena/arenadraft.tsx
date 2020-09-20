@@ -108,7 +108,8 @@ export default function ArenaDraft(): JSX.Element {
             }
             const value = findDiceValue(diceId);
             const maxValue = Object.entries(value).find(
-                entry => entry[1] === Math.max(...Object.values(value))
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                ([_, val]) => val === Math.max(...Object.values(value))
             );
             if (maxValue) {
                 const synergy = <T extends keyof DiceValue>(
@@ -118,17 +119,18 @@ export default function ArenaDraft(): JSX.Element {
                     Math.round(
                         (Math.max(targetScore - deckScore(deckType), 0) /
                             targetScore) *
+                            10 *
                             100
                     ) / 100;
                 switch (maxValue[0]) {
                     case 'dps':
-                        return synergy(15, 'dps');
-                    case 'assists':
+                        return synergy(10, 'dps');
+                    case 'assist':
                         return synergy(15, 'assist');
                     case 'slow':
                         return synergy(10, 'slow');
                     case 'value':
-                        return synergy(10, 'value');
+                        return synergy(25, 'value');
                     default:
                         return 0;
                 }
@@ -457,8 +459,6 @@ export default function ArenaDraft(): JSX.Element {
                         />
                     </label>
                 </section>
-                <hr className='divisor' />
-                <ShareButtons name='Random Dice Arena Draft Toll' />
                 <section
                     className={`winrate ${currentPick === 6 ? 'show' : ''}`}
                 >
@@ -482,7 +482,7 @@ export default function ArenaDraft(): JSX.Element {
                                         winProb[7] * 0.4 +
                                         winProb[11] * 1) *
                                         10000
-                                ) / 10000
+                                ) / 10000 || 0
                             }
                             disabled
                         />
@@ -497,7 +497,7 @@ export default function ArenaDraft(): JSX.Element {
                                         winProb[6] * 80 +
                                         winProb[9]) *
                                         100
-                                ) / 100
+                                ) / 100 || 0
                             }
                             disabled
                         />
@@ -518,6 +518,8 @@ export default function ArenaDraft(): JSX.Element {
                             </label>
                         ))}
                 </section>
+                <hr className='divisor' />
+                <ShareButtons name='Random Dice Arena Draft Toll' />
             </>
         );
     } else if (error) {
