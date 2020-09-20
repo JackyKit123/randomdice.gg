@@ -7,12 +7,11 @@ export const FAIL = 'FETCH_DECKS_FAIL';
 export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
 export interface Deck {
+    guide: number[];
     id: number;
     type: 'PvP' | 'Co-op' | 'Crew' | '-';
     rating: number;
     decks: Dice['id'][][];
-    added: string;
-    updated: string | null;
 }
 
 export type Decks = Deck[];

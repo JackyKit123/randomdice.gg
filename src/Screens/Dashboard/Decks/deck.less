@@ -182,6 +182,7 @@
 
                         .deck-container,
                         .edit-container {
+                            min-height: 54px;
                             .display(flex);
                             .flex-direction(row);
                             .justify-content(space-between);
@@ -189,6 +190,13 @@
                             figure {
                                 width: 50px;
                             }
+                        }
+
+                        .deck-guide-labels {
+                            height: 100%;
+                            .display(flex);
+                            .flex-direction(column);
+                            .justify-content(space-around);
                         }
 
                         select,

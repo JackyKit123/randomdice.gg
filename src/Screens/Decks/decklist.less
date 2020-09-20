@@ -162,9 +162,14 @@
         }
     }
 
+    p.updated {
+        text-align: center;
+        font-style: italic;
+    }
+
     .table-container {
         overflow: auto;
-        max-width: 800px;
+        max-width: 700px;
         margin: 0 auto;
         height: 500px;
         border: 2px solid #6ba4a5;
@@ -198,6 +203,7 @@
                         vertical-align: middle;
 
                         .deck-container {
+                            min-height: 54px;
                             .display(flex);
                             .flex-direction(row);
                             .justify-content(space-between);
@@ -231,7 +237,7 @@
                                     border-radius: 3px;
                                     content: 'Click to Show';
                                     position: absolute;
-                                    left: 40px;
+                                    right: 40px;
                                     opacity: 0;
                                     white-space: nowrap;
                                     padding: 3px;
@@ -252,6 +258,74 @@
                                     &::after {
                                         content: '';
                                         opacity: 0;
+                                    }
+                                }
+                            }
+                        }
+
+                        .link-container {
+                            height: 100%;
+                            .display(flex);
+                            .flex-direction(column);
+                            .justify-content(space-around);
+
+                            & > .deck-guide-link {
+                                &[href$='/decks/guide/'] {
+                                    display: none;
+                                }
+                                position: relative;
+                                border-width: 2px;
+                                border-style: outset;
+                                border-color: rgb(118, 118, 118);
+                                display: block;
+                                text-align: center;
+                                margin: 0 auto;
+                                text-decoration: none;
+                                font-size: 15px;
+                                background-color: #05292e;
+                                padding: 6px;
+                                border-radius: 5px;
+                                color: #ffffff;
+                                .transition(all 0.2s ease-in-out);
+
+                                &::after {
+                                    pointer-events: none;
+                                    color: #05292e;
+                                    background-color: rgba(238, 238, 238, 0.85);
+                                    border-radius: 3px;
+                                    content: 'Click to Navigate';
+                                    position: absolute;
+                                    right: 40px;
+                                    opacity: 0;
+                                    white-space: nowrap;
+                                    padding: 3px;
+                                    .transition(all 0.2s ease-in-out);
+                                }
+
+                                &:hover,
+                                &:focus {
+                                    &::after {
+                                        display: inline-block;
+                                        opacity: 1;
+                                    }
+                                }
+
+                                &:hover,
+                                &:active,
+                                &:focus {
+                                    color: #05292e;
+                                    background-color: #eeeeee;
+                                }
+
+                                &:disabled {
+                                    background-color: #aaaaaa;
+
+                                    &:hover,
+                                    &:active,
+                                    &:focus {
+                                        cursor: initial;
+                                        color: #ffffff;
+                                        background-color: #aaaaaa;
                                     }
                                 }
                             }

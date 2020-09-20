@@ -23,13 +23,16 @@ import {
     CLOSE_POPUP,
     OPEN_POPUP,
 } from '../../../Misc/Redux Storage/PopUp Overlay/types';
+import { DecksGuide } from '../../../Misc/Redux Storage/Fetch Firebase/Decks Guide/types';
 
 function DeckRow({
     deckInfo,
     setActiveEdit,
+    guides,
 }: {
     deckInfo: Deck;
     setActiveEdit: (deckInfo: Deck) => void;
+    guides: DecksGuide;
 }): JSX.Element {
     return (
         <>
@@ -44,6 +47,17 @@ function DeckRow({
                         ))}
                     </div>
                 ))}
+            </td>
+            <td>
+                <div className='deck-guide-labels'>
+                    {deckInfo.guide.map((guide, i) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <div key={i}>
+                            {guides.find(g => g.id === guide)?.name ||
+                                'Auto Detect'}
+                        </div>
+                    ))}
+                </div>
             </td>
             <td>
                 <button
@@ -70,7 +84,7 @@ export default function updateDeck(): JSX.Element {
         useRef(null as null | HTMLInputElement)
     );
     const [decks, setDecks] = useState<Decks>([]);
-    const [currentGameVersion, setCurrentGameVersion] = useState('');
+    const [guides, setGuides] = useState<DecksGuide>([]);
     const initialNewDeckState = {
         id: -1,
         rating: 0,
@@ -81,8 +95,7 @@ export default function updateDeck(): JSX.Element {
             | 'Co-op (Pair)'
             | 'Crew',
         decks: [[0, 1, 2, 3, 4]] as DiceType['id'][][],
-        added: '',
-        updated: null,
+        guide: [-1],
     };
     const [deckToAdd, setDeckToAdd] = useState({ ...initialNewDeckState });
     const [deckToDelete, setDeckToDelete] = useState({
@@ -100,31 +113,25 @@ export default function updateDeck(): JSX.Element {
     const initialEditState = {
         id: -1,
         rating: 0,
-        type: '-' as '-' | 'PvP' | 'Co-op' | 'Crew',
-        decks: [[]] as DiceType['id'][][],
-        added: '',
-        updated: null as string | null,
-    };
+        type: '-',
+        decks: [[]],
+        guide: [-1],
+    } as Deck;
     const [activeEdit, setActiveEdit] = useState({ ...initialEditState });
-    const invalidVersion = currentGameVersion
-        ? !/^[1-9][0-9]{0,}\.(0|[1-9][0-9]{0,})\.[0-9]{1,}$/.test(
-              currentGameVersion
-          )
-        : false;
-    const invalidVersionToAdd = deckToAdd.added
-        ? !/^[1-9][0-9]{0,}\.(0|[1-9][0-9]{0,})\.[0-9]{1,}$/.test(
-              deckToAdd.added
-          )
-        : false;
     const invalidRating = !(activeEdit.rating >= 0 && activeEdit.rating <= 10);
     const invalidRatingToAdd = !(
         deckToAdd.rating >= 0 && deckToAdd.rating <= 10
     );
-    const missingVersion = activeEdit.id > 0 && currentGameVersion === '';
 
     useEffect(() => {
-        const ref = database.ref('/decks');
-        ref.once('value').then(snapshot => setDecks(snapshot.val()));
+        database
+            .ref('/decks')
+            .once('value')
+            .then(snapshot => setDecks(snapshot.val()));
+        database
+            .ref('/decks_guide')
+            .once('value')
+            .then(snapshot => setGuides(snapshot.val()));
     }, []);
 
     const sortDecksAndUpdate = (deckList: Decks): void => {
@@ -149,7 +156,6 @@ export default function updateDeck(): JSX.Element {
     };
 
     const updateDecks = (): void => {
-        activeEdit.updated = currentGameVersion;
         const updated = decks.map(deck =>
             deck.id === activeEdit.id ? activeEdit : deck
         );
@@ -167,11 +173,6 @@ export default function updateDeck(): JSX.Element {
         const clone = {
             ...deckToAdd,
         };
-        if (!clone.added.length) {
-            clone.added = 'invalid';
-            setDeckToAdd(clone);
-            return;
-        }
         if (invalidRatingToAdd) {
             return;
         }
@@ -192,8 +193,7 @@ export default function updateDeck(): JSX.Element {
                 rating: number;
                 type: 'PvP' | 'Co-op' | 'Crew';
                 decks: DiceType['id'][][];
-                added: string;
-                updated: string | null;
+                guide: number[];
             },
         ]);
         dispatch({ type: CLOSE_POPUP });
@@ -215,19 +215,9 @@ export default function updateDeck(): JSX.Element {
                     You need to fix the following errors before you can save
                     your updated deck onto the database.
                 </p>
-                {invalidVersion ? (
-                    <span className='invalid-warning'>
-                        Current game version input is invalid.
-                    </span>
-                ) : null}
                 {invalidRating ? (
                     <span className='invalid-warning'>
                         Invalid Rating Input.
-                    </span>
-                ) : null}
-                {missingVersion ? (
-                    <span className='invalid-warning'>
-                        You need to input the current game version.
                     </span>
                 ) : null}
             </PopUp>
@@ -256,22 +246,6 @@ export default function updateDeck(): JSX.Element {
             <PopUp popUpTarget='add-deck'>
                 <h3>Add A Deck</h3>
                 <form onSubmit={(evt): void => evt.preventDefault()}>
-                    <label htmlFor='game-version'>
-                        Current Game Version :{' '}
-                        <input
-                            className={invalidVersionToAdd ? 'invalid' : ''}
-                            type='textbox'
-                            placeholder='1.0.0'
-                            defaultValue={deckToAdd.added}
-                            onChange={(evt): void => {
-                                const clone = {
-                                    ...deckToAdd,
-                                };
-                                clone.added = evt.target.value;
-                                setDeckToAdd(clone);
-                            }}
-                        />
-                    </label>
                     <label htmlFor='rating'>
                         Rating :{' '}
                         <input
@@ -290,109 +264,157 @@ export default function updateDeck(): JSX.Element {
                             }}
                         />
                     </label>
-                    <select
-                        defaultValue='PvP'
-                        onChange={(evt): void => {
-                            const clone = {
-                                ...deckToAdd,
-                            };
-                            clone.type = evt.target.value as
-                                | 'PvP'
-                                | 'Co-op (Solo)'
-                                | 'Co-op (Pair)'
-                                | 'Crew';
-                            if (clone.type === 'Co-op (Pair)') {
-                                clone.decks = [...clone.decks, [0, 1, 2, 3, 4]];
-                            } else {
-                                clone.decks = [...clone.decks];
-                            }
-                            setDeckToAdd(clone);
-                        }}
-                    >
-                        <option>PvP</option>
-                        <option>Co-op (Solo)</option>
-                        <option>Co-op (Pair)</option>
-                        <option>Crew</option>
-                    </select>
-                    {Array(5)
-                        .fill('')
-                        .map((_, i) => (
-                            <select
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={i}
-                                defaultValue={i}
-                                onChange={(evt): void => {
-                                    const clone = {
-                                        ...deckToAdd,
-                                    };
-                                    clone.decks[0][i] = Number(
-                                        evt.target.value
-                                    );
-                                    setDeckToAdd(clone);
-                                }}
-                            >
-                                {dices
-                                    .filter(
-                                        die =>
-                                            !deckToAdd.decks[0].find(
-                                                (dieId, j) =>
-                                                    dieId === die.id && i !== j
-                                            )
-                                    )
-                                    .map(die => (
-                                        <option value={die.id} key={die.id}>
-                                            {die.name}
-                                        </option>
-                                    ))}
-                            </select>
-                        ))}
-
+                    <label htmlFor='deck-type'>
+                        Deck Type:{' '}
+                        <select
+                            defaultValue='PvP'
+                            onChange={(evt): void => {
+                                const clone = {
+                                    ...deckToAdd,
+                                };
+                                clone.type = evt.target.value as
+                                    | 'PvP'
+                                    | 'Co-op (Solo)'
+                                    | 'Co-op (Pair)'
+                                    | 'Crew';
+                                if (clone.type === 'Co-op (Pair)') {
+                                    clone.decks = [
+                                        ...clone.decks,
+                                        [0, 1, 2, 3, 4],
+                                    ];
+                                } else {
+                                    clone.decks = [...clone.decks];
+                                }
+                                setDeckToAdd(clone);
+                            }}
+                        >
+                            <option>PvP</option>
+                            <option>Co-op (Solo)</option>
+                            <option>Co-op (Pair)</option>
+                            <option>Crew</option>
+                        </select>
+                    </label>
+                    <label htmlFor='dice-list'>
+                        Dice List:{' '}
+                        {Array(5)
+                            .fill('')
+                            .map((_, i) => (
+                                <select
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    key={i}
+                                    defaultValue={i}
+                                    onChange={(evt): void => {
+                                        const clone = {
+                                            ...deckToAdd,
+                                        };
+                                        clone.decks[0][i] = Number(
+                                            evt.target.value
+                                        );
+                                        setDeckToAdd(clone);
+                                    }}
+                                >
+                                    {dices
+                                        .filter(
+                                            die =>
+                                                !deckToAdd.decks[0].find(
+                                                    (dieId, j) =>
+                                                        dieId === die.id &&
+                                                        i !== j
+                                                )
+                                        )
+                                        .map(die => (
+                                            <option value={die.id} key={die.id}>
+                                                {die.name}
+                                            </option>
+                                        ))}
+                                </select>
+                            ))}
+                    </label>
+                    <label htmlFor='associated-guide'>
+                        Associated Deck Guide:{' '}
+                        <select
+                            defaultValue='PvP'
+                            onChange={(evt): void => {
+                                const clone = {
+                                    ...deckToAdd,
+                                };
+                                clone.guide[0] = Number(evt.target.value);
+                                setDeckToAdd(clone);
+                            }}
+                        >
+                            <option value={-1}>Auto detect</option>
+                            {guides.map(guide => (
+                                <option key={guide.id} value={guide.id}>
+                                    {guide.name}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
                     {deckToAdd.type === 'Co-op (Pair)' ? (
                         <>
-                            <h3>Co-op Deck Pair</h3>
-                            {Array(5)
-                                .fill('')
-                                .map((_, i) => (
-                                    <select
-                                        // eslint-disable-next-line react/no-array-index-key
-                                        key={i}
-                                        defaultValue={i}
-                                        onChange={(evt): void => {
-                                            const clone = {
-                                                ...deckToAdd,
-                                            };
-                                            clone.decks[1][i] = Number(
-                                                evt.target.value
-                                            );
-                                            setDeckToAdd(clone);
-                                        }}
-                                    >
-                                        {dices
-                                            .filter(
-                                                die =>
-                                                    !deckToAdd.decks[1].find(
-                                                        (dieId, j) =>
-                                                            dieId === die.id &&
-                                                            i !== j
-                                                    )
-                                            )
-                                            .map(die => (
-                                                <option
-                                                    value={die.id}
-                                                    key={die.id}
-                                                >
-                                                    {die.name}
-                                                </option>
-                                            ))}
-                                    </select>
-                                ))}
+                            <label htmlFor='dice-list-coop-pair'>
+                                Co-op Deck Pair:{' '}
+                                {Array(5)
+                                    .fill('')
+                                    .map((_, i) => (
+                                        <select
+                                            // eslint-disable-next-line react/no-array-index-key
+                                            key={i}
+                                            defaultValue={i}
+                                            onChange={(evt): void => {
+                                                const clone = {
+                                                    ...deckToAdd,
+                                                };
+                                                clone.decks[1][i] = Number(
+                                                    evt.target.value
+                                                );
+                                                setDeckToAdd(clone);
+                                            }}
+                                        >
+                                            {dices
+                                                .filter(
+                                                    die =>
+                                                        !deckToAdd.decks[1].find(
+                                                            (dieId, j) =>
+                                                                dieId ===
+                                                                    die.id &&
+                                                                i !== j
+                                                        )
+                                                )
+                                                .map(die => (
+                                                    <option
+                                                        value={die.id}
+                                                        key={die.id}
+                                                    >
+                                                        {die.name}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                    ))}
+                            </label>
+                            <label htmlFor='associated-guide'>
+                                Associated Deck Guide:{' '}
+                                <select
+                                    defaultValue='PvP'
+                                    onChange={(evt): void => {
+                                        const clone = {
+                                            ...deckToAdd,
+                                        };
+                                        clone.guide[1] = Number(
+                                            evt.target.value
+                                        );
+                                        setDeckToAdd(clone);
+                                    }}
+                                >
+                                    <option value={-1}>Auto detect</option>
+                                    {guides.map(guide => (
+                                        <option key={guide.id} value={guide.id}>
+                                            {guide.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
                         </>
-                    ) : null}
-
-                    {invalidVersionToAdd ? (
-                        <span className='invalid-warning'>
-                            Current game version input is invalid.
-                        </span>
                     ) : null}
                     {invalidRatingToAdd ? (
                         <span className='invalid-warning'>
@@ -403,34 +425,17 @@ export default function updateDeck(): JSX.Element {
                 <button
                     onClick={addDeck}
                     type='submit'
-                    disabled={invalidVersionToAdd || invalidRatingToAdd}
+                    disabled={invalidRatingToAdd}
                 >
                     Submit
                 </button>
             </PopUp>
             <h3>Update Deck List</h3>
             <p>
-                To begin updating the deck data, first enter the current game
-                version in a format of #.#.#
-            </p>
-            <p>
                 To Edit the decks, press the edit button, once you are done
                 editing, press the button again to save the data to the
                 database.
             </p>
-            <label htmlFor='game-version'>
-                Current Game Version :{' '}
-                <input
-                    className={
-                        missingVersion || invalidVersion ? 'invalid' : ''
-                    }
-                    type='textbox'
-                    placeholder='1.0.0'
-                    onChange={(evt): void =>
-                        setCurrentGameVersion(evt.target.value)
-                    }
-                />
-            </label>
             <label htmlFor='add-deck'>
                 Add a Deck :{' '}
                 <button
@@ -439,10 +444,9 @@ export default function updateDeck(): JSX.Element {
                         setDeckToAdd({
                             id: -1,
                             rating: 0,
-                            type: 'PvP' as 'PvP' | 'Co-op' | 'Crew',
-                            decks: [[0, 1, 2, 3, 4]] as DiceType['id'][][],
-                            added: '',
-                            updated: null,
+                            type: 'PvP',
+                            decks: [[0, 1, 2, 3, 4]],
+                            guide: [-1],
                         });
                         dispatch({
                             type: OPEN_POPUP,
@@ -453,18 +457,8 @@ export default function updateDeck(): JSX.Element {
                     <FontAwesomeIcon icon={faPlusCircle} />
                 </button>
             </label>
-            {invalidVersion ? (
-                <span className='invalid-warning'>
-                    Current game version input is invalid.
-                </span>
-            ) : null}
             {invalidRating ? (
                 <span className='invalid-warning'>Invalid Rating Input.</span>
-            ) : null}
-            {missingVersion ? (
-                <span className='invalid-warning'>
-                    You need to input the current game version.
-                </span>
             ) : null}
             <hr className='divisor' />
             <h4>Filter</h4>
@@ -576,6 +570,7 @@ export default function updateDeck(): JSX.Element {
                             <th>Rating</th>
                             <th>Type</th>
                             <th>Deck</th>
+                            <th>Associated Deck Guide</th>
                             <th>Toggle Edit</th>
                             <th>Remove Deck</th>
                         </tr>
@@ -605,8 +600,7 @@ export default function updateDeck(): JSX.Element {
                                         rating: 0,
                                         type: '-',
                                         decks: [[]],
-                                        added: '-',
-                                        updated: '-',
+                                        guide: [-1],
                                     }))
                             )
                             .filter((deck, i) => !(deck.id < 0 && i > 8))
@@ -761,6 +755,62 @@ export default function updateDeck(): JSX.Element {
                                                 )}
                                             </td>
                                             <td>
+                                                {deckInfo.guide.map(
+                                                    (guideId, i) => (
+                                                        <select
+                                                            // eslint-disable-next-line react/no-array-index-key
+                                                            key={i}
+                                                            defaultValue={
+                                                                guideId
+                                                            }
+                                                            onChange={(
+                                                                evt
+                                                            ): void => {
+                                                                const clone = {
+                                                                    ...activeEdit,
+                                                                };
+                                                                clone.guide = clone.guide.map(
+                                                                    (
+                                                                        clonedGuideId,
+                                                                        ii
+                                                                    ) =>
+                                                                        ii === i
+                                                                            ? Number(
+                                                                                  evt
+                                                                                      .target
+                                                                                      .value
+                                                                              )
+                                                                            : clonedGuideId
+                                                                );
+                                                                setActiveEdit(
+                                                                    clone
+                                                                );
+                                                            }}
+                                                        >
+                                                            <option value={-1}>
+                                                                Auto Detect
+                                                            </option>
+                                                            {guides.map(
+                                                                guide => (
+                                                                    <option
+                                                                        key={
+                                                                            guide.id
+                                                                        }
+                                                                        value={
+                                                                            guide.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            guide.name
+                                                                        }
+                                                                    </option>
+                                                                )
+                                                            )}
+                                                        </select>
+                                                    )
+                                                )}
+                                            </td>
+                                            <td>
                                                 <button
                                                     type='button'
                                                     onClick={(): void => {
@@ -783,13 +833,17 @@ export default function updateDeck(): JSX.Element {
                                                                                 i
                                                                             ][j]
                                                                     )
+                                                            ) ||
+                                                            activeEdit.guide.some(
+                                                                (guide, i) =>
+                                                                    guide !==
+                                                                    deckInfo
+                                                                        .guide[
+                                                                        i
+                                                                    ]
                                                             )
                                                         ) {
-                                                            if (
-                                                                invalidVersion ||
-                                                                invalidRating ||
-                                                                missingVersion
-                                                            ) {
+                                                            if (invalidRating) {
                                                                 dispatch({
                                                                     type: OPEN_POPUP,
                                                                     payload:
@@ -815,6 +869,7 @@ export default function updateDeck(): JSX.Element {
                                         <MemoRow
                                             deckInfo={deckInfo}
                                             setActiveEdit={setActiveEdit}
+                                            guides={guides}
                                         />
                                     )}
                                     <td>

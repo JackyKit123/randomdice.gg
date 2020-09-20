@@ -4,8 +4,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
-import { useHistory, useLocation } from 'react-router-dom';
+import {
+    faCheck,
+    faExchangeAlt,
+    faInfoCircle,
+} from '@fortawesome/free-solid-svg-icons';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { RootState } from '../../Misc/Redux Storage/store';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
@@ -29,6 +33,7 @@ export default function DeckList(): JSX.Element {
     const { error } =
         selection.fetchDecksReducer || selection.fetchDicesReducer;
     const { decks } = selection.fetchDecksReducer;
+    const { guide } = selection.fetchDecksGuideReducer;
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
@@ -59,46 +64,30 @@ export default function DeckList(): JSX.Element {
     }, [dices]);
 
     let jsx;
-    if (dices && decks && decks.length > 0) {
-        const filteredDeck = decks
-            .filter(deckData => {
-                return (
-                    deckData.decks.some(deck =>
-                        deck.every(dice =>
-                            dices.find(d => d.id === dice)?.rarity ===
-                            'Legendary'
-                                ? filter.legendary.includes(dice)
-                                : true
-                        )
-                    ) &&
-                    deckData.type.toLowerCase() === deckType &&
-                    (filter.customSearch === -1
-                        ? true
-                        : deckData.decks.some(deck =>
-                              deck.includes(filter.customSearch)
-                          ))
-                );
-            })
-            .map(deck => {
-                return {
-                    id: deck.id,
-                    type: deck.type,
-                    rating: deck.rating,
-                    decks: deck.decks,
-                    alternatives: deck.decks,
-                    added: deck.added,
-                    updated: deck.updated ? deck.updated : '-',
-                };
-            });
+    if (guide && dices && decks && decks.length > 0 && guide.length > 0) {
+        const filteredDeck = decks.filter(
+            deckData =>
+                deckData.decks.some(deck =>
+                    deck.every(dice =>
+                        dices.find(d => d.id === dice)?.rarity === 'Legendary'
+                            ? filter.legendary.includes(dice)
+                            : true
+                    )
+                ) &&
+                deckData.type.toLowerCase() === deckType &&
+                (filter.customSearch === -1
+                    ? true
+                    : deckData.decks.some(deck =>
+                          deck.includes(filter.customSearch)
+                      ))
+        );
         while (filteredDeck.length < 7 && filteredDeck.length !== 0) {
             filteredDeck.push({
                 id: filteredDeck.length,
                 type: '-',
                 rating: 0,
                 decks: [[-1, -2, -3, -4, -5]],
-                alternatives: [[]],
-                added: '-',
-                updated: '-',
+                guide: [-1],
             });
         }
 
@@ -117,6 +106,13 @@ export default function DeckList(): JSX.Element {
                     for every decks, so you can click on the button in
                     alternatives column to show yourself some alternative
                     options for some legendary dice.
+                </p>
+                <p>
+                    {' '}
+                    The rating of these {deckType} decks is determined by{' '}
+                    {deckType === 'pvp' || deckType === 'crew'
+                        ? 'first rating the strongest decks, and then we compare whichever decks can consistency beat one another deck.'
+                        : 'a mix of factors for the highest wave, consistency, and the speed of the deck.'}
                 </p>
                 <hr className='divisor' />
                 <PopUp popUpTarget='alt'>
@@ -314,17 +310,24 @@ export default function DeckList(): JSX.Element {
                 <hr className='divisor' />
                 <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
+                <p className='updated'>
+                    The deck list is last updated on{' '}
+                    {new Date(
+                        JSON.parse(
+                            localStorage.getItem('last_updated') || '{}'
+                        ).decks
+                    ).toDateString()}
+                    .
+                </p>
                 <div className='table-container'>
                     <table>
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Type</th>
                                 <th>Rating</th>
                                 <th>Deck</th>
                                 <th>Alternatives</th>
-                                <th>Added</th>
-                                <th>Updated</th>
+                                <th>Deck Guide</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -336,7 +339,6 @@ export default function DeckList(): JSX.Element {
                                                 ? '-'
                                                 : deckInfo.id}
                                         </td>
-                                        <td>{deckInfo.type}</td>
                                         <td>
                                             {deckInfo.type === '-'
                                                 ? '-'
@@ -415,8 +417,46 @@ export default function DeckList(): JSX.Element {
                                                 )}
                                             </div>
                                         </td>
-                                        <td>{deckInfo.added}</td>
-                                        <td>{deckInfo.updated}</td>
+                                        <td>
+                                            <div className='link-container'>
+                                                {deckInfo.decks.map(
+                                                    (deck, i) => {
+                                                        deck.sort();
+                                                        return (
+                                                            <Link
+                                                                key={deck.toString()}
+                                                                className='deck-guide-link'
+                                                                to={`/decks/guide/${guide.find(
+                                                                    eachGuide =>
+                                                                        deckInfo
+                                                                            .guide[
+                                                                            i
+                                                                        ] ===
+                                                                            eachGuide.id ||
+                                                                        eachGuide.diceList.find(
+                                                                            list => {
+                                                                                list.sort();
+                                                                                return (
+                                                                                    list.toString() ===
+                                                                                        deck.toString() &&
+                                                                                    deckInfo.type ===
+                                                                                        eachGuide.type
+                                                                                );
+                                                                            }
+                                                                        )
+                                                                )?.name || ''}`}
+                                                            >
+                                                                <FontAwesomeIcon
+                                                                    icon={
+                                                                        faInfoCircle
+                                                                    }
+                                                                />
+                                                            </Link>
+                                                        );
+                                                    }
+                                                )}
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
