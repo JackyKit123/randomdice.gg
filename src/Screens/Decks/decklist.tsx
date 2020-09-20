@@ -311,7 +311,7 @@ export default function DeckList(): JSX.Element {
                 <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
                 <p className='updated'>
-                    The deck list is last updated on{' '}
+                    The deck list was last updated on{' '}
                     {new Date(
                         JSON.parse(
                             localStorage.getItem('last_updated') || '{}'
