@@ -24,7 +24,7 @@ export default function AboutUs(): JSX.Element {
             <h3>Webmaster Information</h3>
             <figure>
                 <img
-                    src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/People%20Images%2FJackyKit.png?alt=media&token=798ada68-b17e-48a8-8af1-095c7df7169b'
+                    src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/People%20Images%2FJackyKit?alt=media&token=8b725823-fb9a-4cff-ab15-a99282d2be61'
                     alt='Icon of JackyKit'
                 />
             </figure>
