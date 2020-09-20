@@ -19,7 +19,7 @@ export default function CommunityListing(): JSX.Element {
     const discordCommunities = [
         {
             name: 'Main Discord',
-            url: 'https://discord.gg/randomdice',
+            url: 'https://discord.randomdice.gg',
             serverId: '717500464975052883',
         },
         {

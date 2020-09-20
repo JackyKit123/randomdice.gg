@@ -49,7 +49,7 @@ export default function Homepage(): JSX.Element {
                 <p>
                     You are welcome to join the community in{' '}
                     <a
-                        href='https://discord.gg/zQj6tCM'
+                        href='https://discord.randomdice.gg'
                         target='_blank'
                         rel='noopener noreferrer'
                     >

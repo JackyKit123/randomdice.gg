@@ -12,7 +12,7 @@ export default function Footer(): JSX.Element {
         discord: {
             name: 'discord',
             icon: faDiscord,
-            hyperlink: 'https://discord.gg/zQj6tCM',
+            hyperlink: 'https://discord.randomdice.gg',
         },
         reddit: {
             name: 'reddit',
