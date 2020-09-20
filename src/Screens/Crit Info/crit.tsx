@@ -34,6 +34,8 @@ export default function critDataCollection(): JSX.Element {
     const { critData, error } = selection;
     const { user } = useSelector((state: RootState) => state.authReducer);
     const database = firebase.database();
+    const [typingTrophies, setTypingTrophies] = useState(0);
+    const [typingCrit, setTypingCrit] = useState(0);
     const [myTrophies, setMyTrophies] = useState(0);
     const [myCrit, setMyCrit] = useState(111);
 
@@ -105,6 +107,8 @@ export default function critDataCollection(): JSX.Element {
 
         const processedData: {
             [key: number]: {
+                min: number;
+                max: number;
                 avg: number;
                 median: number;
                 trophies: number;
@@ -115,12 +119,18 @@ export default function critDataCollection(): JSX.Element {
                 .filter(data => data.rank === i)
                 .map(data => data.crit);
 
+            const min =
+                critDataPerClass.length > 0 ? math.min(critDataPerClass) : 0;
+            const max =
+                critDataPerClass.length > 0 ? math.max(critDataPerClass) : 0;
             const avg =
                 critDataPerClass.length > 0 ? math.mean(critDataPerClass) : 0;
             const median =
                 critDataPerClass.length > 0 ? math.median(critDataPerClass) : 0;
             const trophies = trophiesForClass[i];
             processedData[i] = {
+                min,
+                max,
                 avg,
                 median,
                 trophies,
@@ -161,27 +171,41 @@ export default function critDataCollection(): JSX.Element {
                                         critData[user.uid]?.trophies ||
                                         myTrophies
                                     }
-                                    onChange={async (evt): Promise<void> => {
-                                        const trophies = Number(
-                                            evt.target.value
+                                    onChange={(evt): void => {
+                                        evt.persist();
+                                        clearTimeout(typingTrophies);
+                                        setTypingTrophies(() =>
+                                            window.setTimeout(async (): Promise<
+                                                void
+                                            > => {
+                                                const trophies = Number(
+                                                    evt.target.value
+                                                );
+                                                setMyTrophies(trophies);
+                                                if (trophies >= 0 && user) {
+                                                    await Promise.all([
+                                                        database
+                                                            .ref(
+                                                                '/last_updated/critData'
+                                                            )
+                                                            .set(
+                                                                new Date().toISOString()
+                                                            ),
+                                                        database
+                                                            .ref(
+                                                                `/critData/${user.uid}/crit`
+                                                            )
+                                                            .set(myCrit),
+                                                        database
+                                                            .ref(
+                                                                `/critData/${user.uid}/trophies`
+                                                            )
+                                                            .set(trophies),
+                                                    ]);
+                                                    fetchCrit(dispatch);
+                                                }
+                                            }, 500)
                                         );
-                                        setMyTrophies(trophies);
-                                        if (trophies >= 0 && user) {
-                                            database
-                                                .ref('/last_updated/critData')
-                                                .set(new Date().toISOString());
-                                            await database
-                                                .ref(
-                                                    `/critData/${user.uid}/trophies`
-                                                )
-                                                .set(trophies);
-                                            await database
-                                                .ref(
-                                                    `/critData/${user.uid}/crit`
-                                                )
-                                                .set(myCrit);
-                                            fetchCrit(dispatch);
-                                        }
                                     }}
                                 />
                             </label>
@@ -222,25 +246,45 @@ export default function critDataCollection(): JSX.Element {
                                     defaultValue={
                                         critData[user.uid]?.crit || myCrit
                                     }
-                                    onChange={async (evt): Promise<void> => {
-                                        const crit = Number(evt.target.value);
-                                        setMyCrit(crit);
-                                        if (crit >= 0 && user) {
-                                            database
-                                                .ref('/last_updated/critData')
-                                                .set(new Date().toISOString());
-                                            await database
-                                                .ref(
-                                                    `/critData/${user.uid}/crit`
-                                                )
-                                                .set(crit);
-                                            await database
-                                                .ref(
-                                                    `/critData/${user.uid}/trophies`
-                                                )
-                                                .set(myTrophies);
-                                            fetchCrit(dispatch);
-                                        }
+                                    onChange={(evt): void => {
+                                        evt.persist();
+                                        clearTimeout(typingCrit);
+                                        setTypingCrit(() =>
+                                            window.setTimeout(async (): Promise<
+                                                void
+                                            > => {
+                                                const crit = Number(
+                                                    evt.target.value
+                                                );
+                                                setMyCrit(crit);
+                                                if (
+                                                    crit >= 111 &&
+                                                    crit < maxCrit &&
+                                                    user
+                                                ) {
+                                                    await Promise.all([
+                                                        database
+                                                            .ref(
+                                                                '/last_updated/critData'
+                                                            )
+                                                            .set(
+                                                                new Date().toISOString()
+                                                            ),
+                                                        database
+                                                            .ref(
+                                                                `/critData/${user.uid}/crit`
+                                                            )
+                                                            .set(crit),
+                                                        database
+                                                            .ref(
+                                                                `/critData/${user.uid}/trophies`
+                                                            )
+                                                            .set(myTrophies),
+                                                    ]);
+                                                    fetchCrit(dispatch);
+                                                }
+                                            }, 500)
+                                        );
                                     }}
                                 />
                             </label>
@@ -443,6 +487,19 @@ export default function critDataCollection(): JSX.Element {
                                     ))}
                             </tr>
                             <tr>
+                                <th scope='row'>Minimum</th>
+                                {Object.entries(processedData)
+                                    .slice(0, 10)
+                                    .map(([rank, data]) => (
+                                        <td key={`crit-table-min-${rank}`}>
+                                            {Math.round(data.min)
+                                                ? Math.round(data.min * 100) /
+                                                  100
+                                                : ''}
+                                        </td>
+                                    ))}
+                            </tr>
+                            <tr>
                                 <th scope='row'>Average</th>
                                 {Object.entries(processedData)
                                     .slice(0, 10)
@@ -465,6 +522,19 @@ export default function critDataCollection(): JSX.Element {
                                                 ? Math.round(
                                                       data.median * 100
                                                   ) / 100
+                                                : ''}
+                                        </td>
+                                    ))}
+                            </tr>
+                            <tr>
+                                <th scope='row'>Maximum</th>
+                                {Object.entries(processedData)
+                                    .slice(0, 10)
+                                    .map(([rank, data]) => (
+                                        <td key={`crit-table-max-${rank}`}>
+                                            {Math.round(data.max)
+                                                ? Math.round(data.max * 100) /
+                                                  100
                                                 : ''}
                                         </td>
                                     ))}
@@ -498,6 +568,19 @@ export default function critDataCollection(): JSX.Element {
                                     ))}
                             </tr>
                             <tr>
+                                <th scope='row'>Minimum</th>
+                                {Object.entries(processedData)
+                                    .slice(10, 20)
+                                    .map(([rank, data]) => (
+                                        <td key={`crit-table-min-${rank}`}>
+                                            {Math.round(data.min)
+                                                ? Math.round(data.min * 100) /
+                                                  100
+                                                : ''}
+                                        </td>
+                                    ))}
+                            </tr>
+                            <tr>
                                 <th scope='row'>Average</th>
                                 {Object.entries(processedData)
                                     .slice(10, 20)
@@ -524,6 +607,19 @@ export default function critDataCollection(): JSX.Element {
                                         </td>
                                     ))}
                             </tr>
+                            <tr>
+                                <th scope='row'>Maximum</th>
+                                {Object.entries(processedData)
+                                    .slice(10, 20)
+                                    .map(([rank, data]) => (
+                                        <td key={`crit-table-max-${rank}`}>
+                                            {Math.round(data.max)
+                                                ? Math.round(data.max * 100) /
+                                                  100
+                                                : ''}
+                                        </td>
+                                    ))}
+                            </tr>
                         </tbody>
                     </table>
                     <table className='vertical'>
@@ -531,8 +627,10 @@ export default function critDataCollection(): JSX.Element {
                             <tr>
                                 <th>Class</th>
                                 <th>Trophies</th>
+                                <th>Minimum</th>
                                 <th>Average</th>
                                 <th>Median</th>
+                                <th>Maximum</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -541,6 +639,12 @@ export default function critDataCollection(): JSX.Element {
                                     <tr key={`crit-table-row-${rank}`}>
                                         <td>{rank}</td>
                                         <td>{data.trophies}</td>
+                                        <td key={`crit-table-min-${rank}`}>
+                                            {Math.round(data.min)
+                                                ? Math.round(data.min * 100) /
+                                                  100
+                                                : ''}
+                                        </td>
                                         <td key={`crit-table-avg-${rank}`}>
                                             {Math.round(data.avg)
                                                 ? Math.round(data.avg * 100) /
@@ -552,6 +656,12 @@ export default function critDataCollection(): JSX.Element {
                                                 ? Math.round(
                                                       data.median * 100
                                                   ) / 100
+                                                : ''}
+                                        </td>
+                                        <td key={`crit-table-max-${rank}`}>
+                                            {Math.round(data.max)
+                                                ? Math.round(data.max * 100) /
+                                                  100
                                                 : ''}
                                         </td>
                                     </tr>
