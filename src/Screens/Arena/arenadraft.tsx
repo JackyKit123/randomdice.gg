@@ -427,7 +427,7 @@ export default function ArenaDraft(): JSX.Element {
                     </div>
                     <h3>Deck Score</h3>
                     <label htmlFor='Main-Dps'>
-                        <h4>Main DPS (target score: 15)</h4>
+                        <h4>Main DPS (target score: 10)</h4>
                         <input
                             type='textbox'
                             value={deckScore('dps')}
@@ -451,7 +451,7 @@ export default function ArenaDraft(): JSX.Element {
                         />
                     </label>
                     <label htmlFor='Value-Buff'>
-                        <h4>Value / Buff (target score: 20)</h4>
+                        <h4>Value / Buff (target score: 25)</h4>
                         <input
                             type='textbox'
                             value={deckScore('value')}
