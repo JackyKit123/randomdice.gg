@@ -1,11 +1,13 @@
 {
   "short_name": "Random Dice",
   "name": "Random Dice Community created website",
+  "description": "A resourceful web app for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.",
   "icons": [
     {
-      "src": "title_dice.png",
-      "sizes": "510x510",
-      "type": "image/png"
+      "src": "/title_dice.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "start_url": ".",
