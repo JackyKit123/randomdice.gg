@@ -1,0 +1,3 @@
+[submodule "randomdice.gg-discord-bot"]
+	path = randomdice.gg-discord-bot
+	url = git@github.com:JackyKit123/randomdice.gg-discord-bot.git
