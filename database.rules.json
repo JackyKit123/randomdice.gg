@@ -40,6 +40,10 @@
             ".read": true,
             ".write": "auth.token.isEditor === true"
         },
+        "discord_bot": {
+            ".read": "auth.uid === 'discord-bot'",
+            ".write": "auth.uid === 'discord-bot'"
+        },
         "wiki": {
             ".read": true,
             ".write": "auth.token.isEditor === true"
