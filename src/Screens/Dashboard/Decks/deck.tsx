@@ -80,9 +80,7 @@ export default function updateDeck(): JSX.Element {
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
-    const checkboxRef = dices?.map(() =>
-        useRef(null as null | HTMLInputElement)
-    );
+    const filterRef = useRef(null as null | HTMLDivElement);
     const [decks, setDecks] = useState<Decks>([]);
     const [guides, setGuides] = useState<DecksGuide>([]);
     const initialNewDeckState = {
@@ -492,13 +490,15 @@ export default function updateDeck(): JSX.Element {
                         type='button'
                         onClick={(evt): void => {
                             const target = evt.target as HTMLButtonElement;
-                            if (checkboxRef) {
-                                checkboxRef.forEach(eachRef => {
-                                    if (eachRef.current)
+                            const { current } = filterRef;
+                            if (current) {
+                                current
+                                    .querySelectorAll('input[type="checkbox"]')
+                                    .forEach(checkbox => {
                                         // eslint-disable-next-line no-param-reassign
-                                        eachRef.current.checked =
+                                        (checkbox as HTMLInputElement).checked =
                                             target.innerText === 'Select All';
-                                });
+                                    });
                             }
                             filter.dice =
                                 target.innerText === 'Select All'
@@ -516,19 +516,16 @@ export default function updateDeck(): JSX.Element {
                             ? 'Deselect All'
                             : 'Select All'}
                     </button>
-                    <div>
+                    <div ref={filterRef}>
                         {dices
                             ?.filter(die => die.rarity === 'Legendary')
-                            .map((dice, i) => (
+                            .map(dice => (
                                 <div key={dice.id} className='dice-container'>
                                     <Dice dice={dice.id} />
                                     <input
                                         value={dice.id}
                                         type='checkbox'
                                         defaultChecked
-                                        ref={
-                                            checkboxRef ? checkboxRef[i] : null
-                                        }
                                         onChange={(evt): void => {
                                             if (evt.target.checked) {
                                                 if (

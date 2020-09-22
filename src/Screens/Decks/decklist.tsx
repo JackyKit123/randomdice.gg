@@ -37,9 +37,7 @@ export default function DeckList(): JSX.Element {
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
-    const checkboxRef = dices?.map(() =>
-        useRef(null as null | HTMLInputElement)
-    );
+    const filterRef = useRef(null as null | HTMLDivElement);
     const { filter } = selection.filterReducer;
     const deckType = location.pathname
         .replace(/^\/decks\//i, '')
@@ -214,14 +212,18 @@ export default function DeckList(): JSX.Element {
                                     }
                                     onClick={(evt): void => {
                                         const target = evt.target as HTMLButtonElement;
-                                        if (checkboxRef) {
-                                            checkboxRef.forEach(eachRef => {
-                                                if (eachRef.current)
+                                        const { current } = filterRef;
+                                        if (current) {
+                                            current
+                                                .querySelectorAll(
+                                                    'input[type="checkbox"]'
+                                                )
+                                                .forEach(checkbox => {
                                                     // eslint-disable-next-line no-param-reassign
-                                                    eachRef.current.checked =
+                                                    (checkbox as HTMLInputElement).checked =
                                                         target.innerText ===
                                                         'Select All';
-                                            });
+                                                });
                                         }
                                         filter.legendary =
                                             target.innerText === 'Select All'
@@ -245,37 +247,51 @@ export default function DeckList(): JSX.Element {
                                         : 'Select All'}
                                 </button>
                             </div>
-                            {legendaryList.map(
-                                (legendary: DiceType['id'], i) => (
-                                    <div
-                                        className='legendary-filter'
-                                        key={legendary}
-                                    >
-                                        <Dice dice={legendary} />
-                                        <input
-                                            value={legendary}
-                                            type='checkbox'
-                                            defaultChecked
-                                            ref={
-                                                checkboxRef
-                                                    ? checkboxRef[i]
-                                                    : null
-                                            }
-                                            onChange={(evt): void => {
-                                                if (evt.target.checked) {
-                                                    if (
-                                                        !filter.legendary.includes(
-                                                            Number(
-                                                                evt.target.value
+                            <div className='filter-container' ref={filterRef}>
+                                {legendaryList.map(
+                                    (legendary: DiceType['id']) => (
+                                        <div
+                                            className='legendary-filter'
+                                            key={legendary}
+                                        >
+                                            <Dice dice={legendary} />
+                                            <input
+                                                value={legendary}
+                                                type='checkbox'
+                                                defaultChecked
+                                                onChange={(evt): void => {
+                                                    if (evt.target.checked) {
+                                                        if (
+                                                            !filter.legendary.includes(
+                                                                Number(
+                                                                    evt.target
+                                                                        .value
+                                                                )
                                                             )
-                                                        )
-                                                    ) {
-                                                        filter.legendary = [
-                                                            ...filter.legendary,
-                                                            Number(
-                                                                evt.target.value
-                                                            ),
-                                                        ];
+                                                        ) {
+                                                            filter.legendary = [
+                                                                ...filter.legendary,
+                                                                Number(
+                                                                    evt.target
+                                                                        .value
+                                                                ),
+                                                            ];
+                                                            dispatch({
+                                                                type: FILTER_ACTION,
+                                                                payload: {
+                                                                    ...filter,
+                                                                },
+                                                            });
+                                                        }
+                                                    } else {
+                                                        filter.legendary = filter.legendary.filter(
+                                                            dieId =>
+                                                                dieId !==
+                                                                Number(
+                                                                    evt.target
+                                                                        .value
+                                                                )
+                                                        );
                                                         dispatch({
                                                             type: FILTER_ACTION,
                                                             payload: {
@@ -283,27 +299,17 @@ export default function DeckList(): JSX.Element {
                                                             },
                                                         });
                                                     }
-                                                } else {
-                                                    filter.legendary = filter.legendary.filter(
-                                                        dieId =>
-                                                            dieId !==
-                                                            Number(
-                                                                evt.target.value
-                                                            )
-                                                    );
-                                                    dispatch({
-                                                        type: FILTER_ACTION,
-                                                        payload: { ...filter },
-                                                    });
-                                                }
-                                            }}
-                                        />
-                                        <span className='checkbox-styler'>
-                                            <FontAwesomeIcon icon={faCheck} />
-                                        </span>
-                                    </div>
-                                )
-                            )}
+                                                }}
+                                            />
+                                            <span className='checkbox-styler'>
+                                                <FontAwesomeIcon
+                                                    icon={faCheck}
+                                                />
+                                            </span>
+                                        </div>
+                                    )
+                                )}
+                            </div>
                         </label>
                     </div>
                 </form>
