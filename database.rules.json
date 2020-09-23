@@ -13,6 +13,11 @@
             },
             "critData": {
                 ".write": "auth.uid !== null"
+            },
+            "discord_bot": {
+                "emoji": {
+                    ".write":"auth.uid === 'discord-bot'"
+                }
             }
         },
         "critData": {
