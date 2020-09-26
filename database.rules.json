@@ -15,9 +15,8 @@
                 ".write": "auth.uid !== null"
             },
             "discord_bot": {
-                "emoji": {
-                    ".write":"auth.uid === 'discord-bot'"
-                }
+                ".read": "auth.uid === 'discord-bot'",
+                ".write": "auth.uid === 'discord-bot'"
             }
         },
         "critData": {
