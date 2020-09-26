@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,6 @@ import './guide.less';
 import { RootState } from '../../Misc/Redux Storage/store';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import { fetchDecksGuide, fetchDices } from '../../Misc/Firebase/fetchData';
-import GoogleAds from '../../Components/Ad Unit/ad';
 
 export default function DeckGuideMenu(): JSX.Element {
     const dispatch = useDispatch();
@@ -20,46 +19,89 @@ export default function DeckGuideMenu(): JSX.Element {
 
     let jsx;
     if (guide) {
-        if (!guide.find(g => g.guide === 'ad')) {
-            guide.splice(Math.min(Math.floor(guide.length / 2), 10), 0, {
-                id: -10,
-                type: 'PvP',
-                diceList: [],
-                guide: 'ad',
-                name: 'ad',
-            });
-        }
         jsx = (
             <>
                 <p>
                     In here you can find the guide to the meta decks. Click the
-                    deck below to show the detail guide for each decks.
+                    deck below to show the detail guide for each decks. Archive
+                    section denotes decks that are off meta, you can still
+                    access them for curiosity.
                 </p>
+                {['PvP', 'Co-op', 'Crew'].map(guideType => (
+                    <Fragment key={guideType}>
+                        <hr className='divisor' />
+                        <h3>{guideType} Decks Guide</h3>
+                        <table>
+                            <tbody>
+                                {guide
+                                    .filter(
+                                        g => !g.archived && g.type === guideType
+                                    )
+                                    .map(g => (
+                                        <tr key={g.id}>
+                                            <td>
+                                                <Link
+                                                    to={`/decks/guide/${g.name}`}
+                                                >
+                                                    <span>{g.name}</span>
+                                                </Link>
+                                            </td>
+                                            <td>
+                                                <Link
+                                                    to={`/decks/guide/${g.name}`}
+                                                >
+                                                    {g.diceList.map(
+                                                        dicelist => (
+                                                            <div
+                                                                className='dice-container'
+                                                                key={`filter-${dicelist.join()}`}
+                                                            >
+                                                                {dicelist.map(
+                                                                    (
+                                                                        dice,
+                                                                        i
+                                                                    ) => (
+                                                                        <Dice
+                                                                            /* eslint-disable-next-line react/no-array-index-key */
+                                                                            key={`filter-${dicelist.join()}-${dice}-${i}`}
+                                                                            dice={
+                                                                                dice
+                                                                            }
+                                                                        />
+                                                                    )
+                                                                )}
+                                                            </div>
+                                                        )
+                                                    )}
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </table>
+                    </Fragment>
+                ))}
                 <hr className='divisor' />
-                <table className='filter'>
+                <h3>Archived Section</h3>
+                <table className='archived'>
                     <tbody>
-                        {guide.map(deck =>
-                            deck.guide === 'ad' ? (
-                                <tr key='ad' className='ad'>
-                                    <td colSpan={3}>
-                                        <GoogleAds unitId='1144871846' />
-                                    </td>
-                                </tr>
-                            ) : (
-                                <tr key={deck.id}>
+                        {guide
+                            .filter(g => g.archived)
+                            .map(g => (
+                                <tr key={g.id}>
                                     <td>
-                                        <Link to={`/decks/guide/${deck.name}`}>
-                                            <span>{deck.type}</span>
+                                        <Link to={`/decks/guide/${g.type}`}>
+                                            <span>{g.type}</span>
                                         </Link>
                                     </td>
                                     <td>
-                                        <Link to={`/decks/guide/${deck.name}`}>
-                                            <span>{deck.name}</span>
+                                        <Link to={`/decks/guide/${g.name}`}>
+                                            <span>{g.name}</span>
                                         </Link>
                                     </td>
                                     <td>
-                                        <Link to={`/decks/guide/${deck.name}`}>
-                                            {deck.diceList.map(dicelist => (
+                                        <Link to={`/decks/guide/${g.name}`}>
+                                            {g.diceList.map(dicelist => (
                                                 <div
                                                     className='dice-container'
                                                     key={`filter-${dicelist.join()}`}
@@ -76,8 +118,7 @@ export default function DeckGuideMenu(): JSX.Element {
                                         </Link>
                                     </td>
                                 </tr>
-                            )
-                        )}
+                            ))}
                     </tbody>
                 </table>
             </>

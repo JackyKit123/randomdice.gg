@@ -10,6 +10,8 @@ import {
     faCheck,
     faPlusCircle,
     faUndo,
+    faArchive,
+    faBoxOpen,
 } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from '../../../Components/Dashboard/dashboard';
 import LoadingScreen from '../../../Components/Loading/loading';
@@ -35,7 +37,7 @@ export default function updateDecksGuide(): JSX.Element {
     );
     const [guides, setGuides] = useState<DecksGuide>();
     const [activeEdit, setActiveEdit] = useState<DeckGuide>();
-    const [guideToDelete, setGuideToDelete] = useState<number>();
+    const [guideToArchive, setGuideToArchive] = useState<number>();
     const [invalidGuideName, setInvalidGuideName] = useState(false);
 
     useEffect(() => {
@@ -102,23 +104,36 @@ export default function updateDecksGuide(): JSX.Element {
                     Yes
                 </button>
             </PopUp>
-            <PopUp popUpTarget='confirm-delete'>
+            <PopUp popUpTarget='confirm-archive'>
                 <h3>Please Confirm</h3>
                 <p>
-                    Are you sure to want to delete this guide? The action is
-                    irreversible!
+                    Are you sure to want to{' '}
+                    {guides.find(guide => guide.id === guideToArchive)?.archived
+                        ? 'unarchive'
+                        : 'archive'}{' '}
+                    this guide?
                 </p>
                 <button
                     type='button'
                     className='confirm'
                     onClick={(): void => {
-                        guides.splice(guideToDelete as number, 1);
-                        setGuideToDelete(undefined);
-                        setGuides([...guides]);
-                        database
-                            .ref('/last_updated/decks_guide')
-                            .set(new Date().toISOString());
-                        dbRef.set([...guides]);
+                        const archiveTarget = guides.find(
+                            guide => guide.id === guideToArchive
+                        );
+                        if (archiveTarget) {
+                            archiveTarget.archived = !archiveTarget.archived;
+                            const newGuides = guides.map(guide =>
+                                guide.id === guideToArchive
+                                    ? archiveTarget
+                                    : guide
+                            );
+                            setGuideToArchive(undefined);
+                            setGuides(newGuides);
+                            database
+                                .ref('/last_updated/decks_guide')
+                                .set(new Date().toISOString());
+                            dbRef.set(newGuides);
+                        }
                         dispatch({ type: CLOSE_POPUP });
                     }}
                 >
@@ -221,7 +236,7 @@ export default function updateDecksGuide(): JSX.Element {
                                             activeEdit.diceList.length <= 1
                                         }
                                         type='button'
-                                        className='delete'
+                                        className='archive'
                                         onClick={(): void => {
                                             activeEdit.diceList.splice(i, 1);
                                             setActiveEdit({
@@ -355,6 +370,7 @@ export default function updateDecksGuide(): JSX.Element {
                                     name: '',
                                     diceList: [Array(5).fill('?')],
                                     guide: '',
+                                    archived: false,
                                 });
                             }}
                         >
@@ -364,9 +380,20 @@ export default function updateDecksGuide(): JSX.Element {
                     <table className='guide-menu'>
                         <tbody>
                             {guides.map((guide, i) => (
-                                <tr key={guide.id}>
+                                <tr
+                                    key={guide.id}
+                                    className={guide.archived ? 'archived' : ''}
+                                >
                                     <td>{guide.type}</td>
-                                    <td>{guide.name}</td>
+                                    <td>
+                                        {guide.name}
+                                        {guide.archived ? (
+                                            <>
+                                                <br />
+                                                (ARCHIVED)
+                                            </>
+                                        ) : null}
+                                    </td>
                                     <td>
                                         {guide.diceList.map(dicelist => (
                                             <div
@@ -395,6 +422,7 @@ export default function updateDecksGuide(): JSX.Element {
                                                     name: guide.name,
                                                     diceList: guide.diceList,
                                                     guide: guide.guide,
+                                                    archived: false,
                                                 });
                                             }}
                                         >
@@ -406,17 +434,21 @@ export default function updateDecksGuide(): JSX.Element {
                                     <td>
                                         <button
                                             type='button'
-                                            className='delete'
+                                            className='archive'
                                             onClick={(): void => {
-                                                setGuideToDelete(i);
+                                                setGuideToArchive(guide.id);
                                                 dispatch({
                                                     type: OPEN_POPUP,
-                                                    payload: 'confirm-delete',
+                                                    payload: 'confirm-archive',
                                                 });
                                             }}
                                         >
                                             <FontAwesomeIcon
-                                                icon={faTrashAlt}
+                                                icon={
+                                                    guide.archived
+                                                        ? faBoxOpen
+                                                        : faArchive
+                                                }
                                             />
                                         </button>
                                     </td>

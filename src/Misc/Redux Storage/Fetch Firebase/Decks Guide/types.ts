@@ -17,6 +17,7 @@ export interface DeckGuide {
     type: 'PvP' | 'Co-op' | 'Crew';
     diceList: Dice['id'][][];
     guide: string;
+    archived: boolean;
 }
 
 export type DecksGuide = DeckGuide[];

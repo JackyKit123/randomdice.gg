@@ -17,35 +17,12 @@
         max-width: 800px;
         margin: 0 auto;
 
-        tbody {
+        & > tbody {
             & > tr {
                 font-size: 28px;
                 position: relative;
                 .filter(opacity(0.5));
                 .transition(0.2s all ease-in-out);
-
-                &.ad {
-                    font-size: initial;
-                    cursor: auto;
-                    .filter(none);
-
-                    & > td:first-of-type a {
-                        width: unset;
-                        height: unset;
-                        position: unset;
-                        top: unset;
-                        left: unset;
-                        padding: unset;
-                        display: inline;
-                        text-decoration: initial;
-                        color: #6ba4a5;
-
-                        &:hover,
-                        &:focus {
-                            color: #ffffff;
-                        }
-                    }
-                }
 
                 &:nth-of-type(odd) {
                     background: #f8d298;
@@ -60,25 +37,9 @@
                 }
 
                 & > td {
-                    padding: 10px;
-                    border: 5px ridge #ededed;
-                    vertical-align: middle;
-                    text-align: center;
-                    font-weight: 500;
-                    line-height: 32px;
-                    position: relative;
-
                     &:first-of-type {
-                        width: 80px;
-                    }
-
-                    &:nth-of-type(2) {
                         width: 20%;
                         min-width: 170px;
-                    }
-
-                    &:first-of-type,
-                    &:nth-of-type(2) {
                         height: 100px;
 
                         a {
@@ -97,6 +58,58 @@
                             &:hover {
                                 color: #000000;
                             }
+                        }
+                    }
+
+                    &:nth-of-type(2) {
+                        a {
+                            display: block;
+                            padding: 10px;
+                        }
+                    }
+                    border: 5px ridge #ededed;
+                    vertical-align: middle;
+                    text-align: center;
+                    font-weight: 500;
+                    line-height: 32px;
+                    position: relative;
+                }
+            }
+        }
+
+        &.archived {
+            .filter(grayscale(1));
+
+            & > tbody > tr > td {
+                &:first-of-type {
+                    width: 80px;
+                    min-width: 0;
+                }
+
+                &:nth-of-type(2) {
+                    width: 20%;
+                    min-width: 170px;
+                }
+
+                &:first-of-type,
+                &:nth-of-type(2) {
+                    height: 100px;
+
+                    a {
+                        width: 100%;
+                        height: 100%;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        padding: 10px;
+                        .display(flex);
+                        .flex-direction(column);
+                        .justify-content(center);
+                        text-decoration: none;
+                        color: #000000;
+
+                        &:hover {
+                            color: #000000;
                         }
                     }
                 }

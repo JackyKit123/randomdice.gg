@@ -27,14 +27,19 @@ export default function DeckGuideMenu(): JSX.Element | null {
 
     let jsx;
     if (guide) {
-        const thisGuide = guide.find(g => g.name === name);
+        const thisGuide = guide.find(
+            g => g.name.toLowerCase() === name.toLowerCase()
+        );
         if (!thisGuide) {
             history.push('/decks/guide');
         }
         jsx = (
             <>
                 <div className='guide'>
-                    <h3>{name}</h3>
+                    <h3>
+                        {thisGuide?.name} ({thisGuide?.type})
+                    </h3>
+                    {thisGuide?.archived ? <h4>ARCHIVED</h4> : null}
                     {thisGuide?.diceList.map(dicelist => (
                         <div
                             className='dice-container'

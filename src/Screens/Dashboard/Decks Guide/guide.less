@@ -37,6 +37,10 @@
 
         tbody {
             & > tr {
+                &.archived {
+                    .filter(grayscale(1));
+                }
+
                 &:first-of-type > td:first-of-type {
                     width: 200px;
 
@@ -73,7 +77,7 @@
     }
 
     button {
-        &.delete,
+        &.archive,
         &.submit,
         &.back,
         &.add,
