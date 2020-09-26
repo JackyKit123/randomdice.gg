@@ -70,7 +70,7 @@ export default function Dashboard(props: {
                 <title>Dashboard</title>
                 <link
                     rel='canonical'
-                    href={`https://${process.env.REACT_APP_DOMAIN}${location.pathname}`}
+                    href={`https://randomdice.gg${location.pathname}`}
                 />
                 <meta name='robots' content='noindex' />
             </Helmet>

@@ -525,7 +525,7 @@ export default function DeckList(): JSX.Element {
                 />
                 <meta
                     property='og:url'
-                    content={`https://${process.env.REACT_APP_DOMAIN}${location.pathname}`}
+                    content={`https://randomdice.gg${location.pathname}`}
                 />
                 <meta
                     name='og:description'
@@ -538,7 +538,7 @@ export default function DeckList(): JSX.Element {
 
                 <link
                     rel='canonical'
-                    href={`https://${process.env.REACT_APP_DOMAIN}${location.pathname}`}
+                    href={`https://randomdice.gg${location.pathname}`}
                 />
             </Helmet>
             {jsx}

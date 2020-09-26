@@ -28,11 +28,11 @@ export default function Main(props: {
             <Helmet>
                 <meta
                     property='og:url'
-                    content={`https://${process.env.REACT_APP_DOMAIN}${location.pathname}`}
+                    content={`https://randomdice.gg${location.pathname}`}
                 />
                 <link
                     rel='canonical'
-                    href={`https://${process.env.REACT_APP_DOMAIN}${location.pathname}`}
+                    href={`https://randomdice.gg${location.pathname}`}
                 />
             </Helmet>
             <div className={`banner ${!online ? 'offline' : ''}`}>

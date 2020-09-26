@@ -93,11 +93,11 @@ export default function Terms(): JSX.Element {
                         <strong>Website</strong> refers to Random Dice
                         Community, accessible from{' '}
                         <a
-                            href={`https://${process.env.REACT_APP_DOMAIN}`}
+                            href='https://randomdice.gg'
                             rel='external nofollow noopener noreferrer'
                             target='_blank'
                         >
-                            https://{process.env.REACT_APP_DOMAIN}
+                            https://randomdice.gg
                         </a>
                     </p>
                 </li>
@@ -315,7 +315,7 @@ export default function Terms(): JSX.Element {
                 can contact us:
             </p>
             <ul>
-                <li>By email: admin@{process.env.REACT_APP_DOMAIN}</li>
+                <li>By email: admin@randomdice.gg</li>
             </ul>
         </Main>
     );

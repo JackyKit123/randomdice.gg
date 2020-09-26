@@ -37,8 +37,8 @@ export default function AboutUs(): JSX.Element {
                 I like to listen to what you want. You can contact me through
                 email{' '}
                 <a
-                    href={`mailto:admin@${process.env.REACT_APP_DOMAIN}`}
-                >{`admin@${process.env.REACT_APP_DOMAIN}`}</a>{' '}
+                    href={`mailto:admin@randomdice.gg`}
+                >{`admin@randomdice.gg`}</a>{' '}
                 or you can ping me on Discord.
             </p>
             <p>
