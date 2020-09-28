@@ -1,0 +1,39 @@
+.discord-bot {
+    text-align: center;
+
+    figure {
+        width: 500px;
+        margin: 0 auto 20px;
+        max-width: 60vw;
+        border-radius: 20px;
+        overflow: hidden;
+
+        & > img {
+            width: 100%;
+        }
+    }
+
+    .command {
+        background-color: rgba(180, 180, 180, 0.7);
+        border: 3px inset #ffffff;
+        border-radius: 5px;
+    }
+
+    ul {
+        margin: 20px auto;
+        max-width: 800px;
+        text-align: left;
+
+        & > li {
+            .command {
+                display: inline-block;
+            }
+
+            .description {
+                display: block;
+                padding-left: 30px;
+                font-style: italic;
+            }
+        }
+    }
+}

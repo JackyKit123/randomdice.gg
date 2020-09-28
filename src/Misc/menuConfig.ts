@@ -58,6 +58,11 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/YoutubeListing/yt')),
             },
             {
+                name: 'Discord Bot',
+                path: '/discord_bot',
+                component: lazy(() => import('../Screens/Discord Bot/bot')),
+            },
+            {
                 path: '/decks/guide/:name',
                 excludeFromMenu: true,
                 component: lazy(() => import('../Screens/Deck Guide/guide')),
