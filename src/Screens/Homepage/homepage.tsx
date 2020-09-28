@@ -73,9 +73,7 @@ export default function Homepage(): JSX.Element {
                         JackyKit#0333
                     </a>{' '}
                     or by emailing{' '}
-                    <a href={`mailto:admin@randomdice.gg`}>
-                        {`admin@randomdice.gg`}
-                    </a>{' '}
+                    <a href='mailto:admin@randomdice.gg'>admin@randomdice.gg</a>{' '}
                     for any web related issue.
                 </p>
             </section>

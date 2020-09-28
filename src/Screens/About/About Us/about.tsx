@@ -36,10 +36,8 @@ export default function AboutUs(): JSX.Element {
             <p>
                 I like to listen to what you want. You can contact me through
                 email{' '}
-                <a
-                    href={`mailto:admin@randomdice.gg`}
-                >{`admin@randomdice.gg`}</a>{' '}
-                or you can ping me on Discord.
+                <a href='mailto:admin@randomdice.gg'>admin@randomdice.gg</a> or
+                you can ping me on Discord.
             </p>
             <p>
                 My discord tag is{' '}
