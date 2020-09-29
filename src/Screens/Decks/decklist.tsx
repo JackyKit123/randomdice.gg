@@ -62,7 +62,7 @@ export default function DeckList(): JSX.Element {
     }, [dices]);
 
     let jsx;
-    if (guide && dices && decks && decks.length > 0 && guide.length > 0) {
+    if (dices?.length && decks?.length && guide?.length) {
         const filteredDeck = decks.filter(
             deckData =>
                 deckData.decks.some(deck =>
