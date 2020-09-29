@@ -427,7 +427,6 @@ export default function DeckList(): JSX.Element {
                                             <div className='link-container'>
                                                 {deckInfo.decks.map(
                                                     (deck, i) => {
-                                                        deck.sort();
                                                         return (
                                                             <Link
                                                                 key={deck.toString()}
@@ -440,15 +439,15 @@ export default function DeckList(): JSX.Element {
                                                                         ] ===
                                                                             eachGuide.id ||
                                                                         eachGuide.diceList.find(
-                                                                            list => {
-                                                                                list.sort();
-                                                                                return (
-                                                                                    list.toString() ===
-                                                                                        deck.toString() &&
-                                                                                    deckInfo.type ===
-                                                                                        eachGuide.type
-                                                                                );
-                                                                            }
+                                                                            list =>
+                                                                                list.every(
+                                                                                    dieId =>
+                                                                                        deck.includes(
+                                                                                            dieId
+                                                                                        )
+                                                                                ) &&
+                                                                                deckInfo.type ===
+                                                                                    eachGuide.type
                                                                         )
                                                                 )?.name || ''}`}
                                                             >
