@@ -10,7 +10,12 @@ export interface Deck {
     guide: number[];
     id: number;
     type: 'PvP' | 'Co-op' | 'Crew' | '-';
-    rating: number;
+    rating: {
+        default: number;
+        c8?: number;
+        c9?: number;
+        c10?: number;
+    };
     decks: Dice['id'][][];
 }
 

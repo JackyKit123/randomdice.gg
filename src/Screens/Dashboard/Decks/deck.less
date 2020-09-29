@@ -15,11 +15,25 @@
             text-align: left;
             margin-bottom: 20px;
 
-            input,
-            select {
-                display: inline-block;
-                height: 32px;
-                margin: 10px 0;
+            label {
+                font-size: 20px;
+
+                input,
+                select {
+                    display: inline-block;
+                    height: 32px;
+                    margin: 10px 0;
+                }
+
+                &[for$='rating'] > input {
+                    display: block;
+                }
+
+                &[for='dice-list'] > div {
+                    max-width: 200px;
+                    .display(flex);
+                    .flex-direction(column);
+                }
             }
         }
     }
@@ -147,7 +161,7 @@
 
     .table-container {
         overflow: auto;
-        max-width: 800px;
+        max-width: 1000px;
         margin: 0 auto;
         height: 500px;
         border: 2px solid #6ba4a5;

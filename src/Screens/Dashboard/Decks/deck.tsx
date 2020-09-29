@@ -36,7 +36,10 @@ function DeckRow({
 }): JSX.Element {
     return (
         <>
-            <td>{deckInfo.rating}</td>
+            <td>{deckInfo.rating.default}</td>
+            <td>{deckInfo.rating.c8}</td>
+            <td>{deckInfo.rating.c9}</td>
+            <td>{deckInfo.rating.c10}</td>
             <td>{deckInfo.type}</td>
             <td>
                 {deckInfo.decks.map((deck, i) => (
@@ -85,7 +88,9 @@ export default function updateDeck(): JSX.Element {
     const [guides, setGuides] = useState<DecksGuide>([]);
     const initialNewDeckState = {
         id: -1,
-        rating: 0,
+        rating: {
+            default: 0,
+        } as Deck['rating'],
         type: 'PvP' as
             | 'PvP'
             | 'Co-op'
@@ -110,15 +115,19 @@ export default function updateDeck(): JSX.Element {
 
     const initialEditState = {
         id: -1,
-        rating: 0,
+        rating: {
+            default: 0,
+        } as Deck['rating'],
         type: '-',
         decks: [[]],
         guide: [-1],
     } as Deck;
     const [activeEdit, setActiveEdit] = useState({ ...initialEditState });
-    const invalidRating = !(activeEdit.rating >= 0 && activeEdit.rating <= 10);
-    const invalidRatingToAdd = !(
-        deckToAdd.rating >= 0 && deckToAdd.rating <= 10
+    const invalidRating = !Object.values(activeEdit.rating).every(
+        rating => typeof rating === 'undefined' || (rating >= 0 && rating <= 10)
+    );
+    const invalidRatingToAdd = !Object.values(deckToAdd.rating).every(
+        rating => typeof rating === 'undefined' || (rating >= 0 && rating <= 10)
     );
 
     useEffect(() => {
@@ -134,13 +143,13 @@ export default function updateDeck(): JSX.Element {
 
     const sortDecksAndUpdate = (deckList: Decks): void => {
         deckList.sort((a, b) => {
-            if (a.rating > b.rating) {
+            if (a.rating.default > b.rating.default) {
                 return -1;
             }
-            if (a.rating < b.rating) {
+            if (a.rating.default < b.rating.default) {
                 return 1;
             }
-            if (a.rating === b.rating) {
+            if (a.rating.default === b.rating.default) {
                 if (a.id > b.id) {
                     return 1;
                 }
@@ -184,16 +193,7 @@ export default function updateDeck(): JSX.Element {
         if (clone.type === 'Co-op (Pair)' || clone.type === 'Co-op (Solo)') {
             clone.type = 'Co-op';
         }
-        sortDecksAndUpdate([
-            ...decks,
-            clone as {
-                id: number;
-                rating: number;
-                type: 'PvP' | 'Co-op' | 'Crew';
-                decks: DiceType['id'][][];
-                guide: number[];
-            },
-        ]);
+        sortDecksAndUpdate([...decks, clone as Deck]);
         dispatch({ type: CLOSE_POPUP });
     };
 
@@ -244,24 +244,45 @@ export default function updateDeck(): JSX.Element {
             <PopUp popUpTarget='add-deck'>
                 <h3>Add A Deck</h3>
                 <form onSubmit={(evt): void => evt.preventDefault()}>
-                    <label htmlFor='rating'>
-                        Rating :{' '}
-                        <input
-                            defaultValue={0}
-                            type='number'
-                            min={0}
-                            max={10}
-                            step={0.25}
-                            className={invalidRatingToAdd ? 'invalid' : ''}
-                            onChange={(evt): void => {
-                                const clone = {
-                                    ...deckToAdd,
-                                };
-                                clone.rating = Number(evt.target.value);
-                                setDeckToAdd(clone);
-                            }}
-                        />
-                    </label>
+                    {['default', 'c8', 'c9', 'c10'].map(ratingType => (
+                        <label
+                            htmlFor={`${ratingType}-rating`}
+                            key={ratingType}
+                        >
+                            {
+                                ({
+                                    default:
+                                        'Default Rating (c7 Legends, < 600%)',
+                                    c8:
+                                        'Optional Rating (c8 Legends, 600% - 900%)',
+                                    c9:
+                                        'Optional Rating (c9 Legends, 900% - 1200%)',
+                                    c10:
+                                        'Optional Rating (c10+ Legends, > 1200%)',
+                                } as { [key: string]: string })[ratingType]
+                            }{' '}
+                            :{' '}
+                            <input
+                                defaultValue={
+                                    ratingType === 'default' ? 0 : undefined
+                                }
+                                type='number'
+                                min={0}
+                                max={10}
+                                step={0.25}
+                                className={invalidRatingToAdd ? 'invalid' : ''}
+                                onChange={(evt): void => {
+                                    const clone = {
+                                        ...deckToAdd,
+                                    };
+                                    clone.rating[
+                                        ratingType as keyof Deck['rating']
+                                    ] = Number(evt.target.value);
+                                    setDeckToAdd(clone);
+                                }}
+                            />
+                        </label>
+                    ))}
                     <label htmlFor='deck-type'>
                         Deck Type:{' '}
                         <select
@@ -294,39 +315,44 @@ export default function updateDeck(): JSX.Element {
                     </label>
                     <label htmlFor='dice-list'>
                         Dice List:{' '}
-                        {Array(5)
-                            .fill('')
-                            .map((_, i) => (
-                                <select
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    key={i}
-                                    defaultValue={i}
-                                    onChange={(evt): void => {
-                                        const clone = {
-                                            ...deckToAdd,
-                                        };
-                                        clone.decks[0][i] = Number(
-                                            evt.target.value
-                                        );
-                                        setDeckToAdd(clone);
-                                    }}
-                                >
-                                    {dices
-                                        .filter(
-                                            die =>
-                                                !deckToAdd.decks[0].find(
-                                                    (dieId, j) =>
-                                                        dieId === die.id &&
-                                                        i !== j
-                                                )
-                                        )
-                                        .map(die => (
-                                            <option value={die.id} key={die.id}>
-                                                {die.name}
-                                            </option>
-                                        ))}
-                                </select>
-                            ))}
+                        <div>
+                            {Array(5)
+                                .fill('')
+                                .map((_, i) => (
+                                    <select
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        key={i}
+                                        defaultValue={i}
+                                        onChange={(evt): void => {
+                                            const clone = {
+                                                ...deckToAdd,
+                                            };
+                                            clone.decks[0][i] = Number(
+                                                evt.target.value
+                                            );
+                                            setDeckToAdd(clone);
+                                        }}
+                                    >
+                                        {dices
+                                            .filter(
+                                                die =>
+                                                    !deckToAdd.decks[0].find(
+                                                        (dieId, j) =>
+                                                            dieId === die.id &&
+                                                            i !== j
+                                                    )
+                                            )
+                                            .map(die => (
+                                                <option
+                                                    value={die.id}
+                                                    key={die.id}
+                                                >
+                                                    {die.name}
+                                                </option>
+                                            ))}
+                                    </select>
+                                ))}
+                        </div>
                     </label>
                     <label htmlFor='associated-guide'>
                         Associated Deck Guide:{' '}
@@ -441,7 +467,9 @@ export default function updateDeck(): JSX.Element {
                     onClick={(): void => {
                         setDeckToAdd({
                             id: -1,
-                            rating: 0,
+                            rating: {
+                                default: 0,
+                            },
                             type: 'PvP',
                             decks: [[0, 1, 2, 3, 4]],
                             guide: [-1],
@@ -564,7 +592,10 @@ export default function updateDeck(): JSX.Element {
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Rating</th>
+                            <th>Rating C7</th>
+                            <th>Rating C8</th>
+                            <th>Rating C9</th>
+                            <th>Rating C10</th>
                             <th>Type</th>
                             <th>Deck</th>
                             <th>Associated Deck Guide</th>
@@ -594,7 +625,9 @@ export default function updateDeck(): JSX.Element {
                                     .fill(-10)
                                     .map((i, j) => ({
                                         id: i - j,
-                                        rating: 0,
+                                        rating: {
+                                            default: 0,
+                                        },
                                         type: '-',
                                         decks: [[]],
                                         guide: [-1],
@@ -608,31 +641,44 @@ export default function updateDeck(): JSX.Element {
                                     </td>
                                     {activeEdit.id === deckInfo.id ? (
                                         <>
-                                            <td>
-                                                <input
-                                                    type='number'
-                                                    min={0}
-                                                    max={10}
-                                                    step={0.25}
-                                                    defaultValue={
-                                                        deckInfo.rating
-                                                    }
-                                                    className={
-                                                        invalidRating
-                                                            ? 'invalid'
-                                                            : ''
-                                                    }
-                                                    onChange={(evt): void => {
-                                                        const clone = {
-                                                            ...activeEdit,
-                                                        };
-                                                        clone.rating = Number(
-                                                            evt.target.value
-                                                        );
-                                                        setActiveEdit(clone);
-                                                    }}
-                                                />
-                                            </td>
+                                            {['default', 'c8', 'c9', 'c10'].map(
+                                                ratingType => (
+                                                    <td key={ratingType}>
+                                                        <input
+                                                            type='number'
+                                                            min={0}
+                                                            max={10}
+                                                            step={0.25}
+                                                            defaultValue={
+                                                                deckInfo.rating[
+                                                                    ratingType as keyof Deck['rating']
+                                                                ]
+                                                            }
+                                                            className={
+                                                                invalidRating
+                                                                    ? 'invalid'
+                                                                    : ''
+                                                            }
+                                                            onChange={(
+                                                                evt
+                                                            ): void => {
+                                                                const clone = {
+                                                                    ...activeEdit,
+                                                                };
+                                                                clone.rating[
+                                                                    ratingType as keyof Deck['rating']
+                                                                ] = Number(
+                                                                    evt.target
+                                                                        .value
+                                                                );
+                                                                setActiveEdit(
+                                                                    clone
+                                                                );
+                                                            }}
+                                                        />
+                                                    </td>
+                                                )
+                                            )}
                                             <td>
                                                 <select
                                                     defaultValue={deckInfo.type}
@@ -812,8 +858,22 @@ export default function updateDeck(): JSX.Element {
                                                     type='button'
                                                     onClick={(): void => {
                                                         if (
-                                                            activeEdit.rating !==
-                                                                deckInfo.rating ||
+                                                            activeEdit.rating
+                                                                .default !==
+                                                                deckInfo.rating
+                                                                    .default ||
+                                                            activeEdit.rating
+                                                                .c8 !==
+                                                                deckInfo.rating
+                                                                    .c8 ||
+                                                            activeEdit.rating
+                                                                .c9 !==
+                                                                deckInfo.rating
+                                                                    .c9 ||
+                                                            activeEdit.rating
+                                                                .c10 !==
+                                                                deckInfo.rating
+                                                                    .c10 ||
                                                             activeEdit.decks.some(
                                                                 (
                                                                     editedDeck,

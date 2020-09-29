@@ -21,6 +21,7 @@ import { FILTER_ACTION } from '../../Misc/Redux Storage/Deck Filter/types';
 import { fetchDecks, fetchDices } from '../../Misc/Firebase/fetchData';
 import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import { Dice as DiceType } from '../../Misc/Redux Storage/Fetch Firebase/Dices/types';
+import { Deck } from '../../Misc/Redux Storage/Fetch Firebase/Decks/types';
 import './decklist.less';
 import { OPEN_POPUP } from '../../Misc/Redux Storage/PopUp Overlay/types';
 import ShareButtons from '../../Components/Social Media Share/share';
@@ -83,11 +84,34 @@ export default function DeckList(): JSX.Element {
             filteredDeck.push({
                 id: filteredDeck.length,
                 type: '-',
-                rating: 0,
+                rating: {
+                    default: 0,
+                },
                 decks: [[-1, -2, -3, -4, -5]],
                 guide: [-1],
             });
         }
+
+        const sortedDeck = [...filteredDeck];
+        sortedDeck.sort((deckA, deckB) => {
+            const ratingA =
+                deckA.rating[filter.profile] || deckA.rating.default;
+            const ratingB =
+                deckB.rating[filter.profile] || deckB.rating.default;
+            if (ratingA > ratingB) {
+                return -1;
+            }
+            if (ratingA < ratingB) {
+                return 1;
+            }
+            if (ratingA === ratingB) {
+                if (deckA.id > deckB.id) {
+                    return 1;
+                }
+                return -1;
+            }
+            return 0;
+        });
 
         jsx = (
             <>
@@ -104,6 +128,11 @@ export default function DeckList(): JSX.Element {
                     for every decks, so you can click on the button in
                     alternatives column to show yourself some alternative
                     options for some legendary dice.
+                </p>
+                <p>
+                    You can choose to have varying legendary class and crit% to
+                    see different ratings for certain decks at certain dice
+                    class or level.
                 </p>
                 <p>
                     {' '}
@@ -170,6 +199,33 @@ export default function DeckList(): JSX.Element {
                                 <option value='pvp'>PvP</option>
                                 <option value='co-op'>Co-op</option>
                                 <option value='crew'>Crew</option>
+                            </select>
+                        </label>
+                        <label htmlFor='profile'>
+                            <span>Legendary Class & Crit% Setting:</span>
+                            <select
+                                defaultValue={filter.profile}
+                                onChange={(evt): void => {
+                                    filter.profile = evt.target
+                                        .value as keyof Deck['rating'];
+                                    dispatch({
+                                        type: FILTER_ACTION,
+                                        payload: { ...filter },
+                                    });
+                                }}
+                            >
+                                <option value='default'>
+                                    Class 7, {'<'} 600% Crit
+                                </option>
+                                <option value='c8'>
+                                    Class 8, 600% - 900% Crit
+                                </option>
+                                <option value='c9'>
+                                    Class 9, 900% - 1200% Crit
+                                </option>
+                                <option value='c10'>
+                                    Class 10+, {'>'} 1200% Crit
+                                </option>
                             </select>
                         </label>
                         <label htmlFor='Custom Search'>
@@ -337,8 +393,8 @@ export default function DeckList(): JSX.Element {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredDeck.length > 0 ? (
-                                filteredDeck.map(deckInfo => (
+                            {sortedDeck.length > 0 ? (
+                                sortedDeck.map(deckInfo => (
                                     <tr key={`deck-${deckInfo.id}`}>
                                         <td>
                                             {deckInfo.type === '-'
@@ -348,7 +404,9 @@ export default function DeckList(): JSX.Element {
                                         <td>
                                             {deckInfo.type === '-'
                                                 ? '-'
-                                                : deckInfo.rating}
+                                                : deckInfo.rating[
+                                                      filter.profile
+                                                  ] || deckInfo.rating.default}
                                         </td>
                                         <td>
                                             {deckInfo.decks.map((deck, i) => (

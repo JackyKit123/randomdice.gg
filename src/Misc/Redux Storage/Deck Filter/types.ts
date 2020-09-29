@@ -1,9 +1,11 @@
+import { Deck } from '../Fetch Firebase/Decks/types';
 import { Dice } from '../Fetch Firebase/Dices/types';
 
 export const FILTER_ACTION = 'FILTER_ACTION';
 
 interface Filter {
     legendary: Dice['id'][];
+    profile: keyof Deck['rating'];
     customSearch: Dice['id'];
 }
 

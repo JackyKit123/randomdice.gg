@@ -2,6 +2,7 @@ import { FILTER_ACTION, Action, FilterState } from './types';
 
 const initialState: FilterState = {
     filter: {
+        profile: 'default',
         legendary: [],
         customSearch: -1,
     },
