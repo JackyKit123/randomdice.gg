@@ -107,6 +107,7 @@ export default function updateDeck(): JSX.Element {
     });
     const [filter, setFilter] = useState({
         type: '?' as '?' | 'PvP' | 'Co-op' | 'Crew',
+        customSearch: -1,
         dice:
             dices
                 ?.filter(dice => dice.rarity === 'Legendary')
@@ -506,6 +507,26 @@ export default function updateDeck(): JSX.Element {
                     <option>Crew</option>
                 </select>
             </label>
+            <label htmlFor='Custom Search'>
+                Custom Search :{' '}
+                <select
+                    name='Custom Search'
+                    defaultValue={filter.customSearch}
+                    onChange={(evt): void => {
+                        filter.customSearch = Number(evt.target.value);
+                        setFilter({ ...filter });
+                    }}
+                    data-value={filter.customSearch}
+                >
+                    <option value={-1}>?</option>
+                    {dices.map(dice => (
+                        <option value={dice.id} key={dice.id}>
+                            {dice.name}
+                        </option>
+                    ))}
+                </select>
+                <Dice dice={filter.customSearch} />
+            </label>
             {typeof filter.dice !== 'undefined' ? (
                 <label htmlFor='dice-filter'>
                     <span>Dice : </span>
@@ -606,19 +627,22 @@ export default function updateDeck(): JSX.Element {
                     <tbody>
                         {decks
                             .filter(
-                                deck =>
-                                    filter.type === '?' ||
-                                    filter.type === deck.type
-                            )
-                            .filter(deckInfo =>
-                                deckInfo.decks.some(deck =>
-                                    deck.every(dice =>
-                                        dices.find(d => d.id === dice)
-                                            ?.rarity === 'Legendary'
-                                            ? filter.dice.includes(dice)
-                                            : true
-                                    )
-                                )
+                                deckInfo =>
+                                    (filter.type === '?' ||
+                                        filter.type === deckInfo.type) &&
+                                    deckInfo.decks.some(deck =>
+                                        deck.every(dice =>
+                                            dices.find(d => d.id === dice)
+                                                ?.rarity === 'Legendary'
+                                                ? filter.dice.includes(dice)
+                                                : true
+                                        )
+                                    ) &&
+                                    (filter.customSearch === -1
+                                        ? true
+                                        : deckInfo.decks.some(deck =>
+                                              deck.includes(filter.customSearch)
+                                          ))
                             )
                             .concat(
                                 Array(9)
