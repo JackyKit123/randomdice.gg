@@ -8,9 +8,14 @@ export default function discordBot(): JSX.Element {
             category: 'Sync Data (require `MANAGE_CHANNEL` permission)',
             commands: [
                 {
-                    command: '.gg register <guide|news|list>',
+                    command: '.gg register <guide|news|list> #channel',
                     description:
                         'Register channel to sync data from the website, the channel should be a standalone channel, do not sync multiple categories of data into the same channel. ".gg register list" will return a list of registered channels.',
+                },
+                {
+                    command: '.gg unregister <guide|news>',
+                    description:
+                        'Unregister the channel registered from `.gg register`',
                 },
                 {
                     command: '.gg postnow <guide|news>',
@@ -62,6 +67,11 @@ export default function discordBot(): JSX.Element {
                 {
                     command: '.gg app',
                     description: 'Send link to Google Play App',
+                },
+                {
+                    command: '.gg contact',
+                    description:
+                        'Send contact information for the developer of this bot or the community website.',
                 },
                 {
                     command: '.gg support',
