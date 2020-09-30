@@ -665,12 +665,16 @@ export default function updateDeck(): JSX.Element {
                                                                 const clone = {
                                                                     ...activeEdit,
                                                                 };
-                                                                clone.rating[
+                                                                const cloneRating = {
+                                                                    ...clone.rating,
+                                                                };
+                                                                cloneRating[
                                                                     ratingType as keyof Deck['rating']
                                                                 ] = Number(
                                                                     evt.target
                                                                         .value
                                                                 );
+                                                                clone.rating = cloneRating;
                                                                 setActiveEdit(
                                                                     clone
                                                                 );
