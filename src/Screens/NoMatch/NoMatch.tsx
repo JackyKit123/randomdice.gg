@@ -12,7 +12,7 @@ export default function NoMatch(props: {
     const history = useHistory();
     const { title } = props;
     return (
-        <Main title={title || '404 Not found'} className='NoMatch'>
+        <Main title={title || '404 Not found'} className='NoMatch' disallowAd>
             <Helmet>
                 <title>{title || '404 Not found'}</title>
                 <meta name='robots' content='noindex' />

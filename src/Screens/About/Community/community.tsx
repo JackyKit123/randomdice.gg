@@ -39,7 +39,7 @@ export default function CommunityListing(): JSX.Element {
     }[];
 
     return (
-        <Main title='Community' className='community'>
+        <Main title='Community' className='community' disallowAd>
             <p>
                 Here you can find a list of communities that you can join, come
                 hang out with us if you have not joined any Random Dice

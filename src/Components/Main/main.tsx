@@ -8,8 +8,9 @@ export default function Main(props: {
     title: string;
     className?: string;
     children: ReactNode;
+    disallowAd?: boolean;
 }): JSX.Element {
-    const { title, className, children } = props;
+    const { title, className, children, disallowAd } = props;
     const [online, setOnline] = useState(navigator.onLine);
     const location = useLocation();
 
@@ -47,7 +48,7 @@ export default function Main(props: {
                 ) : null}
             </div>
             <div className={`main ${className}`}>
-                <GoogleAds unitId='3944820222' />
+                {disallowAd ? null : <GoogleAds unitId='3944820222' />}
                 <div className='content'>{children}</div>
             </div>
         </main>

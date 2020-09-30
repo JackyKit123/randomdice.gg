@@ -4,7 +4,7 @@ import './about.less';
 
 export default function AboutUs(): JSX.Element {
     return (
-        <Main title='About Us' className='about'>
+        <Main title='About Us' className='about' disallowAd>
             <p>
                 This website is created to provide the community some
                 information for the game Random Dice.

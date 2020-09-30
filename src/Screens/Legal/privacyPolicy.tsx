@@ -7,6 +7,7 @@ export default function PrivacyPolicy(): JSX.Element {
         <Main
             className='legal'
             title='Privacy Policy for Random Dice Community'
+            disallowAd
         >
             <p>
                 At Random Dice Community, accessible from{' '}

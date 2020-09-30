@@ -93,7 +93,7 @@ export default function PatreonIntro(): JSX.Element {
         jsx = <LoadingScreen />;
     }
     return (
-        <Main title='Patreon' className='patreon'>
+        <Main title='Patreon' className='patreon' disallowAd>
             {jsx}
         </Main>
     );

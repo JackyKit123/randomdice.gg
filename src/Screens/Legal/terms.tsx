@@ -7,6 +7,7 @@ export default function Terms(): JSX.Element {
         <Main
             className='legal'
             title='Terms and Conditions for Random Dice Community'
+            disallowAd
         >
             <h1>Terms and Conditions</h1>
             <p>Last updated: June 03, 2020</p>

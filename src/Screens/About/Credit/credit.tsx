@@ -63,7 +63,7 @@ export default function Credit(): JSX.Element {
         jsx = <LoadingScreen />;
     }
     return (
-        <Main title='Credit' className='credit'>
+        <Main title='Credit' className='credit' disallowAd>
             {jsx}
         </Main>
     );
