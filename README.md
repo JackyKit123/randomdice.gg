@@ -46,3 +46,11 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Environment Variables Used
+
+Create a .env.development.local file and include the following variables otherwise the web app will not work.
+
+REACT_APP_GOOGLE_API_KEY
+
+This api key is restricted for production domain https://randomdice.gg/, you should create your own api key for development purpose via the [Google Cloud Platform](https://console.cloud.google.com/apis/credentials)
