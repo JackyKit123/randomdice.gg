@@ -17,7 +17,7 @@ import ConvertEmbed from '../../Components/Youtube Embed/embed';
 export default function DeckGuideMenu(): JSX.Element | null {
     const history = useHistory();
     const dispatch = useDispatch();
-    const { name } = useParams();
+    const { name } = useParams<{ name: string }>();
     const { guide, error } = useSelector(
         (state: RootState) => state.fetchDecksGuideReducer
     );
