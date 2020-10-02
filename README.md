@@ -46,32 +46,3 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-## Environment Variables Used
-
-Create a .env file and include the following variables otherwise the web app will not work.
-
-<table>
-    <tbody>
-        <tr>
-            <td>REACT_APP_GAPI_KEY</td>
-            <td>api key of Google</td>
-        </tr>
-        <tr>
-            <td>REACT_APP_FIREBASE_API_KEY</td>
-            <td>api key for Firebase</td>
-        </tr>
-        <tr>
-            <td>REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID</td>
-            <td>Tracking ID for Google Analytics</td>
-        </tr>
-        <tr>
-            <td>REACT_APP_DISCORD_CLIENT_ID</td>
-            <td>Discord OAUTH2 App id</td>
-        </tr>
-        <tr>
-            <td>REACT_APP_PATREON_CLIENT_ID</td>
-            <td>Patreon OAUTH2 App id</td>
-        </tr>
-    </tbody>
-</table>
