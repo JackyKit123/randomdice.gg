@@ -54,8 +54,7 @@ export default function critDataCollection(): JSX.Element {
     const maxCrit = findMaxCrit(dices);
     let jsx;
     if (
-        dices &&
-        dices.length &&
+        dices?.length &&
         critData &&
         Object.values(critData).every(
             data => data.trophies >= 0 && data.crit >= 111

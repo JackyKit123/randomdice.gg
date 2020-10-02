@@ -16,9 +16,12 @@ export default function DeckGuideMenu(): JSX.Element {
     const { guide, error } = useSelector(
         (state: RootState) => state.fetchDecksGuideReducer
     );
+    const { dices } = useSelector(
+        (state: RootState) => state.fetchDicesReducer
+    );
 
     let jsx;
-    if (guide) {
+    if (guide?.length && dices?.length) {
         jsx = (
             <>
                 <p>

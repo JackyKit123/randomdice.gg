@@ -27,7 +27,7 @@ export default function GearCalculator(): JSX.Element {
     let jsx = <div />;
     const data = dices?.find(dice => dice.id === 26);
 
-    if (dices && data) {
+    if (dices?.length && data) {
         const maxCrit = findMaxCrit(dices);
         const isInvalidCrit =
             !Number.isInteger(filter.crit) ||

@@ -44,7 +44,7 @@ export default function ArenaDraft(): JSX.Element {
     const [manualPick, setManualPick] = useState(-1 as number);
 
     let jsx;
-    if (dices && dices.length > 0) {
+    if (dices?.length) {
         interface DiceValue {
             dps: number;
             assist: number;

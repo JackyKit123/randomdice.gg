@@ -44,7 +44,7 @@ export default function updateDecksGuide(): JSX.Element {
         dbRef.once('value').then(snapshot => setGuides(snapshot.val()));
     }, []);
 
-    if (!guides || !dices) {
+    if (!guides?.length || !dices?.length) {
         return (
             <Dashboard>
                 <LoadingScreen />

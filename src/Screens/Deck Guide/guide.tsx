@@ -21,12 +21,15 @@ export default function DeckGuideMenu(): JSX.Element | null {
     const { guide, error } = useSelector(
         (state: RootState) => state.fetchDecksGuideReducer
     );
+    const { dices } = useSelector(
+        (state: RootState) => state.fetchDicesReducer
+    );
     useEffect(() => {
         return replaceAnchorWithHistory(history);
     }, []);
 
     let jsx;
-    if (guide) {
+    if (guide?.length && dices?.length) {
         const thisGuide = guide.find(
             g => g.name.toLowerCase() === name.toLowerCase()
         );

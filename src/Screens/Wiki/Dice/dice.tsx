@@ -56,7 +56,7 @@ export default function DiceMechanic(): JSX.Element {
     }, [mechanics, hash]);
 
     useEffect(() => {
-        if (dices && !mechanics?.includes('ad')) {
+        if (dices?.length && !mechanics?.includes('ad')) {
             const tmp = dices.map(dice => ({
                 id: dice.id,
                 name: dice.name,
@@ -76,7 +76,7 @@ export default function DiceMechanic(): JSX.Element {
 
     let jsx;
 
-    if (dices && mechanics) {
+    if (dices?.length && mechanics) {
         jsx = (
             <>
                 <p className='intro'>

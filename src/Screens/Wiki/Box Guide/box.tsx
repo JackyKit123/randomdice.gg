@@ -53,7 +53,7 @@ export default function BoxGuide(): JSX.Element {
     }, [wiki]);
 
     let jsx;
-    if (dices && boxInfo) {
+    if (dices?.length && boxInfo) {
         jsx = (
             <>
                 <p>

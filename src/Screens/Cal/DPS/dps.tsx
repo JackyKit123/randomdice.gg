@@ -80,7 +80,7 @@ export default function DpsCalculator(): JSX.Element {
         lunar: dices?.find(dice => dice.id === 47),
     } as { [key: string]: DiceType };
 
-    if (dices && Object.values(data).every(d => d !== undefined)) {
+    if (dices?.length && Object.values(data).every(d => d !== undefined)) {
         const maxCrit = findMaxCrit(dices);
         const isInvalidCrit =
             !Number.isInteger(filter.crit) ||
