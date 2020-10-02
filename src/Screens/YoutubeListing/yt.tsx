@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import firebase from 'firebase/app';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import Linkify from 'linkifyjs/react';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
@@ -149,7 +150,20 @@ export default function YoutubeList(): JSX.Element {
                             </a>
                         </div>
 
-                        <p>{info.description}</p>
+                        <Linkify
+                            tagName='p'
+                            options={{
+                                nl2br: true,
+                                attributes: {
+                                    rel: 'nofollow noreferrer noopener',
+                                },
+                                target: {
+                                    url: '_blank',
+                                },
+                            }}
+                        >
+                            {info.description}
+                        </Linkify>
                         <a
                             href={`https://www.youtube.com/channel/${info.id}`}
                             target='_blank'
