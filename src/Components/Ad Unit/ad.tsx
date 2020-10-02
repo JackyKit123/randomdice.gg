@@ -22,7 +22,8 @@ export default function GoogleAds({
         if (
             user !== 'awaiting auth state' &&
             !adLoaded &&
-            (user === null || (data && !data['patreon-tier']))
+            (user === null || (data && !data['patreon-tier'])) &&
+            !(user && process.env.REACT_APP_ADS_EXCLUSION?.includes(user.uid))
         ) {
             try {
                 if (
@@ -57,7 +58,13 @@ export default function GoogleAds({
         }
     }, [user, data]);
 
-    if ((error && error !== 'Loading') || (data && data['patreon-tier'])) {
+    if (
+        (error && error !== 'Loading') ||
+        (data && data['patreon-tier']) ||
+        (user &&
+            user !== 'awaiting auth state' &&
+            process.env.REACT_APP_ADS_EXCLUSION?.includes(user.uid))
+    ) {
         return null;
     }
 
