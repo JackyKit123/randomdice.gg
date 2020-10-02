@@ -142,3 +142,16 @@ export async function unregister(): Promise<void> {
         }
     }
 }
+
+export async function clearRegistration(): Promise<void> {
+    if ('serviceWorker' in navigator) {
+        try {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(
+                registrations.map(registration => registration.unregister())
+            );
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+}

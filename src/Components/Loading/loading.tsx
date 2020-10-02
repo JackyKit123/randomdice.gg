@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { unregister } from '../../serviceWorker';
+import { clearRegistration } from '../../serviceWorker';
 import './loading.less';
 
 export default function Loading(): JSX.Element {
@@ -38,7 +38,7 @@ export default function Loading(): JSX.Element {
                         type='button'
                         onClick={async (): Promise<void> => {
                             localStorage.clear();
-                            await unregister();
+                            await clearRegistration();
                             window.location.reload();
                         }}
                     >
