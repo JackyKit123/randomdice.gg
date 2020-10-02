@@ -1,6 +1,9 @@
 import { Dices } from './Redux Storage/Fetch Firebase/Dices/types';
 
-export default function findMaxCrit(dice: Dices): number {
+export default function findMaxCrit(dice: Dices = []): number {
+    if (!dice.length) {
+        return 0;
+    }
     const classUpCrit = dice
         .map(die => {
             switch (die.rarity) {

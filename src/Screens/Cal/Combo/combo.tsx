@@ -55,132 +55,167 @@ export default function ComboCalculator(): JSX.Element {
         crit: dices?.find(dice => dice.id === 13),
         lunar: dices?.find(dice => dice.id === 47),
     } as {
-        [key: string]: DiceType;
+        [key: string]: DiceType | undefined;
     };
 
-    if (dices && Object.values(data).every(d => d !== undefined)) {
-        const maxCrit = findMaxCrit(dices);
-        const isInvalidCrit =
-            !Number.isInteger(filter.crit) ||
-            filter.crit < 111 ||
-            filter.crit > maxCrit;
-        const isInvalidCombo =
-            !Number.isInteger(filter.combo.count) || filter.combo.count < 1;
-        const invalidInput = isInvalidCombo || isInvalidCrit;
+    const maxCrit = findMaxCrit(dices);
+    const isInvalidCrit =
+        !Number.isInteger(filter.crit) ||
+        filter.crit < 111 ||
+        filter.crit > maxCrit;
+    const isInvalidCombo =
+        !Number.isInteger(filter.combo.count) || filter.combo.count < 1;
+    const invalidInput = isInvalidCombo || isInvalidCrit;
 
-        const dpsPerComboCount = (
-            mode: 'raw' | 'crit' | 'lunar' | 'lunar+crit',
-            count = filter.combo.count
-        ): { dmg: number; dps: number } => {
-            const dmgPerCombo =
-                data.combo.eff1 +
-                data.combo.cupEff1 * (filter.combo.class - 7) +
-                data.combo.pupEff1 * (filter.combo.level - 1);
-            const baseAtk =
-                data.combo.atk +
-                data.combo.cupAtk * (filter.combo.class - 7) +
-                data.combo.pupAtk * (filter.combo.level - 1);
+    const dpsPerComboCount = (
+        mode: 'raw' | 'crit' | 'lunar' | 'lunar+crit',
+        count = filter.combo.count
+    ): { dmg: number; dps: number } => {
+        if (!(data.combo && data.crit && data.lunar) || invalidInput) {
+            return {
+                dmg: 0,
+                dps: 0,
+            };
+        }
+        const dmgPerCombo =
+            data.combo.eff1 +
+            data.combo.cupEff1 * (filter.combo.class - 7) +
+            data.combo.pupEff1 * (filter.combo.level - 1);
+        const baseAtk =
+            data.combo?.atk +
+            data.combo?.cupAtk * (filter.combo.class - 7) +
+            data.combo?.pupAtk * (filter.combo.level - 1);
 
-            const roundTo3Sf = (val: number): number =>
-                Math.round(val * 100) / 100;
+        const roundTo3Sf = (val: number): number => Math.round(val * 100) / 100;
 
-            if (invalidInput) {
+        const dmg = (dmgPerCombo / 2) * (count ** 2 - count) + baseAtk;
+        const criticalCritMultiplier =
+            (5 +
+                ((filter.critical.class - 3) * data.crit?.cupEff1 +
+                    data.crit?.eff1) *
+                    filter.critical.pip +
+                data.crit?.pupEff1 * (filter.critical.level - 1)) /
+            100;
+        const lunarCritMultiplier =
+            (5 + (filter.lunar.active ? filter.lunar.pip * 5 : 0)) / 100;
+        const lunarSpdBuff =
+            1 -
+            ((data.lunar.eff1 + data.lunar.cupEff1 * (filter.lunar.class - 7)) *
+                filter.lunar.pip +
+                (filter.lunar.active ? 3 : 0) +
+                data.lunar.pupEff1 * (filter.lunar.level - 1)) /
+                100;
+        const lunarBuffedDmg = filter.lunar.active
+            ? (filter.lunar.pip * 0.1 + 1) * dmg
+            : dmg;
+        switch (mode) {
+            case 'raw':
+                return {
+                    dmg: roundTo3Sf(dmg),
+                    dps: roundTo3Sf(
+                        (dmg * 0.95 + dmg * 0.05 * (filter.crit / 100)) /
+                            data.combo.spd
+                    ),
+                };
+            case 'crit': {
+                return {
+                    dmg: roundTo3Sf(dmg),
+                    dps: roundTo3Sf(
+                        (dmg * (1 - criticalCritMultiplier) +
+                            (dmg * criticalCritMultiplier * filter.crit) /
+                                100) /
+                            data.combo.spd
+                    ),
+                };
+            }
+            case 'lunar': {
+                const atkSpd =
+                    lunarSpdBuff * data.combo.spd <= 0.01
+                        ? 0.01
+                        : lunarSpdBuff * data.combo.spd;
+                return {
+                    dmg: roundTo3Sf(lunarBuffedDmg),
+                    dps: roundTo3Sf(
+                        (lunarBuffedDmg * (1 - lunarCritMultiplier) +
+                            (lunarBuffedDmg *
+                                lunarCritMultiplier *
+                                filter.crit) /
+                                100) /
+                            atkSpd
+                    ),
+                };
+            }
+            case 'lunar+crit': {
+                const atkSpd =
+                    lunarSpdBuff * data.combo.spd <= 0.01
+                        ? 0.01
+                        : lunarSpdBuff * data.combo.spd;
+                return {
+                    dmg: roundTo3Sf(lunarBuffedDmg),
+                    dps: roundTo3Sf(
+                        (lunarBuffedDmg *
+                            (1 -
+                                Math.max(
+                                    lunarCritMultiplier,
+                                    criticalCritMultiplier
+                                )) +
+                            (lunarBuffedDmg *
+                                Math.max(
+                                    lunarCritMultiplier,
+                                    criticalCritMultiplier
+                                ) *
+                                filter.crit) /
+                                100) /
+                            atkSpd
+                    ),
+                };
+            }
+            default:
                 return {
                     dmg: 0,
                     dps: 0,
                 };
-            }
-            const dmg = (dmgPerCombo / 2) * (count ** 2 - count) + baseAtk;
-            const criticalCritMultiplier =
-                (5 +
-                    ((filter.critical.class - 3) * data.crit.cupEff1 +
-                        data.crit.eff1) *
-                        filter.critical.pip +
-                    data.crit.pupEff1 * (filter.critical.level - 1)) /
-                100;
-            const lunarCritMultiplier =
-                (5 + (filter.lunar.active ? filter.lunar.pip * 5 : 0)) / 100;
-            const lunarSpdBuff =
-                1 -
-                ((data.lunar.eff1 +
-                    data.lunar.cupEff1 * (filter.lunar.class - 7)) *
-                    filter.lunar.pip +
-                    (filter.lunar.active ? 3 : 0) +
-                    data.lunar.pupEff1 * (filter.lunar.level - 1)) /
-                    100;
-            const lunarBuffedDmg = filter.lunar.active
-                ? (filter.lunar.pip * 0.1 + 1) * dmg
-                : dmg;
-            switch (mode) {
-                case 'raw':
-                    return {
-                        dmg: roundTo3Sf(dmg),
-                        dps: roundTo3Sf(
-                            (dmg * 0.95 + dmg * 0.05 * (filter.crit / 100)) /
-                                data.combo.spd
-                        ),
-                    };
-                case 'crit': {
-                    return {
-                        dmg: roundTo3Sf(dmg),
-                        dps: roundTo3Sf(
-                            (dmg * (1 - criticalCritMultiplier) +
-                                (dmg * criticalCritMultiplier * filter.crit) /
-                                    100) /
-                                data.combo.spd
-                        ),
-                    };
-                }
-                case 'lunar': {
-                    const atkSpd =
-                        lunarSpdBuff * data.combo.spd <= 0.01
-                            ? 0.01
-                            : lunarSpdBuff * data.combo.spd;
-                    return {
-                        dmg: roundTo3Sf(lunarBuffedDmg),
-                        dps: roundTo3Sf(
-                            (lunarBuffedDmg * (1 - lunarCritMultiplier) +
-                                (lunarBuffedDmg *
-                                    lunarCritMultiplier *
-                                    filter.crit) /
-                                    100) /
-                                atkSpd
-                        ),
-                    };
-                }
-                case 'lunar+crit': {
-                    const atkSpd =
-                        lunarSpdBuff * data.combo.spd <= 0.01
-                            ? 0.01
-                            : lunarSpdBuff * data.combo.spd;
-                    return {
-                        dmg: roundTo3Sf(lunarBuffedDmg),
-                        dps: roundTo3Sf(
-                            (lunarBuffedDmg *
-                                (1 -
-                                    Math.max(
-                                        lunarCritMultiplier,
-                                        criticalCritMultiplier
-                                    )) +
-                                (lunarBuffedDmg *
-                                    Math.max(
-                                        lunarCritMultiplier,
-                                        criticalCritMultiplier
-                                    ) *
-                                    filter.crit) /
-                                    100) /
-                                atkSpd
-                        ),
-                    };
-                }
-                default:
-                    return {
-                        dmg: 0,
-                        dps: 0,
-                    };
-            }
-        };
+        }
+    };
 
+    const plotGraphCallback = {
+        lunar: useCallback(
+            (d: { x: number }): number => dpsPerComboCount('lunar', d.x).dps,
+            [
+                filter.lunar.active,
+                filter.lunar.class,
+                filter.lunar.level,
+                filter.lunar.pip,
+                filter.combo.class,
+                filter.combo.level,
+                filter.combo.count,
+                filter.crit,
+            ]
+        ),
+        crit: useCallback(
+            (d: { x: number }): number => dpsPerComboCount('crit', d.x).dps,
+            [
+                filter.critical.class,
+                filter.critical.level,
+                filter.critical.pip,
+                filter.combo.class,
+                filter.combo.level,
+                filter.combo.count,
+                filter.crit,
+            ]
+        ),
+        raw: useCallback(
+            (d: { x: number }): number => dpsPerComboCount('raw', d.x).dps,
+            [
+                filter.combo.class,
+                filter.combo.level,
+                filter.combo.count,
+                filter.crit,
+            ]
+        ),
+    };
+
+    if (data.combo && data.crit && data.lunar) {
         jsx = (
             <>
                 <p>
@@ -671,42 +706,12 @@ export default function ComboCalculator(): JSX.Element {
                             y={70}
                             orientation='vertical'
                             gutter={20}
-                            colorScale={[
-                                '#d178ff',
-                                '#197cf0',
-                                '#ff0000',
-                                '#111111',
-                            ]}
+                            colorScale={['#197cf0', '#ff0000', '#111111']}
                             data={[
-                                { name: 'Lunar + Crit' },
                                 { name: 'Lunar Buffed' },
                                 { name: 'Crit Buffed' },
                                 { name: 'No Buff' },
                             ]}
-                        />
-                        <VictoryLine
-                            name='Lunar + Crit'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#d178ff', strokeWidth: 1 },
-                            }}
-                            y={useCallback(
-                                (d: { x: number }): number =>
-                                    dpsPerComboCount('lunar+crit', d.x).dps,
-                                [
-                                    filter.combo.class,
-                                    filter.combo.level,
-                                    filter.combo.count,
-                                    filter.critical.class,
-                                    filter.critical.level,
-                                    filter.critical.pip,
-                                    filter.lunar.active,
-                                    filter.lunar.class,
-                                    filter.lunar.level,
-                                    filter.lunar.pip,
-                                    filter.crit,
-                                ]
-                            )}
                         />
                         <VictoryLine
                             name='Lunar Buffed'
@@ -714,20 +719,7 @@ export default function ComboCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#197cf0', strokeWidth: 1 },
                             }}
-                            y={useCallback(
-                                (d: { x: number }): number =>
-                                    dpsPerComboCount('lunar', d.x).dps,
-                                [
-                                    filter.lunar.active,
-                                    filter.lunar.class,
-                                    filter.lunar.level,
-                                    filter.lunar.pip,
-                                    filter.combo.class,
-                                    filter.combo.level,
-                                    filter.combo.count,
-                                    filter.crit,
-                                ]
-                            )}
+                            y={plotGraphCallback.lunar}
                         />
                         <VictoryLine
                             name='Crit Buffed'
@@ -735,19 +727,7 @@ export default function ComboCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#ff0000', strokeWidth: 1 },
                             }}
-                            y={useCallback(
-                                (d: { x: number }): number =>
-                                    dpsPerComboCount('crit', d.x).dps,
-                                [
-                                    filter.critical.class,
-                                    filter.critical.level,
-                                    filter.critical.pip,
-                                    filter.combo.class,
-                                    filter.combo.level,
-                                    filter.combo.count,
-                                    filter.crit,
-                                ]
-                            )}
+                            y={plotGraphCallback.crit}
                         />
                         <VictoryLine
                             name='No Buff'
@@ -755,16 +735,7 @@ export default function ComboCalculator(): JSX.Element {
                             style={{
                                 data: { stroke: '#111111', strokeWidth: 1 },
                             }}
-                            y={useCallback(
-                                (d: { x: number }): number =>
-                                    dpsPerComboCount('raw', d.x).dps,
-                                [
-                                    filter.combo.class,
-                                    filter.combo.level,
-                                    filter.combo.count,
-                                    filter.crit,
-                                ]
-                            )}
+                            y={plotGraphCallback.raw}
                         />
                     </VictoryChart>
                 </div>
