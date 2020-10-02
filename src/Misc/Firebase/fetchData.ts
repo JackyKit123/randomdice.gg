@@ -58,7 +58,11 @@ async function fetch(
             await database.ref(`/last_updated/${key}`).once('value')
         ).val();
         // localVersion match database version, no need to refetch
-        if (remoteKeyVersion && remoteKeyVersion === localVersion?.[key]) {
+        if (
+            localCache &&
+            remoteKeyVersion &&
+            remoteKeyVersion === localVersion?.[key]
+        ) {
             return;
         }
 
