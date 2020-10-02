@@ -183,7 +183,6 @@ export default function DiceStat(): JSX.Element {
                         </div>
                     </div>
                 </div>
-                <hr className='divisor' />
                 <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
                 <p>

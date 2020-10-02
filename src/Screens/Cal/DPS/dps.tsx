@@ -1067,7 +1067,6 @@ export default function DpsCalculator(): JSX.Element {
                         </form>
                     </div>
                 </div>
-                <hr className='divisor' />
                 <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
                 <div className='result vertical'>

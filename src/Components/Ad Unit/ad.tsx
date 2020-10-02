@@ -11,7 +11,6 @@ export default function GoogleAds({
     unitId,
 }: {
     unitId: string;
-    style?: React.CSSProperties;
 }): JSX.Element | null {
     const selector = useSelector((state: RootState) => state);
     const { data } = selector.fetchUserDataReducer;
@@ -88,6 +87,7 @@ export default function GoogleAds({
                 </span>
             ) : (
                 <>
+                    <hr className='divisor' />
                     <ins
                         className='adsbygoogle'
                         style={{ display: 'block' }}

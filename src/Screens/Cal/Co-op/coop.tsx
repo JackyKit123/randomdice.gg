@@ -434,7 +434,6 @@ export default function GoldCalculator(): JSX.Element {
                     )}
                 </form>
             </section>
-            <hr className='divisor' />
             <GoogleAds unitId='1144871846' />
             <hr className='divisor' />
             <div className='result'>

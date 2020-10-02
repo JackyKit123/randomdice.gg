@@ -369,7 +369,6 @@ export default function DeckList(): JSX.Element {
                         </label>
                     </div>
                 </form>
-                <hr className='divisor' />
                 <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
                 <p className='updated'>

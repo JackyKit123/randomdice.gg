@@ -586,7 +586,6 @@ export default function EnergyCalculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                <hr className='divisor' />
                 <GoogleAds unitId='1144871846' />
                 <hr className='divisor' />
                 <div className='result vertical'>
