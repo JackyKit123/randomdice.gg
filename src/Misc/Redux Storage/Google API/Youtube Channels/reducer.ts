@@ -1,11 +1,10 @@
 import {
     FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
-    FETCH_GAPI_YOUTUBE_CHANNEL_FAIL,
     Action,
     YouTubeInfo,
     FetchState,
-    CLEAR_ERRORS,
 } from './types';
+import { FETCH_GOOGLE_API_FAIL, CLEAR_ERRORS } from '../types';
 
 const initialState: FetchState = {
     list: [] as YouTubeInfo[],
@@ -19,7 +18,7 @@ export default function(state = initialState, action: Action): FetchState {
                 list: action.payload,
                 error: state.error,
             };
-        case FETCH_GAPI_YOUTUBE_CHANNEL_FAIL:
+        case FETCH_GOOGLE_API_FAIL:
             return {
                 list: state.list,
                 error: action.payload,

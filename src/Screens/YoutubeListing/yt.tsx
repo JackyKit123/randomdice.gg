@@ -8,7 +8,7 @@ import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
 import LoadingScreen from '../../Components/Loading/loading';
 import { fetchYouTube } from '../../Misc/Redux Storage/Google API/fetchData';
-import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Google API/Youtube Channels/types';
+import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Google API/types';
 import { RootState } from '../../Misc/Redux Storage/store';
 import './yt.less';
 import {

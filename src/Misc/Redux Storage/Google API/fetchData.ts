@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux';
 import { fetchPatreon } from '../../Firebase/fetchData';
 import { PatreonList } from '../Fetch Firebase/Patreon List/types';
+import { FETCH_GOOGLE_API_FAIL } from './types';
 import {
-    FETCH_GAPI_YOUTUBE_CHANNEL_FAIL,
     FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
     YouTubeInfo,
 } from './Youtube Channels/types';
@@ -73,7 +73,7 @@ export async function fetchYouTube(
         localStorage.setItem('YoutubeChannels', JSON.stringify(YoutubeList));
     } catch (err) {
         dispatch({
-            type: FETCH_GAPI_YOUTUBE_CHANNEL_FAIL,
+            type: FETCH_GOOGLE_API_FAIL,
             payload: err.error,
         });
     }

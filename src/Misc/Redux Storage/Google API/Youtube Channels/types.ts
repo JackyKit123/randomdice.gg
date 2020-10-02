@@ -1,8 +1,7 @@
+import * as FETCH_GOOGLE_API from '../types';
+
 export const FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS =
     'FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS';
-export const FETCH_GAPI_YOUTUBE_CHANNEL_FAIL =
-    'FETCH_GAPI_YOUTUBE_CHANNEL_FAIL';
-export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 export interface YouTubeInfo {
     id: string;
@@ -25,16 +24,7 @@ interface FetchGAPISuccessAction {
     payload: YouTubeInfo[];
 }
 
-interface FetchGAPIFailureAction {
-    type: typeof FETCH_GAPI_YOUTUBE_CHANNEL_FAIL;
-    payload: Error;
-}
-
-interface ClearErrorAction {
-    type: typeof CLEAR_ERRORS;
-}
-
 export type Action =
     | FetchGAPISuccessAction
-    | FetchGAPIFailureAction
-    | ClearErrorAction;
+    | FETCH_GOOGLE_API.FetchGoogleApiFailureAction
+    | FETCH_GOOGLE_API.ClearErrorAction;
