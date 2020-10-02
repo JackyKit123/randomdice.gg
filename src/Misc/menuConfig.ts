@@ -202,6 +202,11 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Legal/privacyPolicy')),
             },
             {
+                path: '/about/disclaimer',
+                excludeFromMenu: true,
+                component: lazy(() => import('../Screens/Legal/disclaimer')),
+            },
+            {
                 name: 'Support Us',
                 path: '/about/patreon',
                 component: lazy(() =>

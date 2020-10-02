@@ -61,6 +61,7 @@ export default function Footer(): JSX.Element {
                         <div className='footer-link'>
                             <Link to='/about/terms'>Terms and Conditions</Link>
                             <Link to='/about/privacy'>Privacy Policy</Link>
+                            <Link to='/about/disclaimer'>Disclaimer</Link>
                             <Link to='/about/us'>About Us</Link>
                         </div>
                     </div>
