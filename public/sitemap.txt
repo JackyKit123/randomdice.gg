@@ -29,6 +29,7 @@ https://randomdice.gg/about/us
 https://randomdice.gg/about/community
 https://randomdice.gg/about/credit
 https://randomdice.gg/about/privacy
+https://randomdice.gg/about/disclaimer
 https://randomdice.gg/about/patreon
 https://randomdice.gg/about/patreon/*
 https://randomdice.gg/about/terms
