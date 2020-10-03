@@ -24,7 +24,7 @@ import { Patreon } from '../../../Misc/Redux Storage/Fetch Firebase/Patreon List
 
 export default function PatreonProfile(): JSX.Element {
     const history = useHistory();
-    const { name } = useParams();
+    const { name } = useParams<{ name: string }>();
     const dispatch = useDispatch();
     const { list, error } = useSelector(
         (state: RootState) => state.fetchPatreonListReducer
