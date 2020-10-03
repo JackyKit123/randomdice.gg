@@ -252,6 +252,7 @@ export default function updateDecksGuide(): JSX.Element {
                         <tr>
                             <td>
                                 <select
+                                    defaultValue={activeEdit.type}
                                     onChange={(evt): void => {
                                         activeEdit.type = evt.target.value as
                                             | 'PvP'
