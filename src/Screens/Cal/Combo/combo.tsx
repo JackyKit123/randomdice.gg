@@ -648,10 +648,16 @@ export default function ComboCalculator(): JSX.Element {
                         minDomain={{ x: 1 }}
                         maxDomain={{
                             x: filter.combo.count + 10 || 10,
-                            y: dpsPerComboCount(
-                                'lunar+crit',
-                                filter.combo.count + 10
-                            ).dps,
+                            y: Math.max(
+                                dpsPerComboCount(
+                                    'lunar',
+                                    filter.combo.count + 10
+                                ).dps,
+                                dpsPerComboCount(
+                                    'crit',
+                                    filter.combo.count + 10
+                                ).dps
+                            ),
                         }}
                         theme={VictoryTheme.material}
                     >
