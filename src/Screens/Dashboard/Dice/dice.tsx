@@ -770,7 +770,8 @@ export default function editDice(): JSX.Element {
                                                 list: [],
                                             };
                                             activeEdit.alternatives.list[0] =
-                                                evt.target.value;
+                                                Number(evt.target.value) ||
+                                                null;
                                             setActiveEdit({ ...activeEdit });
                                         }}
                                     >
@@ -799,7 +800,8 @@ export default function editDice(): JSX.Element {
                                                 list: [],
                                             };
                                             activeEdit.alternatives.list[1] =
-                                                evt.target.value;
+                                                Number(evt.target.value) ||
+                                                null;
                                             setActiveEdit({ ...activeEdit });
                                         }}
                                     >
@@ -828,7 +830,8 @@ export default function editDice(): JSX.Element {
                                                 list: [],
                                             };
                                             activeEdit.alternatives.list[2] =
-                                                evt.target.value;
+                                                Number(evt.target.value) ||
+                                                null;
                                             setActiveEdit({ ...activeEdit });
                                         }}
                                     >
@@ -857,7 +860,8 @@ export default function editDice(): JSX.Element {
                                                 list: [],
                                             };
                                             activeEdit.alternatives.list[3] =
-                                                evt.target.value;
+                                                Number(evt.target.value) ||
+                                                null;
                                             setActiveEdit({ ...activeEdit });
                                         }}
                                     >
@@ -886,7 +890,8 @@ export default function editDice(): JSX.Element {
                                                 list: [],
                                             };
                                             activeEdit.alternatives.list[4] =
-                                                evt.target.value;
+                                                Number(evt.target.value) ||
+                                                null;
                                             setActiveEdit({ ...activeEdit });
                                         }}
                                     >

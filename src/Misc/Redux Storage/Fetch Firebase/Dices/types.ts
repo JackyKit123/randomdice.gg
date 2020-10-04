@@ -12,7 +12,7 @@ export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 
 interface Alternatives {
     desc: string;
-    list: Array<Dice['name']>;
+    list: Array<Dice['id'] | null>;
 }
 
 interface ArenaValue {
