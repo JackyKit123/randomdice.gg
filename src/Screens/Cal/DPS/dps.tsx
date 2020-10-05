@@ -189,7 +189,7 @@ export default function DpsCalculator(): JSX.Element {
             const lightingDPSPerPip =
                 ((data.electric.eff1 +
                     data.electric.pupEff1 * (level - 1) +
-                    data.electric.cupEff1 * (filter.electricClass - 5)) /
+                    data.electric.cupEff1 * (filter.electricClass - 1)) /
                     atkSpd(data.electric)) *
                 critMultiplier;
             const dps = boss
