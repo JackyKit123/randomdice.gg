@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Main from '../../../Components/Main/main';
+import { navDiscord } from '../../../Misc/customGaEvent';
 import './community.less';
 
 export default function CommunityListing(): JSX.Element {
@@ -21,6 +22,7 @@ export default function CommunityListing(): JSX.Element {
             name: 'Main Discord',
             url: 'https://discord.randomdice.gg',
             serverId: '717500464975052883',
+            googleAnalyticTrack: true,
         },
         {
             name: 'Portuguese Discord',
@@ -36,6 +38,7 @@ export default function CommunityListing(): JSX.Element {
         name: string;
         url: string;
         serverId: string;
+        googleAnalyticTrack?: true;
     }[];
 
     return (
@@ -53,6 +56,9 @@ export default function CommunityListing(): JSX.Element {
                             href={community.url}
                             target='_blank'
                             rel='noopener noreferrer'
+                            onClick={(): void => {
+                                if (community.googleAnalyticTrack) navDiscord();
+                            }}
                         >
                             {community.name}
                         </a>

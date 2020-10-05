@@ -10,6 +10,7 @@ import { menu } from '../../Misc/menuConfig';
 import replaceAnchorWithHistory from '../../Misc/HTMLAnchorNavigation';
 import { RootState } from '../../Misc/Redux Storage/store';
 import ConvertEmbed from '../../Components/Youtube Embed/embed';
+import { navDiscord } from '../../Misc/customGaEvent';
 
 export default function Homepage(): JSX.Element {
     const history = useHistory();
@@ -52,6 +53,7 @@ export default function Homepage(): JSX.Element {
                         href='https://discord.randomdice.gg'
                         target='_blank'
                         rel='noopener noreferrer'
+                        onClick={navDiscord}
                     >
                         Discord
                     </a>{' '}

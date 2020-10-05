@@ -19,3 +19,6 @@ export const share = (): void =>
 
 export const adblocked = (): void =>
     window.ga('send', 'event', 'Ad Blocked Browsing', 'adblocked');
+
+export const navDiscord = (): void =>
+    window.ga('send', 'event', 'Discord Link Clicked', 'click');

@@ -6,6 +6,7 @@ import {
     faPatreon,
 } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
+import { navDiscord } from '../../Misc/customGaEvent';
 
 export default function Footer(): JSX.Element {
     const communityList = {
@@ -13,16 +14,19 @@ export default function Footer(): JSX.Element {
             name: 'discord',
             icon: faDiscord,
             hyperlink: 'https://discord.randomdice.gg',
+            googleAnalyticTrack: true,
         },
         reddit: {
             name: 'reddit',
             icon: faReddit,
             hyperlink: 'https://www.reddit.com/r/randomdice/',
+            googleAnalyticTrack: false,
         },
         patreon: {
             name: 'patreon',
             icon: faPatreon,
             hyperlink: 'https://www.patreon.com/RandomDiceCommunityWebsite',
+            googleAnalyticTrack: false,
         },
     };
     return (
@@ -39,6 +43,10 @@ export default function Footer(): JSX.Element {
                                         className={community.name}
                                         target='_blank'
                                         rel='noopener noreferrer'
+                                        onClick={(): void => {
+                                            if (community?.googleAnalyticTrack)
+                                                navDiscord();
+                                        }}
                                     >
                                         <FontAwesomeIcon
                                             icon={community.icon}
