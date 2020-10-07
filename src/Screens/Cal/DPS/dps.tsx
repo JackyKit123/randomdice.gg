@@ -184,13 +184,13 @@ export default function DpsCalculator(): JSX.Element {
         const electricDps = (boss = false, level = filter.level): number => {
             const basicDpsPerPip =
                 (baseAtkDmg(data.electric, filter.electricClass, level) /
-                    atkSpd(data.electric)) *
+                    atkSpd(data.electric, filter.electricClass)) *
                 critMultiplier;
             const lightingDPSPerPip =
                 ((data.electric.eff1 +
                     data.electric.pupEff1 * (level - 1) +
                     data.electric.cupEff1 * (filter.electricClass - 1)) /
-                    atkSpd(data.electric)) *
+                    atkSpd(data.electric, filter.electricClass)) *
                 critMultiplier;
             const dps = boss
                 ? (basicDpsPerPip + lightingDPSPerPip) * filter.pip
