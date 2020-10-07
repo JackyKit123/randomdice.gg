@@ -8,12 +8,14 @@ export default function init(dispatch: ReturnType<typeof useDispatch>): void {
     script.onload = (): void => {
         window.gapi.load('client', async () => {
             try {
+                console.log('initializing');
                 await window.gapi.client.init({
                     apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
                     discoveryDocs: [
                         'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
                     ],
                 });
+                console.log('initialized');
                 await fetchYouTube(dispatch);
             } catch (err) {
                 dispatch({

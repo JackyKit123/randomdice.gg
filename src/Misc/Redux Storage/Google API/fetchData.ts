@@ -36,6 +36,7 @@ export async function fetchYouTube(
         const patreonList: PatreonList = JSON.parse(
             localStorage.getItem('patreon_list') as string
         );
+        console.log(patreonList);
         const YoutubeList = await Promise.all(
             patreonList
                 .map(patreon => patreon[patreon.id].youtubeId)
@@ -46,6 +47,7 @@ export async function fetchYouTube(
                     ).split(','),
                 ]) // custom hard coded editor channels
                 .map(async id => {
+                    console.log(id);
                     const res = await window.gapi.client.youtube.channels.list({
                         part: 'brandingSettings, snippet',
                         id,
@@ -70,6 +72,7 @@ export async function fetchYouTube(
                     } as YouTubeInfo;
                 })
         );
+        console.log(YoutubeList);
         dispatch({
             type: FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
             payload: YoutubeList,

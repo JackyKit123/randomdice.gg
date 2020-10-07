@@ -433,77 +433,109 @@ export const fetchPatreon = functions.pubsub
                 }
             };
 
-            let anyProfileUpdated = false;
+            let anyProfileUpdated =
+                existingProfiles.length !== patreonList.length;
             await Promise.all(
-                usersData.map(async ([uid, userData]) => {
-                    const patreonId = userData['linked-account'].patreon;
-                    const isPatreon = patreonList.find(
-                        patreon => patreon.id === patreonId
-                    );
-                    const existingProfile = existingProfiles.find(
-                        profile => profile.id === uid
-                    );
-                    if (isPatreon) {
-                        await Promise.all(
-                            patreonList.map(async (newProfile, i) => {
-                                const user = await getUserSuppressError(uid);
-                                if (patreonId === newProfile.id) {
-                                    if (existingProfile?.id !== uid) {
-                                        anyProfileUpdated = true;
-                                        await database
-                                            .ref(`/patreon_list/${i}/id`)
-                                            .set(uid);
-                                    }
-                                    if (
-                                        existingProfile?.tier !==
-                                        newProfile.tier
-                                    ) {
-                                        anyProfileUpdated = true;
-                                        await Promise.all([
-                                            await database
-                                                .ref(`/patreon_list/${i}/tier`)
-                                                .set(newProfile.tier),
-                                            await database
-                                                .ref(
-                                                    `/users/${uid}/patreon-tier`
-                                                )
-                                                .set(newProfile.tier),
-                                        ]);
-                                    }
-                                    if (
-                                        user?.displayName &&
-                                        existingProfile?.name !==
-                                            user.displayName
-                                    ) {
-                                        anyProfileUpdated = true;
-                                        await database
-                                            .ref(`/patreon_list/${i}/name`)
-                                            .set(user.displayName);
-                                    } else if (
-                                        !user?.displayName &&
-                                        !existingProfile?.name
-                                    ) {
-                                        anyProfileUpdated = true;
-                                        await database
-                                            .ref(`/patreon_list/${i}/name`)
-                                            .set(newProfile.name);
-                                    }
-                                    if (
-                                        user?.photoURL &&
-                                        existingProfile?.img !== user?.photoURL
-                                    ) {
-                                        anyProfileUpdated = true;
-                                        await database
-                                            .ref(`/patreon_list/${i}/img`)
-                                            .set(user.photoURL);
-                                    }
-                                }
-                            })
+                usersData
+                    .map(async ([uid, userData]) => {
+                        const patreonId = userData['linked-account'].patreon;
+                        const isPatreon = patreonList.find(
+                            patreon => patreon.id === patreonId
                         );
-                    } else if (userData['patreon-tier'] !== 0) {
-                        await database.ref(`/users/${uid}/patreon-tier`).set(0);
-                    }
-                })
+                        const existingProfile = existingProfiles.find(
+                            profile => profile.id === uid
+                        );
+                        if (isPatreon) {
+                            await Promise.all(
+                                patreonList.map(async (newProfile, i) => {
+                                    const user = await getUserSuppressError(
+                                        uid
+                                    );
+                                    if (patreonId === newProfile.id) {
+                                        if (existingProfile?.id !== uid) {
+                                            anyProfileUpdated = true;
+                                            await database
+                                                .ref(`/patreon_list/${i}/id`)
+                                                .set(uid);
+                                        }
+                                        if (
+                                            existingProfile?.tier !==
+                                            newProfile.tier
+                                        ) {
+                                            anyProfileUpdated = true;
+                                            await Promise.all([
+                                                await database
+                                                    .ref(
+                                                        `/patreon_list/${i}/tier`
+                                                    )
+                                                    .set(newProfile.tier),
+                                                await database
+                                                    .ref(
+                                                        `/users/${uid}/patreon-tier`
+                                                    )
+                                                    .set(newProfile.tier),
+                                            ]);
+                                        }
+                                        if (
+                                            user?.displayName &&
+                                            existingProfile?.name !==
+                                                user.displayName
+                                        ) {
+                                            anyProfileUpdated = true;
+                                            await database
+                                                .ref(`/patreon_list/${i}/name`)
+                                                .set(user.displayName);
+                                        } else if (
+                                            !user?.displayName &&
+                                            !existingProfile?.name
+                                        ) {
+                                            anyProfileUpdated = true;
+                                            await database
+                                                .ref(`/patreon_list/${i}/name`)
+                                                .set(newProfile.name);
+                                        }
+                                        if (
+                                            user?.photoURL &&
+                                            existingProfile?.img !==
+                                                user?.photoURL
+                                        ) {
+                                            anyProfileUpdated = true;
+                                            await database
+                                                .ref(`/patreon_list/${i}/img`)
+                                                .set(user.photoURL);
+                                        }
+                                    }
+                                })
+                            );
+                        } else if (userData['patreon-tier'] !== 0) {
+                            await database
+                                .ref(`/users/${uid}/patreon-tier`)
+                                .set(0);
+                        }
+                    })
+                    .concat(
+                        patreonList
+                            .filter(patreon =>
+                                usersData.every(
+                                    ([, userData]) =>
+                                        userData['linked-account'].patreon !==
+                                        patreon.id
+                                )
+                            )
+                            .map(async patreon =>
+                                database
+                                    .ref(
+                                        `/patreon_list/${patreonList.findIndex(
+                                            p => p.id === patreon.id
+                                        )}/`
+                                    )
+                                    .set({
+                                        id: patreon.id,
+                                        name: patreon.name,
+                                        tier: patreon.tier,
+                                    })
+                            )
+                    )
             );
             if (anyProfileUpdated) {
                 await database
