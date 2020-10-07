@@ -40,6 +40,10 @@ export default function YoutubeList(): JSX.Element {
         }
     }, [user, patreonList]);
 
+    useEffect(() => {
+        fetchYouTube(dispatch);
+    }, []);
+
     let jsx;
     if (ytList.length && patreonList?.length) {
         jsx = (

@@ -1,5 +1,4 @@
 import { useDispatch } from 'react-redux';
-import { fetchYouTube } from './fetchData';
 import { FETCH_GOOGLE_API_FAIL } from './types';
 
 export default function init(dispatch: ReturnType<typeof useDispatch>): void {
@@ -14,7 +13,6 @@ export default function init(dispatch: ReturnType<typeof useDispatch>): void {
                         'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
                     ],
                 });
-                await fetchYouTube(dispatch);
             } catch (err) {
                 dispatch({
                     type: FETCH_GOOGLE_API_FAIL,
