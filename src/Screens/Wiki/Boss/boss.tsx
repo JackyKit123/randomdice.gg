@@ -73,7 +73,7 @@ export default function BossGuide(): JSX.Element {
                     {bossInfo.map(boss =>
                         boss.img === 'ad' ? (
                             <Fragment key='ad'>
-                                <GoogleAds unitId='1144871846' />
+                                <GoogleAds unitId='8891384324' />
                             </Fragment>
                         ) : (
                             <Fragment key={boss.name}>

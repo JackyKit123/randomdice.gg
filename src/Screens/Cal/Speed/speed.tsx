@@ -431,7 +431,7 @@ export default function SpeedCalculator(): JSX.Element {
                         </span>
                     ) : null}
                 </form>
-                <GoogleAds unitId='1144871846' />
+                <GoogleAds unitId='8891384324' />
                 <hr className='divisor' />
                 <div className='result'>
                     <label htmlFor='result'>

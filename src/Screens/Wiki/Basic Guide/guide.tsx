@@ -63,7 +63,7 @@ export default function Basic(): JSX.Element {
                     {tips.map(tip =>
                         tip.img === 'ad' ? (
                             <Fragment key='ad'>
-                                <GoogleAds unitId='1144871846' />
+                                <GoogleAds unitId='8891384324' />
                             </Fragment>
                         ) : (
                             <Fragment key={tip.id}>

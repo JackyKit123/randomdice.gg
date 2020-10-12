@@ -9,8 +9,10 @@ import { adblocked } from '../../Misc/customGaEvent';
 
 export default function GoogleAds({
     unitId,
+    noHrDivisor,
 }: {
     unitId: string;
+    noHrDivisor?: true;
 }): JSX.Element | null {
     const selector = useSelector((state: RootState) => state);
     const { data } = selector.fetchUserDataReducer;
@@ -87,7 +89,7 @@ export default function GoogleAds({
                 </span>
             ) : (
                 <>
-                    <hr className='divisor' />
+                    {noHrDivisor ? null : <hr className='divisor' />}
                     <ins
                         className='adsbygoogle'
                         style={{ display: 'block' }}

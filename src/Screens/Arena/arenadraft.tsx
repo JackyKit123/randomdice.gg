@@ -415,7 +415,7 @@ export default function ArenaDraft(): JSX.Element {
                         Reset <FontAwesomeIcon icon={faTimes} />
                     </button>
                 </section>
-                <GoogleAds unitId='1144871846' />
+                <GoogleAds unitId='8891384324' />
                 <section className='deck'>
                     <hr className='divisor' />
                     <h3>Your Deck</h3>

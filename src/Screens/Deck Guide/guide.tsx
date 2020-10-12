@@ -57,7 +57,7 @@ export default function DeckGuideMenu(): JSX.Element | null {
                             ))}
                         </div>
                     ))}
-                    <GoogleAds unitId='1144871846' />
+                    <GoogleAds unitId='8891384324' />
                     <hr className='divisor' />
                     <ConvertEmbed htmlString={thisGuide?.guide || ''} />
                 </div>

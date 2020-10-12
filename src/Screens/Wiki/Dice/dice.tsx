@@ -92,7 +92,7 @@ export default function DiceMechanic(): JSX.Element {
                     {mechanics.map(dice =>
                         dice === 'ad' ? (
                             <Fragment key='ad'>
-                                <GoogleAds unitId='1144871846' />
+                                <GoogleAds unitId='8891384324' />
                             </Fragment>
                         ) : (
                             <Fragment key={dice.id}>

@@ -369,7 +369,7 @@ export default function DeckList(): JSX.Element {
                         </label>
                     </div>
                 </form>
-                <GoogleAds unitId='1144871846' />
+                <GoogleAds unitId='8891384324' />
                 <hr className='divisor' />
                 <p className='updated'>
                     The deck list was last updated on{' '}

@@ -48,7 +48,9 @@ export default function Main(props: {
                 ) : null}
             </div>
             <div className={`main ${className}`}>
-                {disallowAd ? null : <GoogleAds unitId='3944820222' />}
+                {disallowAd ? null : (
+                    <GoogleAds noHrDivisor unitId='5526854380' />
+                )}
                 <div className='content'>{children}</div>
             </div>
         </main>

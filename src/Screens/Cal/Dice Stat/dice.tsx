@@ -183,7 +183,7 @@ export default function DiceStat(): JSX.Element {
                         </div>
                     </div>
                 </div>
-                <GoogleAds unitId='1144871846' />
+                <GoogleAds unitId='8891384324' />
                 <hr className='divisor' />
                 <p>
                     The table below shows the information of upgrading a dice

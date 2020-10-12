@@ -64,7 +64,7 @@ export default function BoxGuide(): JSX.Element {
                     {boxInfo.map(box =>
                         box.img === 'ad' ? (
                             <Fragment key='ad'>
-                                <GoogleAds unitId='1144871846' />
+                                <GoogleAds unitId='8891384324' />
                             </Fragment>
                         ) : (
                             <Fragment key={box.name}>

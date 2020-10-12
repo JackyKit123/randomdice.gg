@@ -534,7 +534,7 @@ export default function ComboCalculator(): JSX.Element {
                 ) : (
                     ''
                 )}
-                <GoogleAds unitId='1144871846' />
+                <GoogleAds unitId='8891384324' />
                 <hr className='divisor' />
                 <div className='result vertical'>
                     <div className='dmg'>
