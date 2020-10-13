@@ -100,11 +100,15 @@ export default function GoldCalculator(): JSX.Element {
     );
     const cardsNeeded = boxNeeded * 40;
     const targetNumberOfRuns = Math.ceil(cardsNeeded / cardsPerRun);
-    const minutesNeeded = targetNumberOfRuns * minutesPerRun - 1;
+    const minutesNeeded = Math.max(targetNumberOfRuns * minutesPerRun - 1, 0);
     const timeNeeded =
         minutesNeeded >= 60
-            ? `${Math.round((minutesNeeded / 60) * 100) / 100} Hour(s)`
-            : `${Math.round(minutesNeeded * 100) / 100} Minute(s)`;
+            ? `${Math.round((minutesNeeded / 60) * 100) / 100} Hour${
+                  minutesNeeded >= 120 ? 's' : ''
+              }`
+            : `${Math.round(minutesNeeded * 100) / 100} Minute${
+                  minutesNeeded % 60 > 1 ? 's' : ''
+              }`;
 
     return (
         <Main title='Card Box Grind Calculator' className='cal coop-cal'>
@@ -430,9 +434,70 @@ export default function GoldCalculator(): JSX.Element {
                     )}
                 </form>
             </section>
+            <hr className='divisor' />
+            <section className='coop-gold-table'>
+                <p>The gold for card boxes across ranks is as below.</p>
+                <table className='horizontal'>
+                    <tbody>
+                        <tr>
+                            <th scope='row'>Class</th>
+                            {new Array(10).fill(1).map((i, j) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <td key={j}>{i + j}</td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <th scope='row'>Gold</th>
+                            {new Array(10).fill(1).map((i, j) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <td key={j}>
+                                    {cardBoxGoldPerClass.get(i + j)}
+                                </td>
+                            ))}
+                        </tr>
+                    </tbody>
+                </table>
+                <table className='horizontal'>
+                    <tbody>
+                        <tr>
+                            <th scope='row'>Class</th>
+                            {new Array(10).fill(11).map((i, j) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <td key={j}>{i + j}</td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <th scope='row'>Gold</th>
+                            {new Array(10).fill(11).map((i, j) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <td key={j}>
+                                    {cardBoxGoldPerClass.get(i + j)}
+                                </td>
+                            ))}
+                        </tr>
+                    </tbody>
+                </table>
+                <table className='vertical'>
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Gold</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {new Array(20).fill(1).map((i, j) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <tr key={j}>
+                                <td>{i + j}</td>
+                                <td>{cardBoxGoldPerClass.get(i + j)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </section>
             <GoogleAds unitId='8891384324' />
             <hr className='divisor' />
-            <div className='result'>
+            <section className='result'>
                 <label htmlFor='result'>
                     <span>Card Boxes Needed :</span>
                     <input
@@ -462,7 +527,7 @@ export default function GoldCalculator(): JSX.Element {
                         disabled
                     />
                 </label>
-            </div>
+            </section>
         </Main>
     );
 }
