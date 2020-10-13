@@ -73,7 +73,7 @@ export const menu: Menu[] = [
         name: 'Calculator',
         childNode: [
             {
-                name: 'Slow Effect Calculator',
+                name: 'Mob Speed Calculator',
                 path: '/calculator/speed',
                 component: lazy(() => import('../Screens/Cal/Speed/speed')),
             },
