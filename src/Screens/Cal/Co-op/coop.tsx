@@ -12,46 +12,42 @@ export default function GoldCalculator(): JSX.Element {
     const [filter, setFilter] = useState({
         class: 12,
         currentGold: 0,
-        targetGold: 40000,
+        targetGold: 0,
         currentDiamond: 0,
-        targetDiamond: 500,
+        targetDiamond: 0,
         luck: 0.5,
         legendary: 0,
         targetWave: 30,
         custom: false,
     });
-    const cardBoxGoldPerClass: {
-        [key: number]: number;
-    } = {
-        1: 320,
-        2: 432,
-        3: 544,
-        4: 640,
-        5: 736,
-        6: 832,
-        7: 925,
-        8: 1024,
-        9: 1120,
-        10: 1312,
-        11: 1408,
-        12: 1504,
-        13: 1594,
-        14: 1687,
-        15: 1775,
-        16: 1866,
-        17: 1951,
-        18: 2044,
-        19: 2133,
-        20: 2222,
-    };
+    const cardBoxGoldPerClass = new Map([
+        [1, 320],
+        [2, 432],
+        [3, 544],
+        [4, 640],
+        [5, 736],
+        [6, 832],
+        [7, 925],
+        [8, 1024],
+        [9, 1120],
+        [10, 1312],
+        [11, 1408],
+        [12, 1504],
+        [13, 1594],
+        [14, 1687],
+        [15, 1775],
+        [16, 1866],
+        [17, 1951],
+        [18, 2044],
+        [19, 2133],
+        [20, 2222],
+    ]);
 
-    const coopWaveMode: {
-        [key: number]: string;
-    } = {
-        30: 'Gear',
-        40: 'Landmine',
-        60: 'Generic Wave 60 Run',
-    };
+    const coopWaveMode = new Map([
+        [30, 'Gear'],
+        [40, 'Landmine'],
+        [60, 'Generic Wave 60 Run'],
+    ]);
 
     const isInvalidCurrentGold =
         !Number.isInteger(filter.currentGold) || filter.currentGold < 0;
@@ -80,7 +76,7 @@ export default function GoldCalculator(): JSX.Element {
         filter.targetWave > 50
             ? (filter.targetWave - 50) * 3 + 50
             : filter.targetWave;
-    const goldPerBox = cardBoxGoldPerClass[filter.class];
+    const goldPerBox = cardBoxGoldPerClass.get(filter.class) || 0;
     const diamondPerBox = 3;
     const goldAim = filter.targetGold - filter.currentGold;
     const diamondAim = filter.targetDiamond - filter.currentDiamond;
@@ -111,7 +107,7 @@ export default function GoldCalculator(): JSX.Element {
             : `${Math.round(minutesNeeded * 100) / 100} Minute(s)`;
 
     return (
-        <Main title='Card Box Grind Time Calculator' className='cal coop-cal'>
+        <Main title='Card Box Grind Calculator' className='cal coop-cal'>
             <Helmet>
                 <title>Random Dice Calculator</title>
                 <meta property='og:title' content='Random Dice Calculator' />
@@ -140,8 +136,8 @@ export default function GoldCalculator(): JSX.Element {
                 time.
             </p>
             <p>
-                By default, there are {Object.keys(coopWaveMode).length} modes:{' '}
-                {Object.entries(coopWaveMode)
+                By default, there are {coopWaveMode.size} modes:{' '}
+                {Array.from(coopWaveMode.entries())
                     .map(
                         ([wave, mode]) =>
                             `${mode} wave ${wave} run(${Math.round(
@@ -225,7 +221,7 @@ export default function GoldCalculator(): JSX.Element {
                             min={0}
                             step={1}
                             name='target-gold'
-                            defaultValue={40000}
+                            defaultValue={0}
                             className={
                                 isInvalidTargetGold || invalidGoldRelationship
                                     ? 'invalid'
@@ -292,7 +288,7 @@ export default function GoldCalculator(): JSX.Element {
                             min={0}
                             step={1}
                             name='target-diamond'
-                            defaultValue={500}
+                            defaultValue={0}
                             className={
                                 isInvalidTargetDiamond ||
                                 invalidDiamondRelationship
@@ -396,7 +392,7 @@ export default function GoldCalculator(): JSX.Element {
                                 setFilter({ ...filter });
                             }}
                         >
-                            {Object.entries(coopWaveMode).map(
+                            {Array.from(coopWaveMode.entries()).map(
                                 ([wave, name]) => (
                                     <option
                                         key={name}
