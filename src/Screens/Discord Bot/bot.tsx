@@ -47,6 +47,11 @@ export default function discordBot(): JSX.Element {
                     description: 'Show information about the boss.',
                 },
                 {
+                    command: '.gg battlefield <Battlefield Name> [--level=?]',
+                    description:
+                        'Show information about the battlefield. alias for arguments `-l=?`',
+                },
+                {
                     command: '.gg randomtip',
                     description: 'Show you a random tip',
                 },
