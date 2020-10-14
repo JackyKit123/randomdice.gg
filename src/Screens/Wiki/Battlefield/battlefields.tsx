@@ -65,6 +65,29 @@ export default function BattlefieldGuide(): JSX.Element {
         }
     }, [battlefieldInfo, hash]);
 
+    const coinsPerLevel = new Map([
+        [1, 100],
+        [2, 500],
+        [3, 1000],
+        [4, 1500],
+        [5, 2000],
+        [6, 3000],
+        [7, 4000],
+        [8, 5000],
+        [9, 6000],
+        [10, 8000],
+        [11, 10000],
+        [12, 12000],
+        [13, 15000],
+        [14, 20000],
+        [15, 25000],
+        [16, 30000],
+        [17, 40000],
+        [18, 55000],
+        [19, 75000],
+        [20, 100000],
+    ]);
+
     let jsx;
     if (battlefieldInfo) {
         jsx = (
@@ -75,6 +98,72 @@ export default function BattlefieldGuide(): JSX.Element {
                     a unique buff instead of being cosmetic purpose only. The
                     buff for individual battlefield skins can be viewed below.
                 </p>
+                <p>
+                    The battlefield effects can be leveled up using gold. The
+                    maximum level for the battlefield skin is your pvp rank,
+                    that means level 20 is the max for all battlefield skins.
+                    Below is a table for cost to upgrade the battlefield skins.
+                    It takes{' '}
+                    {Array.from(coinsPerLevel.values()).reduce(
+                        (acc, cur) => acc + cur
+                    )}{' '}
+                    gold to max a battlefield skin.
+                </p>
+                <div className='table-container'>
+                    <table className='horizontal'>
+                        <tbody>
+                            <tr>
+                                <th scope='row'>Level</th>
+                                {new Array(10).fill(1).map((i, j) => (
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    <td key={j}>{i + j}</td>
+                                ))}
+                            </tr>
+                            <tr>
+                                <th scope='row'>Gold</th>
+                                {new Array(10).fill(1).map((i, j) => (
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    <td key={j}>{coinsPerLevel.get(i + j)}</td>
+                                ))}
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className='horizontal'>
+                        <tbody>
+                            <tr>
+                                <th scope='row'>Level</th>
+                                {new Array(10).fill(11).map((i, j) => (
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    <td key={j}>{i + j}</td>
+                                ))}
+                            </tr>
+                            <tr>
+                                <th scope='row'>Gold</th>
+                                {new Array(10).fill(11).map((i, j) => (
+                                    // eslint-disable-next-line react/no-array-index-key
+                                    <td key={j}>{coinsPerLevel.get(i + j)}</td>
+                                ))}
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className='vertical'>
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Gold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {new Array(20).fill(1).map((i, j) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <tr key={j}>
+                                    <td>{i + j}</td>
+                                    <td>{coinsPerLevel.get(i + j)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 <section className='battlefield-list' ref={containerRef}>
                     {battlefieldInfo.map(battlefield =>
                         battlefield.img === 'ad' ? (
