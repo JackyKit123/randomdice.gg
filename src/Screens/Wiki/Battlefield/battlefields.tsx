@@ -23,7 +23,7 @@ export default function BattlefieldGuide(): JSX.Element {
     const { wiki, error } = useSelector(
         (state: RootState) => state.fetchWikiReducer
     );
-    const [battleFieldLevel, setBattlefieldLevel] = useState(1);
+    const [battleFieldLevel, setBattlefieldLevel] = useState(0);
     const containerRef = useRef(null as null | HTMLElement);
 
     useEffect(() => {
@@ -122,13 +122,11 @@ export default function BattlefieldGuide(): JSX.Element {
                                                 }
                                             }}
                                         >
-                                            {Array(20)
-                                                .fill(1)
-                                                .map((i, j) => (
+                                            {Array(21)
+                                                .fill(0)
+                                                .map((_, i) => (
                                                     // eslint-disable-next-line react/no-array-index-key
-                                                    <option key={j}>
-                                                        {i + j}
-                                                    </option>
+                                                    <option key={i}>{i}</option>
                                                 ))}
                                         </select>
                                     </label>
