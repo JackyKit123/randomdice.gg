@@ -39,6 +39,7 @@ export default function BattlefieldGuide(): JSX.Element {
                     name: 'ad',
                     img: 'ad',
                     desc: 'ad',
+                    source: 'ad',
                     buffName: 'ad',
                     buffValue: 0,
                     buffUnit: 'ad',
@@ -184,7 +185,7 @@ export default function BattlefieldGuide(): JSX.Element {
                                         />
                                     </figure>
                                     <h3>{battlefield.name}</h3>
-                                    <div className='battlefield-buff-value'>
+                                    <div>
                                         {battlefield.buffName} :{' '}
                                         {battlefield.buffValue +
                                             battlefield.buffCupValue *
@@ -219,6 +220,9 @@ export default function BattlefieldGuide(): JSX.Element {
                                                 ))}
                                         </select>
                                     </label>
+                                    <div>
+                                        Obtained from: {battlefield.source}
+                                    </div>
                                     {ReactHtmlParser(
                                         sanitize(battlefield.desc)
                                     )}

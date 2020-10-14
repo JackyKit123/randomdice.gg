@@ -31,6 +31,7 @@ export default function editBattlefield(): JSX.Element {
         name: '',
         img: '',
         desc: '',
+        source: '',
         buffName: '',
         buffValue: 0,
         buffUnit: '',
@@ -52,10 +53,12 @@ export default function editBattlefield(): JSX.Element {
         );
     }
 
-    const invalidName = activeEdit.name.length <= 0;
-    const invalidImg = activeEdit.img.length <= 0;
-    const invalidBuffName = activeEdit.buffName.length <= 0;
-    const invalidInput = invalidName || invalidImg || invalidBuffName;
+    const invalidName = !activeEdit.name?.length;
+    const invalidImg = !activeEdit.img?.length;
+    const invalidSource = !activeEdit.source?.length;
+    const invalidBuffName = !activeEdit.buffName?.length;
+    const invalidInput =
+        invalidName || invalidImg || invalidSource || invalidBuffName;
 
     const handleSubmit = async (): Promise<void> => {
         if (activeEdit) {
@@ -274,6 +277,24 @@ export default function editBattlefield(): JSX.Element {
                         {invalidImg ? (
                             <div className='invalid-warning'>
                                 Please upload a battlefield image.
+                            </div>
+                        ) : null}
+                        <label htmlFor='battlefield-buff-source'>
+                            Obtained from:
+                            <input
+                                key={`battlefield${activeEdit.id}-buff-source`}
+                                className={invalidSource ? 'invalid' : ''}
+                                defaultValue={activeEdit.source}
+                                type='textbox'
+                                onChange={(evt): void => {
+                                    activeEdit.source = evt.target.value;
+                                    setActiveEdit({ ...activeEdit });
+                                }}
+                            />
+                        </label>
+                        {invalidSource ? (
+                            <div className='invalid-warning'>
+                                Battlefield obtained source should not be empty.
                             </div>
                         ) : null}
                         <label htmlFor='battlefield-buff-name'>

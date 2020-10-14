@@ -42,6 +42,7 @@ export interface WikiContent {
         name: string;
         img: string;
         desc: string;
+        source: string;
         buffName: string;
         buffValue: number;
         buffUnit: string;
