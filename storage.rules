@@ -31,6 +31,12 @@ service firebase.storage {
                 allow write: if request.auth.token.isEditor == true;
             }
         }
+        match /Battlefield%20Images {
+            match /{allImages=**} {
+                allow read;
+                allow write: if request.auth.token.isEditor == true;
+            }
+        }
         match /Users {
             match /{userId}/avatar {
                 allow read;

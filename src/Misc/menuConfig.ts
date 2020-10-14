@@ -154,6 +154,13 @@ export const menu: Menu[] = [
                 component: lazy(() => import('../Screens/Wiki/Boss/boss')),
             },
             {
+                name: 'Battlefield Info',
+                path: '/wiki/battlefield',
+                component: lazy(() =>
+                    import('../Screens/Wiki/Battlefield/battlefields')
+                ),
+            },
+            {
                 name: 'Guide and Tips',
                 path: '/wiki/guide',
                 component: lazy(() =>
@@ -256,7 +263,7 @@ export const menu: Menu[] = [
                 ),
             },
             {
-                name: 'Written Deck Guide',
+                name: 'Decks Guide',
                 privateRoute: true,
                 path: '/dashboard/guide',
                 excludeFromMenu: true,
@@ -289,6 +296,17 @@ export const menu: Menu[] = [
                 excludeFromMenu: true,
                 component: lazy(() =>
                     import('../Screens/Dashboard/Wiki/Box/box')
+                ),
+            },
+            {
+                name: 'Battlefield Information',
+                privateRoute: true,
+                path: '/dashboard/battlefield',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import(
+                        '../Screens/Dashboard/Wiki/Battlefields/editBattlefield'
+                    )
                 ),
             },
             {

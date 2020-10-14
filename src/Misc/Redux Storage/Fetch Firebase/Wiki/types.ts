@@ -37,6 +37,16 @@ export interface WikiContent {
         img: string;
         desc: string;
     }[];
+    battlefield: {
+        id: number;
+        name: string;
+        img: string;
+        desc: string;
+        buffName: string;
+        buffValue: number;
+        buffUnit: string;
+        buffCupValue: number;
+    }[];
 }
 
 export interface FetchState {

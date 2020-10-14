@@ -1,0 +1,28 @@
+@import '../../../../cross_import_lesshat.less';
+
+.dashboard.battlefield {
+    label {
+        margin: 0 auto 20px;
+        width: 400px;
+        max-width: 100%;
+        display: block;
+
+        & > select,
+        & > input {
+            width: 50%;
+            float: right;
+        }
+
+        img {
+            height: 50px;
+            vertical-align: middle;
+            margin-left: 15px;
+        }
+    }
+
+    form {
+        .display(flex);
+        .flex-direction(column);
+        .align-items(center);
+    }
+}
