@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import 'firebase/database';
 import { detected } from 'adblockdetect';
@@ -17,45 +17,23 @@ export default function GoogleAds({
     const selector = useSelector((state: RootState) => state);
     const { data } = selector.fetchUserDataReducer;
     const { user, error } = selector.authReducer;
-    const [adLoaded, setAdLoaded] = useState(false);
 
     useEffect(() => {
+        if (user === 'awaiting auth state') {
+            return;
+        }
+
         if (
-            user !== 'awaiting auth state' &&
-            !adLoaded &&
             (user === null || (data && !data['patreon-tier'])) &&
             !(user && process.env.REACT_APP_ADS_EXCLUSION?.includes(user.uid))
         ) {
-            try {
-                if (
-                    !document.querySelector(
-                        'script[src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"][data-ad-client="ca-pub-3031422008949072"]'
-                    )
-                ) {
-                    if (detected()) {
-                        adblocked();
-                    }
-                    const script = document.createElement('script');
-                    script.src =
-                        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-                    script.setAttribute(
-                        'data-ad-client',
-                        'ca-pub-3031422008949072'
-                    );
-                    script.async = true;
-                    document.head.appendChild(script);
-                    script.onload = (): void => {
-                        (window.adsbygoogle = window.adsbygoogle || []).push(
-                            {}
-                        );
-                    };
-                } else {
-                    (window.adsbygoogle = window.adsbygoogle || []).push({});
-                }
-                setAdLoaded(true);
-            } catch (err) {
-                //
+            document.body.setAttribute('ads-free', 'false');
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+            if (detected()) {
+                adblocked();
             }
+        } else {
+            document.body.setAttribute('ads-free', 'true');
         }
     }, [user, data]);
 

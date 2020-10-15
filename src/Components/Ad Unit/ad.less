@@ -1,5 +1,17 @@
 @import '../../cross_import_lesshat.less';
 
+body[ads-free='true'] {
+    .google-auto-placed,
+    ins.adsbygoogle {
+        display: none !important;
+        height: 0 !important;
+        visibility: hidden !important;
+        border: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
 .ad-container {
     margin: 0 auto 20px;
     max-width: 1200px;
