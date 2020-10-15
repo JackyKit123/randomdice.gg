@@ -1,6 +1,12 @@
 rules_version = '2';
 service firebase.storage {
     match /b/{bucket}/o {
+        match /CKEditor%20Images {
+            match /{allImages=**} {
+                allow read;
+            allow write: if request.auth.token.isEditor == true;
+            }
+        }
         match /Dice%20Images {
             match /{allImages=**} {
                 allow read;

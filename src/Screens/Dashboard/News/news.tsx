@@ -13,6 +13,7 @@ import {
     CLOSE_POPUP,
 } from '../../../Misc/Redux Storage/PopUp Overlay/types';
 import './news.less';
+import MyUploadAdapter from '../../../Misc/ckeditorUploadAdapter';
 
 export default function editPatchNote(): JSX.Element {
     const dispatch = useDispatch();
@@ -56,6 +57,23 @@ export default function editPatchNote(): JSX.Element {
                     <h3>Update {type} News</h3>
                     <CKEditor
                         editor={ClassicEditor}
+                        onInit={(editor: {
+                            plugins: {
+                                get(
+                                    arg: 'FileRepository'
+                                ): {
+                                    createUploadAdapter(loader: {
+                                        file: Promise<File>;
+                                    }): void;
+                                };
+                            };
+                        }): void => {
+                            // eslint-disable-next-line no-param-reassign
+                            editor.plugins.get(
+                                'FileRepository'
+                            ).createUploadAdapter = (loader): MyUploadAdapter =>
+                                new MyUploadAdapter(loader);
+                        }}
                         data={content[type.toLowerCase() as 'game' | 'website']}
                         config={{
                             removePlugins: ['heading'],
@@ -69,7 +87,11 @@ export default function editPatchNote(): JSX.Element {
                                 'bulletedList',
                                 '|',
                                 'link',
-                            ].concat(type === 'Game' ? ['mediaembed'] : []),
+                                '|',
+                                'imageUpload',
+                                'imageTextAlternative',
+                                'mediaembed',
+                            ],
                         }}
                         onBlur={(
                             _: unknown,

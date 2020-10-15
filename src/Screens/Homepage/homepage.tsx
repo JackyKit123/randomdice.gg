@@ -79,7 +79,7 @@ export default function Homepage(): JSX.Element {
                     for any web related issue.
                 </p>
             </section>
-            <section>
+            <section className='news game'>
                 <h3>Game News</h3>
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {news ? (
@@ -90,7 +90,7 @@ export default function Homepage(): JSX.Element {
                     'Loading News...'
                 )}
             </section>
-            <section>
+            <section className='news website'>
                 <h3>Website News</h3>
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {news

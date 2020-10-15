@@ -6,6 +6,7 @@ export default function init(): admin.app.App {
         : admin.initializeApp({
               serviceAccountId: 'random-dice-web@appspot.gserviceaccount.com',
               databaseURL: 'https://random-dice-web.firebaseio.com/',
+              storageBucket: 'random-dice-web.appspot.com',
               databaseAuthVariableOverride: {
                   uid: 'my-service-worker',
               },
