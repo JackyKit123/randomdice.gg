@@ -99,7 +99,7 @@ export default function editDice(): JSX.Element {
             if (/^data:image\/([a-zA-Z]*);base64,/.test(activeEdit.img)) {
                 if (originalDice) {
                     await storage
-                        .ref(`Dice Images/${originalDice.name}.png`)
+                        .ref(`Dice Images/${originalDice.name}`)
                         .delete();
                 }
                 await storage
