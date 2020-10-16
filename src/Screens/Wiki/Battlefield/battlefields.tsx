@@ -94,21 +94,20 @@ export default function BattlefieldGuide(): JSX.Element {
         jsx = (
             <>
                 <p>
-                    Here you will find information about battlefields skins and
-                    their effects. Since patch 5.3.0, battlefield skins now give
-                    a unique buff instead of being cosmetic purpose only. The
-                    buff for individual battlefield skins can be viewed below.
+                    Since patch 5.3.0, battlefield skins now give a unique buff
+                    in addition to being a cosmetic. The buff given by each
+                    individual battlefield skin can be viewed below.
                 </p>
                 <p>
-                    The battlefield effects can be leveled up using gold. The
-                    maximum level for the battlefield skin is your pvp rank,
-                    that means level 20 is the max for all battlefield skins.
-                    Below is a table for cost to upgrade the battlefield skins.
-                    It takes{' '}
+                    The battlefield buff effect can be leveled up using gold.
+                    The maximum level for the battlefield skin is your pvp rank,
+                    meaning that level 20 is the maximum level for all
+                    battlefield skins. Below is a table showing the cost to
+                    upgrade the battlefield skins. It takes a total of{' '}
                     {Array.from(coinsPerLevel.values()).reduce(
                         (acc, cur) => acc + cur
                     )}{' '}
-                    gold to max a battlefield skin.
+                    gold to upgrade a battlefield skin to max level.
                 </p>
                 <div className='table-container'>
                     <table className='horizontal'>
