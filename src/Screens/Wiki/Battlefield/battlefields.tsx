@@ -109,6 +109,13 @@ export default function BattlefieldGuide(): JSX.Element {
                     )}{' '}
                     gold to upgrade a battlefield skin to max level.
                 </p>
+                <p>
+                    In co-op mode, the battlefield from the player with higher
+                    pvp rank will be used. If both players are the same pvp
+                    rank, the battlefield used is randomly picked. The only
+                    exception is that the default light mode battlefield skin is
+                    never chosen despite one player having higher pvp rank.
+                </p>
                 <div className='table-container'>
                     <table className='horizontal'>
                         <tbody>
