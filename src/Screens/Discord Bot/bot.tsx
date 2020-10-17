@@ -33,9 +33,10 @@ export default function discordBot(): JSX.Element {
                         'Show information about the dice, alias for arguments `-c=?` `-l=?`',
                 },
                 {
-                    command: '.gg deck <PvP|Co-op|Crew> [page#]',
+                    command:
+                        '.gg deck <PvP|Co-op|Crew> [--page=?] [--legendary=(c7|c8|c9|c10)]',
                     description:
-                        'Show the deck list, optional parameter to select the initial page',
+                        'Show the deck list, optional arguments to select page or show variations for different legendary class, alias for arguments `-p=?` `-l=?`',
                 },
                 {
                     command: '.gg guide <Guide Name|list>',
