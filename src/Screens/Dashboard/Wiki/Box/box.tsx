@@ -13,6 +13,7 @@ import {
 } from '../../../../Misc/Redux Storage/PopUp Overlay/types';
 import { WikiContent } from '../../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
 import './box.less';
+import { fetchWiki } from '../../../../Misc/Firebase/fetchData';
 
 export default function editBox(): JSX.Element {
     const dispatch = useDispatch();
@@ -98,6 +99,7 @@ export default function editBox(): JSX.Element {
                         .ref('/last_updated/wiki')
                         .set(new Date().toISOString());
                     dbRef.set(result);
+                    fetchWiki(dispatch);
                     setBoxInfo(result);
                     setActiveEdit({ ...initialState });
                     if (selectRef.current) {
@@ -118,6 +120,7 @@ export default function editBox(): JSX.Element {
             }
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
+            fetchWiki(dispatch);
             setBoxInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
@@ -134,6 +137,7 @@ export default function editBox(): JSX.Element {
             const result = boxInfo.filter(box => box.id !== activeEdit.id);
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
+            fetchWiki(dispatch);
             setBoxInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {

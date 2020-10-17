@@ -20,6 +20,7 @@ import {
     CLOSE_POPUP,
 } from '../../../Misc/Redux Storage/PopUp Overlay/types';
 import './credit.less';
+import { fetchCredit } from '../../../Misc/Firebase/fetchData';
 
 export default function editCredit(): JSX.Element {
     const dispatch = useDispatch();
@@ -189,6 +190,7 @@ export default function editCredit(): JSX.Element {
         database.ref('/last_updated/credit').set(new Date().toISOString());
         database.ref('/credit').set(credit);
         setInitialCredit(credit);
+        fetchCredit(dispatch);
     };
 
     return (

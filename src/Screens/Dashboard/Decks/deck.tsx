@@ -25,6 +25,7 @@ import {
 } from '../../../Misc/Redux Storage/PopUp Overlay/types';
 import { DecksGuide } from '../../../Misc/Redux Storage/Fetch Firebase/Decks Guide/types';
 import { Battlefield } from '../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
+import { fetchDecks } from '../../../Misc/Firebase/fetchData';
 
 function DeckRow({
     deckInfo,
@@ -174,6 +175,7 @@ export default function updateDeck(): JSX.Element {
         database.ref('/last_updated/decks').set(new Date().toISOString());
         database.ref('/decks').set([...deckList]);
         setDecks([...deckList]);
+        fetchDecks(dispatch);
     };
 
     const updateDecks = (): void => {

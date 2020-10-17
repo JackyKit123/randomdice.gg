@@ -14,6 +14,7 @@ import {
 } from '../../../../Misc/Redux Storage/PopUp Overlay/types';
 import { WikiContent } from '../../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
 import './tips.less';
+import { fetchWiki } from '../../../../Misc/Firebase/fetchData';
 
 export default function editTips(): JSX.Element {
     const dispatch = useDispatch();
@@ -71,6 +72,7 @@ export default function editTips(): JSX.Element {
             }
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
+            fetchWiki(dispatch);
             setTips(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
@@ -87,6 +89,7 @@ export default function editTips(): JSX.Element {
             const result = tips.filter(tip => tip.id !== activeEdit.id);
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
+            fetchWiki(dispatch);
             setTips(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {

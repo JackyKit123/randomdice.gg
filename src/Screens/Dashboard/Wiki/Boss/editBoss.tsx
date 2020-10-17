@@ -15,6 +15,7 @@ import {
 } from '../../../../Misc/Redux Storage/PopUp Overlay/types';
 import { WikiContent } from '../../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
 import './boss.less';
+import { fetchWiki } from '../../../../Misc/Firebase/fetchData';
 
 export default function editBoss(): JSX.Element {
     const dispatch = useDispatch();
@@ -95,6 +96,7 @@ export default function editBoss(): JSX.Element {
                         return boss;
                     });
                     dbRef.set(result);
+                    fetchWiki(dispatch);
                     setBossInfo(result);
                     setActiveEdit({ ...initialState });
                     if (selectRef.current) {
@@ -115,6 +117,7 @@ export default function editBoss(): JSX.Element {
             }
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
+            fetchWiki(dispatch);
             setBossInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
@@ -130,6 +133,7 @@ export default function editBoss(): JSX.Element {
             await storage.ref(`Boss Images/${originalBoss.name}`).delete();
             const result = bossInfo.filter(boss => boss.id !== activeEdit.id);
             dbRef.set(result);
+            fetchWiki(dispatch);
             setBossInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {

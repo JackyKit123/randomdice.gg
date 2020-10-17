@@ -18,6 +18,7 @@ import {
     Dices,
 } from '../../../Misc/Redux Storage/Fetch Firebase/Dices/types';
 import './dice.less';
+import { fetchDices } from '../../../Misc/Firebase/fetchData';
 
 export default function editDice(): JSX.Element {
     const dispatch = useDispatch();
@@ -156,6 +157,7 @@ export default function editDice(): JSX.Element {
                         .ref('/last_updated/dice')
                         .set(new Date().toISOString());
                     dbRef.set(result);
+                    fetchDices(dispatch);
                     setDices(result);
                     setActiveEdit({ ...initialState });
                     if (selectRef.current) {
@@ -191,6 +193,7 @@ export default function editDice(): JSX.Element {
             });
             database.ref('/last_updated/dice').set(new Date().toISOString());
             dbRef.set(result);
+            fetchDices(dispatch);
             setDices(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
@@ -206,6 +209,7 @@ export default function editDice(): JSX.Element {
             await storage.ref(`Dice Images/${originalDice.name}`).delete();
             const result = dices.filter(dice => dice.id !== activeEdit.id);
             dbRef.set(result);
+            fetchDices(dispatch);
             setDices(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {

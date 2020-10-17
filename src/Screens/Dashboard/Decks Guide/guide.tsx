@@ -27,6 +27,7 @@ import {
     OPEN_POPUP,
     CLOSE_POPUP,
 } from '../../../Misc/Redux Storage/PopUp Overlay/types';
+import { fetchDecksGuide } from '../../../Misc/Firebase/fetchData';
 
 export default function updateDecksGuide(): JSX.Element {
     const dispatch = useDispatch();
@@ -77,6 +78,7 @@ export default function updateDecksGuide(): JSX.Element {
                                 .ref('/last_updated/decks_guide')
                                 .set(new Date().toISOString());
                             dbRef.set(clone);
+                            fetchDecksGuide(dispatch);
                             setActiveEdit(undefined);
                             dispatch({ type: CLOSE_POPUP });
                         }
@@ -133,6 +135,7 @@ export default function updateDecksGuide(): JSX.Element {
                                 .ref('/last_updated/decks_guide')
                                 .set(new Date().toISOString());
                             dbRef.set(newGuides);
+                            fetchDecksGuide(dispatch);
                         }
                         dispatch({ type: CLOSE_POPUP });
                     }}

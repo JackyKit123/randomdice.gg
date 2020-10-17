@@ -14,6 +14,7 @@ import {
 } from '../../../Misc/Redux Storage/PopUp Overlay/types';
 import './news.less';
 import MyUploadAdapter from '../../../Misc/ckeditorUploadAdapter';
+import { fetchNews } from '../../../Misc/Firebase/fetchData';
 
 export default function editPatchNote(): JSX.Element {
     const dispatch = useDispatch();
@@ -46,6 +47,7 @@ export default function editPatchNote(): JSX.Element {
                             .ref('/last_updated/news')
                             .set(new Date().toISOString());
                         dbRef.set(content);
+                        fetchNews(dispatch);
                         dispatch({ type: CLOSE_POPUP });
                     }}
                 >

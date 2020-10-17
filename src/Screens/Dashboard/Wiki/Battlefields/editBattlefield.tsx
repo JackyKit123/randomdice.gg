@@ -15,6 +15,7 @@ import {
 } from '../../../../Misc/Redux Storage/PopUp Overlay/types';
 import { WikiContent } from '../../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
 import './battlefield.less';
+import { fetchWiki } from '../../../../Misc/Firebase/fetchData';
 
 export default function editBattlefield(): JSX.Element {
     const dispatch = useDispatch();
@@ -112,6 +113,7 @@ export default function editBattlefield(): JSX.Element {
                         return battlefield;
                     });
                     dbRef.set(result);
+                    fetchWiki(dispatch);
                     setBattlefieldInfo(result);
                     setActiveEdit({ ...initialState });
                     if (selectRef.current) {
@@ -132,6 +134,7 @@ export default function editBattlefield(): JSX.Element {
             }
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
+            fetchWiki(dispatch);
             setBattlefieldInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
@@ -153,6 +156,7 @@ export default function editBattlefield(): JSX.Element {
                 battlefield => battlefield.id !== activeEdit.id
             );
             dbRef.set(result);
+            fetchWiki(dispatch);
             setBattlefieldInfo(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
