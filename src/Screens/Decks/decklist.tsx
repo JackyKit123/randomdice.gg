@@ -38,6 +38,7 @@ export default function DeckList(): JSX.Element {
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
+    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
     const filterRef = useRef(null as null | HTMLDivElement);
     const { filter } = selection.filterReducer;
     const deckType = location.pathname
@@ -63,7 +64,12 @@ export default function DeckList(): JSX.Element {
     }, [dices]);
 
     let jsx;
-    if (dices?.length && decks?.length && guide?.length) {
+    if (
+        dices?.length &&
+        decks?.length &&
+        guide?.length &&
+        wiki?.battlefield.length
+    ) {
         const filteredDeck = decks.filter(
             deckData =>
                 deckData.decks.some(deck =>
@@ -89,6 +95,7 @@ export default function DeckList(): JSX.Element {
                 },
                 decks: [[-1, -2, -3, -4, -5]],
                 guide: [-1],
+                battlefield: -1,
             });
         }
 
@@ -387,6 +394,7 @@ export default function DeckList(): JSX.Element {
                                 <th>ID</th>
                                 <th>Rating</th>
                                 <th>Deck</th>
+                                <th>Battlefield</th>
                                 <th>Alternatives</th>
                                 <th>Deck Guide</th>
                             </tr>
@@ -445,6 +453,26 @@ export default function DeckList(): JSX.Element {
                                                     ))}
                                                 </div>
                                             ))}
+                                        </td>
+                                        <td>
+                                            <Link
+                                                className='battlefield-link'
+                                                to={`/wiki/battlefield#${
+                                                    wiki.battlefield.find(
+                                                        battlefield =>
+                                                            battlefield.id ===
+                                                            deckInfo.battlefield
+                                                    )?.name
+                                                }`}
+                                            >
+                                                {
+                                                    wiki.battlefield.find(
+                                                        battlefield =>
+                                                            battlefield.id ===
+                                                            deckInfo.battlefield
+                                                    )?.name
+                                                }
+                                            </Link>
                                         </td>
                                         <td>
                                             <div className='button-container'>

@@ -1,5 +1,6 @@
 import { CLEAR_ERRORS, ClearErrorAction } from '../types';
 import { Dice } from '../Dices/types';
+import { Battlefield } from '../Wiki/types';
 
 export const SUCCESS = 'FETCH_DECKS_SUCCESS';
 export const FAIL = 'FETCH_DECKS_FAIL';
@@ -16,6 +17,7 @@ export interface Deck {
         c9?: number;
         c10?: number;
     };
+    battlefield: Battlefield['id'];
     decks: Dice['id'][][];
 }
 

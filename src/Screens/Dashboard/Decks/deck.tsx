@@ -24,15 +24,18 @@ import {
     OPEN_POPUP,
 } from '../../../Misc/Redux Storage/PopUp Overlay/types';
 import { DecksGuide } from '../../../Misc/Redux Storage/Fetch Firebase/Decks Guide/types';
+import { Battlefield } from '../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
 
 function DeckRow({
     deckInfo,
     setActiveEdit,
     guides,
+    battlefields,
 }: {
     deckInfo: Deck;
     setActiveEdit: (deckInfo: Deck) => void;
     guides: DecksGuide;
+    battlefields: Battlefield[];
 }): JSX.Element {
     return (
         <>
@@ -50,6 +53,13 @@ function DeckRow({
                         ))}
                     </div>
                 ))}
+            </td>
+            <td>
+                {
+                    battlefields.find(
+                        battlefield => battlefield.id === deckInfo.battlefield
+                    )?.id
+                }
             </td>
             <td>
                 <div className='deck-guide-labels'>
@@ -83,6 +93,7 @@ export default function updateDeck(): JSX.Element {
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
+    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
     const filterRef = useRef(null as null | HTMLDivElement);
     const [decks, setDecks] = useState<Decks>([]);
     const [guides, setGuides] = useState<DecksGuide>([]);
@@ -99,6 +110,7 @@ export default function updateDeck(): JSX.Element {
             | 'Crew',
         decks: [[0, 1, 2, 3, 4]] as DiceType['id'][][],
         guide: [-1],
+        battlefield: -1,
     };
     const [deckToAdd, setDeckToAdd] = useState({ ...initialNewDeckState });
     const [deckToDelete, setDeckToDelete] = useState({
@@ -122,6 +134,7 @@ export default function updateDeck(): JSX.Element {
         type: '-',
         decks: [[]],
         guide: [-1],
+        battlefield: -1,
     } as Deck;
     const [activeEdit, setActiveEdit] = useState({ ...initialEditState });
     const invalidRating = !Object.values(activeEdit.rating).every(
@@ -198,7 +211,7 @@ export default function updateDeck(): JSX.Element {
         dispatch({ type: CLOSE_POPUP });
     };
 
-    if (!dices?.length || !decks?.length) {
+    if (!dices?.length || !decks?.length || !wiki?.battlefield?.length) {
         return (
             <Dashboard>
                 <LoadingScreen />
@@ -250,19 +263,22 @@ export default function updateDeck(): JSX.Element {
                             htmlFor={`${ratingType}-rating`}
                             key={ratingType}
                         >
-                            {
-                                ({
-                                    default:
-                                        'Default Rating (c7 Legends, < 600%)',
-                                    c8:
-                                        'Optional Rating (c8 Legends, 600% - 900%)',
-                                    c9:
-                                        'Optional Rating (c9 Legends, 900% - 1200%)',
-                                    c10:
-                                        'Optional Rating (c10+ Legends, > 1200%)',
-                                } as { [key: string]: string })[ratingType]
-                            }{' '}
-                            :{' '}
+                            <div>
+                                {ratingType === 'default'
+                                    ? 'Default'
+                                    : 'Optional'}{' '}
+                                Rating
+                            </div>
+                            <div>
+                                {
+                                    ({
+                                        default: '(c7 Legends, < 600%)',
+                                        c8: '(c8 Legends, 600% - 900%)',
+                                        c9: '(c9 Legends, 900% - 1200%)',
+                                        c10: '(c10+ Legends, > 1200%)',
+                                    } as { [key: string]: string })[ratingType]
+                                }
+                            </div>
                             <input
                                 defaultValue={
                                     ratingType === 'default' ? 0 : undefined
@@ -312,6 +328,29 @@ export default function updateDeck(): JSX.Element {
                             <option>Co-op (Solo)</option>
                             <option>Co-op (Pair)</option>
                             <option>Crew</option>
+                        </select>
+                    </label>
+                    <label htmlFor='battlefield'>
+                        Battlefield:{' '}
+                        <select
+                            defaultValue={-1}
+                            onChange={(evt): void => {
+                                const clone = {
+                                    ...deckToAdd,
+                                };
+                                clone.battlefield = Number(evt.target.value);
+                                setDeckToAdd(clone);
+                            }}
+                        >
+                            <option value={-1}>?</option>
+                            {wiki.battlefield.map(battlefield => (
+                                <option
+                                    key={battlefield.id}
+                                    value={battlefield.id}
+                                >
+                                    {battlefield.name}
+                                </option>
+                            ))}
                         </select>
                     </label>
                     <label htmlFor='dice-list'>
@@ -379,43 +418,45 @@ export default function updateDeck(): JSX.Element {
                         <>
                             <label htmlFor='dice-list-coop-pair'>
                                 Co-op Deck Pair:{' '}
-                                {Array(5)
-                                    .fill('')
-                                    .map((_, i) => (
-                                        <select
-                                            // eslint-disable-next-line react/no-array-index-key
-                                            key={i}
-                                            defaultValue={i}
-                                            onChange={(evt): void => {
-                                                const clone = {
-                                                    ...deckToAdd,
-                                                };
-                                                clone.decks[1][i] = Number(
-                                                    evt.target.value
-                                                );
-                                                setDeckToAdd(clone);
-                                            }}
-                                        >
-                                            {dices
-                                                .filter(
-                                                    die =>
-                                                        !deckToAdd.decks[1].find(
-                                                            (dieId, j) =>
-                                                                dieId ===
-                                                                    die.id &&
-                                                                i !== j
-                                                        )
-                                                )
-                                                .map(die => (
-                                                    <option
-                                                        value={die.id}
-                                                        key={die.id}
-                                                    >
-                                                        {die.name}
-                                                    </option>
-                                                ))}
-                                        </select>
-                                    ))}
+                                <div>
+                                    {Array(5)
+                                        .fill('')
+                                        .map((_, i) => (
+                                            <select
+                                                // eslint-disable-next-line react/no-array-index-key
+                                                key={i}
+                                                defaultValue={i}
+                                                onChange={(evt): void => {
+                                                    const clone = {
+                                                        ...deckToAdd,
+                                                    };
+                                                    clone.decks[1][i] = Number(
+                                                        evt.target.value
+                                                    );
+                                                    setDeckToAdd(clone);
+                                                }}
+                                            >
+                                                {dices
+                                                    .filter(
+                                                        die =>
+                                                            !deckToAdd.decks[1].find(
+                                                                (dieId, j) =>
+                                                                    dieId ===
+                                                                        die.id &&
+                                                                    i !== j
+                                                            )
+                                                    )
+                                                    .map(die => (
+                                                        <option
+                                                            value={die.id}
+                                                            key={die.id}
+                                                        >
+                                                            {die.name}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                        ))}
+                                </div>
                             </label>
                             <label htmlFor='associated-guide'>
                                 Associated Deck Guide:{' '}
@@ -474,6 +515,7 @@ export default function updateDeck(): JSX.Element {
                             type: 'PvP',
                             decks: [[0, 1, 2, 3, 4]],
                             guide: [-1],
+                            battlefield: -1,
                         });
                         dispatch({
                             type: OPEN_POPUP,
@@ -619,6 +661,7 @@ export default function updateDeck(): JSX.Element {
                             <th>Rating C10</th>
                             <th>Type</th>
                             <th>Deck</th>
+                            <th>Battlefield</th>
                             <th>Associated Deck Guide</th>
                             <th>Toggle Edit</th>
                             <th>Remove Deck</th>
@@ -655,6 +698,7 @@ export default function updateDeck(): JSX.Element {
                                         type: '-',
                                         decks: [[]],
                                         guide: [-1],
+                                        battlefield: -1,
                                     }))
                             )
                             .filter((deck, i) => !(deck.id < 0 && i > 8))
@@ -826,6 +870,42 @@ export default function updateDeck(): JSX.Element {
                                                 )}
                                             </td>
                                             <td>
+                                                <select
+                                                    defaultValue={
+                                                        deckInfo.battlefield
+                                                    }
+                                                    onChange={(evt): void => {
+                                                        const clone = {
+                                                            ...activeEdit,
+                                                        };
+                                                        clone.battlefield = Number(
+                                                            evt.target.value
+                                                        );
+                                                        setActiveEdit(clone);
+                                                    }}
+                                                >
+                                                    <option value={-1}>
+                                                        ?
+                                                    </option>
+                                                    {wiki.battlefield.map(
+                                                        battlefield => (
+                                                            <option
+                                                                key={
+                                                                    battlefield.id
+                                                                }
+                                                                value={
+                                                                    battlefield.id
+                                                                }
+                                                            >
+                                                                {
+                                                                    battlefield.name
+                                                                }
+                                                            </option>
+                                                        )
+                                                    )}
+                                                </select>
+                                            </td>
+                                            <td>
                                                 {deckInfo.guide.map(
                                                     (guideId, i) => (
                                                         <select
@@ -902,6 +982,8 @@ export default function updateDeck(): JSX.Element {
                                                                 .c10 !==
                                                                 deckInfo.rating
                                                                     .c10 ||
+                                                            activeEdit.battlefield !==
+                                                                deckInfo.battlefield ||
                                                             activeEdit.decks.some(
                                                                 (
                                                                     editedDeck,
@@ -955,6 +1037,7 @@ export default function updateDeck(): JSX.Element {
                                             deckInfo={deckInfo}
                                             setActiveEdit={setActiveEdit}
                                             guides={guides}
+                                            battlefields={wiki.battlefield}
                                         />
                                     )}
                                     <td>

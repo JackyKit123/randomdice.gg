@@ -12,7 +12,7 @@
             .flex-direction(column);
             .flex-wrap(wrap);
             .justify-content(center);
-            text-align: left;
+            text-align: center;
             margin-bottom: 20px;
 
             label {
@@ -27,12 +27,15 @@
 
                 &[for$='rating'] > input {
                     display: block;
+                    margin: 5px auto;
                 }
 
-                &[for='dice-list'] > div {
-                    max-width: 200px;
+                &[for^='dice-list'] > div {
+                    max-width: 300px;
+                    margin: 5px auto;
                     .display(flex);
                     .flex-direction(column);
+                    .align-items(center);
                 }
             }
         }
