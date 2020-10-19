@@ -13,7 +13,7 @@ export type ActionType = typeof SUCCESS | typeof FAIL | CLEAR_ERRORS;
 export interface Info {
     [key: string]: {
         youtubeId: string | undefined;
-        message: string;
+        message: string | undefined;
     };
 }
 

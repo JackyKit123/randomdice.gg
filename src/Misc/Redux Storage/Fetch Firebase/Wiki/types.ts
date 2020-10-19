@@ -37,7 +37,6 @@ export interface WikiContent {
         Arena: string;
         Store: string;
     };
-    patch_note: string;
     boss: {
         id: number;
         name: string;

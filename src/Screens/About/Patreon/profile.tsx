@@ -164,7 +164,7 @@ export default function PatreonProfile(): JSX.Element {
                         <div className='message'>
                             {patreon[patreon.id]?.message ? (
                                 ReactHtmlParser(
-                                    sanitize(patreon[patreon.id].message)
+                                    sanitize(patreon[patreon.id].message || '')
                                 )
                             ) : (
                                 <p>

@@ -39,12 +39,12 @@ export async function fetchYouTube(
         const YoutubeList = await Promise.all(
             patreonList
                 .map(patreon => patreon[patreon.id]?.youtubeId)
-                .filter(id => id)
+                .filter(id => typeof id === 'string')
                 .concat([
                     ...(
                         process.env.REACT_APP_YOUTUBERS_INCLUSIVE_OVERRIDE || ''
                     ).split(','),
-                ]) // custom hard coded editor channels
+                ])
                 .map(async id => {
                     const res = await window.gapi.client.youtube.channels.list({
                         part: 'brandingSettings, snippet',

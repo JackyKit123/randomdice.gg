@@ -10,6 +10,7 @@ import * as FETCH_USER from '../Redux Storage/Fetch Firebase/User/types';
 import * as FETCH_NEWS from '../Redux Storage/Fetch Firebase/News/types';
 import * as FETCH_PATREON from '../Redux Storage/Fetch Firebase/Patreon List/types';
 import * as FETCH_CRIT from '../Redux Storage/Fetch Firebase/Crit/types';
+import validateLocalstorage from './validateLocalstorage';
 
 const database = firebase.apps.length
     ? firebase.database()
@@ -23,17 +24,12 @@ async function fetch(
     forceFetch?: true
 ): Promise<void> {
     // apply local storage cache before fetching database
-    const localCache = localStorage.getItem(key);
+    const localCache = validateLocalstorage(key);
     if (localCache) {
-        try {
-            dispatch({
-                type: successAction,
-                payload: JSON.parse(localCache),
-            });
-        } catch (err) {
-            // error at JSON.parse, prob corrupted JSON, removing item and proceed to fetch database
-            localStorage.removeItem(key);
-        }
+        dispatch({
+            type: successAction,
+            payload: localCache,
+        });
     }
 
     try {
