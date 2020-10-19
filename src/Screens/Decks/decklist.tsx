@@ -394,7 +394,9 @@ export default function DeckList(): JSX.Element {
                                 <th>ID</th>
                                 <th>Rating</th>
                                 <th>Deck</th>
-                                <th>Battlefield</th>
+                                {deckType === 'crew' ? null : (
+                                    <th>Battlefield</th>
+                                )}
                                 <th>Alternatives</th>
                                 <th>Deck Guide</th>
                             </tr>
@@ -454,26 +456,28 @@ export default function DeckList(): JSX.Element {
                                                 </div>
                                             ))}
                                         </td>
-                                        <td>
-                                            <Link
-                                                className='battlefield-link'
-                                                to={`/wiki/battlefield#${
-                                                    wiki.battlefield.find(
-                                                        battlefield =>
-                                                            battlefield.id ===
-                                                            deckInfo.battlefield
-                                                    )?.name
-                                                }`}
-                                            >
-                                                {
-                                                    wiki.battlefield.find(
-                                                        battlefield =>
-                                                            battlefield.id ===
-                                                            deckInfo.battlefield
-                                                    )?.name
-                                                }
-                                            </Link>
-                                        </td>
+                                        {deckType === 'crew' ? null : (
+                                            <td>
+                                                <Link
+                                                    className='battlefield-link'
+                                                    to={`/wiki/battlefield#${
+                                                        wiki.battlefield.find(
+                                                            battlefield =>
+                                                                battlefield.id ===
+                                                                deckInfo.battlefield
+                                                        )?.name
+                                                    }`}
+                                                >
+                                                    {
+                                                        wiki.battlefield.find(
+                                                            battlefield =>
+                                                                battlefield.id ===
+                                                                deckInfo.battlefield
+                                                        )?.name
+                                                    }
+                                                </Link>
+                                            </td>
+                                        )}
                                         <td>
                                             <div className='button-container'>
                                                 {deckInfo.decks.map(

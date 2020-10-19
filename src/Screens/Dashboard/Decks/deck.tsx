@@ -59,7 +59,7 @@ function DeckRow({
                 {
                     battlefields.find(
                         battlefield => battlefield.id === deckInfo.battlefield
-                    )?.id
+                    )?.name
                 }
             </td>
             <td>
@@ -332,29 +332,33 @@ export default function updateDeck(): JSX.Element {
                             <option>Crew</option>
                         </select>
                     </label>
-                    <label htmlFor='battlefield'>
-                        Battlefield:{' '}
-                        <select
-                            defaultValue={-1}
-                            onChange={(evt): void => {
-                                const clone = {
-                                    ...deckToAdd,
-                                };
-                                clone.battlefield = Number(evt.target.value);
-                                setDeckToAdd(clone);
-                            }}
-                        >
-                            <option value={-1}>?</option>
-                            {wiki.battlefield.map(battlefield => (
-                                <option
-                                    key={battlefield.id}
-                                    value={battlefield.id}
-                                >
-                                    {battlefield.name}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
+                    {deckToAdd.type === 'Crew' ? null : (
+                        <label htmlFor='battlefield'>
+                            Battlefield:{' '}
+                            <select
+                                defaultValue={-1}
+                                onChange={(evt): void => {
+                                    const clone = {
+                                        ...deckToAdd,
+                                    };
+                                    clone.battlefield = Number(
+                                        evt.target.value
+                                    );
+                                    setDeckToAdd(clone);
+                                }}
+                            >
+                                <option value={-1}>?</option>
+                                {wiki.battlefield.map(battlefield => (
+                                    <option
+                                        key={battlefield.id}
+                                        value={battlefield.id}
+                                    >
+                                        {battlefield.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    )}
                     <label htmlFor='dice-list'>
                         Dice List:{' '}
                         <div>
@@ -875,6 +879,10 @@ export default function updateDeck(): JSX.Element {
                                                 <select
                                                     defaultValue={
                                                         deckInfo.battlefield
+                                                    }
+                                                    disabled={
+                                                        activeEdit.type ===
+                                                        'Crew'
                                                     }
                                                     onChange={(evt): void => {
                                                         const clone = {
