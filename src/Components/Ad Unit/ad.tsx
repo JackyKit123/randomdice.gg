@@ -28,9 +28,13 @@ export default function GoogleAds({
             !(user && process.env.REACT_APP_ADS_EXCLUSION?.includes(user.uid))
         ) {
             document.body.setAttribute('ads-free', 'false');
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
             if (detected()) {
                 adblocked();
+            }
+            try {
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+            } catch {
+                //
             }
         } else {
             document.body.setAttribute('ads-free', 'true');
