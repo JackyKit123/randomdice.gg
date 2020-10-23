@@ -74,15 +74,17 @@ export default function SpeedCalculator(): JSX.Element {
         const sandSlow = filter.sand.enable ? 40 : 0;
         const flowSpeed =
             filter.flow.mode === 'PvP'
-                ? data.flow.cupEff1 * (filter.flow.class - 7) +
-                  data.flow.eff1 * filter.flow.pip +
+                ? (data.flow.cupEff1 * (filter.flow.class - 7) +
+                      data.flow.eff1) *
+                      filter.flow.pip +
                   data.flow.pupEff1 *
                       (filter.flow.level - 1) *
                       filter.flow.count
                 : Math.max(
                       -1 *
-                          (data.flow.cupEff2 * (filter.flow.class - 7) +
-                              data.flow.eff2 * filter.flow.pip +
+                          ((data.flow.cupEff2 * (filter.flow.class - 7) +
+                              data.flow.eff2) *
+                              filter.flow.pip +
                               data.flow.pupEff2 *
                                   (filter.flow.level - 1) *
                                   filter.flow.count),
@@ -90,7 +92,7 @@ export default function SpeedCalculator(): JSX.Element {
                   );
         const totalSlow = Math.max(
             flowSpeed - Math.max(blizzardSlow, iceSlow) - sandSlow,
-            -100
+            -90
         );
 
         const invalidFlowPip = filter.flow.pip < 0 || filter.flow.pip > 105;
