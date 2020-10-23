@@ -22,6 +22,13 @@ export interface Battlefield {
     buffCupValue: number;
 }
 
+export interface Guide {
+    id: number;
+    level: 'Beginners' | 'Intermediate' | 'Advanced';
+    title: string;
+    content: string;
+}
+
 export interface WikiContent {
     box: {
         id: number;
@@ -43,11 +50,7 @@ export interface WikiContent {
         img: string;
         desc: string;
     }[];
-    tips: {
-        id: number;
-        img: string;
-        desc: string;
-    }[];
+    tips: Guide[];
     battlefield: Battlefield[];
 }
 

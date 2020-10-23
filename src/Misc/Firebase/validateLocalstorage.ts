@@ -125,8 +125,11 @@ function validate(key: string, data: unknown): boolean {
                     tips.every(
                         tip =>
                             typeof tip.id === 'number' &&
-                            typeof tip.img === 'string' &&
-                            typeof tip.desc === 'string'
+                            typeof tip.content === 'string' &&
+                            typeof tip.title === 'string' &&
+                            /(?:Beginners|Intermediate|Advanced)/.test(
+                                tip.level
+                            )
                     ) &&
                     Array.isArray(battlefield) &&
                     battlefield.every(

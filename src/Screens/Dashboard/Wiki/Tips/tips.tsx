@@ -12,30 +12,31 @@ import {
     CLOSE_POPUP,
     OPEN_POPUP,
 } from '../../../../Misc/Redux Storage/PopUp Overlay/types';
-import { WikiContent } from '../../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
+import { Guide } from '../../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
 import './tips.less';
 import { fetchWiki } from '../../../../Misc/Firebase/fetchData';
+import MyUploadAdapter from '../../../../Misc/ckeditorUploadAdapter';
 
-export default function editTips(): JSX.Element {
+export default function editGuides(): JSX.Element {
     const dispatch = useDispatch();
     const selectRef = useRef(null as null | HTMLSelectElement);
     const database = firebase.database();
     const dbRef = database.ref('/wiki/tips');
-    const storage = firebase.storage();
-    const [tips, setTips] = useState<WikiContent['tips']>();
+    const [guides, setGuides] = useState<Guide[]>();
 
     const initialState = {
         id: -1,
-        img: '',
-        desc: '',
+        level: 'Beginners' as Guide['level'],
+        title: '',
+        content: '',
     };
     const [activeEdit, setActiveEdit] = useState({ ...initialState });
 
     useEffect(() => {
-        dbRef.once('value').then(snapshot => setTips(snapshot.val()));
+        dbRef.once('value').then(snapshot => setGuides(snapshot.val()));
     }, []);
 
-    if (!tips) {
+    if (!guides) {
         return (
             <Dashboard>
                 <LoadingScreen />
@@ -43,37 +44,26 @@ export default function editTips(): JSX.Element {
         );
     }
 
-    const invalidImg = activeEdit.img.length <= 0;
-    const invalidInput = invalidImg;
+    const emptyTitle = activeEdit.title.length <= 0;
+    const invalidTitleChar = /(;|\/|\?|:|@|=|&)/.test(activeEdit.title);
 
     const handleSubmit = async (): Promise<void> => {
         if (activeEdit) {
-            if (/^data:image\/([a-zA-Z]*);base64,/.test(activeEdit.img)) {
-                await storage
-                    .ref(`Tip Images/${activeEdit.id}`)
-                    .putString(activeEdit.img, 'data_url', {
-                        cacheControl: 'public,max-age=31536000',
-                    });
-                const newUrl = await storage
-                    .ref(`Tip Images/${activeEdit.id}`)
-                    .getDownloadURL();
-                activeEdit.img = newUrl;
-            }
-            let updateTips = false;
-            const result = tips.map(tip => {
-                if (tip.id === activeEdit.id) {
-                    updateTips = true;
+            let updateGuides = false;
+            const result = guides.map(guide => {
+                if (guide.id === activeEdit.id) {
+                    updateGuides = true;
                     return activeEdit;
                 }
-                return tip;
+                return guide;
             });
-            if (!updateTips) {
+            if (!updateGuides) {
                 result.push(activeEdit);
             }
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
             fetchWiki(dispatch);
-            setTips(result);
+            setGuides(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
                 selectRef.current.value = '?';
@@ -83,14 +73,13 @@ export default function editTips(): JSX.Element {
     };
 
     const handleDelete = async (): Promise<void> => {
-        const originalTips = tips.find(tip => tip.id === activeEdit.id);
-        if (originalTips) {
-            await storage.ref(`Tip Images/${originalTips.id}`).delete();
-            const result = tips.filter(tip => tip.id !== activeEdit.id);
+        const originalGuides = guides.find(guide => guide.id === activeEdit.id);
+        if (originalGuides) {
+            const result = guides.filter(guide => guide.id !== activeEdit.id);
             database.ref('/last_updated/wiki').set(new Date().toISOString());
             dbRef.set(result);
             fetchWiki(dispatch);
-            setTips(result);
+            setGuides(result);
             setActiveEdit({ ...initialState });
             if (selectRef.current) {
                 selectRef.current.value = '?';
@@ -100,12 +89,12 @@ export default function editTips(): JSX.Element {
     };
 
     return (
-        <Dashboard className='tips'>
+        <Dashboard className='guide'>
             <PopUp popUpTarget='confirm-submit'>
                 <h3>Please Confirm</h3>
                 <p>
                     Are you sure to want to update the information for this
-                    tips?
+                    guide?
                 </p>
                 <button
                     type='button'
@@ -117,7 +106,7 @@ export default function editTips(): JSX.Element {
             </PopUp>
             <PopUp popUpTarget='confirm-delete'>
                 <h3>Please Confirm</h3>
-                <p>Are you sure to want to delete this tips?</p>
+                <p>Are you sure to want to delete this guide?</p>
                 <button
                     type='button'
                     className='confirm'
@@ -126,28 +115,28 @@ export default function editTips(): JSX.Element {
                     Yes
                 </button>
             </PopUp>
-            <h3>Update Tips Information</h3>
-            <label htmlFor='select-tips'>
-                Select A Tips:
+            <h3>Update Guide Information</h3>
+            <label htmlFor='select-guides'>
+                Select A Guide:
                 <select
                     ref={selectRef}
-                    id='select-tips'
+                    id='select-guides'
                     onChange={(evt): void => {
                         if (evt.target.value === '?') {
                             setActiveEdit({ ...initialState });
                         } else {
-                            const foundTips = tips.find(
-                                tip => tip.id === Number(evt.target.value)
+                            const foundGuides = guides.find(
+                                guide => guide.title === evt.target.value
                             );
-                            if (foundTips) {
-                                setActiveEdit({ ...foundTips });
+                            if (foundGuides) {
+                                setActiveEdit({ ...foundGuides });
                             } else {
-                                tips.sort((a, b) => (a.id < b.id ? -1 : 1));
-                                let newId = tips.findIndex(
-                                    (tip, i) => tip.id !== i
+                                guides.sort((a, b) => b.id - a.id);
+                                let newId = guides.findIndex(
+                                    (guide, i) => guide.id !== i
                                 );
                                 if (newId === -1) {
-                                    newId = tips.length;
+                                    newId = guides.length;
                                 }
                                 const clone = { ...initialState };
                                 clone.id = newId;
@@ -157,10 +146,8 @@ export default function editTips(): JSX.Element {
                     }}
                 >
                     <option>?</option>
-                    {tips.map(tip => (
-                        <option key={tip.id} value={tip.id}>
-                            Tip #{tip.id + 1}
-                        </option>
+                    {guides.map(guide => (
+                        <option key={guide.id}>{guide.title}</option>
                     ))}
                     <option>Add a New Tip</option>
                 </select>
@@ -168,48 +155,90 @@ export default function editTips(): JSX.Element {
             {activeEdit.id < 0 ? null : (
                 <>
                     <form onSubmit={(evt): void => evt.preventDefault()}>
-                        <label htmlFor='tips-image'>
-                            Image:
+                        <label htmlFor='guides-image'>
+                            Title:
                             <input
-                                key={`tips${activeEdit.id}-img`}
-                                type='file'
-                                alt='tips'
-                                accept='image/*'
-                                className={invalidImg ? 'invalid' : ''}
+                                defaultValue={activeEdit.title}
+                                key={`guides${activeEdit.id}-title`}
+                                type='text'
+                                className={
+                                    invalidTitleChar || emptyTitle
+                                        ? 'invalid'
+                                        : ''
+                                }
                                 onChange={(evt): void => {
-                                    if (evt.target.files) {
-                                        const reader = new FileReader();
-                                        const file = evt.target.files[0];
-                                        reader.readAsDataURL(file);
-                                        reader.onloadend = (): void => {
-                                            activeEdit.img = reader.result as string;
-                                            setActiveEdit({ ...activeEdit });
-                                        };
-                                    }
+                                    activeEdit.title = evt.target.value;
+                                    setActiveEdit({ ...activeEdit });
                                 }}
                             />
                         </label>
-                        <figure className='preview'>
-                            <img src={activeEdit.img} alt='tips' />
-                        </figure>
-                        {invalidImg ? (
+                        {emptyTitle ? (
                             <div className='invalid-warning'>
-                                Please upload an image to depict the tip.
+                                Title cannot be empty.
                             </div>
                         ) : null}
+                        {invalidTitleChar ? (
+                            <div className='invalid-warning'>
+                                You entered an invalid character,{' '}
+                                <strong>; / ? : @ = &</strong> are forbidden
+                                characters
+                            </div>
+                        ) : null}
+                        <label htmlFor='guides-level'>
+                            Level:
+                            <select
+                                defaultValue={activeEdit.level}
+                                onChange={(evt): void => {
+                                    activeEdit.level = evt.target.value as
+                                        | 'Beginners'
+                                        | 'Intermediate'
+                                        | 'Advanced';
+                                    setActiveEdit({ ...activeEdit });
+                                }}
+                            >
+                                <option>Beginners</option>
+                                <option>Intermediate</option>
+                                <option>Advanced</option>
+                            </select>
+                        </label>
                         <CKEditor
                             editor={ClassicEditor}
-                            data={activeEdit.desc}
+                            onInit={(editor: {
+                                plugins: {
+                                    get(
+                                        arg: 'FileRepository'
+                                    ): {
+                                        createUploadAdapter(loader: {
+                                            file: Promise<File>;
+                                        }): void;
+                                    };
+                                };
+                            }): void => {
+                                // eslint-disable-next-line no-param-reassign
+                                editor.plugins.get(
+                                    'FileRepository'
+                                ).createUploadAdapter = (
+                                    loader
+                                ): MyUploadAdapter =>
+                                    new MyUploadAdapter(loader);
+                            }}
+                            data={activeEdit.content}
                             config={{
-                                removePlugins: ['Heading'],
+                                removePlugins: ['heading'],
                                 toolbar: [
                                     'undo',
                                     'redo',
                                     '|',
                                     'bold',
                                     'italic',
+                                    'numberedList',
+                                    'bulletedList',
                                     '|',
                                     'link',
+                                    '|',
+                                    'imageUpload',
+                                    'imageTextAlternative',
+                                    'mediaembed',
                                 ],
                             }}
                             onBlur={(
@@ -218,7 +247,7 @@ export default function editTips(): JSX.Element {
                                     getData: () => string;
                                 }
                             ): void => {
-                                activeEdit.desc = editor.getData();
+                                activeEdit.content = editor.getData();
                                 setActiveEdit({
                                     ...activeEdit,
                                 });
@@ -227,7 +256,7 @@ export default function editTips(): JSX.Element {
                     </form>
                     <hr className='divisor' />
                     <button
-                        disabled={invalidInput}
+                        disabled={invalidTitleChar || emptyTitle}
                         type='button'
                         className='submit'
                         onClick={(): void => {
@@ -240,7 +269,7 @@ export default function editTips(): JSX.Element {
                         <FontAwesomeIcon icon={faCheck} />
                     </button>
                     <button
-                        disabled={invalidInput}
+                        disabled={invalidTitleChar || emptyTitle}
                         type='button'
                         className='submit'
                         onClick={(): void => {
