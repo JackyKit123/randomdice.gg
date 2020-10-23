@@ -164,7 +164,15 @@ export const menu: Menu[] = [
                 name: 'Guide and Tips',
                 path: '/wiki/guide',
                 component: lazy(() =>
-                    import('../Screens/Wiki/Basic Guide/guide')
+                    import('../Screens/Wiki/Basic Guide/guideMenu')
+                ),
+                excludeFromMenu: true,
+            },
+            {
+                path: '/wiki/guide/:title',
+                excludeFromMenu: true,
+                component: lazy(() =>
+                    import('../Screens/Wiki/Basic Guide/content')
                 ),
             },
             {

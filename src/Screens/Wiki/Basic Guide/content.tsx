@@ -20,7 +20,6 @@ export default function BasicGuide(): JSX.Element {
     const { wiki, error } = useSelector(
         (state: RootState) => state.fetchWikiReducer
     );
-
     useEffect(() => {
         return replaceAnchorWithHistory(history);
     }, []);
