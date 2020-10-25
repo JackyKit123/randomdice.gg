@@ -24,6 +24,7 @@ https://randomdice.gg/wiki/dice_mechanics
 https://randomdice.gg/wiki/boss_mechanics
 https://randomdice.gg/wiki/battlefield
 https://randomdice.gg/wiki/guide
+https://randomdice.gg/wiki/guide/*
 https://randomdice.gg/wiki/store
 https://randomdice.gg/wiki/box_guide
 https://randomdice.gg/about/us
