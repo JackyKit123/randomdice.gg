@@ -24,12 +24,13 @@ export default function DeckGuideMenu(): JSX.Element | null {
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
+    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
     useEffect(() => {
         return replaceAnchorWithHistory(history);
     }, []);
 
     let jsx;
-    if (guide?.length && dices?.length) {
+    if (guide?.length && dices?.length && wiki?.battlefield?.length) {
         const thisGuide = guide.find(
             g => g.name.toLowerCase() === name.toLowerCase()
         );
@@ -57,6 +58,22 @@ export default function DeckGuideMenu(): JSX.Element | null {
                             ))}
                         </div>
                     ))}
+                    {thisGuide &&
+                    thisGuide.battlefield > -1 &&
+                    thisGuide.type !== 'Crew' ? (
+                        <div className='battlefield'>
+                            <p>
+                                Battlefield:{' '}
+                                {
+                                    wiki.battlefield.find(
+                                        battlefield =>
+                                            battlefield.id ===
+                                            thisGuide.battlefield
+                                    )?.name
+                                }
+                            </p>
+                        </div>
+                    ) : null}
                     <GoogleAds unitId='8891384324' />
                     <hr className='divisor' />
                     <ConvertEmbed htmlString={thisGuide?.guide || ''} />

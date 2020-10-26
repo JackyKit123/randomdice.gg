@@ -36,6 +36,7 @@ export default function updateDecksGuide(): JSX.Element {
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
+    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
     const [guides, setGuides] = useState<DecksGuide>();
     const [activeEdit, setActiveEdit] = useState<DeckGuide>();
     const [guideToArchive, setGuideToArchive] = useState<number>();
@@ -45,7 +46,7 @@ export default function updateDecksGuide(): JSX.Element {
         dbRef.once('value').then(snapshot => setGuides(snapshot.val()));
     }, []);
 
-    if (!guides?.length || !dices?.length) {
+    if (!guides?.length || !dices?.length || !wiki?.battlefield?.length) {
         return (
             <Dashboard>
                 <LoadingScreen />
@@ -150,63 +151,95 @@ export default function updateDecksGuide(): JSX.Element {
                 guide will immediately go live.
             </p>
             {activeEdit ? (
-                <table>
+                <table className='editing'>
                     <tbody>
-                        {activeEdit.diceList.map((dicelist, i, arr) => (
+                        <tr>
+                            <td colSpan={4}>
+                                <input
+                                    type='textbox'
+                                    className={
+                                        invalidGuideName ? 'invalid' : ''
+                                    }
+                                    defaultValue={activeEdit.name}
+                                    onChange={(evt): void => {
+                                        if (
+                                            /(;|\/|\?|:|@|=|&)/.test(
+                                                evt.target.value
+                                            )
+                                        ) {
+                                            setInvalidGuideName(true);
+                                        } else {
+                                            if (invalidGuideName) {
+                                                setInvalidGuideName(false);
+                                            }
+                                            activeEdit.name = evt.target.value;
+
+                                            setActiveEdit({
+                                                ...activeEdit,
+                                            });
+                                        }
+                                    }}
+                                />
+                                {invalidGuideName ? (
+                                    <span className='invalid-warning'>
+                                        You entered an invalid character,{' '}
+                                        <strong>; / ? : @ = & are</strong>
+                                        forbidden characters
+                                    </span>
+                                ) : null}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={2}>
+                                <select
+                                    defaultValue={activeEdit.type}
+                                    onChange={(evt): void => {
+                                        activeEdit.type = evt.target.value as
+                                            | 'PvP'
+                                            | 'Co-op'
+                                            | 'Crew';
+                                        setActiveEdit({
+                                            ...activeEdit,
+                                        });
+                                    }}
+                                >
+                                    <option>PvP</option>
+                                    <option>Co-op</option>
+                                    <option>Crew</option>
+                                </select>
+                            </td>
+                            <td colSpan={2}>
+                                <select
+                                    disabled={activeEdit.type === 'Crew'}
+                                    defaultValue={activeEdit.battlefield}
+                                    onChange={(evt): void => {
+                                        activeEdit.battlefield = Number(
+                                            evt.target.value
+                                        );
+                                        setActiveEdit({
+                                            ...activeEdit,
+                                        });
+                                    }}
+                                >
+                                    <option value={-1}>?</option>
+                                    {wiki.battlefield.map(battlefield => (
+                                        <option
+                                            key={battlefield.id}
+                                            value={battlefield.id}
+                                        >
+                                            {battlefield.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </td>
+                        </tr>
+                        {activeEdit.diceList.map((dicelist, i) => (
                             <tr
                                 className='dice-container'
                                 /* eslint-disable-next-line react/no-array-index-key */
                                 key={`dice-container-${i}`}
                             >
-                                {i === 0 ? (
-                                    <>
-                                        <td rowSpan={arr.length}>
-                                            <input
-                                                type='textbox'
-                                                className={
-                                                    invalidGuideName
-                                                        ? 'invalid'
-                                                        : ''
-                                                }
-                                                defaultValue={activeEdit.name}
-                                                onChange={(evt): void => {
-                                                    if (
-                                                        /(;|\/|\?|:|@|=|&)/.test(
-                                                            evt.target.value
-                                                        )
-                                                    ) {
-                                                        setInvalidGuideName(
-                                                            true
-                                                        );
-                                                    } else {
-                                                        if (invalidGuideName) {
-                                                            setInvalidGuideName(
-                                                                false
-                                                            );
-                                                        }
-                                                        activeEdit.name =
-                                                            evt.target.value;
-
-                                                        setActiveEdit({
-                                                            ...activeEdit,
-                                                        });
-                                                    }
-                                                }}
-                                            />
-                                            {invalidGuideName ? (
-                                                <span className='invalid-warning'>
-                                                    You entered an invalid
-                                                    character,{' '}
-                                                    <strong>
-                                                        ; / ? : @ = & are
-                                                    </strong>
-                                                    forbidden characters
-                                                </span>
-                                            ) : null}
-                                        </td>
-                                    </>
-                                ) : null}
-                                <td>
+                                <td colSpan={3}>
                                     {dicelist.map((dice, j) => (
                                         <select
                                             /* eslint-disable-next-line react/no-array-index-key */
@@ -253,25 +286,7 @@ export default function updateDecksGuide(): JSX.Element {
                             </tr>
                         ))}
                         <tr>
-                            <td>
-                                <select
-                                    defaultValue={activeEdit.type}
-                                    onChange={(evt): void => {
-                                        activeEdit.type = evt.target.value as
-                                            | 'PvP'
-                                            | 'Co-op'
-                                            | 'Crew';
-                                        setActiveEdit({
-                                            ...activeEdit,
-                                        });
-                                    }}
-                                >
-                                    <option>PvP</option>
-                                    <option>Co-op</option>
-                                    <option>Crew</option>
-                                </select>
-                            </td>
-                            <td colSpan={2}>
+                            <td colSpan={4}>
                                 <button
                                     type='button'
                                     className='add'
@@ -289,7 +304,7 @@ export default function updateDecksGuide(): JSX.Element {
                             </td>
                         </tr>
                         <tr>
-                            <td colSpan={3}>
+                            <td colSpan={4}>
                                 <div className='ckeditor-container'>
                                     <CKEditor
                                         editor={ClassicEditor}
@@ -323,7 +338,7 @@ export default function updateDecksGuide(): JSX.Element {
                             </td>
                         </tr>
                         <tr>
-                            <td colSpan={3}>
+                            <td colSpan={4}>
                                 <button
                                     type='button'
                                     className='submit'
@@ -374,6 +389,7 @@ export default function updateDecksGuide(): JSX.Element {
                                     name: '',
                                     diceList: [Array(5).fill('?')],
                                     guide: '',
+                                    battlefield: -1,
                                     archived: false,
                                 });
                             }}
@@ -414,6 +430,19 @@ export default function updateDecksGuide(): JSX.Element {
                                                 ))}
                                             </div>
                                         ))}
+                                        {guide.battlefield > -1 &&
+                                        guide.type !== 'Crew' ? (
+                                            <div>
+                                                Battlefield:{' '}
+                                                {
+                                                    wiki?.battlefield?.find(
+                                                        battlefield =>
+                                                            battlefield.id ===
+                                                            guide.battlefield
+                                                    )?.name
+                                                }
+                                            </div>
+                                        ) : null}
                                     </td>
                                     <td>
                                         <button
@@ -426,6 +455,8 @@ export default function updateDecksGuide(): JSX.Element {
                                                     name: guide.name,
                                                     diceList: guide.diceList,
                                                     guide: guide.guide,
+                                                    battlefield:
+                                                        guide.battlefield,
                                                     archived: false,
                                                 });
                                             }}

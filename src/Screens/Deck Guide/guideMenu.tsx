@@ -19,9 +19,10 @@ export default function DeckGuideMenu(): JSX.Element {
     const { dices } = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
+    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
 
     let jsx;
-    if (guide?.length && dices?.length) {
+    if (guide?.length && dices?.length && wiki?.battlefield?.length) {
         jsx = (
             <>
                 <p>
@@ -76,6 +77,19 @@ export default function DeckGuideMenu(): JSX.Element {
                                                             </div>
                                                         )
                                                     )}
+                                                    {g.battlefield > -1 &&
+                                                    g.type !== 'Crew' ? (
+                                                        <div>
+                                                            Battlefield:{' '}
+                                                            {
+                                                                wiki.battlefield.find(
+                                                                    battlefield =>
+                                                                        battlefield.id ===
+                                                                        g.battlefield
+                                                                )?.name
+                                                            }
+                                                        </div>
+                                                    ) : null}
                                                 </Link>
                                             </td>
                                         </tr>
@@ -118,6 +132,19 @@ export default function DeckGuideMenu(): JSX.Element {
                                                     ))}
                                                 </div>
                                             ))}
+                                            {g.battlefield > -1 &&
+                                            g.type !== 'Crew' ? (
+                                                <div>
+                                                    Battlefield:{' '}
+                                                    {
+                                                        wiki.battlefield.find(
+                                                            battlefield =>
+                                                                battlefield.id ===
+                                                                g.battlefield
+                                                        )?.name
+                                                    }
+                                                </div>
+                                            ) : null}
                                         </Link>
                                     </td>
                                 </tr>

@@ -163,7 +163,8 @@ function validate(key: string, data: unknown): boolean {
                                 deck.every(die => typeof die === 'number')
                         ) &&
                         typeof datum.guide === 'string' &&
-                        typeof datum.archived === 'boolean'
+                        typeof datum.archived === 'boolean' &&
+                        typeof datum.battlefield === 'number'
                 )
             );
         case 'credit':

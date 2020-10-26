@@ -31,24 +31,10 @@
         width: 100%;
         margin: 0 auto;
 
-        &.guide-menu > tbody > tr:first-of-type > td:first-of-type {
-            width: 50px;
-        }
-
         tbody {
             & > tr {
                 &.archived {
                     .filter(grayscale(1));
-                }
-
-                &:first-of-type > td:first-of-type {
-                    width: 200px;
-
-                    input {
-                        margin: 0;
-                        font-size: inherit;
-                        width: 90%;
-                    }
                 }
 
                 &:nth-of-type(odd) {
@@ -67,11 +53,23 @@
                     font-weight: 500;
                     line-height: 32px;
                 }
+            }
+        }
 
-                &.dice-container > td select {
-                    display: inline-block;
-                    margin: 10px;
+        &.guide-menu > tbody > tr:first-of-type > td:first-of-type {
+            width: 50px;
+        }
+
+        &.editing > tbody > tr {
+            &:nth-of-type(2) {
+                td:first-of-type {
+                    width: 50%;
                 }
+            }
+
+            &.dice-container > td select {
+                display: inline-block;
+                margin: 10px;
             }
         }
     }

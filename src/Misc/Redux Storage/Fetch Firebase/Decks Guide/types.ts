@@ -5,6 +5,7 @@ import {
     ClearErrorAction,
 } from '../types';
 import { Dice } from '../Dices/types';
+import { Battlefield } from '../Wiki/types';
 
 export const SUCCESS = 'FETCH_DECKS_GUIDE_SUCCESS';
 export const FAIL = 'FETCH_DECKS_GUIDE_FAIL';
@@ -17,6 +18,7 @@ export interface DeckGuide {
     type: 'PvP' | 'Co-op' | 'Crew';
     diceList: Dice['id'][][];
     guide: string;
+    battlefield: Battlefield['id'];
     archived: boolean;
 }
 
