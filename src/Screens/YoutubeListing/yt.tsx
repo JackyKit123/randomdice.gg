@@ -25,11 +25,13 @@ export default function YoutubeList(): JSX.Element {
     const [isT3Patreon, setIsT3Patreon] = useState<Info & Patreon>();
     const [channelID, setChannelID] = useState<string>('');
     const [loading, setLoading] = useState(false);
+    const { client } = selector.initGAPIReducer;
     const ytList = selector.fetchGAPIyoutubeChannelsReducer.list;
     const patreonList = selector.fetchPatreonListReducer.list;
     const error =
         selector.fetchGAPIyoutubeChannelsReducer.error ||
-        selector.fetchPatreonListReducer.error;
+        selector.fetchPatreonListReducer.error ||
+        selector.initGAPIReducer.error;
     const user = firebase.auth().currentUser;
     useEffect(() => {
         if (patreonList && user) {
@@ -41,8 +43,11 @@ export default function YoutubeList(): JSX.Element {
     }, [user, patreonList]);
 
     useEffect(() => {
-        fetchYouTube(dispatch);
-    }, []);
+        if (!client) {
+            return;
+        }
+        fetchYouTube(dispatch, client);
+    }, [patreonList, client]);
 
     let jsx;
     if (ytList.length && patreonList?.length) {
@@ -105,8 +110,9 @@ export default function YoutubeList(): JSX.Element {
                                         .database()
                                         .ref('/last_updated/patreon_list')
                                         .set(new Date().toISOString());
-
-                                    await fetchYouTube(dispatch);
+                                    if (client) {
+                                        await fetchYouTube(dispatch, client);
+                                    }
                                     setLoading(false);
                                 }}
                             >
@@ -199,7 +205,7 @@ export default function YoutubeList(): JSX.Element {
                 error={error}
                 retryFn={(): void => {
                     dispatch({ type: CLEAR_ERRORS });
-                    fetchYouTube(dispatch);
+                    window.location.reload();
                 }}
             />
         );

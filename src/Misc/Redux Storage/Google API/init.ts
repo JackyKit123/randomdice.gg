@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { FETCH_GOOGLE_API_FAIL } from './types';
+import { INIT_GAPI_SUCCESS } from './Client/types';
 
 export default function init(dispatch: ReturnType<typeof useDispatch>): void {
     const script = document.createElement('script');
@@ -12,6 +13,10 @@ export default function init(dispatch: ReturnType<typeof useDispatch>): void {
                     discoveryDocs: [
                         'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
                     ],
+                });
+                dispatch({
+                    type: INIT_GAPI_SUCCESS,
+                    payload: window.gapi.client,
                 });
             } catch (err) {
                 dispatch({

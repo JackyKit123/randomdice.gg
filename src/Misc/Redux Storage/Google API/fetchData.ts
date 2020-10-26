@@ -6,6 +6,7 @@ import {
     FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
     YouTubeInfo,
 } from './Youtube Channels/types';
+import { Client } from './Client/types';
 
 function corruptedStorage(item: string): boolean {
     try {
@@ -18,7 +19,8 @@ function corruptedStorage(item: string): boolean {
 
 // eslint-disable-next-line import/prefer-default-export
 export async function fetchYouTube(
-    dispatch: ReturnType<typeof useDispatch>
+    dispatch: ReturnType<typeof useDispatch>,
+    client: Client
 ): Promise<void> {
     const localCache = localStorage.getItem('YoutubeChannels');
     if (localCache) {
@@ -32,21 +34,23 @@ export async function fetchYouTube(
         }
     }
     try {
-        await fetchPatreon(dispatch);
-        const patreonList: PatreonList = JSON.parse(
-            localStorage.getItem('patreon_list') as string
-        );
+        const patreonListRaw = localStorage.getItem('patreon_list');
+        if (!patreonListRaw) {
+            fetchPatreon(dispatch);
+            return;
+        }
+        const patreonList: PatreonList = JSON.parse(patreonListRaw);
         const YoutubeList = await Promise.all(
             patreonList
                 .map(patreon => patreon[patreon.id]?.youtubeId)
-                .filter(id => typeof id === 'string')
-                .concat([
-                    ...(
+                .concat(
+                    (
                         process.env.REACT_APP_YOUTUBERS_INCLUSIVE_OVERRIDE || ''
-                    ).split(','),
-                ])
+                    ).split(',')
+                )
+                .filter(id => typeof id === 'string' && id !== '')
                 .map(async id => {
-                    const res = await window.gapi.client.youtube.channels.list({
+                    const res = await client.youtube.channels.list({
                         part: 'brandingSettings, snippet',
                         id,
                     });
@@ -78,7 +82,7 @@ export async function fetchYouTube(
     } catch (err) {
         dispatch({
             type: FETCH_GOOGLE_API_FAIL,
-            payload: err.result?.error,
+            payload: err.result?.error || err,
         });
     }
 }
