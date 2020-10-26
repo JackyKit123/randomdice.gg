@@ -103,7 +103,7 @@ export default function YoutubeList(): JSX.Element {
                                     await firebase
                                         .database()
                                         .ref(
-                                            `/patreon_list/${i}/${user.uid}/message`
+                                            `/patreon_list/${i}/${user.uid}/youtubeId`
                                         )
                                         .set(channelID);
                                     await firebase
