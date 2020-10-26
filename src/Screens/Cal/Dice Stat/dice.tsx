@@ -47,28 +47,28 @@ export default function DiceStat(): JSX.Element {
             setFilter({ ...filter });
         }
         const atk =
-            Math.floor(
+            Math.round(
                 (dice.atk +
                     dice.cupAtk * (filter.class - minClass) +
                     dice.pupAtk * (filter.level - 1)) *
                     100
             ) / 100;
         const spd =
-            Math.floor(
+            Math.round(
                 (dice.spd +
                     dice.cupSpd * (filter.class - minClass) +
                     dice.pupSpd * (filter.level - 1)) *
                     100
             ) / 100;
         const eff1 =
-            Math.floor(
+            Math.round(
                 (dice.eff1 +
                     dice.cupEff1 * (filter.class - minClass) +
                     dice.pupEff1 * (filter.level - 1)) *
                     100
             ) / 100;
         const eff2 =
-            Math.floor(
+            Math.round(
                 (dice.eff2 +
                     dice.cupEff2 * (filter.class - minClass) +
                     dice.pupEff2 * (filter.level - 1)) *

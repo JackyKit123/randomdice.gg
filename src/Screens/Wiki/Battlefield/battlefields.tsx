@@ -193,9 +193,12 @@ export default function BattlefieldGuide(): JSX.Element {
                                     <h3>{battlefield.name}</h3>
                                     <div>
                                         {battlefield.buffName} :{' '}
-                                        {battlefield.buffValue +
-                                            battlefield.buffCupValue *
-                                                battleFieldLevel}
+                                        {Math.round(
+                                            (battlefield.buffValue +
+                                                battlefield.buffCupValue *
+                                                    battleFieldLevel) *
+                                                100
+                                        ) / 100}
                                         {battlefield.buffUnit}
                                     </div>
                                     <label htmlFor='battlefield-level'>
