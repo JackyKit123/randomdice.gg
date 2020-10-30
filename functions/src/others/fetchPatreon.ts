@@ -9,46 +9,26 @@ const auth = app.auth();
 const database = app.database();
 
 export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
-    const url = 'https://www.patreon.com';
+    const url = 'https://www.patreon.com/api/oauth2/v2';
+    const { access_token } = functions.config().patreon;
+    const headers = {
+        Authorization: `Bearer ${access_token}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+    };
     try {
-        const token_store = database.ref('/token_storage/patreon');
-        const refresh_token = (await token_store.once('value')).val();
-
-        const res = await axios.post(
-            `${url}/api/oauth2/token`,
-            'grant_type=refresh_token' +
-                `&refresh_token=${refresh_token}` +
-                '&client_id=mcsy6u4brWts2SHqlVuV4jo_BVLO3Ynfa0HJsnYcozdqkOYv-lWhLz1x6BZzwQTq' +
-                `&client_secret=${functions.config().patreon.secret}`,
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            }
-        );
-
-        const { access_token } = res.data;
-        await token_store.set(res.data.refresh_token);
-        const getMemberData = await axios.get(
-            `${url}/api/oauth2/v2/campaigns/4696297/members?include=currently_entitled_tiers,user`,
-            {
-                headers: {
-                    Authorization: `Bearer ${access_token}`,
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            }
-        );
-        const memberData = getMemberData.data;
-        const getCampaignData = await axios.get(
-            `${url}/api/oauth2/v2/campaigns/4696297?include=tiers`,
-            {
-                headers: {
-                    Authorization: `Bearer ${access_token}`,
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            }
-        );
-        const campaignData = getCampaignData.data;
+        const [memberRes, campaignRes] = await Promise.all([
+            await axios.get(
+                `${url}/campaigns/4696297/members?include=currently_entitled_tiers,user`,
+                {
+                    headers,
+                }
+            ),
+            await axios.get(`${url}/campaigns/4696297?include=tiers`, {
+                headers,
+            }),
+        ]);
+        const memberData = memberRes.data;
+        const campaignData = campaignRes.data;
 
         interface Member {
             id: string;
@@ -77,49 +57,46 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
             [uid: string]: object;
         };
 
-        const patreonList = await Promise.all(
-            memberData.data.map(async (member: Member) => {
-                const tierArr = member.relationships.currently_entitled_tiers.data.map(
-                    t => t.id
-                );
-                let tier = 0;
-                for (let i = tierList.length; i > 0; i -= 1) {
-                    if (tierArr.includes(tierList[i - 1])) {
-                        tier = i;
-                    }
-                }
-                const userData = (
-                    await axios.get(
-                        `${url}/api/oauth2/v2/members/${member.id}?fields%5Bmember%5D=full_name`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${access_token}`,
-                                'Content-Type':
-                                    'application/x-www-form-urlencoded',
-                            },
+        const [patreonList, users, existingProfiles] = await Promise.all([
+            await Promise.all(
+                memberData.data.map(async (member: Member) => {
+                    const tierArr = member.relationships.currently_entitled_tiers.data.map(
+                        t => t.id
+                    );
+                    let tier = 0;
+                    for (let i = tierList.length; i > 0; i -= 1) {
+                        if (tierArr.includes(tierList[i - 1])) {
+                            tier = i;
                         }
-                    )
-                ).data;
+                    }
+                    const userData = (
+                        await axios.get(
+                            `${url}/members/${member.id}?fields%5Bmember%5D=full_name`,
+                            {
+                                headers,
+                            }
+                        )
+                    ).data;
 
-                return {
-                    id: member.relationships.user.data.id,
-                    name: userData.data.attributes.full_name,
-                    tier,
+                    return {
+                        id: member.relationships.user.data.id,
+                        name: userData.data.attributes.full_name,
+                        tier,
+                    };
+                }) as PatreonProfile[]
+            ),
+            (await database.ref('/users').once('value')).val() as {
+                [key: string]: {
+                    'linked-account': { patreon?: string };
+                    'patreon-tier'?: number;
                 };
-            }) as PatreonProfile[]
-        );
+            },
+            (
+                await database.ref(`/patreon_list`).once('value')
+            ).val() as PatreonProfile[],
+        ]);
 
-        const users = (await database.ref('/users').once('value')).val() as {
-            [key: string]: {
-                'linked-account': { patreon?: string };
-                'patreon-tier'?: number;
-            };
-        };
         const usersData = Object.entries(users);
-        const existingProfiles = (
-            await database.ref(`/patreon_list`).once('value')
-        ).val() as PatreonProfile[];
-
         const getUserSuppressError = async (
             uid: string
         ): Promise<admin.auth.UserRecord | undefined> => {
