@@ -192,7 +192,7 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
                             .ref(`/patreon_list/${i}/img`)
                             .set(user.photoURL);
                     }
-                } else {
+                } else if (!existingProfile) {
                     anyProfileUpdated = true;
                     await database.ref(`/patreon_list/${i}/`).set({
                         id: newProfile.id,
