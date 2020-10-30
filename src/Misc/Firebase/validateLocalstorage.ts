@@ -233,6 +233,21 @@ function validate(key: string, data: unknown): boolean {
             }
             return false;
         }
+        case 'YoutubeChannels': {
+            return (
+                Array.isArray(data) &&
+                data.every(
+                    datum =>
+                        typeof datum.id === 'string' &&
+                        ((typeof datum.bannerImg?.default === 'string' &&
+                            typeof datum.bannerImg?.mobile === 'undefined') ||
+                            typeof datum.bannerImg?.mobile === 'string') &&
+                        typeof datum.title === 'string' &&
+                        typeof datum.description === 'string' &&
+                        typeof datum.thumbnails === 'string'
+                )
+            );
+        }
         default:
             if (key.match(/^users\/.+/)) {
                 if (typeof data === 'object' && data !== null) {

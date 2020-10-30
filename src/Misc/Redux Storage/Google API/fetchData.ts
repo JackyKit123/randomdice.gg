@@ -7,32 +7,21 @@ import {
     YouTubeInfo,
 } from './Youtube Channels/types';
 import { Client } from './Client/types';
-
-function corruptedStorage(item: string): boolean {
-    try {
-        JSON.parse(item);
-        return false;
-    } catch (err) {
-        return true;
-    }
-}
+import validateLocalstorage from '../../Firebase/validateLocalstorage';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function fetchYouTube(
     dispatch: ReturnType<typeof useDispatch>,
     client: Client
 ): Promise<void> {
-    const localCache = localStorage.getItem('YoutubeChannels');
+    const localCache = validateLocalstorage('YoutubeChannels');
     if (localCache) {
-        if (corruptedStorage(localCache)) {
-            localStorage.removeItem('YoutubeChannels');
-        } else {
-            dispatch({
-                type: FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
-                payload: JSON.parse(localCache),
-            });
-        }
+        dispatch({
+            type: FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
+            payload: localCache,
+        });
     }
+
     try {
         const patreonListRaw = localStorage.getItem('patreon_list');
         if (!patreonListRaw) {
@@ -40,39 +29,57 @@ export async function fetchYouTube(
             return;
         }
         const patreonList: PatreonList = JSON.parse(patreonListRaw);
-        const YoutubeList = await Promise.all(
+        const extraIds = (
+            process.env.REACT_APP_YOUTUBERS_INCLUSIVE_OVERRIDE || ''
+        ).split(',');
+        const ids = await Promise.all(
             patreonList
                 .map(patreon => patreon[patreon.id]?.youtubeId)
-                .concat(
-                    (
-                        process.env.REACT_APP_YOUTUBERS_INCLUSIVE_OVERRIDE || ''
-                    ).split(',')
-                )
+                .concat(extraIds)
                 .filter(id => typeof id === 'string' && id !== '')
-                .map(async id => {
-                    const res = await client.youtube.channels.list({
-                        part: 'brandingSettings, snippet',
-                        id,
-                    });
-
-                    return {
-                        id,
-                        bannerImg: {
-                            default: res.result.items[0].brandingSettings.image.bannerImageUrl?.replace(
-                                'http://',
-                                'https://'
-                            ),
-                            mobile: res.result.items[0].brandingSettings.image.bannerMobileImageUrl?.replace(
-                                'http://',
-                                'https://'
-                            ),
-                        },
-                        title: res.result.items[0].snippet.title,
-                        description: res.result.items[0].snippet.description,
-                        thumbnails:
-                            res.result.items[0].snippet.thumbnails.default.url,
-                    } as YouTubeInfo;
-                })
+        );
+        const res = await client.youtube.channels.list({
+            part: 'brandingSettings, snippet',
+            id: ids,
+        });
+        const YoutubeList = (res.result.items.map(
+            (channel: {
+                id: string;
+                brandingSettings: {
+                    image?: {
+                        bannerImageUrl?: string;
+                        bannerMobileImageUrl?: string;
+                    };
+                };
+                snippet: {
+                    title: string;
+                    description: string;
+                    thumbnails: {
+                        default: {
+                            url: string;
+                        };
+                    };
+                };
+            }) => ({
+                id: channel.id,
+                bannerImg: {
+                    default: channel.brandingSettings.image?.bannerImageUrl?.replace(
+                        'http://',
+                        'https://'
+                    ),
+                    mobile: channel.brandingSettings.image?.bannerMobileImageUrl?.replace(
+                        'http://',
+                        'https://'
+                    ),
+                },
+                title: channel.snippet.title,
+                description: channel.snippet.description,
+                thumbnails: channel.snippet.thumbnails.default.url,
+            })
+        ) as YouTubeInfo[]).sort(
+            (a, b) =>
+                Number(extraIds.includes(a.id)) -
+                Number(extraIds.includes(b.id))
         );
         dispatch({
             type: FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
