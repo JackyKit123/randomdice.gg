@@ -1,8 +1,6 @@
 import 'react-app-polyfill/ie9';
 import 'react-app-polyfill/stable';
 import 'array-flat-polyfill';
-import 'core-js/stable';
-import 'core-js/modules/esnext.string.match-all';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
