@@ -5,10 +5,9 @@ export const FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS =
 
 export interface YouTubeInfo {
     id: string;
-    bannerImg: {
-        default: string;
-        mobile?: string;
-    };
+    viewCount: bigint;
+    subscriberCount: bigint;
+    videoCount: bigint;
     title: string;
     description: string;
     thumbnails: string;

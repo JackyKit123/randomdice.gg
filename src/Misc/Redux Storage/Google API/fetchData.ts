@@ -39,17 +39,17 @@ export async function fetchYouTube(
                 .filter(id => typeof id === 'string' && id !== '')
         );
         const res = await client.youtube.channels.list({
-            part: 'brandingSettings, snippet',
+            part: 'statistics, snippet',
             id: ids,
         });
         const YoutubeList = (res.result.items.map(
             (channel: {
                 id: string;
-                brandingSettings: {
-                    image?: {
-                        bannerImageUrl?: string;
-                        bannerMobileImageUrl?: string;
-                    };
+                statistics: {
+                    viewCount: bigint;
+                    subscriberCount: bigint;
+                    hiddenSubscriberCount: boolean;
+                    videoCount: bigint;
                 };
                 snippet: {
                     title: string;
@@ -60,22 +60,17 @@ export async function fetchYouTube(
                         };
                     };
                 };
-            }) => ({
-                id: channel.id,
-                bannerImg: {
-                    default: channel.brandingSettings.image?.bannerImageUrl?.replace(
-                        'http://',
-                        'https://'
-                    ),
-                    mobile: channel.brandingSettings.image?.bannerMobileImageUrl?.replace(
-                        'http://',
-                        'https://'
-                    ),
-                },
-                title: channel.snippet.title,
-                description: channel.snippet.description,
-                thumbnails: channel.snippet.thumbnails.default.url,
-            })
+            }) => {
+                return {
+                    id: channel.id,
+                    videoCount: channel.statistics.videoCount,
+                    subscriberCount: channel.statistics.subscriberCount,
+                    viewCount: channel.statistics.viewCount,
+                    title: channel.snippet.title,
+                    description: channel.snippet.description,
+                    thumbnails: channel.snippet.thumbnails.default.url,
+                };
+            }
         ) as YouTubeInfo[]).sort(
             (a, b) =>
                 Number(extraIds.includes(a.id)) -

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from 'firebase/app';
+import Masonry from 'react-masonry-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faUsers, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-regular-svg-icons';
 import Linkify from 'linkifyjs/react';
 import Main from '../../Components/Main/main';
 import Error from '../../Components/Error/error';
@@ -135,68 +137,68 @@ export default function YoutubeList(): JSX.Element {
                         </p>
                     </>
                 ) : null}
-                {ytList.map(info => (
-                    <div className='block' key={info.id}>
-                        <hr className='divisor' />
-                        <div>
-                            <a
-                                href={`https://www.youtube.com/channel/${info.id}`}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
-                                {info.title}
-                            </a>
-                            <a
-                                href={`https://www.youtube.com/channel/${info.id}`}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
+                <hr className='divisor' />
+                <Masonry className='masonry'>
+                    {ytList.map(info => (
+                        <a
+                            className='card'
+                            key={info.id}
+                            href={`https://www.youtube.com/channel/${info.id}`}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
+                            <div className='profile'>
+                                <span>{info.title}</span>
                                 <figure>
                                     <img
                                         src={info.thumbnails}
                                         alt='thumbnails'
                                     />
                                 </figure>
-                            </a>
-                        </div>
-
-                        <Linkify
-                            tagName='p'
-                            options={{
-                                nl2br: true,
-                                attributes: {
-                                    rel: 'nofollow noreferrer noopener',
-                                },
-                                target: {
-                                    url: '_blank',
-                                },
-                            }}
-                        >
-                            {info.description}
-                        </Linkify>
-                        <a
-                            href={`https://www.youtube.com/channel/${info.id}`}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                        >
-                            <figure>
-                                <img
-                                    className='desktop'
-                                    src={info.bannerImg.default}
-                                    alt='banner'
-                                />
-                                <img
-                                    className='mobile'
-                                    src={
-                                        info.bannerImg.mobile ||
-                                        info.bannerImg.default
-                                    }
-                                    alt='banner'
-                                />
-                            </figure>
+                            </div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Views</td>
+                                        <td>
+                                            <FontAwesomeIcon icon={faEye} />
+                                        </td>
+                                        <td>{info.viewCount}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Subscribers</td>
+                                        <td>
+                                            <FontAwesomeIcon icon={faUsers} />
+                                        </td>
+                                        <td>{info.subscriberCount}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Videos</td>
+                                        <td>
+                                            <FontAwesomeIcon icon={faVideo} />
+                                        </td>
+                                        <td>{info.videoCount}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr className='divisor' />
+                            <Linkify
+                                tagName='p'
+                                options={{
+                                    nl2br: true,
+                                    attributes: {
+                                        rel: 'nofollow noreferrer noopener',
+                                    },
+                                    target: {
+                                        url: '_blank',
+                                    },
+                                }}
+                            >
+                                {info.description}
+                            </Linkify>
                         </a>
-                    </div>
-                ))}
+                    ))}
+                </Masonry>
             </>
         );
     } else if (error) {

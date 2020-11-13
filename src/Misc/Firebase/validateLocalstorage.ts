@@ -239,9 +239,9 @@ function validate(key: string, data: unknown): boolean {
                 data.every(
                     datum =>
                         typeof datum.id === 'string' &&
-                        ((typeof datum.bannerImg?.default === 'string' &&
-                            typeof datum.bannerImg?.mobile === 'undefined') ||
-                            typeof datum.bannerImg?.mobile === 'string') &&
+                        typeof datum.videoCount === 'number' &&
+                        typeof datum.subscriberCount === 'number' &&
+                        typeof datum.viewCount === 'number' &&
                         typeof datum.title === 'string' &&
                         typeof datum.description === 'string' &&
                         typeof datum.thumbnails === 'string'
