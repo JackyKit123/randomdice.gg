@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import ReactHtmlParser from 'react-html-parser';
-import { sanitize } from 'dompurify';
 
 export default function ConvertEmbed({
     htmlString,
@@ -26,29 +25,21 @@ export default function ConvertEmbed({
         return (): void => window.removeEventListener('resize', resizeIframe);
     }, [htmlString]);
 
-    const youtubeLinkRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?‌[\w?‌=]*)?/g;
+    const youtubeLinkRegex = /<figure class="media"><oembed url="http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-_]*)(&(amp;)?[\w?=]*)?"><\/oembed><\/figure>/;
 
-    let convertingString = sanitize(htmlString);
-    Array.from(htmlString.matchAll(youtubeLinkRegex)).forEach(match => {
-        convertingString = htmlString.replace(
-            match[0],
-            `https://youtube.com/embed/${match[1]}`
+    let convertedString = htmlString;
+
+    for (
+        let matchArr = youtubeLinkRegex.exec(convertedString);
+        matchArr !== null;
+
+    ) {
+        const [match, vid] = matchArr;
+        convertedString = convertedString.replace(
+            match,
+            `<iframe title="YouTube Video" width="100%" class="youtube-embed" src="https://youtube.com/embed/${vid}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
         );
-    });
-
-    return (
-        <>
-            {ReactHtmlParser(
-                convertingString
-                    .replace(
-                        /<figure class="media"><oembed url="/g,
-                        '<iframe title="YouTube Video" width="100%" class="youtube-embed" src="'
-                    )
-                    .replace(
-                        /"><\/oembed><\/figure>/g,
-                        '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
-                    )
-            )}
-        </>
-    );
+        matchArr = youtubeLinkRegex.exec(convertedString);
+    }
+    return <>{ReactHtmlParser(convertedString)}</>;
 }
