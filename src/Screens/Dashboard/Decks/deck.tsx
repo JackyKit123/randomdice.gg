@@ -121,11 +121,17 @@ export default function updateDeck(): JSX.Element {
     const [filter, setFilter] = useState({
         type: '?' as '?' | 'PvP' | 'Co-op' | 'Crew',
         customSearch: -1,
-        dice:
-            dices
-                ?.filter(dice => dice.rarity === 'Legendary')
-                .map(dice => dice.id) || [],
+        dice: [] as number[],
     });
+
+    useEffect(() => {
+        if (dices) {
+            filter.dice = dices
+                .filter(dice => dice.rarity === 'Legendary')
+                .map(dice => dice.id);
+            setFilter({ ...filter });
+        }
+    }, [dices]);
 
     const initialEditState = {
         id: -1,
