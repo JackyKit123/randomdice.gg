@@ -45,7 +45,7 @@ export default function GoldCalculator(): JSX.Element {
 
     const coopWaveMode = new Map([
         [30, 'Gear'],
-        [40, 'Landmine'],
+        [45, 'Solar Timer'],
         [60, 'Generic Wave 60 Run'],
     ]);
 
@@ -73,9 +73,13 @@ export default function GoldCalculator(): JSX.Element {
 
     const minutesPerRun = filter.targetWave / 3.333 + 1;
     const cardsPerRun =
-        filter.targetWave > 50
-            ? (filter.targetWave - 50) * 3 + 50
-            : filter.targetWave;
+        filter.targetWave > 35
+            ? Math.floor((filter.targetWave - 35) / 2) * 8 +
+              ((filter.targetWave - 1) % 2) * 2 +
+              56
+            : Math.floor(filter.targetWave / 5) * 8 +
+              (filter.targetWave % 5) +
+              Number(filter.targetWave % 5 >= 3);
     const goldPerBox = cardBoxGoldPerClass.get(filter.class) || 0;
     const diamondPerBox = 3;
     const goldAim = filter.targetGold - filter.currentGold;
