@@ -255,7 +255,7 @@ export default function DiceStat(): JSX.Element {
                                     <p>50,000</p>
                                     <p>100,000</p>
                                     <p>200,000</p>
-                                    <p>400,000</p>
+                                    <p>500,000</p>
                                 </td>
                                 <td>
                                     <p>1%</p>
