@@ -88,7 +88,7 @@ export default function ComboCalculator(): JSX.Element {
 
         const roundTo3Sf = (val: number): number => Math.round(val * 100) / 100;
 
-        const dmg = (dmgPerCombo / 2) * (count ** 2 - count) + baseAtk;
+        const dmg = (dmgPerCombo * count * (count + 1)) / 2 + baseAtk;
         const criticalCritMultiplier =
             (5 +
                 ((filter.critical.class - 3) * data.crit?.cupEff1 +
