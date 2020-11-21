@@ -102,7 +102,7 @@ export default function ArenaDraft(): JSX.Element {
                 .reduce((acc, curr) => acc + curr);
         };
 
-        const calSynergy = (diceId: number): number => {
+        const calDiceRole = (diceId: number): number => {
             if (!dices.find(d => d.id === diceId)) {
                 return 0;
             }
@@ -112,7 +112,7 @@ export default function ArenaDraft(): JSX.Element {
                 ([_, val]) => val === Math.max(...Object.values(value))
             );
             if (maxValue) {
-                const synergy = <T extends keyof DiceValue>(
+                const diceRole = <T extends keyof DiceValue>(
                     targetScore: number,
                     deckType: T
                 ): number =>
@@ -124,13 +124,13 @@ export default function ArenaDraft(): JSX.Element {
                     ) / 100;
                 switch (maxValue[0]) {
                     case 'dps':
-                        return synergy(10, 'dps');
+                        return diceRole(10, 'dps');
                     case 'assist':
-                        return synergy(15, 'assist');
+                        return diceRole(15, 'assist');
                     case 'slow':
-                        return synergy(10, 'slow');
+                        return diceRole(10, 'slow');
                     case 'value':
-                        return synergy(25, 'value');
+                        return diceRole(25, 'value');
                     default:
                         return 0;
                 }
@@ -180,13 +180,13 @@ export default function ArenaDraft(): JSX.Element {
                     below the table.
                 </p>
                 <p>
-                    Usually, highest synergy value will result in the best pick.
-                    If the highest synergy value are equal, the highest dice
-                    value between them will be the best pick.
+                    Usually, highest dice role value will result in the best
+                    pick. If the highest dice role value are equal, the highest
+                    dice value between them will be the best pick.
                 </p>
                 <p>
                     Take note that dice like typhoon or blizzard may be a good
-                    pick even if their synergy are low. And you should usually
+                    pick even if their dice role are low. And you should usually
                     pick into typhoon and blizzard.
                 </p>
                 <p>
@@ -297,16 +297,16 @@ export default function ArenaDraft(): JSX.Element {
                                 </tr>
                                 <tr>
                                     <td colSpan={3}>
-                                        <h4>Synergy Value</h4>
+                                        <h4>Dice Role Value</h4>
                                     </td>
                                 </tr>
                                 <tr>
                                     {[1, 2, 3].map(tdIndex => (
                                         <td
                                             className='value'
-                                            key={`synergy${tdIndex}`}
+                                            key={`diceRole${tdIndex}`}
                                         >
-                                            {calSynergy(pick[tdIndex])}
+                                            {calDiceRole(pick[tdIndex])}
                                         </td>
                                     ))}
                                 </tr>
