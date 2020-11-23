@@ -67,12 +67,21 @@ export default function discordBot(): JSX.Element {
                         'Ping the bot (only available in DM or as `ADMINISTRATOR`)',
                 },
                 {
+                    command: '.gg invite',
+                    description: `Send link for invitation for <@!723917706641801316> to your server.`,
+                },
+                {
                     command: '.gg website [/path]',
                     description: 'Send link to website, with optional path',
                 },
                 {
                     command: '.gg app',
                     description: 'Send link to Google Play App',
+                },
+                {
+                    command: '.gg drawUntil <c7-c15>',
+                    description:
+                        'Simulate draws and show the expected draws for certain legendary class',
                 },
                 {
                     command: '.gg contact',
