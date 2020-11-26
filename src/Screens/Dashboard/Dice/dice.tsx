@@ -370,11 +370,10 @@ export default function editDice(): JSX.Element {
                         </label>
                         <label htmlFor='dice-desc'>
                             Description:
-                            <input
+                            <textarea
                                 key={`dice${activeEdit.id}-desc`}
                                 defaultValue={activeEdit.desc}
                                 className={invalidDescription ? 'invalid' : ''}
-                                type='textbox'
                                 onChange={(evt): void => {
                                     activeEdit.desc = evt.target.value;
                                     setActiveEdit({ ...activeEdit });
