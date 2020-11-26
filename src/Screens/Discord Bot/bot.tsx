@@ -68,7 +68,7 @@ export default function discordBot(): JSX.Element {
                 },
                 {
                     command: '.gg invite',
-                    description: `Send link for invitation for <@!723917706641801316> to your server.`,
+                    description: `Send link for invitation for @randomdice.gg to your server.`,
                 },
                 {
                     command: '.gg website [/path]',
