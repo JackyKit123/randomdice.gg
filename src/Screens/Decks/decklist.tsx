@@ -172,7 +172,7 @@ export default function DeckList(): JSX.Element {
                                         <h4>{die.alternatives.desc}</h4>
                                         <h5>Alternatives :</h5>
                                         <div className='replacement'>
-                                            {die.alternatives.list.map(
+                                            {die.alternatives.list?.map(
                                                 altDice =>
                                                     altDice ? (
                                                         <Dice

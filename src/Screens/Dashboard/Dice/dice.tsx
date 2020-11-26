@@ -764,14 +764,17 @@ export default function editDice(): JSX.Element {
                                     <select
                                         key={`dice${activeEdit.id}-alt-1`}
                                         defaultValue={
-                                            activeEdit.alternatives?.list[0] ||
-                                            '?'
+                                            activeEdit.alternatives
+                                                ?.list?.[0] || '?'
                                         }
                                         onChange={(evt): void => {
                                             activeEdit.alternatives = activeEdit.alternatives || {
                                                 desc: '',
                                                 list: [],
                                             };
+                                            activeEdit.alternatives.list =
+                                                activeEdit.alternatives.list ||
+                                                [];
                                             activeEdit.alternatives.list[0] =
                                                 Number(evt.target.value) ||
                                                 null;
@@ -794,14 +797,17 @@ export default function editDice(): JSX.Element {
                                     <select
                                         key={`dice${activeEdit.id}-alt-2`}
                                         defaultValue={
-                                            activeEdit.alternatives?.list[1] ||
-                                            '?'
+                                            activeEdit.alternatives
+                                                ?.list?.[1] || '?'
                                         }
                                         onChange={(evt): void => {
                                             activeEdit.alternatives = activeEdit.alternatives || {
                                                 desc: '',
                                                 list: [],
                                             };
+                                            activeEdit.alternatives.list =
+                                                activeEdit.alternatives.list ||
+                                                [];
                                             activeEdit.alternatives.list[1] =
                                                 Number(evt.target.value) ||
                                                 null;
@@ -824,14 +830,17 @@ export default function editDice(): JSX.Element {
                                     <select
                                         key={`dice${activeEdit.id}-alt-3`}
                                         defaultValue={
-                                            activeEdit.alternatives?.list[2] ||
-                                            '?'
+                                            activeEdit.alternatives
+                                                ?.list?.[2] || '?'
                                         }
                                         onChange={(evt): void => {
                                             activeEdit.alternatives = activeEdit.alternatives || {
                                                 desc: '',
                                                 list: [],
                                             };
+                                            activeEdit.alternatives.list =
+                                                activeEdit.alternatives.list ||
+                                                [];
                                             activeEdit.alternatives.list[2] =
                                                 Number(evt.target.value) ||
                                                 null;
@@ -854,14 +863,17 @@ export default function editDice(): JSX.Element {
                                     <select
                                         key={`dice${activeEdit.id}-alt-4`}
                                         defaultValue={
-                                            activeEdit.alternatives?.list[3] ||
-                                            '?'
+                                            activeEdit.alternatives
+                                                ?.list?.[3] || '?'
                                         }
                                         onChange={(evt): void => {
                                             activeEdit.alternatives = activeEdit.alternatives || {
                                                 desc: '',
                                                 list: [],
                                             };
+                                            activeEdit.alternatives.list =
+                                                activeEdit.alternatives.list ||
+                                                [];
                                             activeEdit.alternatives.list[3] =
                                                 Number(evt.target.value) ||
                                                 null;
@@ -884,14 +896,17 @@ export default function editDice(): JSX.Element {
                                     <select
                                         key={`dice${activeEdit.id}-alt-5`}
                                         defaultValue={
-                                            activeEdit.alternatives?.list[4] ||
-                                            '?'
+                                            activeEdit.alternatives
+                                                ?.list?.[4] || '?'
                                         }
                                         onChange={(evt): void => {
                                             activeEdit.alternatives = activeEdit.alternatives || {
                                                 desc: '',
                                                 list: [],
                                             };
+                                            activeEdit.alternatives.list =
+                                                activeEdit.alternatives.list ||
+                                                [];
                                             activeEdit.alternatives.list[4] =
                                                 Number(evt.target.value) ||
                                                 null;
