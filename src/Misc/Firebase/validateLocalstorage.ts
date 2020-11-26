@@ -248,6 +248,24 @@ function validate(key: string, data: unknown): boolean {
                 )
             );
         }
+        case 'discord_bot/help': {
+            return (
+                Array.isArray(data) &&
+                data.every(
+                    datum =>
+                        typeof datum.category === 'string' &&
+                        Array.isArray(datum.commands) &&
+                        (datum.commands as {
+                            command: unknown;
+                            description: unknown;
+                        }[]).every(
+                            d =>
+                                typeof d.command === 'string' &&
+                                typeof d.description === 'string'
+                        )
+                )
+            );
+        }
         default:
             if (key.match(/^users\/.+/)) {
                 if (typeof data === 'object' && data !== null) {

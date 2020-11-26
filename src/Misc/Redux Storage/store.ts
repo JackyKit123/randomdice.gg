@@ -14,6 +14,7 @@ import filterReducer from './Deck Filter/reducer';
 import initGAPIReducer from './Google API/Client/reducer';
 import fetchGAPIyoutubeChannelsReducer from './Google API/Youtube Channels/reducer';
 import fetchCritDataReducer from './Fetch Firebase/Crit/reducer';
+import fetchDiscordBotCommandsReducer from './Fetch Firebase/Discord Bot/reducer';
 
 const rootReducer = combineReducers({
     fetchDecksReducer,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
     initGAPIReducer,
     fetchGAPIyoutubeChannelsReducer,
     fetchCritDataReducer,
+    fetchDiscordBotCommandsReducer,
 });
 export type RootState = ReturnType<typeof rootReducer>;
 export const store = createStore(

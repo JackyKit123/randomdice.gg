@@ -46,7 +46,10 @@
         },
         "discord_bot": {
             ".read": "auth.uid === 'discord-bot'",
-            ".write": "auth.uid === 'discord-bot'"
+            ".write": "auth.uid === 'discord-bot'",
+            "help": {
+                ".read": true
+            }
         },
         "wiki": {
             ".read": true,

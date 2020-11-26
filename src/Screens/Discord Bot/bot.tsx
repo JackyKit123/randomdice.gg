@@ -1,146 +1,88 @@
 import React, { Fragment } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../Misc/Redux Storage/store';
+import { fetchDiscordCommands } from '../../Misc/Firebase/fetchData';
+import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
 import './bot.less';
 import Main from '../../Components/Main/main';
+import Error from '../../Components/Error/error';
+import LoadingScreen from '../../Components/Loading/loading';
 
 export default function discordBot(): JSX.Element {
-    const commandList = [
-        {
-            category: 'Sync Data (require `MANAGE_CHANNEL` permission)',
-            commands: [
-                {
-                    command: '.gg register <guide|news|list> #channel',
-                    description:
-                        'Register channel to sync data from the website, the channel should be a standalone channel, do not sync multiple categories of data into the same channel. ".gg register list" will return a list of registered channels.',
-                },
-                {
-                    command: '.gg unregister <guide|news>',
-                    description:
-                        'Unregister the channel registered from `.gg register`',
-                },
-                {
-                    command: '.gg postnow <guide|news>',
-                    description:
-                        'Force syncing data from the website into your registered channels',
-                },
-            ],
-        },
-        {
-            category: 'Information',
-            commands: [
-                {
-                    command: '.gg dice <Dice Name> [--class=?] [--level=?]',
-                    description:
-                        'Show information about the dice, alias for arguments `-c=?` `-l=?`',
-                },
-                {
-                    command:
-                        '.gg deck <PvP|Co-op|Crew> [--page=?] [--legendary=(c7|c8|c9|c10)]',
-                    description:
-                        'Show the deck list, optional arguments to select page or show variations for different legendary class, alias for arguments `-p=?` `-l=?`',
-                },
-                {
-                    command: '.gg guide <Guide Name|list>',
-                    description:
-                        'Show the detail guide for a certain guide. ".gg register list" will return a list of guides\' name.',
-                },
-                {
-                    command: '.gg boss <Boss Name>',
-                    description: 'Show information about the boss.',
-                },
-                {
-                    command: '.gg battlefield <Battlefield Name> [--level=?]',
-                    description:
-                        'Show information about the battlefield. alias for arguments `-l=?`',
-                },
-                {
-                    command: '.gg randomtip',
-                    description: 'Show you a random tip',
-                },
-            ],
-        },
-        {
-            category: 'Other Commands',
-            commands: [
-                {
-                    command: '.gg ping',
-                    description:
-                        'Ping the bot (only available in DM or as `ADMINISTRATOR`)',
-                },
-                {
-                    command: '.gg invite',
-                    description: `Send link for invitation for @randomdice.gg to your server.`,
-                },
-                {
-                    command: '.gg website [/path]',
-                    description: 'Send link to website, with optional path',
-                },
-                {
-                    command: '.gg app',
-                    description: 'Send link to Google Play App',
-                },
-                {
-                    command: '.gg drawUntil <c7-c15>',
-                    description:
-                        'Simulate draws and show the expected draws for certain legendary class',
-                },
-                {
-                    command: '.gg contact',
-                    description:
-                        'Send contact information for the developer of this bot or the community website.',
-                },
-                {
-                    command: '.gg support',
-                    description:
-                        'Send information about ways to support randomdice.gg',
-                },
-            ],
-        },
-    ];
+    const dispatch = useDispatch();
+    const { commands, error } = useSelector(
+        (state: RootState) => state.fetchDiscordBotCommandsReducer
+    );
+
+    let jsx;
+
+    if (commands) {
+        jsx = (
+            <>
+                <h3>randomdice.gg Discord Bot</h3>
+                <figure>
+                    <img
+                        src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FBot%20Banner.png?alt=media&token=65c62668-2925-46ed-b4b7-c426c1a04a14'
+                        alt='discord bot banner'
+                    />
+                </figure>
+                <p>
+                    Introducing a discord Bot that can sync the website data
+                    onto your discord server!
+                </p>
+                <a
+                    href='https://discord.com/oauth2/authorize?client_id=723917706641801316&permissions=355393&scope=bot'
+                    rel='noopener noreferrer'
+                    target='_blank'
+                >
+                    Click Here to Invite the bot to your server.
+                </a>
+                <hr className='divisor' />
+                <h3>List of commands</h3>
+                <p>
+                    Here is a list of available commands. This is only for
+                    reference, execute <span className='command'>.gg help</span>{' '}
+                    in discord for the latest and accurate version.
+                </p>
+                {commands.map(categories => (
+                    <Fragment key={categories.category}>
+                        <h4>{categories.category}</h4>
+                        <ul className='command-list'>
+                            {categories.commands.map(command => (
+                                <li key={command.command}>
+                                    <span className='command'>
+                                        {command.command}
+                                    </span>
+                                    <span className='description'>
+                                        {command.description.replace(
+                                            '<@!723917706641801316>',
+                                            '@randomdice.gg'
+                                        )}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </Fragment>
+                ))}
+            </>
+        );
+    } else if (error) {
+        jsx = (
+            <Error
+                error={error}
+                retryFn={(): void => {
+                    dispatch({ type: CLEAR_ERRORS });
+                    fetchDiscordCommands(dispatch);
+                }}
+            />
+        );
+    } else {
+        jsx = <LoadingScreen />;
+    }
 
     return (
         <Main title='Discord Bot' className='discord-bot'>
-            <h3>randomdice.gg Discord Bot</h3>
-            <figure>
-                <img
-                    src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FBot%20Banner.png?alt=media&token=65c62668-2925-46ed-b4b7-c426c1a04a14'
-                    alt='discord bot banner'
-                />
-            </figure>
-            <p>
-                Introducing a discord Bot that can sync the website data onto
-                your discord server!
-            </p>
-            <a
-                href='https://discord.com/oauth2/authorize?client_id=723917706641801316&permissions=355393&scope=bot'
-                rel='noopener noreferrer'
-                target='_blank'
-            >
-                Click Here to Invite the bot to your server.
-            </a>
-            <hr className='divisor' />
-            <h3>List of commands</h3>
-            <p>
-                Here is a list of available commands. This is only for
-                reference, execute <span className='command'>.gg help</span> in
-                discord for the latest and accurate version.
-            </p>
-            {commandList.map(categories => (
-                <Fragment key={categories.category}>
-                    <h4>{categories.category}</h4>
-                    <ul className='command-list'>
-                        {categories.commands.map(command => (
-                            <li key={command.command}>
-                                <span className='command'>
-                                    {command.command}
-                                </span>
-                                <span className='description'>
-                                    {command.description}
-                                </span>
-                            </li>
-                        ))}
-                    </ul>
-                </Fragment>
-            ))}
+            {jsx}
         </Main>
     );
 }

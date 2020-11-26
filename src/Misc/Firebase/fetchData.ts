@@ -10,6 +10,7 @@ import * as FETCH_USER from '../Redux Storage/Fetch Firebase/User/types';
 import * as FETCH_NEWS from '../Redux Storage/Fetch Firebase/News/types';
 import * as FETCH_PATREON from '../Redux Storage/Fetch Firebase/Patreon List/types';
 import * as FETCH_CRIT from '../Redux Storage/Fetch Firebase/Crit/types';
+import * as FETCH_DISCORD_BOT_COMMANDS from '../Redux Storage/Fetch Firebase/Discord Bot/types';
 import validateLocalstorage from './validateLocalstorage';
 
 const database = firebase.apps.length
@@ -126,6 +127,17 @@ export function fetchCrit(dispatch: ReturnType<typeof useDispatch>): void {
     fetch(dispatch, FETCH_CRIT.SUCCESS, FETCH_CRIT.FAIL, 'critData');
 }
 
+export function fetchDiscordCommands(
+    dispatch: ReturnType<typeof useDispatch>
+): void {
+    fetch(
+        dispatch,
+        FETCH_DISCORD_BOT_COMMANDS.SUCCESS,
+        FETCH_DISCORD_BOT_COMMANDS.FAIL,
+        'discord_bot/help'
+    );
+}
+
 export default function fetchAll(
     dispatch: ReturnType<typeof useDispatch>
 ): void {
@@ -137,4 +149,5 @@ export default function fetchAll(
     fetchCredit(dispatch);
     fetchPatreon(dispatch);
     fetchCrit(dispatch);
+    fetchDiscordCommands(dispatch);
 }
