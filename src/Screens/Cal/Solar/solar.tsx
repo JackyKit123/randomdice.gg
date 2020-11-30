@@ -33,6 +33,7 @@ export default function SolarCalculator(): JSX.Element {
         crit: 111,
         duration: 10,
         solar: {
+            active: true,
             class: 7,
             level: 1,
             pip: 1,
@@ -89,10 +90,11 @@ export default function SolarCalculator(): JSX.Element {
         (filter.solar.class - 7) * diceData.solar.cupAtk +
         diceData.solar.atk +
         diceData.solar.pupAtk * (filter.solar.level - 1);
-    const basicDmgPerSplash =
-        (filter.solar.class - 7) * diceData.solar.cupEff1 +
-        diceData.solar.eff1 +
-        diceData.solar.pupEff1 * (filter.solar.level - 1);
+    const basicDmgPerSplash = filter.solar.active
+        ? (filter.solar.class - 7) * diceData.solar.cupEff1 +
+          diceData.solar.eff1 +
+          diceData.solar.pupEff1 * (filter.solar.level - 1)
+        : 0;
     const lunarBuffedDmgPerHit = filter.lunar.active
         ? ((filter.lunar.pip * 10) / 100 + 1) * basicDmgPerHit
         : basicDmgPerHit;
@@ -118,13 +120,11 @@ export default function SolarCalculator(): JSX.Element {
         diceData.crit.pupEff1 * (filter.critical.level - 1);
     const lunarCritBuff = filter.lunar.active ? filter.lunar.pip * 5 : 0;
 
-    const atkSpdMultiplier = 1 - lightBuff / 100;
-    const lunarAtkSpdMultiplier = 1 - lunarSpdBuff / 100;
-    const basicAtkSpd = diceData.solar.spd;
-    let buffedAtkSpd = diceData.solar.spd * atkSpdMultiplier;
-    buffedAtkSpd = buffedAtkSpd <= 0.01 ? 0.01 : buffedAtkSpd;
-    let lunarBuffedAtkSpd = diceData.solar.spd * lunarAtkSpdMultiplier;
-    lunarBuffedAtkSpd = lunarBuffedAtkSpd <= 0.01 ? 0.01 : lunarBuffedAtkSpd;
+    const atkSpdMultiplier = Math.max(1 - lightBuff / 100, 0.01);
+    const lunarAtkSpdMultiplier = Math.max(1 - lunarSpdBuff / 100, 0.01);
+    const basicAtkSpd = filter.solar.active ? 0.4 : diceData.solar.spd;
+    const buffedAtkSpd = basicAtkSpd * atkSpdMultiplier;
+    const lunarBuffedAtkSpd = basicAtkSpd * lunarAtkSpdMultiplier;
 
     const critMultiplier = (5 + critBuff) / 100;
     const lunarCritMultiplier = (5 + lunarCritBuff) / 100;
@@ -162,6 +162,8 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
+                dices,
+                filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
                 filter.solar.pip,
@@ -180,6 +182,8 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
+                dices,
+                filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
                 filter.solar.pip,
@@ -198,6 +202,8 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
+                dices,
+                filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
                 filter.solar.pip,
@@ -219,6 +225,8 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
+                dices,
+                filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
                 filter.solar.pip,
@@ -240,6 +248,8 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
+                dices,
+                filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
                 filter.solar.pip,
@@ -261,6 +271,8 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
+                dices,
+                filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
                 filter.solar.pip,
@@ -282,6 +294,8 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
+                dices,
+                filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
                 filter.solar.pip,
@@ -304,6 +318,8 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
+                dices,
+                filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
                 filter.solar.pip,
@@ -323,6 +339,8 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerHit, basicAtkSpd, basicCrit, d.x),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -334,6 +352,8 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerHit, buffedAtkSpd, basicCrit, d.x),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -348,6 +368,8 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerHit, basicAtkSpd, buffedCrit, d.x),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -367,6 +389,8 @@ export default function SolarCalculator(): JSX.Element {
                         d.x
                     ),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -382,6 +406,8 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerHit, buffedAtkSpd, buffedCrit, d.x),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -404,6 +430,8 @@ export default function SolarCalculator(): JSX.Element {
                         d.x
                     ),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -424,6 +452,8 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerSplash, basicAtkSpd, basicCrit, d.x),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -435,6 +465,8 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerSplash, buffedAtkSpd, basicCrit, d.x),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -449,6 +481,8 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerSplash, basicAtkSpd, buffedCrit, d.x),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -468,6 +502,8 @@ export default function SolarCalculator(): JSX.Element {
                         d.x
                     ),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -483,6 +519,8 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerSplash, buffedAtkSpd, buffedCrit, d.x),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -505,6 +543,8 @@ export default function SolarCalculator(): JSX.Element {
                         d.x
                     ),
                 [
+                    dices,
+                    filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
                     filter.solar.pip,
@@ -825,6 +865,26 @@ export default function SolarCalculator(): JSX.Element {
                             className='filter'
                             onSubmit={(evt): void => evt.preventDefault()}
                         >
+                            <label
+                                htmlFor='solar-active'
+                                className='checkbox-label'
+                            >
+                                <span>Active : </span>
+                                <input
+                                    defaultChecked
+                                    type='checkbox'
+                                    onChange={(
+                                        evt: React.ChangeEvent<HTMLInputElement>
+                                    ): void => {
+                                        filter.solar.active =
+                                            evt.target.checked;
+                                        setFilter({ ...filter });
+                                    }}
+                                />
+                                <span className='checkbox-styler'>
+                                    <FontAwesomeIcon icon={faCheck} />
+                                </span>
+                            </label>
                             <label htmlFor='solar-class'>
                                 <span>Class :</span>
                                 <select
