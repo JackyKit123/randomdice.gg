@@ -65,7 +65,7 @@ export default function updateDecksGuide(): JSX.Element {
                     onClick={(): void => {
                         if (activeEdit) {
                             const clone = [...guides];
-                            clone.sort((a, b) => (a.id > b.id ? 1 : -1));
+                            clone.sort((a, b) => b.id - a.id);
                             const i = clone.findIndex(
                                 guide => guide.id === activeEdit?.id
                             );
@@ -376,7 +376,7 @@ export default function updateDecksGuide(): JSX.Element {
                             type='button'
                             onClick={(): void => {
                                 const clone = [...guides];
-                                clone.sort((a, b) => (a.id > b.id ? 1 : -1));
+                                clone.sort((a, b) => a.id - b.id);
                                 let newId = clone.findIndex(
                                     (guide, i) => guide.id !== i
                                 );
