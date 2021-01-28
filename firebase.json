@@ -15,7 +15,7 @@
             "redirects": [
                 {
                     "source": "/",
-                    "destination": "https://discord.com/invite/zQj6tCM/",
+                    "destination": "https://discord.com/invite/ZrXRpZq2mq/",
                     "type": 301
                 }
             ]
@@ -65,7 +65,7 @@
             "redirects": [
                 {
                     "source": "/discord",
-                    "destination": "https://discord.com/invite/zQj6tCM/",
+                    "destination": "https://discord.com/invite/ZrXRpZq2mq/",
                     "type": 301
                 },
                 {
