@@ -21,7 +21,7 @@ export default function CommunityListing(): JSX.Element {
         {
             name: 'Main Discord',
             url: 'https://discord.randomdice.gg',
-            serverId: '717500464975052883',
+            serverId: '804222694488932362',
             googleAnalyticTrack: true,
         },
         {
