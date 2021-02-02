@@ -10,32 +10,13 @@ const database = app.database();
 
 export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
     const url = 'https://www.patreon.com/api/oauth2/v2';
-    const token_store = database.ref('/token_storage/patreon');
+    const { access_token } = functions.config().patreon;
+    const headers = {
+        Authorization: `Bearer ${access_token}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+    };
 
     try {
-        const refresh_token = (await token_store.once('value')).val();
-
-        const res = await axios.post(
-            `${url}/api/oauth2/token`,
-            '?grant_type=refresh_token' +
-                `&refresh_token=${refresh_token}` +
-                '&client_id=mcsy6u4brWts2SHqlVuV4jo_BVLO3Ynfa0HJsnYcozdqkOYv-lWhLz1x6BZzwQTq' +
-                `&client_secret=${functions.config().patreon.secret}`,
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            }
-        );
-
-        const { access_token } = res.data;
-        await token_store.set(res.data.refresh_token);
-
-        const headers = {
-            Authorization: `Bearer ${access_token}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
-        };
-
         const [memberRes, campaignRes] = await Promise.all([
             await axios.get(
                 `${url}/campaigns/4696297/members?include=currently_entitled_tiers,user`,
