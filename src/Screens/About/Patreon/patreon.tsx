@@ -19,6 +19,10 @@ export default function PatreonIntro(): JSX.Element {
     );
     let jsx;
     if (list) {
+        const highestTier = list.sort((a, b) => b.tier - a.tier)[0]?.tier || 1;
+        const tierList = new Array(highestTier)
+            .fill(highestTier)
+            .map((e, i) => e - i);
         jsx = (
             <>
                 <Helmet>
@@ -48,7 +52,7 @@ export default function PatreonIntro(): JSX.Element {
                     .
                 </p>
                 <hr className='divisor' />
-                {[3, 2, 1].map(tier => (
+                {tierList.map(tier => (
                     <Fragment key={tier}>
                         <h3>Tier {tier} Supporters</h3>
                         {list
@@ -56,11 +60,12 @@ export default function PatreonIntro(): JSX.Element {
                             .map(patron => (
                                 <div key={patron.id}>
                                     <span>{patron.name}</span>
-                                    <figure
-                                        className={patron.img ? '' : 'no-icon'}
-                                    >
+                                    <figure>
                                         <img
-                                            src={patron.img}
+                                            src={
+                                                patron.img ||
+                                                'https://res-3.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_170,w_170,f_auto,b_white,q_auto:eco/v1498102829/oul9xkady63xqqn3iw7c.png'
+                                            }
                                             alt={`icon of ${patron.name}`}
                                         />
                                     </figure>
