@@ -170,13 +170,25 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
                             .ref(`/patreon_list/${i}/img`)
                             .set(user.photoURL);
                     }
-                } else if (!existingProfile) {
-                    anyProfileUpdated = true;
-                    await database.ref(`/patreon_list/${i}/`).set({
-                        id: newProfile.id,
-                        name: newProfile.name,
-                        tier: newProfile.tier,
-                    });
+                } else {
+                    if (!existingProfile) {
+                        anyProfileUpdated = true;
+                        await database
+                            .ref(`/patreon_list/${i}/id`)
+                            .set(newProfile.id);
+                    }
+                    if (existingProfile?.name !== newProfile.name) {
+                        anyProfileUpdated = true;
+                        await database
+                            .ref(`/patreon_list/${i}/name`)
+                            .set(newProfile.name);
+                    }
+                    if (existingProfile?.tier !== newProfile.tier) {
+                        anyProfileUpdated = true;
+                        await database
+                            .ref(`/patreon_list/${i}/tier`)
+                            .set(newProfile.tier);
+                    }
                 }
             })
         );
