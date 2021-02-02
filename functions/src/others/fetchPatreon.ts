@@ -17,7 +17,7 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
 
         const res = await axios.post(
             `${url}/api/oauth2/token`,
-            'grant_type=refresh_token' +
+            '?grant_type=refresh_token' +
                 `&refresh_token=${refresh_token}` +
                 '&client_id=mcsy6u4brWts2SHqlVuV4jo_BVLO3Ynfa0HJsnYcozdqkOYv-lWhLz1x6BZzwQTq' +
                 `&client_secret=${functions.config().patreon.secret}`,
