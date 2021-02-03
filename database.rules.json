@@ -68,10 +68,10 @@
             ".write": "auth.token.isEditor === true"
         },
         "users": {
-            ".read": "auth.uid === 'my-service-worker'",
+            ".read": "auth.uid === 'my-service-worker' || auth.uid === 'discord-bot'",
             ".write": "auth.uid === 'my-service-worker'",
             "$uid": {
-                ".read": "auth.uid === $uid || auth.uid === 'my-service-worker'",
+                ".read": "auth.uid === $uid || auth.uid === 'my-service-worker' || auth.uid === 'discord-bot'",
                 ".write": "auth.uid === $uid",
                 "editor": {
                     ".write": false
