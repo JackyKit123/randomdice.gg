@@ -130,7 +130,6 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
                         ) !== i
                     ) {
                         anyProfileUpdated = true;
-                        await database.ref(`/patreon_list/${i}`).set(null);
                         await database.ref(`/patreon_list/${i}`).set({
                             id: uid,
                             tier: newProfile.tier,
