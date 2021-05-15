@@ -64,7 +64,7 @@ export default function critDataCollection(): JSX.Element {
             data => data.trophies && data.crit
         );
         const scatterDataByTrophies = critDataArr.map(data => ({
-            x: data.trophies > 40000 ? 40000 : data.trophies,
+            x: data.trophies > 9000 ? 9000 : data.trophies,
             y: data.crit,
         }));
         const trophiesForClass: {
@@ -396,7 +396,7 @@ export default function critDataCollection(): JSX.Element {
                     <VictoryChart
                         theme={VictoryTheme.material}
                         domain={{
-                            x: [0, 40000],
+                            x: [0, 9000],
                             y: [0, maxCrit],
                         }}
                         domainPadding={{ x: [0, 5] }}
