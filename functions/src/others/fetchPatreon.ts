@@ -99,8 +99,9 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
 
         const usersData = Object.entries(users);
         const getUserSuppressError = async (
-            uid: string
+            uid: string | undefined
         ): Promise<admin.auth.UserRecord | undefined> => {
+            if (!uid) return undefined;
             try {
                 return auth.getUser(uid);
             } catch (err) {
@@ -119,10 +120,8 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
                         profile.id === uid || profile.id === newProfile.id
                 );
 
-                if (uid) {
-                    const user = (await getUserSuppressError(
-                        uid
-                    )) as admin.auth.UserRecord;
+                const user = await getUserSuppressError(uid);
+                if (uid && user) {
                     if (
                         existingProfile &&
                         existingProfiles.findIndex(
@@ -135,7 +134,7 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
                             tier: newProfile.tier,
                             name: user.displayName || newProfile.name,
                             img: user.photoURL || null,
-                            [uid]: existingProfile[uid],
+                            [uid]: existingProfile[uid] || null,
                         });
                         return;
                     }
