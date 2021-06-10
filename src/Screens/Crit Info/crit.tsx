@@ -162,7 +162,7 @@ export default function critDataCollection(): JSX.Element {
                             Note that your trophies count should be a positive
                             integer while your crit damage should be between 111
                             - {maxCrit}. If you are class 20 or above, your
-                            trophies count will be rounded down to 40,000
+                            trophies count will be rounded down to 9,000
                             trophies.
                         </p>
                         <form>
