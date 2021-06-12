@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+import firebase from 'firebase-admin';
 import axios from 'axios';
 import init from '../init';
 
@@ -100,7 +100,7 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
         const usersData = Object.entries(users);
         const getUserSuppressError = async (
             uid: string | undefined
-        ): Promise<admin.auth.UserRecord | undefined> => {
+        ): Promise<firebase.auth.UserRecord | undefined> => {
             if (!uid) return undefined;
             try {
                 return auth.getUser(uid);

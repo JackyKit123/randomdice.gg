@@ -1,9 +1,9 @@
-import * as admin from 'firebase-admin';
+import firebase from 'firebase-admin';
 
-export default function init(): admin.app.App {
-    return admin.apps.length
-        ? admin.app()
-        : admin.initializeApp({
+export default function init(): firebase.app.App {
+    return firebase.apps.length
+        ? firebase.app()
+        : firebase.initializeApp({
               serviceAccountId: 'random-dice-web@appspot.gserviceaccount.com',
               databaseURL: 'https://random-dice-web.firebaseio.com/',
               storageBucket: 'random-dice-web.appspot.com',
