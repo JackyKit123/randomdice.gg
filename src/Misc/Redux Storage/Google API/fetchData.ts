@@ -14,14 +14,6 @@ export async function fetchYouTube(
     dispatch: ReturnType<typeof useDispatch>,
     client: Client
 ): Promise<void> {
-    const localCache = validateLocalstorage('YoutubeChannels');
-    if (localCache) {
-        dispatch({
-            type: FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
-            payload: localCache,
-        });
-    }
-
     try {
         const patreonListRaw = localStorage.getItem('patreon_list');
         if (!patreonListRaw) {
@@ -29,12 +21,25 @@ export async function fetchYouTube(
             return;
         }
         const patreonList: PatreonList = JSON.parse(patreonListRaw);
+
+        const localCache = validateLocalstorage(
+            'YoutubeChannels'
+        ) as YouTubeInfo[];
+        if (localCache) {
+            dispatch({
+                type: FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,
+                payload: localCache,
+            });
+        }
+
         const extraIds = (
             process.env.REACT_APP_YOUTUBERS_INCLUSIVE_OVERRIDE || ''
         ).split(',');
         const ids = await Promise.all(
             patreonList
-                .map(patreon => patreon[patreon.id]?.youtubeId)
+                .map(patreon =>
+                    patreon.tier >= 3 ? patreon[patreon.id]?.youtubeId : ''
+                )
                 .concat(extraIds)
                 .filter(id => typeof id === 'string' && id !== '')
         );
