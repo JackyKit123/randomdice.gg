@@ -39,14 +39,22 @@ export default function Menu(props: {
             switch (true) {
                 case menu.path === location.pathname:
                     anchor = (
-                        <span className='active menu-item'>{menu.name}</span>
+                        <>
+                            <img src={menu.icon} alt={menu.name} />
+                            <span className='active menu-item'>
+                                {menu.name}
+                            </span>
+                        </>
                     );
                     break;
                 case menu.path !== undefined:
                     anchor = (
-                        <Link className='menu-item' to={String(menu.path)}>
-                            {menu.name}
-                        </Link>
+                        <>
+                            <img src={menu.icon} alt={menu.name} />
+                            <Link className='menu-item' to={String(menu.path)}>
+                                {menu.name}
+                            </Link>
+                        </>
                     );
                     break;
                 default:

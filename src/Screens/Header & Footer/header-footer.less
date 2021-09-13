@@ -125,8 +125,8 @@ body {
                 &.topHeaderBar {
                     z-index: 2;
                     height: 30px;
-                    background-color: #525252;
-                    .box-shadow(0 -5px 10px 11px rgba(0, 0, 0, 1));
+                    background-color: #1c1c1c;
+                    //.box-shadow(0 -5px 10px 11px rgba(0, 0, 0, 1));
 
                     & > .container {
                         text-align: right;
@@ -189,9 +189,9 @@ body {
                 &.lowHeaderBar {
                     .transition(height, 0.4s ease-out);
                     z-index: 1;
-                    height: 120px;
-                    background-color: #ffffff;
-                    .box-shadow(0 -8px 10px 11px rgba(0, 0, 0, 1));
+                    height: 60px;
+                    background-color: #3a3a3a;
+                    .box-shadow(0 -8px 20px 11px rgba(0, 0, 0, 1));
 
                     @media @mobile {
                         height: 50px;
@@ -311,7 +311,7 @@ body {
                                     display: table-cell;
                                     vertical-align: middle;
                                     text-decoration: none;
-                                    color: #525252;
+                                    color: #c5c5c5;
                                     font-size: 30px;
                                     font-weight: 500;
                                     .transition(color 0.2s ease-in-out);
@@ -464,7 +464,7 @@ body {
         }
 
         & > .header-placeholder {
-            height: 150px;
+            height: 60px;
             .transition(height, 0.4s ease-in-out);
 
             @media @mobile {
@@ -472,7 +472,7 @@ body {
             }
         }
 
-        &.scroll {
+        /*&.scroll {
             @media @desktop {
                 & > .header-placeholder {
                     height: 80px;
@@ -488,7 +488,7 @@ body {
                     }
                 }
             }
-        }
+        }*/
     }
 
     footer {
@@ -553,7 +553,7 @@ body {
                 @media @desktop {
                     height: 25px;
                 }
-                background-color: #525252;
+                background-color: #1c1c1c;
 
                 & > .footerBar > .container {
                     padding: 0 10px;

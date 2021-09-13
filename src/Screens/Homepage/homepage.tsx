@@ -35,7 +35,7 @@ export default function Homepage(): JSX.Element {
                         rel='noopener noreferrer'
                     >
                         Google Play Store
-                    </a>
+                    </a>{' '}
                     otherwise, if you are using other platforms such as iOS,
                     Windows or MacOS, you can refer to this{' '}
                     <a

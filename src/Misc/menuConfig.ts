@@ -5,6 +5,7 @@ import DiscordLoginCallback from '../Components/Login/login';
 export type Menu = {
     name?: string;
     path?: string;
+    icon?: string;
     component?: FunctionComponent;
     excludeFromMenu?: true;
     childNode?: Menu[];
@@ -15,6 +16,7 @@ export const menu: Menu[] = [
     {
         name: 'Home',
         path: '/',
+        icon: 'favicon-32x32.png',
         component: Homepage,
     },
     {
