@@ -38,7 +38,7 @@ body {
         & > .title-container {
             overflow: hidden;
             display: table;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: auto;
             height: 100%;
             padding: 0 10px;
@@ -71,11 +71,17 @@ body {
         padding: 20px 10px;
 
         & > .content {
-            .box-shadow(0 0 14px -1px rgb(25, 36, 37));
+            .box-shadow(0 0 20px -1px rgba(0, 0, 0, 0.6));
+            .transition(box-shadow 0.5s ease);
+
+            &:hover {
+                .box-shadow(0 0 50px -1px rgba(0, 0, 0, 0.4));
+            }
+
             padding: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 5px;
-            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 10px;
+            max-width: 1400px;
             min-height: 200px;
             width: 100%;
 
@@ -88,5 +94,10 @@ body {
                 }
             }
         }
+    }
+
+    h1, h2, h3, h4, h5, h6, strong {
+        color: white;
+        font-weight: 700 !important;
     }
 }

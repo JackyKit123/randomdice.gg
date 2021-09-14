@@ -42,7 +42,7 @@ export default function Menu(props: {
                 case menu.path === location.pathname:
                     anchor = (
                         <>
-                            <span className='active menu-item'>
+                            <span className='active menu-item menu-icon'>
                                 <Dice dice={menu.icon || ''} />
                                 {menu.name}
                             </span>
@@ -52,7 +52,10 @@ export default function Menu(props: {
                 case menu.path !== undefined:
                     anchor = (
                         <>
-                            <Link className='menu-item' to={String(menu.path)}>
+                            <Link
+                                className='menu-item menu-icon'
+                                to={String(menu.path)}
+                            >
                                 <Dice dice={menu.icon || ''} />
                                 {menu.name}
                             </Link>

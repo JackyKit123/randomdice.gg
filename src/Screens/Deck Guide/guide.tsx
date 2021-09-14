@@ -40,10 +40,14 @@ export default function DeckGuideMenu(): JSX.Element | null {
         jsx = (
             <>
                 <div className='guide'>
+                    {thisGuide?.archived ? (
+                        <div className='guide-archived'>
+                            <h4>This guide has been archived by the editor</h4>
+                        </div>
+                    ) : null}
                     <h3>
                         {thisGuide?.name} ({thisGuide?.type})
                     </h3>
-                    {thisGuide?.archived ? <h4>ARCHIVED</h4> : null}
                     {thisGuide?.diceList.map(dicelist => (
                         <div
                             className='dice-container'

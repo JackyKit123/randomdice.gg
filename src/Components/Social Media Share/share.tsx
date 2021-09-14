@@ -29,7 +29,7 @@ export default function ShareButtons(props: {
                 <h3>Copied</h3>
                 <span>The url has been copied to your clipboard.</span>
             </PopUp>
-            <h4>Share This</h4>
+            <h4>Share this page</h4>
             <FacebookShareButton
                 url={url || window.location.href}
                 quote={name}

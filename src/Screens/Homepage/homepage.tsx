@@ -22,6 +22,13 @@ export default function Homepage(): JSX.Element {
     return (
         <Main className='homepage' title='Random Dice Community Website'>
             <section>
+                <div className='center-container'>
+                    <img
+                        alt='randomdice logo'
+                        src='android-chrome-192x192.png'
+                    />
+                </div>
+                <br />
                 <h3>Welcome</h3>
                 <p>
                     Hello all, this is a Random Dice community created website.

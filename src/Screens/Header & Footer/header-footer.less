@@ -265,12 +265,7 @@ body {
                                             position: initial;
                                             margin-left: 0;
                                             visibility: visible;
-                                            background-color: rgba(
-                                                255,
-                                                255,
-                                                255,
-                                                0.9
-                                            );
+                                            background-color: rgba(49, 49, 49, 0.9);
                                             padding: 10px;
                                             border-bottom: 2px solid #525252;
                                             height: auto;
@@ -321,7 +316,7 @@ body {
                                     cursor: context-menu;
 
                                     &.active {
-                                        color: #6ba4a5;
+                                        color: white;
                                         font-weight: 700;
                                     }
                                 }
@@ -330,7 +325,7 @@ body {
                                     &:hover,
                                     &:focus {
                                         cursor: pointer;
-                                        color: #6ba4a5;
+                                        color: #ffffff;
                                     }
                                 }
 
@@ -355,9 +350,9 @@ body {
                                         visibility: hidden;
                                         z-index: 10;
                                         position: absolute;
-                                        background-color: rgba(5, 41, 46, 0.9);
+                                        background-color: rgba(45, 45, 45, 0.9);
                                         right: 0;
-                                        top: 100px;
+                                        top: 60px;
                                         padding: 0 30px;
 
                                         & > div {
@@ -367,7 +362,7 @@ body {
 
                                             & > a,
                                             & > span {
-                                                color: #49b0b4;
+                                                color: #c5c5c5;
                                                 .transition(
                                                     color 0.2s ease-in-out
                                                 );
@@ -380,8 +375,7 @@ body {
                                                 &.active {
                                                     cursor: context-menu;
                                                     color: #ffffff;
-                                                    text-shadow: #22c6e1 0 0px
-                                                        9px;
+                                                    text-shadow: #b2b2b2 0 0 9px;
                                                     font-weight: 700;
                                                 }
                                             }
@@ -405,12 +399,7 @@ body {
                                         opacity: 0;
                                         .calc(width, ~'100% - 20px');
                                         margin-left: 0;
-                                        background-color: rgba(
-                                            255,
-                                            255,
-                                            255,
-                                            0.9
-                                        );
+                                        background-color: rgba(49, 49, 49, 0.9);
                                         padding: 10px;
                                         z-index: 40;
                                         .transition(0.4s all ease-in-out);
@@ -458,7 +447,7 @@ body {
                     height: 100%;
                     vertical-align: middle;
                     margin: 0 auto;
-                    max-width: 1200px;
+                    max-width: 1400px;
                 }
             }
         }
@@ -511,7 +500,7 @@ body {
                     text-align: center;
                     margin: 0 auto;
                     padding: 30px 10px 0;
-                    max-width: 1200px;
+                    max-width: 1400px;
 
                     & > .community {
                         padding-top: 10px;
@@ -569,7 +558,7 @@ body {
 
                         &:hover,
                         &:active {
-                            color: #05292e;
+                            color: #ffffff;
                         }
                     }
 
@@ -580,6 +569,10 @@ body {
 
                         .footer-link {
                             float: right;
+
+                            & > a {
+                                text-decoration: none;
+                            }
                         }
                     }
                 }
