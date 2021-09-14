@@ -5,6 +5,7 @@ import DiscordLoginCallback from '../Components/Login/login';
 export type Menu = {
     name?: string;
     path?: string;
+    icon?: string;
     component?: FunctionComponent;
     excludeFromMenu?: true;
     childNode?: Menu[];
@@ -15,6 +16,7 @@ export const menu: Menu[] = [
     {
         name: 'Home',
         path: '/',
+        icon: 'Joker',
         component: Homepage,
     },
     {
@@ -23,26 +25,31 @@ export const menu: Menu[] = [
             {
                 name: 'PvP Deck List',
                 path: '/decks/pvp',
+                icon: 'Critical',
                 component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
                 name: 'Co-op Deck List',
                 path: '/decks/co-op',
+                icon: 'YinYang',
                 component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
                 name: 'Crew Deck List',
                 path: '/decks/crew',
+                icon: 'Lunar',
                 component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
                 name: 'Crit% Data Per Class',
                 path: '/critData',
+                icon: 'Scope',
                 component: lazy(() => import('../Screens/Crit Info/crit')),
             },
             {
                 name: 'Meta Decks Guide',
                 path: '/decks/guide',
+                icon: 'Metastasis',
                 component: lazy(() =>
                     import('../Screens/Deck Guide/guideMenu')
                 ),
@@ -50,16 +57,19 @@ export const menu: Menu[] = [
             {
                 name: 'Arena Draft Tool',
                 path: '/arenadraft',
+                icon: 'Holy Sword',
                 component: lazy(() => import('../Screens/Arena/arenadraft')),
             },
             {
                 name: 'YouTube Channels',
                 path: '/youtube',
+                icon: 'Fire',
                 component: lazy(() => import('../Screens/YoutubeListing/yt')),
             },
             {
                 name: 'Discord Bot',
                 path: '/discord_bot',
+                icon: 'Ice',
                 component: lazy(() => import('../Screens/Discord Bot/bot')),
             },
             {
@@ -75,41 +85,49 @@ export const menu: Menu[] = [
             {
                 name: 'Mob Speed Calculator',
                 path: '/calculator/speed',
+                icon: 'Flow',
                 component: lazy(() => import('../Screens/Cal/Speed/speed')),
             },
             {
                 name: 'Combo Damage Calculator',
                 path: '/calculator/combo',
+                icon: 'Combo',
                 component: lazy(() => import('../Screens/Cal/Combo/combo')),
             },
             {
                 name: 'Energy Damage Calculator',
                 path: '/calculator/energy',
+                icon: 'Light',
                 component: lazy(() => import('../Screens/Cal/Energy/energy')),
             },
             {
                 name: 'Solar Damage Calculator',
                 path: '/calculator/solar',
+                icon: 'Solar',
                 component: lazy(() => import('../Screens/Cal/Solar/solar')),
             },
             {
                 name: 'Gear DPS Calculator',
                 path: '/calculator/gear',
+                icon: 'Gear',
                 component: lazy(() => import('../Screens/Cal/Gear/gear')),
             },
             {
                 name: 'Co-op Grind Calculator',
                 path: '/calculator/coop',
+                icon: 'YinYang',
                 component: lazy(() => import('../Screens/Cal/Co-op/coop')),
             },
             {
                 name: 'General DPS Calculator',
                 path: '/calculator/dps',
+                icon: 'Typhoon',
                 component: lazy(() => import('../Screens/Cal/DPS/dps')),
             },
             {
                 name: 'Dice Stat Calculator',
                 path: '/calculator/stat',
+                icon: 'Modified Electric',
                 component: lazy(() => import('../Screens/Cal/Dice Stat/dice')),
             },
         ],
@@ -120,11 +138,13 @@ export const menu: Menu[] = [
             {
                 name: 'PvP Introduction',
                 path: '/wiki/pvp',
+                icon: 'Critical',
                 component: lazy(() => import('../Screens/Wiki/Game Intro/pvp')),
             },
             {
                 name: 'Co-op  Introduction',
                 path: '/wiki/co-op',
+                icon: 'YinYang',
                 component: lazy(() =>
                     import('../Screens/Wiki/Game Intro/coop')
                 ),
@@ -132,6 +152,7 @@ export const menu: Menu[] = [
             {
                 name: 'Crew Introduction',
                 path: '/wiki/crew',
+                icon: 'Lunar',
                 component: lazy(() =>
                     import('../Screens/Wiki/Game Intro/crew')
                 ),
@@ -139,6 +160,7 @@ export const menu: Menu[] = [
             {
                 name: 'Arena Introduction',
                 path: '/wiki/arena',
+                icon: 'Holy Sword',
                 component: lazy(() =>
                     import('../Screens/Wiki/Game Intro/arena')
                 ),
@@ -146,16 +168,19 @@ export const menu: Menu[] = [
             {
                 name: 'Dice Mechanics',
                 path: '/wiki/dice_mechanics',
+                icon: 'Gear',
                 component: lazy(() => import('../Screens/Wiki/Dice/dice')),
             },
             {
                 name: 'Boss Mechanics',
                 path: '/wiki/boss_mechanics',
+                icon: 'ix10',
                 component: lazy(() => import('../Screens/Wiki/Boss/boss')),
             },
             {
                 name: 'Battlefield Info',
                 path: '/wiki/battlefield',
+                icon: 'Landmine',
                 component: lazy(() =>
                     import('../Screens/Wiki/Battlefield/battlefields')
                 ),
@@ -163,6 +188,7 @@ export const menu: Menu[] = [
             {
                 name: 'Guide and Tips',
                 path: '/wiki/guide',
+                icon: 'Random Growth',
                 component: lazy(() =>
                     import('../Screens/Wiki/Basic Guide/guideMenu')
                 ),
@@ -178,6 +204,7 @@ export const menu: Menu[] = [
             {
                 name: 'The Store',
                 path: '/wiki/store',
+                icon: 'Mimic',
                 component: lazy(() =>
                     import('../Screens/Wiki/Game Intro/store')
                 ),
@@ -185,6 +212,7 @@ export const menu: Menu[] = [
             {
                 name: 'Box Guide',
                 path: '/wiki/box_guide',
+                icon: 'Bounty',
                 component: lazy(() => import('../Screens/Wiki/Box Guide/box')),
             },
         ],
@@ -195,6 +223,7 @@ export const menu: Menu[] = [
             {
                 name: 'About Us',
                 path: '/about/us',
+                icon: 'Random Growth',
                 component: lazy(() =>
                     import('../Screens/About/About Us/about')
                 ),
@@ -202,6 +231,7 @@ export const menu: Menu[] = [
             {
                 name: 'Community',
                 path: '/about/community',
+                icon: 'YinYang',
                 component: lazy(() =>
                     import('../Screens/About/Community/community')
                 ),
@@ -209,6 +239,7 @@ export const menu: Menu[] = [
             {
                 name: 'Credit',
                 path: '/about/credit',
+                icon: 'Royal',
                 component: lazy(() => import('../Screens/About/Credit/credit')),
             },
             {
@@ -224,6 +255,7 @@ export const menu: Menu[] = [
             {
                 name: 'Support Us',
                 path: '/about/patreon',
+                icon: 'Sacrifice',
                 component: lazy(() =>
                     import('../Screens/About/Patreon/patreon')
                 ),

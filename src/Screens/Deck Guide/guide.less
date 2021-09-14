@@ -30,11 +30,11 @@
                 .transition(0.2s all ease-in-out);
 
                 &:nth-of-type(odd) {
-                    background: #f8d298;
+                    background: #2f2f2f;
                 }
 
                 &:nth-of-type(even) {
-                    background: #b8dadc;
+                    background: #282828;
                 }
 
                 &:hover {
@@ -58,10 +58,10 @@
                             .flex-direction(column);
                             .justify-content(center);
                             text-decoration: none;
-                            color: #000000;
+                            color: white;
 
                             &:hover {
-                                color: #000000;
+                                color: white;
                             }
                         }
                     }
@@ -111,14 +111,40 @@
                         .flex-direction(column);
                         .justify-content(center);
                         text-decoration: none;
-                        color: #000000;
+                        color: white;
 
                         &:hover {
-                            color: #000000;
+                            color: white;
                         }
                     }
                 }
             }
         }
+    }
+}
+
+.guide-archived {
+    width: calc(100% + 40px);
+    margin: -20px -20px 40px;
+    padding: 0.5rem;
+    background: rgb(110, 101, 0);
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    box-shadow: none;
+
+    & > h4 {
+        color: #f5f5f5;
+        margin-bottom: 0 !important;
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 0.15ch;
+        text-transform: uppercase;
+    }
+}
+
+.guide {
+    & > h3 {
+        font-weight: 600;
+        font-size: 2.5rem;
     }
 }

@@ -3,9 +3,9 @@
 body {
     .banner {
         width: 100%;
-        height: 500px;
-        background-image: url('https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FBanner.jpg?alt=media&token=e998fe3c-efdc-484b-9629-cb0e6db746ff');
-        background-repeat: no-repeat;
+        height: 650px;
+        // weird hack since there is basically no native support for this
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FBanner.jpg?alt=media&token=e998fe3c-efdc-484b-9629-cb0e6db746ff') no-repeat center;
         background-size: cover;
         position: relative;
 
@@ -38,7 +38,7 @@ body {
         & > .title-container {
             overflow: hidden;
             display: table;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: auto;
             height: 100%;
             padding: 0 10px;
@@ -48,7 +48,7 @@ body {
                 font-weight: 700;
                 font-size: 90px;
                 color: #ffffff;
-                text-shadow: 0 0 10px #000000;
+                text-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
                 vertical-align: middle;
                 text-align: center;
 
@@ -60,7 +60,7 @@ body {
     }
 
     .main {
-        .box-shadow(0 -6px 5px 1px rgba(0, 0, 0, 0.75));
+        .box-shadow(0 -6px 20px 1px rgba(0, 0, 0, 0.75));
         position: relative;
         height: 100%;
 
@@ -71,11 +71,17 @@ body {
         padding: 20px 10px;
 
         & > .content {
-            .box-shadow(0 0 14px -1px rgb(25, 36, 37));
+            .box-shadow(0 0 20px -1px rgba(0, 0, 0, 0.6));
+            .transition(box-shadow 0.5s ease);
+
+            &:hover {
+                .box-shadow(0 0 50px -1px rgba(0, 0, 0, 0.4));
+            }
+
             padding: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 5px;
-            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 10px;
+            max-width: 1400px;
             min-height: 200px;
             width: 100%;
 
@@ -88,5 +94,10 @@ body {
                 }
             }
         }
+    }
+
+    h1, h2, h3, h4, h5, h6, strong {
+        color: white;
+        font-weight: 700 !important;
     }
 }
