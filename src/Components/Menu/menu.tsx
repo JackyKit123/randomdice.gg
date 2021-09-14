@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { Menu as MenuProp } from '../../Misc/menuConfig';
+import Dice from '../Dice/dice';
+import './menu.less';
 
 export default function Menu(props: {
     menuList: MenuProp[];
@@ -40,8 +42,8 @@ export default function Menu(props: {
                 case menu.path === location.pathname:
                     anchor = (
                         <>
-                            <img src={menu.icon} alt={menu.name} />
                             <span className='active menu-item'>
+                                <Dice dice={menu.icon || ''} />
                                 {menu.name}
                             </span>
                         </>
@@ -50,8 +52,8 @@ export default function Menu(props: {
                 case menu.path !== undefined:
                     anchor = (
                         <>
-                            <img src={menu.icon} alt={menu.name} />
                             <Link className='menu-item' to={String(menu.path)}>
+                                <Dice dice={menu.icon || ''} />
                                 {menu.name}
                             </Link>
                         </>

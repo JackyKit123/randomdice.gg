@@ -16,7 +16,7 @@ export const menu: Menu[] = [
     {
         name: 'Home',
         path: '/',
-        icon: 'favicon-32x32.png',
+        icon: 'Joker',
         component: Homepage,
     },
     {
@@ -25,26 +25,31 @@ export const menu: Menu[] = [
             {
                 name: 'PvP Deck List',
                 path: '/decks/pvp',
+                icon: 'Critical',
                 component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
                 name: 'Co-op Deck List',
                 path: '/decks/co-op',
+                icon: 'YinYang',
                 component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
                 name: 'Crew Deck List',
                 path: '/decks/crew',
+                icon: 'Solar',
                 component: lazy(() => import('../Screens/Decks/decklist')),
             },
             {
                 name: 'Crit% Data Per Class',
                 path: '/critData',
+                icon: 'Scope',
                 component: lazy(() => import('../Screens/Crit Info/crit')),
             },
             {
                 name: 'Meta Decks Guide',
                 path: '/decks/guide',
+                icon: 'Metastasis',
                 component: lazy(() =>
                     import('../Screens/Deck Guide/guideMenu')
                 ),
@@ -52,16 +57,19 @@ export const menu: Menu[] = [
             {
                 name: 'Arena Draft Tool',
                 path: '/arenadraft',
+                icon: 'Holy Sword',
                 component: lazy(() => import('../Screens/Arena/arenadraft')),
             },
             {
                 name: 'YouTube Channels',
                 path: '/youtube',
+                icon: 'Fire',
                 component: lazy(() => import('../Screens/YoutubeListing/yt')),
             },
             {
                 name: 'Discord Bot',
                 path: '/discord_bot',
+                icon: 'Ice',
                 component: lazy(() => import('../Screens/Discord Bot/bot')),
             },
             {
