@@ -10,13 +10,14 @@
             border: 0;
             font: inherit;
             font-size: 24px;
-            color: #1b00b2;
+            color: #beb4ff;
             word-break: break-word;
             .transition(all 0.2s ease-in-out);
 
             &:hover,
             &:focus {
-                color: #ffffff;
+                color: #e575ff;
+                .transition(all 0s);
             }
         }
     }
@@ -97,7 +98,7 @@
                 font-size: 18px;
                 text-align: left;
                 font-weight: 600;
-                background-color: #4b8bc1;
+                background-color: #3f3f3f;
             }
 
             td {
@@ -106,22 +107,22 @@
                 text-align: right;
 
                 &:nth-of-type(odd) {
-                    background-color: #b8dadc;
+                    background: #2f2f2f;
                 }
 
                 &:nth-of-type(even) {
-                    background-color: #f8d298;
+                    background: #282828;
                 }
             }
 
             tr:nth-of-type(even) {
                 td {
                     &:nth-of-type(odd) {
-                        background-color: #f8d298;
+                        background: #2f2f2f;
                     }
 
                     &:nth-of-type(even) {
-                        background-color: #b8dadc;
+                        background: #282828;
                     }
                 }
             }
