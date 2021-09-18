@@ -2,14 +2,14 @@ import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Main from '../../Components/Main/main';
-import Error from '../../Components/Error/error';
-import LoadingScreen from '../../Components/Loading/loading';
-import Dice from '../../Components/Dice/dice';
+import Main from 'Components/Main';
+import Error from 'Components/Error';
+import LoadingScreen from 'Components/Loading';
+import Dice from 'Components/Dice';
 import './guide.less';
-import { RootState } from '../../Misc/Redux Storage/store';
-import { CLEAR_ERRORS } from '../../Misc/Redux Storage/Fetch Firebase/types';
-import { fetchDecksGuide, fetchDices } from '../../Misc/Firebase/fetchData';
+import { RootState } from 'Redux/store';
+import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+import { fetchDecksGuide, fetchDices } from 'Firebase';
 
 export default function DeckGuideMenu(): JSX.Element {
     const dispatch = useDispatch();

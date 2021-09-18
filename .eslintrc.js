@@ -1,7 +1,7 @@
 module.exports = {
     parser: '@typescript-eslint/parser',
     parserOptions: {
-        ecmaVersion: 2018,
+        ecmaVersion: 2021,
         sourceType: 'module',
         project: './tsconfig.json',
         tsconfigRootDir: __dirname,
@@ -35,6 +35,7 @@ module.exports = {
                 map: ['./src'],
                 extensions: ['.js', '.jsx', '.ts', '.tsx'],
             },
+            typescript: {},
         },
         react: {
             version: 'detect',

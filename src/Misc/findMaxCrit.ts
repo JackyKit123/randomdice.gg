@@ -1,4 +1,4 @@
-import { Dices } from './Redux Storage/Fetch Firebase/Dices/types';
+import { Dices } from 'Redux/Fetch Firebase/Dices/types';
 
 export default function findMaxCrit(dice: Dices = []): number {
     if (!dice.length) {

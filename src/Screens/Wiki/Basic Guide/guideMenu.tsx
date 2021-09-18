@@ -2,13 +2,13 @@ import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Main from '../../../Components/Main/main';
-import Error from '../../../Components/Error/error';
-import LoadingScreen from '../../../Components/Loading/loading';
-import { RootState } from '../../../Misc/Redux Storage/store';
+import Main from 'Components/Main';
+import Error from 'Components/Error';
+import LoadingScreen from 'Components/Loading';
+import { RootState } from 'Redux/store';
 import './guide.less';
-import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
-import { fetchWiki } from '../../../Misc/Firebase/fetchData';
+import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+import { fetchWiki } from 'Firebase';
 
 export default function BasicGuideMenu(): JSX.Element {
     const dispatch = useDispatch();

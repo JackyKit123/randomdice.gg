@@ -4,14 +4,14 @@ import ReactHtmlParser from 'react-html-parser';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { sanitize } from 'dompurify';
-import Main from '../../../Components/Main/main';
-import Error from '../../../Components/Error/error';
-import LoadingScreen from '../../../Components/Loading/loading';
-import replaceAnchorWithHistory from '../../../Misc/HTMLAnchorNavigation';
-import { WikiContent } from '../../../Misc/Redux Storage/Fetch Firebase/Wiki/types';
-import { RootState } from '../../../Misc/Redux Storage/store';
-import { fetchWiki } from '../../../Misc/Firebase/fetchData';
-import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
+import Main from 'Components/Main';
+import Error from 'Components/Error';
+import LoadingScreen from 'Components/Loading';
+import replaceAnchorWithHistory from 'Misc/HTMLAnchorNavigation';
+import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
+import { RootState } from 'Redux/store';
+import { fetchWiki } from 'Firebase';
+import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import './intro.less';
 
 export default function Intro({

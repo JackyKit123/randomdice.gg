@@ -8,19 +8,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Main from '../../../Components/Main/main';
-import Error from '../../../Components/Error/error';
-import LoadingScreen from '../../../Components/Loading/loading';
-import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
-import { fetchPatreon } from '../../../Misc/Firebase/fetchData';
+import Main from 'Components/Main';
+import Error from 'Components/Error';
+import LoadingScreen from 'Components/Loading';
+import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+import { fetchPatreon } from 'Firebase';
 import './patreon.less';
-import { RootState } from '../../../Misc/Redux Storage/store';
-import {
-    OPEN_POPUP,
-    CLOSE_POPUP,
-} from '../../../Misc/Redux Storage/PopUp Overlay/types';
-import PopUp from '../../../Components/PopUp Overlay/popup';
-import { Patreon } from '../../../Misc/Redux Storage/Fetch Firebase/Patreon List/types';
+import { RootState } from 'Redux/store';
+import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
+import PopUp from 'Components/PopUp Overlay';
+import { Patreon } from 'Redux/Fetch Firebase/Patreon List/types';
 
 export default function PatreonProfile(): JSX.Element {
     const history = useHistory();

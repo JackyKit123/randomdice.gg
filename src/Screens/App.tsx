@@ -3,16 +3,16 @@ import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Analytics from 'react-router-ga';
-import Header from './Header & Footer/header';
-import Footer from './Header & Footer/footer';
-import mapRouter from './Router/router';
-import * as ga from '../Misc/customGaEvent';
-import loadGAPI from '../Misc/Redux Storage/Google API/init';
-import fetchFirebase from '../Misc/Firebase/fetchData';
-import { authStateDispatch } from '../Misc/Firebase/auth';
-import { menu } from '../Misc/menuConfig';
+import Header from 'Components/Header & Footer/header';
+import Footer from 'Components/Header & Footer/footer';
+import mapRouter from 'Router';
+import * as ga from 'Misc/customGaEvent';
+import loadGAPI from 'Redux/Google API/init';
+import fetchFirebase from 'Firebase';
+import { authStateDispatch } from 'Firebase/auth';
+import { menu } from 'Router/menu';
 import './App.less';
-import ToTop from '../Components/To Top/btn';
+import ToTop from 'Components/To Top';
 
 export default function App(): JSX.Element {
     const dispatch = useDispatch();

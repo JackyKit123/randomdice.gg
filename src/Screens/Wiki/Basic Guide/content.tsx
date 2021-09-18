@@ -3,15 +3,15 @@ import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import Main from '../../../Components/Main/main';
-import Error from '../../../Components/Error/error';
-import LoadingScreen from '../../../Components/Loading/loading';
-import ShareButton from '../../../Components/Social Media Share/share';
-import ConvertEmbed from '../../../Components/Youtube Embed/embed';
-import { fetchWiki } from '../../../Misc/Firebase/fetchData';
-import replaceAnchorWithHistory from '../../../Misc/HTMLAnchorNavigation';
-import { CLEAR_ERRORS } from '../../../Misc/Redux Storage/Fetch Firebase/types';
-import { RootState } from '../../../Misc/Redux Storage/store';
+import Main from 'Components/Main';
+import Error from 'Components/Error';
+import LoadingScreen from 'Components/Loading';
+import ShareButton from 'Components/Social Media Share';
+import ConvertEmbed from 'Components/Youtube Embed';
+import { fetchWiki } from 'Firebase';
+import replaceAnchorWithHistory from 'Misc/HTMLAnchorNavigation';
+import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+import { RootState } from 'Redux/store';
 
 export default function BasicGuide(): JSX.Element {
     const dispatch = useDispatch();

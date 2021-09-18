@@ -15,16 +15,13 @@ import {
     faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
-import Menu from '../../Components/Menu/menu';
-import * as auth from '../../Misc/Firebase/auth';
-import { menu } from '../../Misc/menuConfig';
-import { RootState } from '../../Misc/Redux Storage/store';
-import PopUp from '../../Components/PopUp Overlay/popup';
-import {
-    OPEN_POPUP,
-    CLOSE_POPUP,
-} from '../../Misc/Redux Storage/PopUp Overlay/types';
-import { ERROR } from '../../Misc/Redux Storage/Firebase Auth/types';
+import Menu from 'Components/Menu';
+import * as auth from 'Firebase/auth';
+import { menu } from 'Router';
+import { RootState } from 'Redux/store';
+import PopUp from 'Components/PopUp Overlay';
+import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
+import { ERROR } from 'Redux/Firebase Auth/types';
 
 export default function Header(): JSX.Element {
     const dispatch = useDispatch();
@@ -185,7 +182,8 @@ export default function Header(): JSX.Element {
                                                 } catch (err) {
                                                     dispatch({
                                                         type: ERROR,
-                                                        payload: err.message,
+                                                        payload: (err as Error)
+                                                            .message,
                                                     });
                                                 }
                                             }, 500)
@@ -229,7 +227,7 @@ export default function Header(): JSX.Element {
                                         } catch (err) {
                                             dispatch({
                                                 type: ERROR,
-                                                payload: err.message,
+                                                payload: (err as Error).message,
                                             });
                                         }
                                     }}

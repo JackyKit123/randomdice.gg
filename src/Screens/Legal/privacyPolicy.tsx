@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Main from '../../Components/Main/main';
+import Main from 'Components/Main';
 import './legal.less';
 
 export default function PrivacyPolicy(): JSX.Element {
