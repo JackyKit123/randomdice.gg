@@ -11,9 +11,8 @@ import {
 import { People, Credit } from 'Redux/Fetch Firebase/Credit/types';
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
-import PopUp from 'Components/PopUp Overlay';
+import PopUp from 'Components/PopUp';
 import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
-import './credit.less';
 import { fetchCredit } from 'Firebase';
 
 export default function editCredit(): JSX.Element {

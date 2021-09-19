@@ -1,0 +1,52 @@
+@import '../cross_import_lesshat.less';
+
+body[ads-free='true'] {
+    .google-auto-placed,
+    ins.adsbygoogle {
+        display: none !important;
+        height: 0 !important;
+        visibility: hidden !important;
+        border: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+.ad-container {
+    margin: 0 auto 20px;
+    max-width: 1400px;
+    width: 100%;
+    overflow: visible;
+    min-height: 250px;
+
+    & > span.label {
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-style: italic;
+        font-size: 15px;
+        margin: 5px auto 0;
+    }
+
+    & > ins {
+        .box-shadow(0 0 10px -1px #192425);
+    }
+
+    &.adblocked {
+        min-height: 0;
+        background: rgba(255, 255, 255, 0.5);
+        .box-shadow(0 0 10px -1px #192425);
+        border-radius: 5px;
+        padding: 15px 10px;
+        line-height: 30px;
+
+        & > span {
+            .justify-content(center);
+            .align-items(center);
+
+            & > a {
+                font-size: inherit;
+            }
+        }
+    }
+}

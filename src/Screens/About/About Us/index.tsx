@@ -1,6 +1,5 @@
 import React from 'react';
 import Main from 'Components/Main';
-import './about.less';
 
 export default function AboutUs(): JSX.Element {
     return (

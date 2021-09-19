@@ -6,7 +6,6 @@ import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
 import { RootState } from 'Redux/store';
-import './guide.less';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchWiki } from 'Firebase';
 

@@ -5,11 +5,10 @@ import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
 import Main from 'Components/Main';
 import Menu from 'Components/Menu';
-import './homepage.less';
 import { menu } from 'Router';
 import replaceAnchorWithHistory from 'Misc/HTMLAnchorNavigation';
 import { RootState } from 'Redux/store';
-import ConvertEmbed from 'Components/Youtube Embed';
+import ConvertEmbed from 'Components/YoutubeEmbed';
 import { navDiscord } from 'Misc/customGaEvent';
 
 export default function Homepage(): JSX.Element {

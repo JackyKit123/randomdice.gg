@@ -18,8 +18,7 @@ import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
 import { DeckGuide, DecksGuide } from 'Redux/Fetch Firebase/Decks Guide/types';
 import { RootState } from 'Redux/store';
-import './guide.less';
-import PopUp from 'Components/PopUp Overlay';
+import PopUp from 'Components/PopUp';
 import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
 import { fetchDecksGuide } from 'Firebase';
 

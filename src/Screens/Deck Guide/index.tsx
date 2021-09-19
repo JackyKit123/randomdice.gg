@@ -6,13 +6,12 @@ import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
-import GoogleAds from 'Components/Ad Unit';
-import SMshare from 'Components/Social Media Share';
-import './guide.less';
+import GoogleAds from 'Components/AdUnit';
+import SMshare from 'Components/ShareButton';
 import { RootState } from 'Redux/store';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchDecksGuide, fetchDices } from 'Firebase';
-import ConvertEmbed from 'Components/Youtube Embed';
+import ConvertEmbed from 'Components/YoutubeEmbed';
 
 export default function DeckGuideMenu(): JSX.Element | null {
     const history = useHistory();

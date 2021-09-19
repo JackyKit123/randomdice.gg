@@ -12,7 +12,6 @@ import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
 import { RootState } from 'Redux/store';
 import { fetchWiki } from 'Firebase';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
-import './intro.less';
 
 export default function Intro({
     type,

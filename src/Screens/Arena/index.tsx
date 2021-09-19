@@ -12,9 +12,8 @@ import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
 import { fetchDices } from 'Firebase';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
-import './arenadraft.less';
-import GoogleAds from 'Components/Ad Unit';
-import ShareButtons from 'Components/Social Media Share';
+import GoogleAds from 'Components/AdUnit';
+import ShareButtons from 'Components/ShareButton';
 
 export default function ArenaDraft(): JSX.Element {
     const dispatch = useDispatch();

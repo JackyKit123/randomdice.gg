@@ -9,9 +9,7 @@ import Dice from 'Components/Dice';
 import { RootState } from 'Redux/store';
 import { fetchDices } from 'Firebase';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
-import '../cal.less';
-import './dice.less';
-import GoogleAds from 'Components/Ad Unit';
+import GoogleAds from 'Components/AdUnit';
 
 export default function DiceStat(): JSX.Element {
     const dispatch = useDispatch();

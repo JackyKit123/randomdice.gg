@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { clearRegistration } from 'serviceWorker';
-import './loading.less';
 
 export default function Loading(): JSX.Element {
     const [loadingTime, setLoadingTime] = useState(0);

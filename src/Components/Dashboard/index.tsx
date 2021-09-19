@@ -9,7 +9,6 @@ import Main from 'Components/Main';
 import LoadingScreen from 'Components/Loading';
 import NoMatch from 'Screens/NoMatch';
 import { menu } from 'Router';
-import './dashboard.less';
 import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 
 export default function Dashboard(props: {

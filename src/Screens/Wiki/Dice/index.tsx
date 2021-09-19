@@ -9,12 +9,11 @@ import Dice from 'Components/Dice';
 import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
-import GoogleAds from 'Components/Ad Unit';
+import GoogleAds from 'Components/AdUnit';
 import replaceAnchorWithHistory from 'Misc/HTMLAnchorNavigation';
 import { RootState } from 'Redux/store';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchWiki } from 'Firebase';
-import './dice.less';
 
 export default function DiceMechanic(): JSX.Element {
     const history = useHistory();

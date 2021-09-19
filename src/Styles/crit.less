@@ -1,0 +1,131 @@
+@import './cross_import_lesshat.less';
+
+.crit-data {
+    p {
+        & > button {
+            display: inline;
+            text-decoration: underline;
+            padding: 0;
+            background: none;
+            border: 0;
+            font: inherit;
+            font-size: 24px;
+            color: #beb4ff;
+            word-break: break-word;
+            .transition(all 0.2s ease-in-out);
+
+            &:hover,
+            &:focus {
+                color: #e575ff;
+                .transition(all 0s);
+            }
+        }
+    }
+
+    form {
+        .display(flex);
+        .flex-direction(row);
+        .justify-content(center);
+        .flex-wrap(wrap);
+
+        & > label {
+            font-size: 20px;
+
+            & > input {
+                margin: 10px;
+                width: 70px;
+            }
+
+            &[for='my-rank'] {
+                & > input {
+                    width: 40px;
+                    background: #eeeeee;
+                }
+            }
+        }
+    }
+
+    .chart-container {
+        filter: invert(1);
+        @media @desktop {
+            .display(flex);
+        }
+    }
+
+    .table-container {
+        overflow-y: hidden;
+        overflow-x: auto;
+
+        table {
+            border: 1px solid black;
+            border-collapse: separate;
+            border-spacing: 1px;
+
+            &:first-of-type {
+                margin-bottom: 20px;
+            }
+
+            @media @desktop {
+                &.vertical {
+                    display: none;
+                }
+            }
+
+            @media @mobile {
+                &.horizontal {
+                    display: none;
+                }
+            }
+
+            &.horizontal {
+                width: 100%;
+
+                td {
+                    min-width: 57px;
+                }
+            }
+
+            &.vertical {
+                margin: 0 auto;
+
+                td {
+                    width: 80px;
+                }
+            }
+
+            th {
+                border: 1px solid black;
+                font-size: 18px;
+                text-align: left;
+                font-weight: 600;
+                background-color: #3f3f3f;
+            }
+
+            td {
+                border: 1px solid black;
+                font-size: 18px;
+                text-align: right;
+
+                &:nth-of-type(odd) {
+                    background: #2f2f2f;
+                }
+
+                &:nth-of-type(even) {
+                    background: #282828;
+                }
+            }
+
+            tr:nth-of-type(even) {
+                td {
+                    &:nth-of-type(odd) {
+                        background: #2f2f2f;
+                    }
+
+                    &:nth-of-type(even) {
+                        background: #282828;
+                    }
+                }
+            }
+        }
+    }
+}

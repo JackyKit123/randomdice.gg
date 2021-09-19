@@ -1,8 +1,7 @@
 import React, { useState, useEffect, ReactNode } from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
-import GoogleAds from 'Components/Ad Unit';
-import './main.less';
+import GoogleAds from 'Components/AdUnit';
 
 export default function Main(props: {
     title: string;

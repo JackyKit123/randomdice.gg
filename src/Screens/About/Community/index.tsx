@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Main from 'Components/Main';
 import { navDiscord } from 'Misc/customGaEvent';
-import './community.less';
 
 export default function CommunityListing(): JSX.Element {
     const [windowWidth, setWindowWidth] = useState(0);

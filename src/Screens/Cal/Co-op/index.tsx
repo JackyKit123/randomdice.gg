@@ -4,9 +4,7 @@ import { combinations } from 'mathjs';
 import ReactHtmlParser from 'react-html-parser';
 import Main from 'Components/Main';
 import replaceTextWithImgTag from 'Misc/replaceTextWithImg';
-import '../cal.less';
-import './coop.less';
-import GoogleAds from 'Components/Ad Unit';
+import GoogleAds from 'Components/AdUnit';
 
 export default function GoldCalculator(): JSX.Element {
     const [filter, setFilter] = useState({

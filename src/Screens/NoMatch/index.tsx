@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import { useHistory } from 'react-router-dom';
 import Main from 'Components/Main';
 import Dice from 'Components/Dice';
-import './nomatch.less';
 
 export default function NoMatch(props: {
     title?: string;

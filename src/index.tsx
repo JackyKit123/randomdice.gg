@@ -8,6 +8,7 @@ import { store } from 'Redux/store';
 import App from 'Screens/App';
 import * as serviceWorker from './serviceWorker';
 import swConfig from './swConfig';
+import 'Styles';
 
 ReactDOM.render(
     <React.StrictMode>

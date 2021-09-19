@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { Menu as MenuProp } from 'Router';
 import Dice from 'Components/Dice';
-import './menu.less';
 
 export default function Menu(props: {
     menuList: MenuProp[];

@@ -15,13 +15,11 @@ import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
-import GoogleAds from 'Components/Ad Unit';
+import GoogleAds from 'Components/AdUnit';
 import { RootState } from 'Redux/store';
 import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchDices } from 'Firebase';
-import '../cal.less';
-import './energy.less';
 import findMaxCrit from 'Misc/findMaxCrit';
 
 export default function EnergyCalculator(): JSX.Element {

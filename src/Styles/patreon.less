@@ -1,0 +1,125 @@
+@import './cross_import_lesshat.less';
+
+.patreon {
+    .patreon-icon {
+        text-align: center;
+        margin-bottom: 20px;
+
+        & > .container {
+            display: inline-block;
+            font-size: 80px;
+            background-color: #f96854;
+            color: #052d49;
+            border-radius: 50%;
+            padding: 20px;
+        }
+    }
+
+    h3 ~ div:not(.loading-animation) {
+        text-align: center;
+        min-height: 100px;
+        margin: 15px 0;
+
+        & > figure {
+            display: inline-block;
+            margin: 0 0 10px 20px;
+            border-radius: 50%;
+            .box-shadow(0 0 5px 5px rgba(0, 0, 0, 0.3));
+            overflow: hidden;
+            height: 100px;
+            width: 100px;
+            vertical-align: middle;
+
+            @media @mobile {
+                display: block;
+                margin: 10px auto;
+            }
+
+            & > img {
+                width: 100%;
+            }
+        }
+
+        a {
+            font-size: 20px;
+            font-style: italic;
+        }
+    }
+}
+
+.patreon-profile {
+    button.edit {
+        position: absolute;
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    figure {
+        float: right;
+        margin-left: 20px;
+        height: 200px;
+        width: 200px;
+        border-radius: 50%;
+        .box-shadow(0 0 5px 5px rgba(0, 0, 0, 0.3));
+        overflow: hidden;
+
+        &.no-icon {
+            padding: 28px;
+        }
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .message {
+        min-height: 200px;
+
+        ul li {
+            list-style: disc;
+        }
+
+        ol li {
+            list-style: decimal;
+        }
+
+        li {
+            margin: 0 0 20px 20px;
+        }
+    }
+
+    .editor-container {
+        min-height: 200px;
+        margin-bottom: 20px;
+
+        button.submit {
+            font-size: 12px;
+            padding: 5px;
+            margin-top: 20px;
+        }
+
+        .ck {
+            &.ck-sticky-panel .ck-sticky-panel__content_sticky {
+                top: 80px;
+            }
+
+            &.ck-label {
+                display: none;
+            }
+
+            &.ck-editor__editable {
+                ul li {
+                    list-style: disc;
+                }
+
+                ol li {
+                    list-style: decimal;
+                }
+
+                li {
+                    margin: 0 0 20px 20px;
+                }
+            }
+        }
+    }
+}

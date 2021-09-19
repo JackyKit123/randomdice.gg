@@ -6,12 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Main from 'Components/Main';
 import Error from 'Components/Error';
 import Loading from 'Components/Loading';
-import GoogleAds from 'Components/Ad Unit';
+import GoogleAds from 'Components/AdUnit';
 import { RootState } from 'Redux/store';
 import replaceTextWithImgTag from 'Misc/replaceTextWithImg';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchWiki, fetchDices } from 'Firebase';
-import './box.less';
 import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
 
 export default function BoxGuide(): JSX.Element {

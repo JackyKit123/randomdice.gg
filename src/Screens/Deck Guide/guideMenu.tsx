@@ -6,7 +6,6 @@ import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
-import './guide.less';
 import { RootState } from 'Redux/store';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchDecksGuide, fetchDices } from 'Firebase';

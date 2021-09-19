@@ -1,17 +1,19 @@
 import React from 'react';
-import './error.less';
 
-export default function Loading({
+export default function Error({
     error,
-    retryFn,
+    retryFn = (): void => window.location.reload(),
 }: {
-    error: Error;
-    retryFn: () => void;
+    error: unknown;
+    retryFn?: () => void;
 }): JSX.Element {
+    const errorMessage = (error as Error)?.message;
     return (
         <>
             <h3 className='error'>Oops! Something went wrong.</h3>
-            <h4 className='error error-message'>{error.message}</h4>
+            {errorMessage && (
+                <h4 className='error error-message'>{errorMessage}</h4>
+            )}
             <button type='button' className='error-retry' onClick={retryFn}>
                 Click Here to try again
             </button>

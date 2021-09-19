@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'Redux/store';
 import { fetchDiscordCommands } from 'Firebase';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
-import './bot.less';
 import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';

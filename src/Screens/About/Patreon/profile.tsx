@@ -13,10 +13,9 @@ import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchPatreon } from 'Firebase';
-import './patreon.less';
 import { RootState } from 'Redux/store';
 import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
-import PopUp from 'Components/PopUp Overlay';
+import PopUp from 'Components/PopUp';
 import { Patreon } from 'Redux/Fetch Firebase/Patreon List/types';
 
 export default function PatreonProfile(): JSX.Element {

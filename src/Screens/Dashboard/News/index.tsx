@@ -7,9 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
-import PopUp from 'Components/PopUp Overlay';
+import PopUp from 'Components/PopUp';
 import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
-import './news.less';
 import MyUploadAdapter from 'Misc/ckeditorUploadAdapter';
 import { fetchNews } from 'Firebase';
 

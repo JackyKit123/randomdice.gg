@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
-import './patreon.less';
 import { RootState } from 'Redux/store';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchPatreon } from 'Firebase';

@@ -1,0 +1,14 @@
+@import '../cross_import_lesshat.less';
+
+figure.dice {
+    & > img {
+        width: 100%;
+
+        &[data-dice-rarity='Common'],
+        &[data-dice-rarity='Rare'],
+        &[data-dice-rarity='Unique'] {
+            width: 90%;
+            margin: 14% 5% 0;
+        }
+    }
+}

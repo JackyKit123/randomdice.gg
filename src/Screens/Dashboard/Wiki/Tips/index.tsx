@@ -7,10 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
-import PopUp from 'Components/PopUp Overlay';
+import PopUp from 'Components/PopUp';
 import { CLOSE_POPUP, OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 import { Guide } from 'Redux/Fetch Firebase/Wiki/types';
-import './tips.less';
 import { fetchWiki } from 'Firebase';
 import MyUploadAdapter from 'Misc/ckeditorUploadAdapter';
 

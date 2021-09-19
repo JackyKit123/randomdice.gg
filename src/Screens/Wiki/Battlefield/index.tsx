@@ -7,11 +7,10 @@ import { useLocation } from 'react-router-dom';
 import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
-import GoogleAds from 'Components/Ad Unit';
+import GoogleAds from 'Components/AdUnit';
 import { RootState } from 'Redux/store';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchWiki } from 'Firebase';
-import './battlefields.less';
 import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
 
 export default function BattlefieldGuide(): JSX.Element {

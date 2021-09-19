@@ -1,0 +1,43 @@
+@import './cross_import_lesshat.less';
+
+.credit .content {
+    line-height: 25px;
+
+    h3 {
+        margin: 40px auto;
+
+        & > a {
+            font: inherit;
+        }
+    }
+
+    div {
+        text-align: center;
+        margin: 15px 0;
+
+        & > span {
+            line-height: 30px;
+            font-size: 24px;
+        }
+
+        & > figure {
+            display: inline-block;
+            margin-left: 20px;
+            border-radius: 50%;
+            .box-shadow(0 0 5px 5px rgba(0, 0, 0, 0.3));
+            overflow: hidden;
+            height: 100px;
+            width: 100px;
+            vertical-align: middle;
+
+            @media @mobile {
+                display: block;
+                margin: 10px auto;
+            }
+
+            & > img {
+                width: 100%;
+            }
+        }
+    }
+}

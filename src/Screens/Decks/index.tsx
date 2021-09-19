@@ -14,17 +14,16 @@ import { RootState } from 'Redux/store';
 import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
-import GoogleAds from 'Components/Ad Unit';
+import GoogleAds from 'Components/AdUnit';
 import Dice from 'Components/Dice';
-import PopUp from 'Components/PopUp Overlay';
+import PopUp from 'Components/PopUp';
 import { FILTER_ACTION } from 'Redux/Deck Filter/types';
 import { fetchDecks, fetchDices } from 'Firebase';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
 import { Deck } from 'Redux/Fetch Firebase/Decks/types';
-import './decklist.less';
 import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
-import ShareButtons from 'Components/Social Media Share';
+import ShareButtons from 'Components/ShareButton';
 
 export default function DeckList(): JSX.Element {
     const history = useHistory();

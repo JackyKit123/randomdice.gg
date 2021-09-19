@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
-import './credit.less';
 import { RootState } from 'Redux/store';
 import { fetchCredit } from 'Firebase';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';

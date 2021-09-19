@@ -304,7 +304,7 @@ export const menu: Menu[] = [
                 privateRoute: true,
                 path: '/dashboard/box',
                 excludeFromMenu: true,
-                component: lazy(() => import('Screens/Dashboard/Wiki/Box')),
+                component: lazy(() => import('Styles/dashboard')),
             },
             {
                 name: 'Battlefield Information',

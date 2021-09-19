@@ -13,10 +13,9 @@ import LoadingScreen from 'Components/Loading';
 import { fetchYouTube } from 'Redux/Google API/fetchData';
 import { CLEAR_ERRORS } from 'Redux/Google API/types';
 import { RootState } from 'Redux/store';
-import './yt.less';
 import { Info, Patreon } from 'Redux/Fetch Firebase/Patreon List/types';
 import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
-import PopUp from 'Components/PopUp Overlay';
+import PopUp from 'Components/PopUp';
 
 export default function YoutubeList(): JSX.Element {
     const dispatch = useDispatch();

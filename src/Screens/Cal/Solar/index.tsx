@@ -18,9 +18,7 @@ import Dice from 'Components/Dice';
 import { RootState } from 'Redux/store';
 import { fetchDices } from 'Firebase';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
-import '../cal.less';
-import './solar.less';
-import GoogleAds from 'Components/Ad Unit';
+import GoogleAds from 'Components/AdUnit';
 import findMaxCrit from 'Misc/findMaxCrit';
 
 export default function SolarCalculator(): JSX.Element {

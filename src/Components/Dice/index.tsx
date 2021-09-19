@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'Redux/store';
-import './dice.less';
 
 export default function Dice({ dice }: { dice: number | string }): JSX.Element {
     const { dices } = useSelector(
