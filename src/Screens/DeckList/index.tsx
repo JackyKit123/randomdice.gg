@@ -1,15 +1,11 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faCheck,
-    faExchangeAlt,
-    faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { faExchangeAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { Link, useLocation } from 'react-router-dom';
 import { RootState } from 'Redux/store';
 import Main from 'Components/Main';
 import Error from 'Components/Error';
@@ -17,50 +13,31 @@ import LoadingScreen from 'Components/Loading';
 import GoogleAds from 'Components/AdUnit';
 import Dice from 'Components/Dice';
 import PopUp from 'Components/PopUp';
-import { FILTER_ACTION } from 'Redux/Deck Filter/types';
 import { fetchDecks, fetchDices } from 'Firebase';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
-import { Deck } from 'Redux/Fetch Firebase/Decks/types';
 import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 import ShareButtons from 'Components/ShareButton';
+import FilterForm, { useDeckFilter } from './Filter';
 
 export default function DeckList(): JSX.Element {
-    const history = useHistory();
     const location = useLocation();
     const dispatch = useDispatch();
     const selection = useSelector((state: RootState) => state);
     const { error } =
         selection.fetchDecksReducer || selection.fetchDicesReducer;
-    const { decks } = selection.fetchDecksReducer;
-    const { guide } = selection.fetchDecksGuideReducer;
-    const { dices } = useSelector(
-        (state: RootState) => state.fetchDicesReducer
-    );
-    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
-    const filterRef = useRef(null as null | HTMLDivElement);
-    const { filter } = selection.filterReducer;
+    const {
+        fetchDecksReducer: { decks },
+        fetchDecksGuideReducer: { guide },
+        fetchDicesReducer: { dices },
+        fetchWikiReducer: { wiki },
+        filterReducer: filter,
+    } = selection;
     const deckType = location.pathname
         .replace(/^\/decks\//i, '')
         .toLowerCase() as 'pvp' | 'co-op' | 'crew';
-
-    const legendaryList =
-        dices
-            ?.filter(dice => dice.rarity === 'Legendary')
-            .map(dice => dice.id) || [];
+    const sortedDeck = useDeckFilter(decks ?? [], deckType);
     const [findAlt, setFindAlt] = useState([] as DiceType['id'][]);
-
-    useEffect(() => {
-        if (legendaryList.length > 0 && filter.legendary.length === 0) {
-            dispatch({
-                type: FILTER_ACTION,
-                payload: {
-                    legendary: legendaryList,
-                    customSearch: filter.customSearch,
-                },
-            });
-        }
-    }, [dices]);
 
     let jsx;
     if (
@@ -69,56 +46,6 @@ export default function DeckList(): JSX.Element {
         guide?.length &&
         wiki?.battlefield.length
     ) {
-        const filteredDeck = decks.filter(
-            deckData =>
-                deckData.decks.some(deck =>
-                    deck.every(dice =>
-                        dices.find(d => d.id === dice)?.rarity === 'Legendary'
-                            ? filter.legendary.includes(dice)
-                            : true
-                    )
-                ) &&
-                deckData.type.toLowerCase() === deckType &&
-                (filter.customSearch === -1
-                    ? true
-                    : deckData.decks.some(deck =>
-                          deck.includes(filter.customSearch)
-                      ))
-        );
-        while (filteredDeck.length < 7 && filteredDeck.length !== 0) {
-            filteredDeck.push({
-                id: filteredDeck.length,
-                type: '-',
-                rating: {
-                    default: 0,
-                },
-                decks: [[-1, -2, -3, -4, -5]],
-                guide: [-1],
-                battlefield: -1,
-            });
-        }
-
-        const sortedDeck = [...filteredDeck];
-        sortedDeck.sort((deckA, deckB) => {
-            const ratingA =
-                deckA.rating[filter.profile] || deckA.rating.default;
-            const ratingB =
-                deckB.rating[filter.profile] || deckB.rating.default;
-            if (ratingA > ratingB) {
-                return -1;
-            }
-            if (ratingA < ratingB) {
-                return 1;
-            }
-            if (ratingA === ratingB) {
-                if (deckA.id > deckB.id) {
-                    return 1;
-                }
-                return -1;
-            }
-            return 0;
-        });
-
         jsx = (
             <>
                 <p>
@@ -190,191 +117,7 @@ export default function DeckList(): JSX.Element {
                             </div>
                         ))}
                 </PopUp>
-                <form className='filter'>
-                    <div className='top-label'>
-                        <label htmlFor='co-opPvp'>
-                            <span>Deck Type :</span>
-                            <select
-                                value={deckType}
-                                onChange={(evt): void =>
-                                    history.push(
-                                        `/decks/${evt.target.value.toLowerCase()}`
-                                    )
-                                }
-                            >
-                                <option value='pvp'>PvP</option>
-                                <option value='co-op'>Co-op</option>
-                                <option value='crew'>Crew</option>
-                            </select>
-                        </label>
-                        <label htmlFor='profile'>
-                            <span>Legendary Class & Crit% Setting:</span>
-                            <select
-                                defaultValue={filter.profile}
-                                onChange={(evt): void => {
-                                    filter.profile = evt.target
-                                        .value as keyof Deck['rating'];
-                                    dispatch({
-                                        type: FILTER_ACTION,
-                                        payload: { ...filter },
-                                    });
-                                }}
-                            >
-                                <option value='default'>
-                                    Class 7, {'<'} 600% Crit
-                                </option>
-                                <option value='c8'>
-                                    Class 8, 600% - 900% Crit
-                                </option>
-                                <option value='c9'>
-                                    Class 9, 900% - 1200% Crit
-                                </option>
-                                <option value='c10'>
-                                    Class 10+, {'>'} 1200% Crit
-                                </option>
-                            </select>
-                        </label>
-                        <label htmlFor='Custom Search'>
-                            <span>Custom Search :</span>
-                            <select
-                                name='Custom Search'
-                                defaultValue={filter.customSearch}
-                                onChange={(evt): void => {
-                                    filter.customSearch = Number(
-                                        evt.target.value
-                                    );
-                                    dispatch({
-                                        type: FILTER_ACTION,
-                                        payload: { ...filter },
-                                    });
-                                }}
-                                data-value={filter.customSearch}
-                            >
-                                <option value={-1}>?</option>
-                                {dices.map(dice => (
-                                    <option value={dice.id} key={dice.id}>
-                                        {dice.name}
-                                    </option>
-                                ))}
-                            </select>
-                            <Dice dice={filter.customSearch} />
-                        </label>
-                    </div>
-                    <div className='lower-label'>
-                        <label htmlFor='legendaryOwned'>
-                            <div className='label'>
-                                <span>Legendary Owned :</span>
-                                <button
-                                    type='button'
-                                    data-select-all={
-                                        filter.legendary.length ===
-                                        dices.filter(
-                                            d => d.rarity === 'Legendary'
-                                        ).length
-                                    }
-                                    onClick={(evt): void => {
-                                        const target = evt.target as HTMLButtonElement;
-                                        const { current } = filterRef;
-                                        if (current) {
-                                            current
-                                                .querySelectorAll(
-                                                    'input[type="checkbox"]'
-                                                )
-                                                .forEach(checkbox => {
-                                                    // eslint-disable-next-line no-param-reassign
-                                                    (checkbox as HTMLInputElement).checked =
-                                                        target.innerText ===
-                                                        'Select All';
-                                                });
-                                        }
-                                        filter.legendary =
-                                            target.innerText === 'Select All'
-                                                ? dices
-                                                      .filter(
-                                                          die =>
-                                                              die.rarity ===
-                                                              'Legendary'
-                                                      )
-                                                      .map(dice => dice.id)
-                                                : [];
-                                        dispatch({
-                                            type: FILTER_ACTION,
-                                            payload: { ...filter },
-                                        });
-                                    }}
-                                >
-                                    {filter.legendary.length ===
-                                    legendaryList.length
-                                        ? 'Deselect All'
-                                        : 'Select All'}
-                                </button>
-                            </div>
-                            <div className='filter-container' ref={filterRef}>
-                                {legendaryList.map(
-                                    (legendary: DiceType['id']) => (
-                                        <div
-                                            className='legendary-filter'
-                                            key={legendary}
-                                        >
-                                            <Dice dice={legendary} />
-                                            <input
-                                                value={legendary}
-                                                type='checkbox'
-                                                defaultChecked
-                                                onChange={(evt): void => {
-                                                    if (evt.target.checked) {
-                                                        if (
-                                                            !filter.legendary.includes(
-                                                                Number(
-                                                                    evt.target
-                                                                        .value
-                                                                )
-                                                            )
-                                                        ) {
-                                                            filter.legendary = [
-                                                                ...filter.legendary,
-                                                                Number(
-                                                                    evt.target
-                                                                        .value
-                                                                ),
-                                                            ];
-                                                            dispatch({
-                                                                type: FILTER_ACTION,
-                                                                payload: {
-                                                                    ...filter,
-                                                                },
-                                                            });
-                                                        }
-                                                    } else {
-                                                        filter.legendary = filter.legendary.filter(
-                                                            dieId =>
-                                                                dieId !==
-                                                                Number(
-                                                                    evt.target
-                                                                        .value
-                                                                )
-                                                        );
-                                                        dispatch({
-                                                            type: FILTER_ACTION,
-                                                            payload: {
-                                                                ...filter,
-                                                            },
-                                                        });
-                                                    }
-                                                }}
-                                            />
-                                            <span className='checkbox-styler'>
-                                                <FontAwesomeIcon
-                                                    icon={faCheck}
-                                                />
-                                            </span>
-                                        </div>
-                                    )
-                                )}
-                            </div>
-                        </label>
-                    </div>
-                </form>
+                <FilterForm />
                 <GoogleAds unitId='8891384324' />
                 <hr className='divisor' />
                 <p className='updated'>

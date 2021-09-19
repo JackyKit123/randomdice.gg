@@ -1,20 +1,15 @@
-import { FILTER_ACTION, Action, FilterState } from './types';
+import { Action, Filter } from './types';
 
-const initialState: FilterState = {
-    filter: {
-        profile: 'default',
-        legendary: [],
-        customSearch: -1,
-    },
+const initialState: Filter = {
+    profile: 'default',
+    legendary: [],
+    customSearch: -1,
+    deckType: 'pvp',
 };
 
-export default function(state = initialState, action: Action): FilterState {
-    switch (action.type) {
-        case FILTER_ACTION:
-            return {
-                filter: action.payload,
-            };
-        default:
-            return state;
-    }
+export default function reducer(
+    state = initialState,
+    { type, payload }: Action
+): Filter {
+    return type === 'FILTER_ACTION' ? payload : state;
 }

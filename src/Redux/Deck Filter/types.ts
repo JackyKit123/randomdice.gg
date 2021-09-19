@@ -3,14 +3,11 @@ import { Dice } from '../Fetch Firebase/Dices/types';
 
 export const FILTER_ACTION = 'FILTER_ACTION';
 
-interface Filter {
+export interface Filter {
     legendary: Dice['id'][];
     profile: keyof Deck['rating'];
     customSearch: Dice['id'];
-}
-
-export interface FilterState {
-    filter: Filter;
+    deckType: 'pvp' | 'co-op' | 'crew';
 }
 
 interface FilterAction {
