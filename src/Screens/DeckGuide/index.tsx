@@ -6,7 +6,7 @@ import Dice from 'Components/Dice';
 import GoogleAds from 'Components/AdUnit';
 import SMshare from 'Components/ShareButton';
 import { RootState } from 'Redux/store';
-import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+
 import { fetchDecksGuide, fetchDices } from 'Firebase';
 import ConvertEmbed from 'Components/YoutubeEmbed';
 import PageWrapper from 'Components/PageWrapper';
@@ -37,7 +37,6 @@ export default function DeckGuideMenu(): JSX.Element | null {
             isContentReady={!!(dices?.length && wiki?.battlefield?.length)}
             error={error}
             retryFn={(dispatch): void => {
-                dispatch({ type: CLEAR_ERRORS });
                 fetchDecksGuide(dispatch);
                 fetchDices(dispatch);
             }}

@@ -1,20 +1,16 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
 import ReactHtmlParser from 'react-html-parser';
 import { useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import Main from 'Components/Main';
-import Error from 'Components/Error';
-import Loading from 'Components/Loading';
+import { useSelector } from 'react-redux';
 import GoogleAds from 'Components/AdUnit';
 import { RootState } from 'Redux/store';
 import replaceTextWithImgTag from 'Misc/replaceTextWithImg';
-import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+
 import { fetchWiki, fetchDices } from 'Firebase';
 import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
+import PageWrapper from 'Components/PageWrapper';
 
 export default function BoxGuide(): JSX.Element {
-    const dispatch = useDispatch();
     const store = useSelector((state: RootState) => state);
     const [boxInfo, setBoxInfo] = useState<WikiContent['box']>();
     const { hash } = useLocation();
@@ -51,74 +47,51 @@ export default function BoxGuide(): JSX.Element {
         }
     }, [wiki]);
 
-    let jsx;
-    if (dices?.length && boxInfo) {
-        jsx = (
-            <>
-                <p>
-                    In this page you will find list of box in the game. Where
-                    they are obtained from and the reward they give.
-                </p>
-                <section>
-                    {boxInfo.map(box =>
-                        box.img === 'ad' ? (
-                            <Fragment key='ad'>
-                                <GoogleAds unitId='8891384324' />
-                            </Fragment>
-                        ) : (
-                            <Fragment key={box.name}>
-                                <hr className='divisor' />
-                                <div id={box.name}>
-                                    <h3>{box.name}</h3>
-                                    <figure>
-                                        <img src={box.img} alt={box.name} />
-                                    </figure>
-                                    <p>Obtained from: {box.from}</p>
-                                    <p>
-                                        Contains:{' '}
-                                        {ReactHtmlParser(
-                                            replaceTextWithImgTag(
-                                                box.contain,
-                                                dices
-                                            )
-                                        )}
-                                    </p>
-                                </div>
-                            </Fragment>
-                        )
-                    )}
-                </section>
-            </>
-        );
-    } else if (error) {
-        jsx = (
-            <Error
-                error={error}
-                retryFn={(): void => {
-                    dispatch({ type: CLEAR_ERRORS });
-                    fetchDices(dispatch);
-                    fetchWiki(dispatch);
-                }}
-            />
-        );
-    } else {
-        jsx = <Loading />;
-    }
     return (
-        <Main title='Box Guide' className='wiki box-guide'>
-            <Helmet>
-                <title>Random Dice Wiki</title>
-                <meta property='og:title' content='Random Dice Wiki' />
-                <meta
-                    name='og:description'
-                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
-                />
-                <meta
-                    name='description'
-                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
-                />
-            </Helmet>
-            {jsx}
-        </Main>
+        <PageWrapper
+            isContentReady={!!(dices?.length && boxInfo)}
+            error={error}
+            retryFn={(dispatch): void => {
+                fetchDices(dispatch);
+                fetchWiki(dispatch);
+            }}
+            title='Box Guide'
+            className='wiki box-guide'
+            description='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+        >
+            <p>
+                In this page you will find list of box in the game. Where they
+                are obtained from and the reward they give.
+            </p>
+            <section>
+                {boxInfo?.map(box =>
+                    box.img === 'ad' ? (
+                        <Fragment key='ad'>
+                            <GoogleAds unitId='8891384324' />
+                        </Fragment>
+                    ) : (
+                        <Fragment key={box.name}>
+                            <hr className='divisor' />
+                            <div id={box.name}>
+                                <h3>{box.name}</h3>
+                                <figure>
+                                    <img src={box.img} alt={box.name} />
+                                </figure>
+                                <p>Obtained from: {box.from}</p>
+                                <p>
+                                    Contains:{' '}
+                                    {ReactHtmlParser(
+                                        replaceTextWithImgTag(
+                                            box.contain,
+                                            dices
+                                        )
+                                    )}
+                                </p>
+                            </div>
+                        </Fragment>
+                    )
+                )}
+            </section>
+        </PageWrapper>
     );
 }

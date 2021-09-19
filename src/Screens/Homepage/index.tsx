@@ -21,7 +21,7 @@ export default function Homepage(): JSX.Element {
     useReplaceAnchorWithHistory(websiteNewsSectionRef, [news]);
 
     return (
-        <PageWrapper title='Community Website' className='homepage'>
+        <PageWrapper title='Random Dice Community Website' className='homepage'>
             <section>
                 <div className='center-container'>
                     <img

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Main from 'Components/Main';
+import PageWrapper from 'Components/PageWrapper';
 
 export default function PrivacyPolicy(): JSX.Element {
     return (
-        <Main
+        <PageWrapper
             className='legal'
             title='Privacy Policy for Random Dice Community Website'
             disallowAd
@@ -257,6 +257,6 @@ export default function PrivacyPolicy(): JSX.Element {
                 us immediately and we will do our best efforts to promptly
                 remove such information from our records.
             </p>
-        </Main>
+        </PageWrapper>
     );
 }

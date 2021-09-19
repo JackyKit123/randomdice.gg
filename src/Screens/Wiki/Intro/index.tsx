@@ -1,65 +1,36 @@
 import React, { useRef } from 'react';
-import { Helmet } from 'react-helmet';
 import ReactHtmlParser from 'react-html-parser';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { sanitize } from 'dompurify';
-import Main from 'Components/Main';
-import Error from 'Components/Error';
-import LoadingScreen from 'Components/Loading';
 import useReplaceAnchorWithHistory from 'Misc/useReplaceAnchorWithHistory';
 import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
 import { RootState } from 'Redux/store';
 import { fetchWiki } from 'Firebase';
-import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+import PageWrapper from 'Components/PageWrapper';
 
 export default function Intro({
     type,
 }: {
     type: keyof WikiContent['intro'];
 }): JSX.Element {
-    const dispatch = useDispatch();
     const selection = useSelector((state: RootState) => state.fetchWikiReducer);
     const { error, wiki } = selection;
 
     const wrapperRef = useRef<HTMLDivElement>(null);
     useReplaceAnchorWithHistory(wrapperRef, [wiki]);
 
-    let jsx;
-
-    if (wiki) {
-        jsx = (
-            <div ref={wrapperRef}>
-                {ReactHtmlParser(sanitize(wiki.intro[type]))}
-            </div>
-        );
-    } else if (error) {
-        jsx = (
-            <Error
-                error={error}
-                retryFn={(): void => {
-                    dispatch({ type: CLEAR_ERRORS });
-                    fetchWiki(dispatch);
-                }}
-            />
-        );
-    } else {
-        jsx = <LoadingScreen />;
-    }
     return (
-        <Main title={`${type} Introduction`} className='wiki intro'>
-            <Helmet>
-                <title>Random Dice Wiki</title>
-                <meta property='og:title' content='Random Dice Wiki' />
-                <meta
-                    name='og:description'
-                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
-                />
-                <meta
-                    name='description'
-                    content='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
-                />
-            </Helmet>
-            {jsx}
-        </Main>
+        <PageWrapper
+            isContentReady={!!wiki}
+            error={error}
+            retryFn={fetchWiki}
+            title={`${type} Introduction`}
+            className='wiki intro'
+            description='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
+        >
+            <div ref={wrapperRef}>
+                {ReactHtmlParser(sanitize(wiki?.intro[type] ?? ''))}
+            </div>
+        </PageWrapper>
     );
 }

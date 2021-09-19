@@ -1,9 +1,9 @@
 import React from 'react';
-import Main from 'Components/Main';
+import PageWrapper from 'Components/PageWrapper';
 
 export default function AboutUs(): JSX.Element {
     return (
-        <Main title='About Us' className='about' disallowAd>
+        <PageWrapper title='About Us' className='about' disallowAd>
             <p>
                 This website is created to provide the community some
                 information for the game Random Dice.
@@ -64,6 +64,6 @@ export default function AboutUs(): JSX.Element {
                 </a>
                 .
             </p>
-        </Main>
+        </PageWrapper>
     );
 }

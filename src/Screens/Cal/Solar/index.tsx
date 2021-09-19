@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Helmet } from 'react-helmet';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -11,18 +10,15 @@ import {
     VictoryLabel,
     VictoryLegend,
 } from 'victory';
-import Main from 'Components/Main';
-import Error from 'Components/Error';
-import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
 import { RootState } from 'Redux/store';
 import { fetchDices } from 'Firebase';
-import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+
 import GoogleAds from 'Components/AdUnit';
 import findMaxCrit from 'Misc/findMaxCrit';
+import PageWrapper from 'Components/PageWrapper';
 
 export default function SolarCalculator(): JSX.Element {
-    const dispatch = useDispatch();
     const selection = useSelector(
         (state: RootState) => state.fetchDicesReducer
     );
@@ -53,7 +49,6 @@ export default function SolarCalculator(): JSX.Element {
             pip: 1,
         },
     });
-    let jsx;
 
     const nullDice = {
         atk: 0,
@@ -560,875 +555,803 @@ export default function SolarCalculator(): JSX.Element {
         },
     };
 
-    if (
-        diceData.solar &&
-        diceData.light &&
-        diceData.crit &&
-        diceData.lunar &&
-        dices?.length
-    ) {
-        jsx = (
-            <>
-                <p>
-                    This calculator is for calculating the cumulative damage of
-                    the Solar Dice over a period of time with the buff of
-                    Critical Dice and Light Dice. You can compare the difference
-                    in damage of Solar with different class and level of Light
-                    Dice or Critical Dice.
-                </p>
-                <p>
-                    Please note that the graph is depicting the total damage
-                    across certain period of time instead of the damage per
-                    second at a certain point of time.
-                </p>
-                <hr className='divisor' />
-                <div className='multiple-dice'>
-                    <div className='dice-container'>
-                        <Dice dice='Light' />
-                        <h3 className='desc'>{diceData.light.desc}</h3>
-                        <form
-                            className='filter'
-                            onSubmit={(evt): void => evt.preventDefault()}
-                        >
-                            <label htmlFor='light-class'>
-                                <span>Class :</span>
-                                <select
-                                    name='light-class'
-                                    defaultValue={10}
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.light.class = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                    <option>13</option>
-                                    <option>14</option>
-                                    <option>15</option>
-                                </select>
-                            </label>
-                            <label htmlFor='light-level'>
-                                <span>Level :</span>
-                                <select
-                                    name='light-level'
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.light.level = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </label>
-                            <label htmlFor='light-pip'>
-                                <span>Pip :</span>
-                                <select
-                                    name='light-pip'
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.light.pip = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                    <div className='dice-container'>
-                        <Dice dice='Lunar' />
-                        <h3 className='desc'>{diceData.lunar.desc}</h3>
-                        <form
-                            className='filter'
-                            onSubmit={(evt): void => evt.preventDefault()}
-                        >
-                            <label
-                                htmlFor='lunar-active'
-                                className='checkbox-label'
-                            >
-                                <span>Active : </span>
-                                <input
-                                    type='checkbox'
-                                    onChange={(
-                                        evt: React.ChangeEvent<HTMLInputElement>
-                                    ): void => {
-                                        filter.lunar.active =
-                                            evt.target.checked;
-                                        setFilter({ ...filter });
-                                    }}
-                                />
-                                <span className='checkbox-styler'>
-                                    <FontAwesomeIcon icon={faCheck} />
-                                </span>
-                            </label>
-                            <label htmlFor='lunar-class'>
-                                <span>Class :</span>
-                                <select
-                                    name='lunar-class'
-                                    defaultValue={7}
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.lunar.class = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                    <option>13</option>
-                                    <option>14</option>
-                                    <option>15</option>
-                                </select>
-                            </label>
-                            <label htmlFor='lunar-level'>
-                                <span>Level :</span>
-                                <select
-                                    name='lunar-level'
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.lunar.level = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </label>
-                            <label htmlFor='lunar-pip'>
-                                <span>Pip :</span>
-                                <select
-                                    name='lunar-pip'
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.lunar.pip = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                    <div className='dice-container'>
-                        <Dice dice='Critical' />
-                        <h3 className='desc'>{diceData.crit.desc}</h3>
-                        <form
-                            className='filter'
-                            onSubmit={(evt): void => evt.preventDefault()}
-                        >
-                            <label htmlFor='crit-class'>
-                                <span>Class :</span>
-                                <select
-                                    name='crit-class'
-                                    defaultValue={10}
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.critical.class = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                    <option>13</option>
-                                    <option>14</option>
-                                    <option>15</option>
-                                </select>
-                            </label>
-                            <label htmlFor='crit-level'>
-                                <span>Level :</span>
-                                <select
-                                    name='crit-level'
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.critical.level = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </label>
-                            <label htmlFor='crit-pip'>
-                                <span>Pip :</span>
-                                <select
-                                    name='crit-pip'
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.critical.pip = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                    <div className='dice-container'>
-                        <Dice dice='Solar' />
-                        <h3 className='desc'>{diceData.solar.desc}</h3>
-                        <form
-                            className='filter'
-                            onSubmit={(evt): void => evt.preventDefault()}
-                        >
-                            <label
-                                htmlFor='solar-active'
-                                className='checkbox-label'
-                            >
-                                <span>Active : </span>
-                                <input
-                                    defaultChecked
-                                    type='checkbox'
-                                    onChange={(
-                                        evt: React.ChangeEvent<HTMLInputElement>
-                                    ): void => {
-                                        filter.solar.active =
-                                            evt.target.checked;
-                                        setFilter({ ...filter });
-                                    }}
-                                />
-                                <span className='checkbox-styler'>
-                                    <FontAwesomeIcon icon={faCheck} />
-                                </span>
-                            </label>
-                            <label htmlFor='solar-class'>
-                                <span>Class :</span>
-                                <select
-                                    name='solar-class'
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.solar.class = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                    <option>13</option>
-                                    <option>14</option>
-                                    <option>15</option>
-                                </select>
-                            </label>
-                            <label htmlFor='solar-level'>
-                                <span>Level :</span>
-                                <select
-                                    name='solar-level'
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.solar.level = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </label>
-                            <label htmlFor='solar-pip'>
-                                <span>Pip :</span>
-                                <select
-                                    name='solar-pip'
-                                    onChange={(
-                                        evt: React.ChangeEvent<
-                                            HTMLSelectElement
-                                        >
-                                    ): void => {
-                                        filter.solar.pip = Number(
-                                            evt.target.value
-                                        );
-                                        setFilter({ ...filter });
-                                    }}
-                                >
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                </select>
-                            </label>
-                        </form>
-                    </div>
-                </div>
-                <form
-                    className='filter'
-                    onSubmit={(evt): void => evt.preventDefault()}
-                >
-                    <label htmlFor='crit dmg'>
-                        <span>Crit% :</span>
-                        <input
-                            type='number'
-                            name='crit dmg'
-                            min={111}
-                            max={maxCrit}
-                            step={1}
-                            defaultValue={111}
-                            className={isInvalidCrit ? 'invalid' : ''}
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLInputElement>
-                            ): void => {
-                                const val = Number(evt.target.value);
-                                filter.crit = val;
-                                setFilter({ ...filter });
-                            }}
-                        />
-                    </label>
-                    <label htmlFor='duration'>
-                        <span>Duration(s) :</span>
-                        <input
-                            type='number'
-                            min={1}
-                            step={1}
-                            name='duration'
-                            style={
-                                !isInvalidDuration && filter.duration > 200
-                                    ? {
-                                          backgroundColor: '#ffff00',
-                                      }
-                                    : undefined
-                            }
-                            defaultValue={10}
-                            className={isInvalidDuration ? 'invalid' : ''}
-                            onChange={(
-                                evt: React.ChangeEvent<HTMLInputElement>
-                            ): void => {
-                                const val = Number(evt.target.value);
-                                filter.duration = val;
-                                setFilter({ ...filter });
-                            }}
-                        />
-                    </label>
-                </form>
-                {isInvalidCrit ? (
-                    <span className='invalid-warning'>
-                        Invalid Crit% Input! Acceptable input is{' '}
-                        <strong>111-{maxCrit}</strong>.
-                    </span>
-                ) : (
-                    ''
-                )}
-                {isInvalidDuration ? (
-                    <span className='invalid-warning'>
-                        Invalid Time Input! Acceptable input is{' '}
-                        <strong>positive integer</strong>.
-                    </span>
-                ) : (
-                    ''
-                )}
-                <GoogleAds unitId='8891384324' />
-                <hr className='divisor' />
-                <div className='chart-container'>
-                    <VictoryChart
-                        maxDomain={{
-                            x: filter.duration || 0,
-                            y: Math.max(
-                                dps(
-                                    basicDmgPerHit,
-                                    buffedAtkSpd,
-                                    buffedCrit,
-                                    filter.duration
-                                ),
-                                dps(
-                                    lunarBuffedDmgPerHit,
-                                    lunarBuffedAtkSpd,
-                                    lunarCritDoubleBuffedCrit,
-                                    filter.duration
-                                )
-                            ),
-                        }}
-                        theme={VictoryTheme.material}
-                    >
-                        <VictoryLabel
-                            text='Cumulative Base Attack Damage Over Time'
-                            x={175}
-                            y={30}
-                            textAnchor='middle'
-                        />
-                        <VictoryAxis
-                            label='Hit Duration (seconds)'
-                            fixLabelOverlap
-                            style={{
-                                axisLabel: {
-                                    padding: 30,
-                                },
-                            }}
-                        />
-                        <VictoryAxis
-                            dependentAxis
-                            tickFormat={(t): string => {
-                                switch (true) {
-                                    case t > 999999999999999999999:
-                                        return t;
-                                    case t > 999999999999999999:
-                                        return `${Math.round(
-                                            t / 100000000000000000
-                                        ) / 10}q`;
-                                    case t > 999999999999999:
-                                        return `${Math.round(
-                                            t / 100000000000000
-                                        ) / 10}t`;
-                                    case t > 999999999999:
-                                        return `${Math.round(t / 100000000000) /
-                                            10}G`;
-                                    case t > 999999999:
-                                        return `${Math.round(t / 100000000) /
-                                            10}B`;
-                                    case t > 999999:
-                                        return `${Math.round(t / 100000) /
-                                            10}M`;
-                                    case t > 999:
-                                        return `${Math.round(t / 100) / 10}K`;
-                                    default:
-                                        return t;
-                                }
-                            }}
-                        />
-                        <VictoryLegend
-                            x={50}
-                            y={70}
-                            orientation='vertical'
-                            gutter={20}
-                            colorScale={[
-                                '#d178ff',
-                                '#ff6a00',
-                                '#197cf0',
-                                '#ffff00',
-                                '#ff0000',
-                                '#111111',
-                            ]}
-                            data={[
-                                { name: 'Lunar + Crit' },
-                                { name: 'Light + Crit' },
-                                { name: 'Lunar Buffed' },
-                                { name: 'Light Buffed' },
-                                { name: 'Crit Buffed' },
-                                { name: 'No Buff' },
-                            ]}
-                        />
-                        <VictoryLine
-                            name='No Buff'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#111111', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.baseDmg.raw}
-                        />
-                        <VictoryLine
-                            name='Light Buffed'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#ffff00', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.baseDmg.light}
-                        />
-                        <VictoryLine
-                            name='Crit Buffed'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#ff0000', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.baseDmg.crit}
-                        />
-                        <VictoryLine
-                            name='Lunar Buffed'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#197cf0', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.baseDmg.lunar}
-                        />
-                        <VictoryLine
-                            name='Light + Crit'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#ff6a00', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.baseDmg.lightCrit}
-                        />
-                        <VictoryLine
-                            name='Lunar + Crit'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#d178ff', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.baseDmg.lunarCrit}
-                        />
-                    </VictoryChart>
-                    <VictoryChart
-                        maxDomain={{
-                            x: filter.duration || 0,
-                            y: Math.max(
-                                dps(
-                                    basicDmgPerHit,
-                                    buffedAtkSpd,
-                                    buffedCrit,
-                                    filter.duration
-                                ),
-                                dps(
-                                    lunarBuffedDmgPerHit,
-                                    lunarBuffedAtkSpd,
-                                    lunarCritDoubleBuffedCrit,
-                                    filter.duration
-                                )
-                            ),
-                        }}
-                        theme={VictoryTheme.material}
-                    >
-                        <VictoryLabel
-                            text='Cumulative Splash Damage Over Time'
-                            x={175}
-                            y={30}
-                            textAnchor='middle'
-                        />
-                        <VictoryAxis
-                            label='Hit Duration (seconds)'
-                            fixLabelOverlap
-                            style={{
-                                axisLabel: {
-                                    padding: 30,
-                                },
-                            }}
-                        />
-                        <VictoryAxis
-                            dependentAxis
-                            tickFormat={(t): string => {
-                                switch (true) {
-                                    case t > 999999999999999999999:
-                                        return t;
-                                    case t > 999999999999999999:
-                                        return `${Math.round(
-                                            t / 100000000000000000
-                                        ) / 10}q`;
-                                    case t > 999999999999999:
-                                        return `${Math.round(
-                                            t / 100000000000000
-                                        ) / 10}t`;
-                                    case t > 999999999999:
-                                        return `${Math.round(t / 100000000000) /
-                                            10}G`;
-                                    case t > 999999999:
-                                        return `${Math.round(t / 100000000) /
-                                            10}B`;
-                                    case t > 999999:
-                                        return `${Math.round(t / 100000) /
-                                            10}M`;
-                                    case t > 999:
-                                        return `${Math.round(t / 100) / 10}K`;
-                                    default:
-                                        return t;
-                                }
-                            }}
-                        />
-                        <VictoryLine
-                            name='No Buff'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#111111', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.splashDmg.raw}
-                        />
-                        <VictoryLine
-                            name='Light Buffed'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#ffff00', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.splashDmg.light}
-                        />
-                        <VictoryLine
-                            name='Crit Buffed'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#ff0000', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.splashDmg.crit}
-                        />
-                        <VictoryLine
-                            name='Lunar Buffed'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#197cf0', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.splashDmg.lunar}
-                        />
-                        <VictoryLine
-                            name='Light + Crit'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#ff6a00', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.splashDmg.lightCrit}
-                        />
-                        <VictoryLine
-                            name='Lunar + Crit'
-                            samples={100}
-                            style={{
-                                data: { stroke: '#d178ff', strokeWidth: 1 },
-                            }}
-                            y={plotGraphCallback.splashDmg.lunarCrit}
-                        />
-                        <VictoryLegend
-                            x={50}
-                            y={70}
-                            orientation='vertical'
-                            gutter={20}
-                            colorScale={[
-                                '#d178ff',
-                                '#ff6a00',
-                                '#197cf0',
-                                '#ffff00',
-                                '#ff0000',
-                                '#111111',
-                            ]}
-                            data={[
-                                { name: 'Lunar + Crit' },
-                                { name: 'Light + Crit' },
-                                { name: 'Lunar Buffed' },
-                                { name: 'Light Buffed' },
-                                { name: 'Crit Buffed' },
-                                { name: 'No Buff' },
-                            ]}
-                        />
-                    </VictoryChart>
-                </div>
-                <hr className='divisor' />
-                <h3>Cumulative Damage Over {filter.duration} seconds.</h3>
-                <div className='result'>
-                    <label htmlFor='result'>
-                        <span>Basic Attack</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : result.basicAtkDps
-                            }
-                            disabled
-                        />
-                        <span>Splash Dmg</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : result.basicSplashDps
-                            }
-                            disabled
-                        />
-                    </label>
-                    <label htmlFor='result'>
-                        <span>Light Buffed Basic Atk</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : result.lightBuffAtk
-                            }
-                            disabled
-                        />
-                        <span>Light Buffed Splash Dmg</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : result.lightBuffSplash
-                            }
-                            disabled
-                        />
-                    </label>
-                    <label htmlFor='result'>
-                        <span>Crit Buffed Basic Atk</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : result.critBuffAtk
-                            }
-                            disabled
-                        />
-                        <span>Crit Buffed Splash Dmg</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : result.critBuffSplash
-                            }
-                            disabled
-                        />
-                    </label>
-                    <label htmlFor='result'>
-                        <span>Lunar Buffed Basic Atk</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : result.lunarBuffAtk
-                            }
-                            disabled
-                        />
-                        <span>Lunar Buffed Splash Dmg</span>
-                        <input
-                            type='textbox'
-                            className={invalidInput ? 'invalid' : ''}
-                            value={
-                                invalidInput
-                                    ? 'Check Input'
-                                    : result.lunarBuffSplash
-                            }
-                            disabled
-                        />
-                    </label>
-                </div>
-            </>
-        );
-    } else if (error) {
-        jsx = (
-            <Error
-                error={error}
-                retryFn={(): void => {
-                    dispatch({ type: CLEAR_ERRORS });
-                    fetchDices(dispatch);
-                }}
-            />
-        );
-    } else {
-        jsx = <LoadingScreen />;
-    }
     return (
-        <Main title='Solar Damage Calculator' className='solar-cal cal'>
-            <Helmet>
-                <title>Random Dice Calculator</title>
-                <meta property='og:title' content='Random Dice Calculator' />
-                <meta
-                    name='og:description'
-                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
-                />
-                <meta
-                    name='description'
-                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
-                />
-            </Helmet>
-            {jsx}
-        </Main>
+        <PageWrapper
+            isContentReady={
+                !!(
+                    diceData.solar &&
+                    diceData.light &&
+                    diceData.crit &&
+                    diceData.lunar &&
+                    dices?.length
+                )
+            }
+            error={error}
+            retryFn={fetchDices}
+            title='Solar Damage Calculator'
+            className='solar-cal cal'
+            description='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
+        >
+            <p>
+                This calculator is for calculating the cumulative damage of the
+                Solar Dice over a period of time with the buff of Critical Dice
+                and Light Dice. You can compare the difference in damage of
+                Solar with different class and level of Light Dice or Critical
+                Dice.
+            </p>
+            <p>
+                Please note that the graph is depicting the total damage across
+                certain period of time instead of the damage per second at a
+                certain point of time.
+            </p>
+            <hr className='divisor' />
+            <div className='multiple-dice'>
+                <div className='dice-container'>
+                    <Dice dice='Light' />
+                    <h3 className='desc'>{diceData.light.desc}</h3>
+                    <form
+                        className='filter'
+                        onSubmit={(evt): void => evt.preventDefault()}
+                    >
+                        <label htmlFor='light-class'>
+                            <span>Class :</span>
+                            <select
+                                name='light-class'
+                                defaultValue={10}
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.light.class = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+                        </label>
+                        <label htmlFor='light-level'>
+                            <span>Level :</span>
+                            <select
+                                name='light-level'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.light.level = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </label>
+                        <label htmlFor='light-pip'>
+                            <span>Pip :</span>
+                            <select
+                                name='light-pip'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.light.pip = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                            </select>
+                        </label>
+                    </form>
+                </div>
+                <div className='dice-container'>
+                    <Dice dice='Lunar' />
+                    <h3 className='desc'>{diceData.lunar.desc}</h3>
+                    <form
+                        className='filter'
+                        onSubmit={(evt): void => evt.preventDefault()}
+                    >
+                        <label
+                            htmlFor='lunar-active'
+                            className='checkbox-label'
+                        >
+                            <span>Active : </span>
+                            <input
+                                type='checkbox'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLInputElement>
+                                ): void => {
+                                    filter.lunar.active = evt.target.checked;
+                                    setFilter({ ...filter });
+                                }}
+                            />
+                            <span className='checkbox-styler'>
+                                <FontAwesomeIcon icon={faCheck} />
+                            </span>
+                        </label>
+                        <label htmlFor='lunar-class'>
+                            <span>Class :</span>
+                            <select
+                                name='lunar-class'
+                                defaultValue={7}
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.lunar.class = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+                        </label>
+                        <label htmlFor='lunar-level'>
+                            <span>Level :</span>
+                            <select
+                                name='lunar-level'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.lunar.level = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </label>
+                        <label htmlFor='lunar-pip'>
+                            <span>Pip :</span>
+                            <select
+                                name='lunar-pip'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.lunar.pip = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                            </select>
+                        </label>
+                    </form>
+                </div>
+                <div className='dice-container'>
+                    <Dice dice='Critical' />
+                    <h3 className='desc'>{diceData.crit.desc}</h3>
+                    <form
+                        className='filter'
+                        onSubmit={(evt): void => evt.preventDefault()}
+                    >
+                        <label htmlFor='crit-class'>
+                            <span>Class :</span>
+                            <select
+                                name='crit-class'
+                                defaultValue={10}
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.critical.class = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+                        </label>
+                        <label htmlFor='crit-level'>
+                            <span>Level :</span>
+                            <select
+                                name='crit-level'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.critical.level = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </label>
+                        <label htmlFor='crit-pip'>
+                            <span>Pip :</span>
+                            <select
+                                name='crit-pip'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.critical.pip = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                            </select>
+                        </label>
+                    </form>
+                </div>
+                <div className='dice-container'>
+                    <Dice dice='Solar' />
+                    <h3 className='desc'>{diceData.solar.desc}</h3>
+                    <form
+                        className='filter'
+                        onSubmit={(evt): void => evt.preventDefault()}
+                    >
+                        <label
+                            htmlFor='solar-active'
+                            className='checkbox-label'
+                        >
+                            <span>Active : </span>
+                            <input
+                                defaultChecked
+                                type='checkbox'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLInputElement>
+                                ): void => {
+                                    filter.solar.active = evt.target.checked;
+                                    setFilter({ ...filter });
+                                }}
+                            />
+                            <span className='checkbox-styler'>
+                                <FontAwesomeIcon icon={faCheck} />
+                            </span>
+                        </label>
+                        <label htmlFor='solar-class'>
+                            <span>Class :</span>
+                            <select
+                                name='solar-class'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.solar.class = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+                        </label>
+                        <label htmlFor='solar-level'>
+                            <span>Level :</span>
+                            <select
+                                name='solar-level'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.solar.level = Number(
+                                        evt.target.value
+                                    );
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </label>
+                        <label htmlFor='solar-pip'>
+                            <span>Pip :</span>
+                            <select
+                                name='solar-pip'
+                                onChange={(
+                                    evt: React.ChangeEvent<HTMLSelectElement>
+                                ): void => {
+                                    filter.solar.pip = Number(evt.target.value);
+                                    setFilter({ ...filter });
+                                }}
+                            >
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                            </select>
+                        </label>
+                    </form>
+                </div>
+            </div>
+            <form
+                className='filter'
+                onSubmit={(evt): void => evt.preventDefault()}
+            >
+                <label htmlFor='crit dmg'>
+                    <span>Crit% :</span>
+                    <input
+                        type='number'
+                        name='crit dmg'
+                        min={111}
+                        max={maxCrit}
+                        step={1}
+                        defaultValue={111}
+                        className={isInvalidCrit ? 'invalid' : ''}
+                        onChange={(
+                            evt: React.ChangeEvent<HTMLInputElement>
+                        ): void => {
+                            const val = Number(evt.target.value);
+                            filter.crit = val;
+                            setFilter({ ...filter });
+                        }}
+                    />
+                </label>
+                <label htmlFor='duration'>
+                    <span>Duration(s) :</span>
+                    <input
+                        type='number'
+                        min={1}
+                        step={1}
+                        name='duration'
+                        style={
+                            !isInvalidDuration && filter.duration > 200
+                                ? {
+                                      backgroundColor: '#ffff00',
+                                  }
+                                : undefined
+                        }
+                        defaultValue={10}
+                        className={isInvalidDuration ? 'invalid' : ''}
+                        onChange={(
+                            evt: React.ChangeEvent<HTMLInputElement>
+                        ): void => {
+                            const val = Number(evt.target.value);
+                            filter.duration = val;
+                            setFilter({ ...filter });
+                        }}
+                    />
+                </label>
+            </form>
+            {isInvalidCrit ? (
+                <span className='invalid-warning'>
+                    Invalid Crit% Input! Acceptable input is{' '}
+                    <strong>111-{maxCrit}</strong>.
+                </span>
+            ) : (
+                ''
+            )}
+            {isInvalidDuration ? (
+                <span className='invalid-warning'>
+                    Invalid Time Input! Acceptable input is{' '}
+                    <strong>positive integer</strong>.
+                </span>
+            ) : (
+                ''
+            )}
+            <GoogleAds unitId='8891384324' />
+            <hr className='divisor' />
+            <div className='chart-container'>
+                <VictoryChart
+                    maxDomain={{
+                        x: filter.duration || 0,
+                        y: Math.max(
+                            dps(
+                                basicDmgPerHit,
+                                buffedAtkSpd,
+                                buffedCrit,
+                                filter.duration
+                            ),
+                            dps(
+                                lunarBuffedDmgPerHit,
+                                lunarBuffedAtkSpd,
+                                lunarCritDoubleBuffedCrit,
+                                filter.duration
+                            )
+                        ),
+                    }}
+                    theme={VictoryTheme.material}
+                >
+                    <VictoryLabel
+                        text='Cumulative Base Attack Damage Over Time'
+                        x={175}
+                        y={30}
+                        textAnchor='middle'
+                    />
+                    <VictoryAxis
+                        label='Hit Duration (seconds)'
+                        fixLabelOverlap
+                        style={{
+                            axisLabel: {
+                                padding: 30,
+                            },
+                        }}
+                    />
+                    <VictoryAxis
+                        dependentAxis
+                        tickFormat={(t): string => {
+                            switch (true) {
+                                case t > 999999999999999999999:
+                                    return t;
+                                case t > 999999999999999999:
+                                    return `${Math.round(
+                                        t / 100000000000000000
+                                    ) / 10}q`;
+                                case t > 999999999999999:
+                                    return `${Math.round(t / 100000000000000) /
+                                        10}t`;
+                                case t > 999999999999:
+                                    return `${Math.round(t / 100000000000) /
+                                        10}G`;
+                                case t > 999999999:
+                                    return `${Math.round(t / 100000000) / 10}B`;
+                                case t > 999999:
+                                    return `${Math.round(t / 100000) / 10}M`;
+                                case t > 999:
+                                    return `${Math.round(t / 100) / 10}K`;
+                                default:
+                                    return t;
+                            }
+                        }}
+                    />
+                    <VictoryLegend
+                        x={50}
+                        y={70}
+                        orientation='vertical'
+                        gutter={20}
+                        colorScale={[
+                            '#d178ff',
+                            '#ff6a00',
+                            '#197cf0',
+                            '#ffff00',
+                            '#ff0000',
+                            '#111111',
+                        ]}
+                        data={[
+                            { name: 'Lunar + Crit' },
+                            { name: 'Light + Crit' },
+                            { name: 'Lunar Buffed' },
+                            { name: 'Light Buffed' },
+                            { name: 'Crit Buffed' },
+                            { name: 'No Buff' },
+                        ]}
+                    />
+                    <VictoryLine
+                        name='No Buff'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#111111', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.baseDmg.raw}
+                    />
+                    <VictoryLine
+                        name='Light Buffed'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#ffff00', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.baseDmg.light}
+                    />
+                    <VictoryLine
+                        name='Crit Buffed'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#ff0000', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.baseDmg.crit}
+                    />
+                    <VictoryLine
+                        name='Lunar Buffed'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#197cf0', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.baseDmg.lunar}
+                    />
+                    <VictoryLine
+                        name='Light + Crit'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#ff6a00', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.baseDmg.lightCrit}
+                    />
+                    <VictoryLine
+                        name='Lunar + Crit'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#d178ff', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.baseDmg.lunarCrit}
+                    />
+                </VictoryChart>
+                <VictoryChart
+                    maxDomain={{
+                        x: filter.duration || 0,
+                        y: Math.max(
+                            dps(
+                                basicDmgPerHit,
+                                buffedAtkSpd,
+                                buffedCrit,
+                                filter.duration
+                            ),
+                            dps(
+                                lunarBuffedDmgPerHit,
+                                lunarBuffedAtkSpd,
+                                lunarCritDoubleBuffedCrit,
+                                filter.duration
+                            )
+                        ),
+                    }}
+                    theme={VictoryTheme.material}
+                >
+                    <VictoryLabel
+                        text='Cumulative Splash Damage Over Time'
+                        x={175}
+                        y={30}
+                        textAnchor='middle'
+                    />
+                    <VictoryAxis
+                        label='Hit Duration (seconds)'
+                        fixLabelOverlap
+                        style={{
+                            axisLabel: {
+                                padding: 30,
+                            },
+                        }}
+                    />
+                    <VictoryAxis
+                        dependentAxis
+                        tickFormat={(t): string => {
+                            switch (true) {
+                                case t > 999999999999999999999:
+                                    return t;
+                                case t > 999999999999999999:
+                                    return `${Math.round(
+                                        t / 100000000000000000
+                                    ) / 10}q`;
+                                case t > 999999999999999:
+                                    return `${Math.round(t / 100000000000000) /
+                                        10}t`;
+                                case t > 999999999999:
+                                    return `${Math.round(t / 100000000000) /
+                                        10}G`;
+                                case t > 999999999:
+                                    return `${Math.round(t / 100000000) / 10}B`;
+                                case t > 999999:
+                                    return `${Math.round(t / 100000) / 10}M`;
+                                case t > 999:
+                                    return `${Math.round(t / 100) / 10}K`;
+                                default:
+                                    return t;
+                            }
+                        }}
+                    />
+                    <VictoryLine
+                        name='No Buff'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#111111', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.splashDmg.raw}
+                    />
+                    <VictoryLine
+                        name='Light Buffed'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#ffff00', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.splashDmg.light}
+                    />
+                    <VictoryLine
+                        name='Crit Buffed'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#ff0000', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.splashDmg.crit}
+                    />
+                    <VictoryLine
+                        name='Lunar Buffed'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#197cf0', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.splashDmg.lunar}
+                    />
+                    <VictoryLine
+                        name='Light + Crit'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#ff6a00', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.splashDmg.lightCrit}
+                    />
+                    <VictoryLine
+                        name='Lunar + Crit'
+                        samples={100}
+                        style={{
+                            data: { stroke: '#d178ff', strokeWidth: 1 },
+                        }}
+                        y={plotGraphCallback.splashDmg.lunarCrit}
+                    />
+                    <VictoryLegend
+                        x={50}
+                        y={70}
+                        orientation='vertical'
+                        gutter={20}
+                        colorScale={[
+                            '#d178ff',
+                            '#ff6a00',
+                            '#197cf0',
+                            '#ffff00',
+                            '#ff0000',
+                            '#111111',
+                        ]}
+                        data={[
+                            { name: 'Lunar + Crit' },
+                            { name: 'Light + Crit' },
+                            { name: 'Lunar Buffed' },
+                            { name: 'Light Buffed' },
+                            { name: 'Crit Buffed' },
+                            { name: 'No Buff' },
+                        ]}
+                    />
+                </VictoryChart>
+            </div>
+            <hr className='divisor' />
+            <h3>Cumulative Damage Over {filter.duration} seconds.</h3>
+            <div className='result'>
+                <label htmlFor='result'>
+                    <span>Basic Attack</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={
+                            invalidInput ? 'Check Input' : result.basicAtkDps
+                        }
+                        disabled
+                    />
+                    <span>Splash Dmg</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={
+                            invalidInput ? 'Check Input' : result.basicSplashDps
+                        }
+                        disabled
+                    />
+                </label>
+                <label htmlFor='result'>
+                    <span>Light Buffed Basic Atk</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={
+                            invalidInput ? 'Check Input' : result.lightBuffAtk
+                        }
+                        disabled
+                    />
+                    <span>Light Buffed Splash Dmg</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={
+                            invalidInput
+                                ? 'Check Input'
+                                : result.lightBuffSplash
+                        }
+                        disabled
+                    />
+                </label>
+                <label htmlFor='result'>
+                    <span>Crit Buffed Basic Atk</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={
+                            invalidInput ? 'Check Input' : result.critBuffAtk
+                        }
+                        disabled
+                    />
+                    <span>Crit Buffed Splash Dmg</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={
+                            invalidInput ? 'Check Input' : result.critBuffSplash
+                        }
+                        disabled
+                    />
+                </label>
+                <label htmlFor='result'>
+                    <span>Lunar Buffed Basic Atk</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={
+                            invalidInput ? 'Check Input' : result.lunarBuffAtk
+                        }
+                        disabled
+                    />
+                    <span>Lunar Buffed Splash Dmg</span>
+                    <input
+                        type='textbox'
+                        className={invalidInput ? 'invalid' : ''}
+                        value={
+                            invalidInput
+                                ? 'Check Input'
+                                : result.lunarBuffSplash
+                        }
+                        disabled
+                    />
+                </label>
+            </div>
+        </PageWrapper>
     );
 }

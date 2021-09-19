@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Helmet } from 'react-helmet';
 import { useHistory } from 'react-router-dom';
-import Main from 'Components/Main';
 import Dice from 'Components/Dice';
+import PageWrapper from 'Components/PageWrapper';
 
 export default function NoMatch(props: {
     title?: string;
@@ -11,9 +11,12 @@ export default function NoMatch(props: {
     const history = useHistory();
     const { title } = props;
     return (
-        <Main title={title || '404 Not found'} className='NoMatch' disallowAd>
+        <PageWrapper
+            title={title || '404 Not found'}
+            className='NoMatch'
+            disallowAd
+        >
             <Helmet>
-                <title>{title || '404 Not found'}</title>
                 <meta name='robots' content='noindex' />
             </Helmet>
             <img
@@ -34,6 +37,6 @@ export default function NoMatch(props: {
                     Click Here to return to Homepage.
                 </button>
             </div>
-        </Main>
+        </PageWrapper>
     );
 }

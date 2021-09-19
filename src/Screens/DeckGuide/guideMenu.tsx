@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Dice from 'Components/Dice';
 import { RootState } from 'Redux/store';
-import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+
 import { fetchDecksGuide, fetchDices } from 'Firebase';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function DeckGuideMenu(): JSX.Element {
-    const dispatch = useDispatch();
     const { guide, error } = useSelector(
         (state: RootState) => state.fetchDecksGuideReducer
     );
@@ -23,8 +22,7 @@ export default function DeckGuideMenu(): JSX.Element {
                 !!(guide?.length && dices?.length && wiki?.battlefield?.length)
             }
             error={error}
-            retryFn={(): void => {
-                dispatch({ type: CLEAR_ERRORS });
+            retryFn={(dispatch): void => {
                 fetchDecksGuide(dispatch);
                 fetchDices(dispatch);
             }}

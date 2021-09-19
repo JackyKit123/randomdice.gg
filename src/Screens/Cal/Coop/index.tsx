@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { combinations } from 'mathjs';
 import ReactHtmlParser from 'react-html-parser';
-import Main from 'Components/Main';
+import PageWrapper from 'Components/PageWrapper';
 import replaceTextWithImgTag from 'Misc/replaceTextWithImg';
 import GoogleAds from 'Components/AdUnit';
 
@@ -113,19 +112,11 @@ export default function GoldCalculator(): JSX.Element {
               }`;
 
     return (
-        <Main title='Card Box Grind Calculator' className='cal coop-cal'>
-            <Helmet>
-                <title>Random Dice Calculator</title>
-                <meta property='og:title' content='Random Dice Calculator' />
-                <meta
-                    name='og:description'
-                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
-                />
-                <meta
-                    name='description'
-                    content='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
-                />
-            </Helmet>
+        <PageWrapper
+            title='Card Box Grind Calculator'
+            className='cal coop-cal'
+            description='Pre-defined calculators for Random Dice, calculate damage, dps, odds with ease using the easy to use calculators.'
+        >
             <p>
                 This is a calculator for the estimated time need to grind
                 certain amount of gold, diamond, legendary dice based on the
@@ -530,6 +521,6 @@ export default function GoldCalculator(): JSX.Element {
                     />
                 </label>
             </section>
-        </Main>
+        </PageWrapper>
     );
 }

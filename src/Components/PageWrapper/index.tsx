@@ -5,6 +5,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 
 interface Props {
     isContentReady?: boolean;
@@ -14,6 +15,7 @@ interface Props {
     description?: string;
     className?: string;
     children: React.ReactNode;
+    disallowAd?: boolean;
 }
 
 export default function PageWrapper({
@@ -24,6 +26,7 @@ export default function PageWrapper({
     retryFn = (): void => window.location.reload(),
     className,
     children,
+    disallowAd,
 }: Props): JSX.Element {
     const location = useLocation();
     const dispatch = useDispatch();
@@ -33,14 +36,20 @@ export default function PageWrapper({
         renderElement = children;
     } else if (error) {
         renderElement = (
-            <Error error={error} retryFn={(): void => retryFn(dispatch)} />
+            <Error
+                error={error}
+                retryFn={(): void => {
+                    dispatch({ type: CLEAR_ERRORS });
+                    retryFn(dispatch);
+                }}
+            />
         );
     } else {
         renderElement = <Loading />;
     }
 
     return (
-        <Main title={title} className={className}>
+        <Main title={title} className={className} disallowAd={disallowAd}>
             <Helmet>
                 <title>Random Dice | {title}</title>
                 <meta property='og:title' content='Random Dice Arena Draft' />

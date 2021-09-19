@@ -15,9 +15,10 @@ export default function useReplaceAnchorWithHistory(
             evt.preventDefault();
             history.push(targetLink);
         };
-        const anchors = ref?.current?.querySelectorAll('a') as NodeListOf<
-            HTMLAnchorElement
-        >;
+        const anchors =
+            (ref?.current?.querySelectorAll('a') as NodeListOf<
+                HTMLAnchorElement
+            >) ?? [];
         anchors.forEach(a => a.addEventListener('click', navigationHandler));
         return (): void =>
             anchors.forEach(a =>

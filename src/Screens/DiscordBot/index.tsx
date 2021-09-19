@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'Redux/store';
 import { fetchDiscordCommands } from 'Firebase';
-import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+
 import PageWrapper from 'Components/PageWrapper';
 
 export default function discordBot(): JSX.Element {
@@ -14,10 +14,7 @@ export default function discordBot(): JSX.Element {
         <PageWrapper
             isContentReady={!!commands}
             error={error}
-            retryFn={(dispatch): void => {
-                dispatch({ type: CLEAR_ERRORS });
-                fetchDiscordCommands(dispatch);
-            }}
+            retryFn={fetchDiscordCommands}
             title='Discord Bot'
             className='discord-bot'
         >

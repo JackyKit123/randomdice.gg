@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Main from 'Components/Main';
+import PageWrapper from 'Components/PageWrapper';
 import { navDiscord } from 'Misc/customGaEvent';
 
 export default function CommunityListing(): JSX.Element {
@@ -41,7 +41,7 @@ export default function CommunityListing(): JSX.Element {
     }[];
 
     return (
-        <Main title='Community' className='community' disallowAd>
+        <PageWrapper title='Community' className='community' disallowAd>
             <p>
                 Here you can find a list of communities that you can join, come
                 hang out with us if you have not joined any Random Dice
@@ -89,6 +89,6 @@ export default function CommunityListing(): JSX.Element {
                 width={Math.min(500, windowWidth - 80)}
                 height={500}
             />
-        </Main>
+        </PageWrapper>
     );
 }

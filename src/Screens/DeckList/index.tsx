@@ -10,7 +10,7 @@ import GoogleAds from 'Components/AdUnit';
 import Dice from 'Components/Dice';
 import PopUp from 'Components/PopUp';
 import { fetchDecks, fetchDices } from 'Firebase';
-import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
+
 import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
 import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 import ShareButtons from 'Components/ShareButton';
@@ -46,7 +46,6 @@ export default function DeckList(): JSX.Element {
             )}
             error={error}
             retryFn={(): void => {
-                dispatch({ type: CLEAR_ERRORS });
                 fetchDecks(dispatch);
                 fetchDices(dispatch);
             }}

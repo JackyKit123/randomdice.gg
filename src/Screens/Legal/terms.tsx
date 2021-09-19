@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Main from 'Components/Main';
+import PageWrapper from 'Components/PageWrapper';
 
 export default function Terms(): JSX.Element {
     return (
-        <Main
+        <PageWrapper
             className='legal'
             title='Terms and Conditions for Random Dice Community Website'
             disallowAd
@@ -319,6 +319,6 @@ export default function Terms(): JSX.Element {
                     </a>
                 </li>
             </ul>
-        </Main>
+        </PageWrapper>
     );
 }

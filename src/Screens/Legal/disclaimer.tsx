@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Main from 'Components/Main';
+import PageWrapper from 'Components/PageWrapper';
 
 export default function Terms(): JSX.Element {
     return (
-        <Main
+        <PageWrapper
             className='legal'
             title='Disclaimer for Random Dice Community Website'
             disallowAd
@@ -77,6 +77,6 @@ export default function Terms(): JSX.Element {
                 Should we update, amend or make any changes to this document,
                 those changes will be prominently posted here.
             </p>
-        </Main>
+        </PageWrapper>
     );
 }
