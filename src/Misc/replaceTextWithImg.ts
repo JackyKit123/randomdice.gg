@@ -8,24 +8,14 @@ export default function replaceTextWithImgTag(
         .replace(/{Dice:\w*( \w*)*}/g, match => {
             const diceName = match.replace('{Dice:', '').replace('}', '');
             const die = dices?.find(dice => dice.name === diceName);
-            if (die) {
-                const { img, rarity } = die;
-                return `<figure class="dice">
+            return `<figure class="dice">
                             <img
-                                src="${img}"
-                                alt="${`dice ${diceName}`}"
-                                data-dice-rarity=${rarity}
+                                src="${die?.img ??
+                                    'https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty?alt=media&token=ccd57102-a890-44ba-b6f0-29e91c765f58'}"
+                                alt="${`dice ${die?.name ?? '?'}`}"
+                                data-dice-rarity=${die?.rarity ?? '?'}
                             />
                         </figure>`;
-            }
-            return `<figure class="dice">
-                        <img
-                            src=
-                              "https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FEmpty?alt=media&token=ccd57102-a890-44ba-b6f0-29e91c765f58"
-                            alt="dice ?"
-                            data-dice-rarity='?'
-                        />
-                    </figure>`;
         })
         .replace(
             /({Gold}|{Diamond}|{Common Dice}|{Rare Dice}|{Unique Dice}|{Legendary Dice})/g,
