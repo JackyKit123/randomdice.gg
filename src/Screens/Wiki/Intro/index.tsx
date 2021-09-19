@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import ReactHtmlParser from 'react-html-parser';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { sanitize } from 'dompurify';
 import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
-import replaceAnchorWithHistory from 'Misc/HTMLAnchorNavigation';
+import useReplaceAnchorWithHistory from 'Misc/useReplaceAnchorWithHistory';
 import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
 import { RootState } from 'Redux/store';
 import { fetchWiki } from 'Firebase';
@@ -18,19 +17,21 @@ export default function Intro({
 }: {
     type: keyof WikiContent['intro'];
 }): JSX.Element {
-    const history = useHistory();
     const dispatch = useDispatch();
     const selection = useSelector((state: RootState) => state.fetchWikiReducer);
     const { error, wiki } = selection;
 
-    useEffect(() => {
-        return replaceAnchorWithHistory(history);
-    }, []);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    useReplaceAnchorWithHistory(wrapperRef, [wiki]);
 
     let jsx;
 
     if (wiki) {
-        jsx = ReactHtmlParser(sanitize(wiki.intro[type]));
+        jsx = (
+            <div ref={wrapperRef}>
+                {ReactHtmlParser(sanitize(wiki.intro[type]))}
+            </div>
+        );
     } else if (error) {
         jsx = (
             <Error

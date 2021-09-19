@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
-import Main from 'Components/Main';
 import Menu from 'Components/Menu';
 import { menu } from 'Router';
-import replaceAnchorWithHistory from 'Misc/HTMLAnchorNavigation';
+import useReplaceAnchorWithHistory from 'Misc/useReplaceAnchorWithHistory';
 import { RootState } from 'Redux/store';
 import ConvertEmbed from 'Components/YoutubeEmbed';
 import { navDiscord } from 'Misc/customGaEvent';
+import PageWrapper from 'Components/PageWrapper';
 
 export default function Homepage(): JSX.Element {
-    const history = useHistory();
-    replaceAnchorWithHistory(history);
     const { news, error } = useSelector(
         (state: RootState) => state.fetchNewsReducer
     );
 
+    const gameNewsSectionRef = useRef<HTMLDivElement>(null);
+    const websiteNewsSectionRef = useRef<HTMLDivElement>(null);
+    useReplaceAnchorWithHistory(gameNewsSectionRef, [news]);
+    useReplaceAnchorWithHistory(websiteNewsSectionRef, [news]);
+
     return (
-        <Main className='homepage' title='Random Dice Community Website'>
+        <PageWrapper title='Community Website' className='homepage'>
             <section>
                 <div className='center-container'>
                     <img
@@ -85,7 +87,7 @@ export default function Homepage(): JSX.Element {
                     for any web related issue.
                 </p>
             </section>
-            <section className='news game'>
+            <section className='news game' ref={gameNewsSectionRef}>
                 <h3>Game News</h3>
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {news ? (
@@ -96,7 +98,7 @@ export default function Homepage(): JSX.Element {
                     'Loading News...'
                 )}
             </section>
-            <section className='news website'>
+            <section className='news website' ref={websiteNewsSectionRef}>
                 <h3>Website News</h3>
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {news
@@ -109,6 +111,6 @@ export default function Homepage(): JSX.Element {
                 <h3>Menu</h3>
                 <Menu menuList={menu} />
             </section>
-        </Main>
+        </PageWrapper>
     );
 }

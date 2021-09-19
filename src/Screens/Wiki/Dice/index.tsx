@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-indent */
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useRef } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
@@ -10,13 +10,12 @@ import Main from 'Components/Main';
 import Error from 'Components/Error';
 import LoadingScreen from 'Components/Loading';
 import GoogleAds from 'Components/AdUnit';
-import replaceAnchorWithHistory from 'Misc/HTMLAnchorNavigation';
+import useReplaceAnchorWithHistory from 'Misc/useReplaceAnchorWithHistory';
 import { RootState } from 'Redux/store';
 import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 import { fetchWiki } from 'Firebase';
 
 export default function DiceMechanic(): JSX.Element {
-    const history = useHistory();
     const dispatch = useDispatch();
     const { hash } = useLocation();
     const selection = useSelector(
@@ -34,9 +33,8 @@ export default function DiceMechanic(): JSX.Element {
         )[]
     >();
 
-    useEffect(() => {
-        return replaceAnchorWithHistory(history);
-    }, []);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    useReplaceAnchorWithHistory(wrapperRef, [dices]);
 
     useEffect(() => {
         const target = document.getElementById(
@@ -87,7 +85,7 @@ export default function DiceMechanic(): JSX.Element {
                     you can visit{' '}
                     <Link to='/calculator/stat'>Dice Stat Calculator</Link>.
                 </p>
-                <section>
+                <section ref={wrapperRef}>
                     {mechanics.map(dice =>
                         dice === 'ad' ? (
                             <Fragment key='ad'>
