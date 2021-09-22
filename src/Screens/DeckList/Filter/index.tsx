@@ -109,16 +109,16 @@ function CustomSearchFilter({ dice }: DiceListProps): JSX.Element {
 
 function LegendaryListFilter({ dice }: DiceListProps): JSX.Element {
     const filter = useRootStateSelector('filterReducer');
-    const { legendary } = filter;
+    const { legendary: legendaryChecked } = filter;
     const setFilter = useUpdateFilter();
-    const legendaryList = dice
+    const allLegendaryDice = dice
         .filter(die => die.rarity === 'Legendary')
         .map(die => die.id);
     const legendaryOwnedFilterRef = useRef(null as null | HTMLDivElement);
-    const selectedAll = legendary.length === legendaryList.length;
+    const selectedAll = legendaryChecked.length === allLegendaryDice.length;
     useEffect(() => {
-        if (legendaryList.length > 0 && legendary.length === 0) {
-            setFilter({ ...filter, legendary: legendaryList });
+        if (legendaryChecked.length === 0) {
+            setFilter({ ...filter, legendary: allLegendaryDice });
         }
     }, [dice]);
 
@@ -157,24 +157,24 @@ function LegendaryListFilter({ dice }: DiceListProps): JSX.Element {
                 </button>
             </div>
             <div className='filter-container' ref={legendaryOwnedFilterRef}>
-                {legendaryList.map((die: Die['id']) => (
+                {allLegendaryDice.map((die: Die['id']) => (
                     <div className='legendary-filter' key={die}>
                         <Dice die={die} />
                         <input
                             value={die}
                             type='checkbox'
-                            checked={legendary.includes(die)}
+                            checked={legendaryChecked.includes(die)}
                             onChange={(evt): void =>
                                 setFilter({
                                     ...filter,
-                                    legendary: legendary.includes(die)
-                                        ? legendaryList.filter(
+                                    legendary: legendaryChecked.includes(die)
+                                        ? legendaryChecked.filter(
                                               dieId =>
                                                   dieId !==
                                                   Number(evt.target.value)
                                           )
                                         : [
-                                              ...legendaryList,
+                                              ...legendaryChecked,
                                               Number(evt.target.value),
                                           ],
                                 })
