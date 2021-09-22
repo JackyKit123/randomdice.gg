@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import Dice from 'Components/Dice';
-import { RootState } from 'Redux/store';
 import { fetchDices } from 'Firebase';
 
 import findMaxCrit from 'Misc/findMaxCrit';
 import PageWrapper from 'Components/PageWrapper';
+import useRootStateSelector from 'Redux';
 
 export default function GearCalculator(): JSX.Element {
-    const selection = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+    const { dice, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { error, dices } = selection;
     const [filter, setFilter] = useState({
         class: 5,
         level: 1,
@@ -20,9 +18,9 @@ export default function GearCalculator(): JSX.Element {
         crit: 111,
     });
 
-    const data = dices?.find(dice => dice.id === 26);
+    const data = dice?.find(die => die.id === 26);
 
-    const maxCrit = findMaxCrit(dices);
+    const maxCrit = findMaxCrit(dice);
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
@@ -56,7 +54,8 @@ export default function GearCalculator(): JSX.Element {
 
     return (
         <PageWrapper
-            error={error}
+            isContentReady={!!data}
+            error={firebaseError}
             retryFn={fetchDices}
             title='Gear DPS Calculator'
             className='gear-dmg-cal cal'
@@ -71,7 +70,7 @@ export default function GearCalculator(): JSX.Element {
             <hr className='divisor' />
             <div className='dice-container'>
                 <div>
-                    <Dice dice='Gear' />
+                    <Dice die='Gear' />
                     <h3 className='desc'>{data?.desc}</h3>
                 </div>
             </div>

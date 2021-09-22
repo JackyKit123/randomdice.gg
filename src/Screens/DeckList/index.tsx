@@ -1,17 +1,16 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation } from 'react-router-dom';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import GoogleAds from 'Components/AdUnit';
 import Dice from 'Components/Dice';
 import PopUp from 'Components/PopUp';
 import { fetchDecks, fetchDices } from 'Firebase';
-
-import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
+import { Die } from 'types/database';
 import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 import ShareButtons from 'Components/ShareButton';
 import PageWrapper from 'Components/PageWrapper';
@@ -20,21 +19,19 @@ import FilterForm, { useDeckFilter } from './Filter';
 export default function DeckList(): JSX.Element {
     const location = useLocation();
     const dispatch = useDispatch();
-    const selection = useSelector((state: RootState) => state);
-    const { error } =
-        selection.fetchDecksReducer || selection.fetchDicesReducer;
     const {
-        fetchDecksReducer: { decks },
-        fetchDecksGuideReducer: { guide },
-        fetchDicesReducer: { dices },
-        fetchWikiReducer: { wiki },
-        filterReducer: filter,
-    } = selection;
+        decks,
+        decks_guide: guide,
+        dice: dices,
+        wiki: { battlefield },
+        firebaseError,
+    } = useRootStateSelector('fetchFirebaseReducer');
+    const filter = useRootStateSelector('filterReducer');
     const deckType = location.pathname
         .replace(/^\/decks\//i, '')
         .toLowerCase() as 'pvp' | 'co-op' | 'crew';
     const sortedDeck = useDeckFilter(decks ?? [], deckType);
-    const [findAlt, setFindAlt] = useState([] as DiceType['id'][]);
+    const [findAlt, setFindAlt] = useState([] as Die['id'][]);
 
     return (
         <PageWrapper
@@ -42,9 +39,9 @@ export default function DeckList(): JSX.Element {
                 dices?.length &&
                     decks?.length &&
                     guide?.length &&
-                    wiki?.battlefield?.length
+                    battlefield?.length
             )}
-            error={error}
+            error={firebaseError}
             retryFn={(): void => {
                 fetchDecks(dispatch);
                 fetchDices(dispatch);
@@ -88,11 +85,11 @@ export default function DeckList(): JSX.Element {
             <PopUp popUpTarget='alt'>
                 <h3>Alternatives List</h3>
                 <div className='original'>
-                    <Dice dice={findAlt[0]} />
-                    <Dice dice={findAlt[1]} />
-                    <Dice dice={findAlt[2]} />
-                    <Dice dice={findAlt[3]} />
-                    <Dice dice={findAlt[4]} />
+                    <Dice die={findAlt[0]} />
+                    <Dice die={findAlt[1]} />
+                    <Dice die={findAlt[2]} />
+                    <Dice die={findAlt[3]} />
+                    <Dice die={findAlt[4]} />
                 </div>
                 {findAlt
                     .map(alt => ({
@@ -102,7 +99,7 @@ export default function DeckList(): JSX.Element {
                     }))
                     .map(die => (
                         <div key={die.id}>
-                            <Dice dice={die.id} />
+                            <Dice die={die.id} />
                             {die.alternatives ? (
                                 <>
                                     <h4>{die.alternatives.desc}</h4>
@@ -111,7 +108,7 @@ export default function DeckList(): JSX.Element {
                                         {die.alternatives.list?.map(altDice =>
                                             altDice ? (
                                                 <Dice
-                                                    dice={altDice}
+                                                    die={altDice}
                                                     key={altDice}
                                                 />
                                             ) : null
@@ -194,10 +191,7 @@ export default function DeckList(): JSX.Element {
                                                 key={i}
                                             >
                                                 {deck.map(die => (
-                                                    <Dice
-                                                        key={die}
-                                                        dice={die}
-                                                    />
+                                                    <Dice key={die} die={die} />
                                                 ))}
                                             </div>
                                         ))}
@@ -207,17 +201,17 @@ export default function DeckList(): JSX.Element {
                                             <Link
                                                 className='battlefield-link'
                                                 to={`/wiki/battlefield#${
-                                                    wiki?.battlefield.find(
-                                                        battlefield =>
-                                                            battlefield.id ===
+                                                    battlefield.find(
+                                                        b =>
+                                                            b.id ===
                                                             deckInfo.battlefield
                                                     )?.name
                                                 }`}
                                             >
                                                 {
-                                                    wiki?.battlefield.find(
-                                                        battlefield =>
-                                                            battlefield.id ===
+                                                    battlefield.find(
+                                                        b =>
+                                                            b.id ===
                                                             deckInfo.battlefield
                                                     )?.name
                                                 }

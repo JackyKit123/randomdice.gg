@@ -8,7 +8,7 @@ import {
     faPlusCircle,
     faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { People, Credit } from 'Redux/Fetch Firebase/Credit/types';
+import { People, Credit } from 'types/database';
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
 import PopUp from 'Components/PopUp';

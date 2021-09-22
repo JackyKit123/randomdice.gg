@@ -10,7 +10,7 @@ import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
 import PopUp from 'Components/PopUp';
 import { CLOSE_POPUP, OPEN_POPUP } from 'Redux/PopUp Overlay/types';
-import { Dice, Dices } from 'Redux/Fetch Firebase/Dices/types';
+import { Die, DiceList } from 'types/database';
 import { fetchDices } from 'Firebase';
 
 export default function editDice(): JSX.Element {
@@ -19,16 +19,16 @@ export default function editDice(): JSX.Element {
     const database = firebase.database();
     const storage = firebase.storage();
     const dbRef = database.ref('/dice');
-    const [dices, setDices] = useState<Dices>([]);
+    const [dices, setDices] = useState<DiceList>([]);
     const initialState = {
         id: -1,
         name: '',
-        type: 'Physical' as Dice['type'],
+        type: 'Physical' as Die['type'],
         desc: '',
         detail: '',
         img: '',
-        target: '-' as Dice['target'],
-        rarity: 'Common' as Dice['rarity'],
+        target: '-' as Die['target'],
+        rarity: 'Common' as Die['rarity'],
         atk: 0,
         spd: 0,
         eff1: 0,
@@ -46,14 +46,14 @@ export default function editDice(): JSX.Element {
         pupEff1: 0,
         pupEff2: 0,
         arenaValue: {
-            type: 'Main Dps' as Dice['arenaValue']['type'],
+            type: 'Main Dps' as Die['arenaValue']['type'],
             assist: 0,
             dps: 0,
             slow: 0,
             value: 0,
         },
     };
-    const [activeEdit, setActiveEdit] = useState<Dice>(initialState);
+    const [activeEdit, setActiveEdit] = useState<Die>(initialState);
 
     useEffect(() => {
         dbRef.once('value').then(snapshot => setDices(snapshot.val()));
@@ -350,7 +350,7 @@ export default function editDice(): JSX.Element {
                                 defaultValue={activeEdit.type}
                                 onChange={(evt): void => {
                                     activeEdit.type = evt.target
-                                        .value as Dice['type'];
+                                        .value as Die['type'];
                                     setActiveEdit({ ...activeEdit });
                                 }}
                             >
@@ -385,7 +385,7 @@ export default function editDice(): JSX.Element {
                                 defaultValue={activeEdit.target}
                                 onChange={(evt): void => {
                                     activeEdit.target = evt.target
-                                        .value as Dice['target'];
+                                        .value as Die['target'];
                                     setActiveEdit({ ...activeEdit });
                                 }}
                             >
@@ -403,7 +403,7 @@ export default function editDice(): JSX.Element {
                                 defaultValue={activeEdit.rarity}
                                 onChange={(evt): void => {
                                     activeEdit.rarity = evt.target
-                                        .value as Dice['rarity'];
+                                        .value as Die['rarity'];
                                     setActiveEdit({ ...activeEdit });
                                 }}
                             >
@@ -635,7 +635,7 @@ export default function editDice(): JSX.Element {
                                         onChange={(evt): void => {
                                             activeEdit.arenaValue.type = evt
                                                 .target
-                                                .value as Dice['arenaValue']['type'];
+                                                .value as Die['arenaValue']['type'];
                                             setActiveEdit({ ...activeEdit });
                                         }}
                                     >

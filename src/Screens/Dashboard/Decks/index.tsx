@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,14 +11,11 @@ import {
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
-import { Deck, Decks } from 'Redux/Fetch Firebase/Decks/types';
-import { RootState } from 'Redux/store';
-import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
 import PopUp from 'Components/PopUp';
 import { CLOSE_POPUP, OPEN_POPUP } from 'Redux/PopUp Overlay/types';
-import { DecksGuide } from 'Redux/Fetch Firebase/Decks Guide/types';
-import { Battlefield } from 'Redux/Fetch Firebase/Wiki/types';
 import { fetchDecks } from 'Firebase';
+import { Battlefield, Deck, DeckGuides, DeckList, Die } from 'types/database';
+import useRootStateSelector from 'Redux';
 
 function DeckRow({
     deckInfo,
@@ -28,7 +25,7 @@ function DeckRow({
 }: {
     deckInfo: Deck;
     setActiveEdit: (deckInfo: Deck) => void;
-    guides: DecksGuide;
+    guides: DeckGuides;
     battlefields: Battlefield[];
 }): JSX.Element {
     return (
@@ -43,7 +40,7 @@ function DeckRow({
                     // eslint-disable-next-line react/no-array-index-key
                     <div className='deck-container' key={i}>
                         {deck.map(die => (
-                            <Dice dice={die} key={die} />
+                            <Dice die={die} key={die} />
                         ))}
                     </div>
                 ))}
@@ -84,13 +81,10 @@ const MemoRow = React.memo(DeckRow);
 export default function updateDeck(): JSX.Element {
     const dispatch = useDispatch();
     const database = firebase.database();
-    const { dices } = useSelector(
-        (state: RootState) => state.fetchDicesReducer
-    );
-    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
+    const { dice, wiki } = useRootStateSelector('fetchFirebaseReducer');
     const filterRef = useRef(null as null | HTMLDivElement);
-    const [decks, setDecks] = useState<Decks>([]);
-    const [guides, setGuides] = useState<DecksGuide>([]);
+    const [decks, setDecks] = useState<DeckList>([]);
+    const [guides, setGuides] = useState<DeckGuides>([]);
     const initialNewDeckState = {
         id: -1,
         rating: {
@@ -102,14 +96,14 @@ export default function updateDeck(): JSX.Element {
             | 'Co-op (Solo)'
             | 'Co-op (Pair)'
             | 'Crew',
-        decks: [[0, 1, 2, 3, 4]] as DiceType['id'][][],
+        decks: [[0, 1, 2, 3, 4]] as Die['id'][][],
         guide: [-1],
         battlefield: -1,
     };
     const [deckToAdd, setDeckToAdd] = useState({ ...initialNewDeckState });
     const [deckToDelete, setDeckToDelete] = useState({
         id: -1,
-        dice: [[]] as DiceType['id'][][],
+        dice: [[]] as Die['id'][][],
     });
     const [filter, setFilter] = useState({
         type: '?' as '?' | 'PvP' | 'Co-op' | 'Crew',
@@ -118,13 +112,13 @@ export default function updateDeck(): JSX.Element {
     });
 
     useEffect(() => {
-        if (dices) {
-            filter.dice = dices
-                .filter(dice => dice.rarity === 'Legendary')
-                .map(dice => dice.id);
+        if (dice) {
+            filter.dice = dice
+                .filter(die => die.rarity === 'Legendary')
+                .map(die => die.id);
             setFilter({ ...filter });
         }
-    }, [dices]);
+    }, [dice]);
 
     const initialEditState = {
         id: -1,
@@ -155,7 +149,7 @@ export default function updateDeck(): JSX.Element {
             .then(snapshot => setGuides(snapshot.val()));
     }, []);
 
-    const sortDecksAndUpdate = (deckList: Decks): void => {
+    const sortDecksAndUpdate = (deckList: DeckList): void => {
         deckList.sort((a, b) => {
             if (a.rating.default > b.rating.default) {
                 return -1;
@@ -188,7 +182,7 @@ export default function updateDeck(): JSX.Element {
     const deleteDeck = (): void => {
         const deleted = decks.filter(deck => deck.id !== deckToDelete.id);
         sortDecksAndUpdate([...deleted]);
-        setDeckToDelete({ id: -1, dice: [[]] as DiceType['id'][][] });
+        setDeckToDelete({ id: -1, dice: [[]] as Die['id'][][] });
     };
 
     const addDeck = (): void => {
@@ -212,7 +206,7 @@ export default function updateDeck(): JSX.Element {
         dispatch({ type: CLOSE_POPUP });
     };
 
-    if (!dices?.length || !decks?.length || !wiki?.battlefield?.length) {
+    if (!dice?.length || !decks?.length || !wiki?.battlefield?.length) {
         return (
             <Dashboard>
                 <LoadingScreen />
@@ -241,7 +235,7 @@ export default function updateDeck(): JSX.Element {
                     // eslint-disable-next-line react/no-array-index-key
                     <div key={i}>
                         {deck.map(die => (
-                            <Dice key={die} dice={die} />
+                            <Dice key={die} die={die} />
                         ))}
                     </div>
                 ))}
@@ -378,7 +372,7 @@ export default function updateDeck(): JSX.Element {
                                             setDeckToAdd(clone);
                                         }}
                                     >
-                                        {dices
+                                        {dice
                                             .filter(
                                                 die =>
                                                     !deckToAdd.decks[0].find(
@@ -441,7 +435,7 @@ export default function updateDeck(): JSX.Element {
                                                     setDeckToAdd(clone);
                                                 }}
                                             >
-                                                {dices
+                                                {dice
                                                     .filter(
                                                         die =>
                                                             !deckToAdd.decks[1].find(
@@ -566,13 +560,13 @@ export default function updateDeck(): JSX.Element {
                     data-value={filter.customSearch}
                 >
                     <option value={-1}>?</option>
-                    {dices.map(dice => (
-                        <option value={dice.id} key={dice.id}>
-                            {dice.name}
+                    {dice.map(die => (
+                        <option value={die.id} key={die.id}>
+                            {die.name}
                         </option>
                     ))}
                 </select>
-                <Dice dice={filter.customSearch} />
+                <Dice die={filter.customSearch} />
             </label>
             {typeof filter.dice !== 'undefined' ? (
                 <label htmlFor='dice-filter'>
@@ -580,7 +574,7 @@ export default function updateDeck(): JSX.Element {
                     <button
                         data-select-all={
                             (filter.dice.length || 0) <
-                            dices.filter(die => die.rarity === 'Legendary')
+                            dice.filter(die => die.rarity === 'Legendary')
                                 .length
                         }
                         type='button'
@@ -598,28 +592,28 @@ export default function updateDeck(): JSX.Element {
                             }
                             filter.dice =
                                 target.innerText === 'Select All'
-                                    ? dices
+                                    ? dice
                                           .filter(
                                               die => die.rarity === 'Legendary'
                                           )
-                                          .map(dice => dice.id)
+                                          .map(die => die.id)
                                     : [];
                             setFilter({ ...filter });
                         }}
                     >
                         {(filter.dice.length || 0) ===
-                        dices.filter(die => die.rarity === 'Legendary').length
+                        dice.filter(die => die.rarity === 'Legendary').length
                             ? 'Deselect All'
                             : 'Select All'}
                     </button>
                     <div ref={filterRef}>
-                        {dices
+                        {dice
                             ?.filter(die => die.rarity === 'Legendary')
-                            .map(dice => (
-                                <div key={dice.id} className='dice-container'>
-                                    <Dice dice={dice.id} />
+                            .map(die => (
+                                <div key={die.id} className='dice-container'>
+                                    <Dice die={die.id} />
                                     <input
-                                        value={dice.id}
+                                        value={die.id}
                                         type='checkbox'
                                         defaultChecked
                                         onChange={(evt): void => {
@@ -679,10 +673,10 @@ export default function updateDeck(): JSX.Element {
                                     (filter.type === '?' ||
                                         filter.type === deckInfo.type) &&
                                     deckInfo.decks.some(deck =>
-                                        deck.every(dice =>
-                                            dices.find(d => d.id === dice)
+                                        deck.every(die =>
+                                            dice.find(d => d.id === die)
                                                 ?.rarity === 'Legendary'
-                                                ? filter.dice.includes(dice)
+                                                ? filter.dice.includes(die)
                                                 : true
                                         )
                                     ) &&
@@ -834,7 +828,7 @@ export default function updateDeck(): JSX.Element {
                                                                             );
                                                                         }}
                                                                     >
-                                                                        {dices
+                                                                        {dice
                                                                             .filter(
                                                                                 d => {
                                                                                     const findExisted = activeEdit.decks[

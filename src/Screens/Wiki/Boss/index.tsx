@@ -1,37 +1,34 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
 import { useLocation } from 'react-router-dom';
 import GoogleAds from 'Components/AdUnit';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 
 import { fetchWiki } from 'Firebase';
-import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
+import { WikiContent } from 'types/database';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function BossGuide(): JSX.Element {
     const { hash } = useLocation();
     const [bossInfo, setBossInfo] = useState<WikiContent['boss']>();
-    const { wiki, error } = useSelector(
-        (state: RootState) => state.fetchWikiReducer
-    );
+    const {
+        wiki: { boss },
+        firebaseError,
+    } = useRootStateSelector('fetchFirebaseReducer');
 
     useEffect(() => {
-        if (wiki && !wiki.boss.find(boss => boss.img === 'ad')) {
-            wiki.boss.splice(
-                Math.min(Math.floor(wiki.boss.length / 2), 10),
-                0,
-                {
-                    id: -1,
-                    name: 'ad',
-                    img: 'ad',
-                    desc: 'ad',
-                }
-            );
-            setBossInfo(wiki.boss);
+        if (!boss.find(b => b.img === 'ad')) {
+            boss.splice(Math.min(Math.floor(boss.length / 2), 10), 0, {
+                id: -1,
+                name: 'ad',
+                img: 'ad',
+                desc: 'ad',
+            });
+            setBossInfo(boss);
         }
-    }, [wiki]);
+    }, [boss]);
 
     useEffect(() => {
         const target = document.getElementById(
@@ -51,8 +48,8 @@ export default function BossGuide(): JSX.Element {
 
     return (
         <PageWrapper
-            isContentReady={!!bossInfo}
-            error={error}
+            isContentReady={!!bossInfo?.length}
+            error={firebaseError}
             retryFn={fetchWiki}
             title='Boss Mechanics'
             className='boss-guide'
@@ -70,20 +67,20 @@ export default function BossGuide(): JSX.Element {
                 your board with too many mobs.
             </p>
             <section className='boss-list'>
-                {bossInfo?.map(boss =>
-                    boss.img === 'ad' ? (
+                {bossInfo?.map(b =>
+                    b.img === 'ad' ? (
                         <Fragment key='ad'>
                             <GoogleAds unitId='8891384324' />
                         </Fragment>
                     ) : (
-                        <Fragment key={boss.name}>
+                        <Fragment key={b.name}>
                             <hr className='divisor' />
-                            <div className='boss' id={boss.name}>
+                            <div className='b' id={b.name}>
                                 <figure>
-                                    <img src={boss.img} alt={boss.name} />
+                                    <img src={b.img} alt={b.name} />
                                 </figure>
-                                <h3>{boss.name}</h3>
-                                {ReactHtmlParser(sanitize(boss.desc))}
+                                <h3>{b.name}</h3>
+                                {ReactHtmlParser(sanitize(b.desc))}
                             </div>
                         </Fragment>
                     )

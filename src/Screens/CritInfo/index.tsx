@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
     VictoryChart,
     VictoryLabel,
@@ -11,7 +11,7 @@ import {
 } from 'victory';
 import * as math from 'mathjs';
 import firebase from 'firebase/app';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import ShareButtons from 'Components/ShareButton';
 import findMaxCrit from 'Misc/findMaxCrit';
 import { fetchCrit, fetchDices } from 'Firebase';
@@ -21,14 +21,10 @@ import PageWrapper from 'Components/PageWrapper';
 
 export default function critDataCollection(): JSX.Element {
     const dispatch = useDispatch();
-    const selection = useSelector(
-        (state: RootState) => state.fetchCritDataReducer
+    const { dice, critData, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { dices } = useSelector(
-        (state: RootState) => state.fetchDicesReducer
-    );
-    const { critData, error } = selection;
-    const { user } = useSelector((state: RootState) => state.authReducer);
+    const { user } = useRootStateSelector('authReducer');
     const database = firebase.database();
     const [typingTrophies, setTypingTrophies] = useState(0);
     const [typingCrit, setTypingCrit] = useState(0);
@@ -47,7 +43,7 @@ export default function critDataCollection(): JSX.Element {
         }
     }, [user, critData]);
 
-    const maxCrit = findMaxCrit(dices);
+    const maxCrit = findMaxCrit(dice);
 
     const critDataArr = Object.values(critData ?? {}).filter(
         data => data.trophies && data.crit
@@ -136,14 +132,13 @@ export default function critDataCollection(): JSX.Element {
         <PageWrapper
             isContentReady={
                 !!(
-                    dices?.length &&
-                    critData &&
+                    dice?.length &&
                     Object.values(critData).every(
                         data => data.trophies >= 0 && data.crit >= 111
                     )
                 )
             }
-            error={error}
+            error={firebaseError}
             retryFn={(): void => {
                 fetchCrit(dispatch);
                 fetchDices(dispatch);

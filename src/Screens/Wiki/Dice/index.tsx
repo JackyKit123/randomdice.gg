@@ -1,23 +1,22 @@
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useState, Fragment, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
 import Dice from 'Components/Dice';
 import GoogleAds from 'Components/AdUnit';
 import useReplaceAnchorWithHistory from 'Misc/useReplaceAnchorWithHistory';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 
 import { fetchWiki } from 'Firebase';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function DiceMechanic(): JSX.Element {
     const { hash } = useLocation();
-    const selection = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+    const { dice, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { error, dices } = selection;
     const [mechanics, setMechanics] = useState<
         (
             | {
@@ -30,7 +29,7 @@ export default function DiceMechanic(): JSX.Element {
     >();
 
     const wrapperRef = useRef<HTMLDivElement>(null);
-    useReplaceAnchorWithHistory(wrapperRef, [dices]);
+    useReplaceAnchorWithHistory(wrapperRef, [dice]);
 
     useEffect(() => {
         const target = document.getElementById(
@@ -49,11 +48,11 @@ export default function DiceMechanic(): JSX.Element {
     }, [mechanics, hash]);
 
     useEffect(() => {
-        if (dices?.length && !mechanics?.includes('ad')) {
-            const tmp = dices.map(dice => ({
-                id: dice.id,
-                name: dice.name,
-                detail: dice.detail,
+        if (dice?.length && !mechanics?.includes('ad')) {
+            const tmp = dice.map(die => ({
+                id: die.id,
+                name: die.name,
+                detail: die.detail,
             })) as (
                 | {
                       id: number;
@@ -62,15 +61,15 @@ export default function DiceMechanic(): JSX.Element {
                   }
                 | 'ad'
             )[];
-            tmp.splice(Math.min(Math.floor(dices.length / 2), 10), 0, 'ad');
+            tmp.splice(Math.min(Math.floor(dice.length / 2), 10), 0, 'ad');
             setMechanics(tmp);
         }
-    }, [dices]);
+    }, [dice]);
 
     return (
         <PageWrapper
-            isContentReady={!!(dices?.length && mechanics)}
-            error={error}
+            isContentReady={!!(dice?.length && mechanics)}
+            error={firebaseError}
             retryFn={fetchWiki}
             title='Dice Mechanics'
             className='wiki dice-mechanics'
@@ -85,20 +84,18 @@ export default function DiceMechanic(): JSX.Element {
                 <Link to='/calculator/stat'>Dice Stat Calculator</Link>.
             </p>
             <section ref={wrapperRef}>
-                {mechanics?.map(dice =>
-                    dice === 'ad' ? (
+                {mechanics?.map(die =>
+                    die === 'ad' ? (
                         <Fragment key='ad'>
                             <GoogleAds unitId='8891384324' />
                         </Fragment>
                     ) : (
-                        <Fragment key={dice.id}>
+                        <Fragment key={die.id}>
                             <hr className='divisor' />
-                            <div className='row' id={dice.name}>
-                                <h3>{dice.name}</h3>
-
-                                <Dice dice={dice.id} />
-
-                                {ReactHtmlParser(sanitize(dice.detail))}
+                            <div className='row' id={die.name}>
+                                <h3>{die.name}</h3>
+                                <Dice die={die.id} />
+                                {ReactHtmlParser(sanitize(die.detail))}
                             </div>
                         </Fragment>
                     )

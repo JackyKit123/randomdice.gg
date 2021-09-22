@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -11,7 +10,7 @@ import {
     VictoryLegend,
 } from 'victory';
 import Dice from 'Components/Dice';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import { fetchDices } from 'Firebase';
 
 import GoogleAds from 'Components/AdUnit';
@@ -19,10 +18,9 @@ import findMaxCrit from 'Misc/findMaxCrit';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function SolarCalculator(): JSX.Element {
-    const selection = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+    const { dice, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { error, dices } = selection;
     const [filter, setFilter] = useState({
         crit: 111,
         duration: 10,
@@ -64,13 +62,13 @@ export default function SolarCalculator(): JSX.Element {
         pupEff2: 0,
     };
     const diceData = {
-        solar: dices?.find(dice => dice.id === 38) || nullDice,
-        light: dices?.find(dice => dice.id === 10) || nullDice,
-        crit: dices?.find(dice => dice.id === 13) || nullDice,
-        lunar: dices?.find(dice => dice.id === 47) || nullDice,
+        solar: dice?.find(die => die.id === 38) || nullDice,
+        light: dice?.find(die => die.id === 10) || nullDice,
+        crit: dice?.find(die => die.id === 13) || nullDice,
+        lunar: dice?.find(die => die.id === 47) || nullDice,
     };
 
-    const maxCrit = findMaxCrit(dices);
+    const maxCrit = findMaxCrit(dice);
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
@@ -155,7 +153,7 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
-                dices,
+                dice,
                 filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
@@ -175,7 +173,7 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
-                dices,
+                dice,
                 filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
@@ -195,7 +193,7 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
-                dices,
+                dice,
                 filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
@@ -218,7 +216,7 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
-                dices,
+                dice,
                 filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
@@ -241,7 +239,7 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
-                dices,
+                dice,
                 filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
@@ -264,7 +262,7 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
-                dices,
+                dice,
                 filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
@@ -287,7 +285,7 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
-                dices,
+                dice,
                 filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
@@ -311,7 +309,7 @@ export default function SolarCalculator(): JSX.Element {
                     ) * 100
                 ) / 100,
             [
-                dices,
+                dice,
                 filter.solar.active,
                 filter.solar.class,
                 filter.solar.level,
@@ -332,7 +330,7 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerHit, basicAtkSpd, basicCrit, d.x),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -345,7 +343,7 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerHit, buffedAtkSpd, basicCrit, d.x),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -361,7 +359,7 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerHit, basicAtkSpd, buffedCrit, d.x),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -382,7 +380,7 @@ export default function SolarCalculator(): JSX.Element {
                         d.x
                     ),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -399,7 +397,7 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerHit, buffedAtkSpd, buffedCrit, d.x),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -423,7 +421,7 @@ export default function SolarCalculator(): JSX.Element {
                         d.x
                     ),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -445,7 +443,7 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerSplash, basicAtkSpd, basicCrit, d.x),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -458,7 +456,7 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerSplash, buffedAtkSpd, basicCrit, d.x),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -474,7 +472,7 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerSplash, basicAtkSpd, buffedCrit, d.x),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -495,7 +493,7 @@ export default function SolarCalculator(): JSX.Element {
                         d.x
                     ),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -512,7 +510,7 @@ export default function SolarCalculator(): JSX.Element {
                 (d: { x: number }): number =>
                     dps(basicDmgPerSplash, buffedAtkSpd, buffedCrit, d.x),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -536,7 +534,7 @@ export default function SolarCalculator(): JSX.Element {
                         d.x
                     ),
                 [
-                    dices,
+                    dice,
                     filter.solar.active,
                     filter.solar.class,
                     filter.solar.level,
@@ -563,10 +561,10 @@ export default function SolarCalculator(): JSX.Element {
                     diceData.light &&
                     diceData.crit &&
                     diceData.lunar &&
-                    dices?.length
+                    dice.length
                 )
             }
-            error={error}
+            error={firebaseError}
             retryFn={fetchDices}
             title='Solar Damage Calculator'
             className='solar-cal cal'
@@ -587,7 +585,7 @@ export default function SolarCalculator(): JSX.Element {
             <hr className='divisor' />
             <div className='multiple-dice'>
                 <div className='dice-container'>
-                    <Dice dice='Light' />
+                    <Dice die='Light' />
                     <h3 className='desc'>{diceData.light.desc}</h3>
                     <form
                         className='filter'
@@ -665,7 +663,7 @@ export default function SolarCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Lunar' />
+                    <Dice die='Lunar' />
                     <h3 className='desc'>{diceData.lunar.desc}</h3>
                     <form
                         className='filter'
@@ -757,7 +755,7 @@ export default function SolarCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Critical' />
+                    <Dice die='Critical' />
                     <h3 className='desc'>{diceData.crit.desc}</h3>
                     <form
                         className='filter'
@@ -837,7 +835,7 @@ export default function SolarCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Solar' />
+                    <Dice die='Solar' />
                     <h3 className='desc'>{diceData.solar.desc}</h3>
                     <form
                         className='filter'

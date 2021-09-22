@@ -5,7 +5,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { CLEAR_ERRORS } from 'Redux/Fetch Firebase/types';
 
 interface Props {
     isContentReady?: boolean;
@@ -32,18 +31,12 @@ export default function PageWrapper({
     const dispatch = useDispatch();
 
     let renderElement: React.ReactNode;
-    if (isContentReady) {
-        renderElement = children;
-    } else if (error) {
+    if (error) {
         renderElement = (
-            <Error
-                error={error}
-                retryFn={(): void => {
-                    dispatch({ type: CLEAR_ERRORS });
-                    retryFn(dispatch);
-                }}
-            />
+            <Error error={error} retryFn={(): void => retryFn(dispatch)} />
         );
+    } else if (isContentReady) {
+        renderElement = children;
     } else {
         renderElement = <Loading />;
     }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import 'firebase/database';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,7 +17,7 @@ import { faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
 import Menu from 'Components/Menu';
 import * as auth from 'Firebase/auth';
 import { menu } from 'Router';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import PopUp from 'Components/PopUp';
 import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
 import { ERROR } from 'Redux/Firebase Auth/types';
@@ -26,9 +26,8 @@ import { AxiosError } from 'axios';
 export default function Header(): JSX.Element {
     const dispatch = useDispatch();
     const history = useHistory();
-    const selector = useSelector((state: RootState) => state);
-    const { user, error } = selector.authReducer;
-    const { data } = selector.fetchUserDataReducer;
+    const { user, error } = useRootStateSelector('authReducer');
+    const { data } = useRootStateSelector('fetchUserDataReducer');
     const [scrolled, setScrolled] = useState(true);
     const [menuToggle, setMenuToggle] = useState(false);
     const [typingUsername, setTypingUsername] = useState<number>(0);

@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
 import { useLocation } from 'react-router-dom';
 import GoogleAds from 'Components/AdUnit';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 
 import { fetchWiki } from 'Firebase';
-import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
+import { WikiContent } from 'types/database';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function BattlefieldGuide(): JSX.Element {
@@ -15,8 +15,8 @@ export default function BattlefieldGuide(): JSX.Element {
     const [battlefieldInfo, setBattlefieldInfo] = useState<
         WikiContent['battlefield']
     >();
-    const { wiki, error } = useSelector(
-        (state: RootState) => state.fetchWikiReducer
+    const { wiki, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
     const [battleFieldLevel, setBattlefieldLevel] = useState(0);
     const containerRef = useRef(null as null | HTMLElement);
@@ -88,7 +88,7 @@ export default function BattlefieldGuide(): JSX.Element {
     return (
         <PageWrapper
             isContentReady={!!battlefieldInfo}
-            error={error}
+            error={firebaseError}
             retryFn={fetchWiki}
             title='Battlefield Mechanics'
             className='battlefield-guide'

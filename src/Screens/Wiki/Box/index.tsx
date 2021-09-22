@@ -1,22 +1,23 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+
 import GoogleAds from 'Components/AdUnit';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import replaceTextWithImgTag from 'Misc/replaceTextWithImg';
 
 import { fetchWiki, fetchDices } from 'Firebase';
-import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
+import { WikiContent } from 'types/database';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function BoxGuide(): JSX.Element {
-    const store = useSelector((state: RootState) => state);
+    const {
+        dice,
+        wiki: { box },
+        firebaseError,
+    } = useRootStateSelector('fetchFirebaseReducer');
     const [boxInfo, setBoxInfo] = useState<WikiContent['box']>();
     const { hash } = useLocation();
-    const { dices } = store.fetchDicesReducer;
-    const { wiki } = store.fetchWikiReducer;
-    const error = store.fetchDicesReducer.error || store.fetchWikiReducer.error;
 
     useEffect(() => {
         const target = document.getElementById(
@@ -35,22 +36,22 @@ export default function BoxGuide(): JSX.Element {
     }, [boxInfo, hash]);
 
     useEffect(() => {
-        if (wiki && !wiki.box.find(box => box.img === 'ad')) {
-            wiki.box.splice(Math.min(Math.floor(wiki.box.length / 2), 10), 0, {
+        if (!box.find(b => b.img === 'ad')) {
+            box.splice(Math.min(Math.floor(box.length / 2), 10), 0, {
                 id: -1,
                 name: 'ad',
                 img: 'ad',
                 contain: 'ad',
                 from: 'ad',
             });
-            setBoxInfo(wiki.box);
+            setBoxInfo(box);
         }
-    }, [wiki]);
+    }, [box]);
 
     return (
         <PageWrapper
-            isContentReady={!!(dices?.length && boxInfo)}
-            error={error}
+            isContentReady={!!(dice.length && boxInfo?.length)}
+            error={firebaseError}
             retryFn={(dispatch): void => {
                 fetchDices(dispatch);
                 fetchWiki(dispatch);
@@ -64,27 +65,24 @@ export default function BoxGuide(): JSX.Element {
                 are obtained from and the reward they give.
             </p>
             <section>
-                {boxInfo?.map(box =>
-                    box.img === 'ad' ? (
+                {boxInfo?.map(b =>
+                    b.img === 'ad' ? (
                         <Fragment key='ad'>
                             <GoogleAds unitId='8891384324' />
                         </Fragment>
                     ) : (
-                        <Fragment key={box.name}>
+                        <Fragment key={b.name}>
                             <hr className='divisor' />
-                            <div id={box.name}>
-                                <h3>{box.name}</h3>
+                            <div id={b.name}>
+                                <h3>{b.name}</h3>
                                 <figure>
-                                    <img src={box.img} alt={box.name} />
+                                    <img src={b.img} alt={b.name} />
                                 </figure>
-                                <p>Obtained from: {box.from}</p>
+                                <p>Obtained from: {b.from}</p>
                                 <p>
                                     Contains:{' '}
                                     {ReactHtmlParser(
-                                        replaceTextWithImgTag(
-                                            box.contain,
-                                            dices
-                                        )
+                                        replaceTextWithImgTag(b.contain, dice)
                                     )}
                                 </p>
                             </div>

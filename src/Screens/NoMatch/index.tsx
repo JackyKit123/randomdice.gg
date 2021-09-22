@@ -24,7 +24,7 @@ export default function NoMatch(props: {
                 alt='assassinate effect'
                 src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FAssassin%20Snipe.png?alt=media&token=4f38af19-31d3-4706-b5da-bd38a0b11809'
             />
-            <Dice dice='Assassin' />
+            <Dice die='Assassin' />
             <h3>This page is assassinated.</h3>
             <div>
                 <button type='button' onClick={history.goBack}>

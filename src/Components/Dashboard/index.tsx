@@ -1,15 +1,15 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import firebase, { FirebaseError } from 'firebase/app';
 import { useLocation, Link } from 'react-router-dom';
 import * as auth from 'Firebase/auth';
-import { RootState } from 'Redux/store';
 import Main from 'Components/Main';
 import LoadingScreen from 'Components/Loading';
 import NoMatch from 'Screens/NoMatch';
 import { menu } from 'Router';
 import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
+import useRootStateSelector from 'Redux';
 
 export default function Dashboard(props: {
     className?: string;
@@ -19,9 +19,8 @@ export default function Dashboard(props: {
     const dispatch = useDispatch();
     const database = firebase.database();
     const { className, children } = props;
-    const selector = useSelector((state: RootState) => state);
-    const { user, error } = selector.authReducer;
-    const { data } = selector.fetchUserDataReducer;
+    const { user, error } = useRootStateSelector('authReducer');
+    const { data } = useRootStateSelector('fetchUserDataReducer');
     const [authorized, setAuthorized] = useState<'loading' | boolean>(
         'loading'
     );

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -10,20 +9,19 @@ import {
     VictoryLabel,
     VictoryLegend,
 } from 'victory';
-import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
+import { Die } from 'types/database';
 
 import Dice from 'Components/Dice';
-import { RootState } from 'Redux/store';
 import { fetchDices } from 'Firebase';
 import GoogleAds from 'Components/AdUnit';
 import findMaxCrit from 'Misc/findMaxCrit';
 import PageWrapper from 'Components/PageWrapper';
+import useRootStateSelector from 'Redux';
 
 export default function DpsCalculator(): JSX.Element {
-    const selection = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+    const { dice, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { error, dices } = selection;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [filter, setFilter] = useState({
@@ -61,21 +59,21 @@ export default function DpsCalculator(): JSX.Element {
     });
 
     const data = {
-        electric: dices?.find(dice => dice.id === 1),
-        wind: dices?.find(dice => dice.id === 2),
-        iron: dices?.find(dice => dice.id === 5),
-        broken: dices?.find(dice => dice.id === 6),
-        gamble: dices?.find(dice => dice.id === 7),
-        arrow: dices?.find(dice => dice.id === 16),
-        mwind: dices?.find(dice => dice.id === 24),
-        melec: dices?.find(dice => dice.id === 22),
-        typhoon: dices?.find(dice => dice.id === 43),
-        critical: dices?.find(dice => dice.id === 13),
-        light: dices?.find(dice => dice.id === 10),
-        lunar: dices?.find(dice => dice.id === 47),
-    } as { [key: string]: DiceType };
+        electric: dice?.find(die => die.id === 1),
+        wind: dice?.find(die => die.id === 2),
+        iron: dice?.find(die => die.id === 5),
+        broken: dice?.find(die => die.id === 6),
+        gamble: dice?.find(die => die.id === 7),
+        arrow: dice?.find(die => die.id === 16),
+        mwind: dice?.find(die => die.id === 24),
+        melec: dice?.find(die => die.id === 22),
+        typhoon: dice?.find(die => die.id === 43),
+        critical: dice?.find(die => die.id === 13),
+        light: dice?.find(die => die.id === 10),
+        lunar: dice?.find(die => die.id === 47),
+    } as { [key: string]: Die };
 
-    const maxCrit = findMaxCrit(dices);
+    const maxCrit = findMaxCrit(dice);
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
@@ -109,13 +107,9 @@ export default function DpsCalculator(): JSX.Element {
 
     const roundTo3Sf = (val: number): number => Math.round(val * 100) / 100;
 
-    const baseAtkDmg = (
-        dice: DiceType,
-        diceClass: number,
-        level: number
-    ): number => {
+    const baseAtkDmg = (die: Die, diceClass: number, level: number): number => {
         let minClass = 1;
-        switch (dice.rarity) {
+        switch (die.rarity) {
             case 'Common':
                 minClass = 1;
                 break;
@@ -132,9 +126,9 @@ export default function DpsCalculator(): JSX.Element {
                 minClass = 1;
         }
         const atk =
-            dice.atk +
-            dice.cupAtk * (diceClass - minClass) +
-            dice.pupAtk * (level - 1);
+            die.atk +
+            die.cupAtk * (diceClass - minClass) +
+            die.pupAtk * (level - 1);
         const lunarAtkBuffMultiplier =
             filter.lunar.enable && filter.lunar.active
                 ? (10 * filter.lunar.pip) / 100 + 1
@@ -142,13 +136,13 @@ export default function DpsCalculator(): JSX.Element {
         return atk * lunarAtkBuffMultiplier;
     };
 
-    const atkSpd = (dice: DiceType, diceClass = 0): number => {
+    const atkSpd = (die: Die, diceClass = 0): number => {
         const atkSpdMultiplier = Math.min(
             1 - lightBuff / 100,
             1 - lunarSpdBuff / 100
         );
         let minClass = 1;
-        switch (dice.rarity) {
+        switch (die.rarity) {
             case 'Common':
                 minClass = 1;
                 break;
@@ -164,8 +158,8 @@ export default function DpsCalculator(): JSX.Element {
             default:
                 minClass = 1;
         }
-        const baseAtkSpd = dice.spd;
-        const cupAtkSpd = diceClass ? dice.cupSpd * (diceClass - minClass) : 0;
+        const baseAtkSpd = die.spd;
+        const cupAtkSpd = diceClass ? die.cupSpd * (diceClass - minClass) : 0;
         const buffedSpd = (baseAtkSpd + cupAtkSpd) * atkSpdMultiplier;
         return buffedSpd <= 0.01 ? 0.01 : buffedSpd;
     };
@@ -318,11 +312,11 @@ export default function DpsCalculator(): JSX.Element {
         <PageWrapper
             isContentReady={
                 !!(
-                    dices?.length &&
+                    dice?.length &&
                     Object.values(data).every(d => d !== undefined)
                 )
             }
-            error={error}
+            error={firebaseError}
             retryFn={fetchDices}
             title='General DPS Calculator'
             className='generic-dmg-cal cal'
@@ -350,7 +344,7 @@ export default function DpsCalculator(): JSX.Element {
             <h3>DPS Dice</h3>
             <div className='multiple-dice'>
                 <div className='dice-container'>
-                    <Dice dice='Electric' />
+                    <Dice die='Electric' />
                     <h3 className='desc'>{data.electric.desc}</h3>
                     <form
                         className='filter'
@@ -383,7 +377,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Wind' />
+                    <Dice die='Wind' />
                     <h3 className='desc'>{data.wind.desc}</h3>
                     <form
                         className='filter'
@@ -414,7 +408,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Iron' />
+                    <Dice die='Iron' />
                     <h3 className='desc'>{data.iron.desc}</h3>
                     <form
                         className='filter'
@@ -444,7 +438,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Broken' />
+                    <Dice die='Broken' />
                     <h3 className='desc'>{data.broken.desc}</h3>
                     <form
                         className='filter'
@@ -476,7 +470,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Gamble' />
+                    <Dice die='Gamble' />
                     <h3 className='desc'>{data.gamble.desc}</h3>
                     <form
                         className='filter'
@@ -508,7 +502,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Arrow' />
+                    <Dice die='Arrow' />
                     <h3 className='desc'>{data.arrow.desc}</h3>
                     <form
                         className='filter'
@@ -540,7 +534,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Mighty Wind' />
+                    <Dice die='Mighty Wind' />
                     <h3 className='desc'>{data.mwind.desc}</h3>
                     <form
                         className='filter'
@@ -572,7 +566,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Modified Electric' />
+                    <Dice die='Modified Electric' />
                     <h3 className='desc'>{data.melec.desc}</h3>
                     <form
                         className='filter'
@@ -604,7 +598,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Typhoon' />
+                    <Dice die='Typhoon' />
                     <h3 className='desc'>{data.typhoon.desc}</h3>
                     <form
                         className='filter'
@@ -710,7 +704,7 @@ export default function DpsCalculator(): JSX.Element {
             <h3>Buff Dice</h3>
             <div className='multiple-dice'>
                 <div className='dice-container'>
-                    <Dice dice='Light' />
+                    <Dice die='Light' />
                     <h3 className='desc'>{data.light?.desc}</h3>
                     <form
                         className='filter'
@@ -806,7 +800,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Lunar' />
+                    <Dice die='Lunar' />
                     <h3 className='desc'>{data.lunar?.desc}</h3>
                     <form
                         className='filter'
@@ -916,7 +910,7 @@ export default function DpsCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Critical' />
+                    <Dice die='Critical' />
                     <h3 className='desc'>{data.critical?.desc}</h3>
                     <form
                         className='filter'

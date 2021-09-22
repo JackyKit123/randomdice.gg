@@ -1,27 +1,26 @@
 import React, { Fragment } from 'react';
-import { useSelector } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 import Dice from 'Components/Dice';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 
 import { fetchDecksGuide, fetchDices } from 'Firebase';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function DeckGuideMenu(): JSX.Element {
-    const { guide, error } = useSelector(
-        (state: RootState) => state.fetchDecksGuideReducer
-    );
-    const { dices } = useSelector(
-        (state: RootState) => state.fetchDicesReducer
-    );
-    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
+    const {
+        dice,
+        wiki: { battlefield },
+        decks_guide: guide,
+        firebaseError,
+    } = useRootStateSelector('fetchFirebaseReducer');
 
     return (
         <PageWrapper
             isContentReady={
-                !!(guide?.length && dices?.length && wiki?.battlefield?.length)
+                !!(guide.length && dice.length && battlefield.length)
             }
-            error={error}
+            error={firebaseError}
             retryFn={(dispatch): void => {
                 fetchDecksGuide(dispatch);
                 fetchDices(dispatch);
@@ -61,11 +60,11 @@ export default function DeckGuideMenu(): JSX.Element {
                                                         key={`filter-${dicelist.join()}`}
                                                     >
                                                         {dicelist.map(
-                                                            (dice, i) => (
+                                                            (die, i) => (
                                                                 <Dice
                                                                     /* eslint-disable-next-line react/no-array-index-key */
-                                                                    key={`filter-${dicelist.join()}-${dice}-${i}`}
-                                                                    dice={dice}
+                                                                    key={`filter-${dicelist.join()}-${die}-${i}`}
+                                                                    die={die}
                                                                 />
                                                             )
                                                         )}
@@ -76,9 +75,9 @@ export default function DeckGuideMenu(): JSX.Element {
                                                     <div>
                                                         Battlefield:{' '}
                                                         {
-                                                            wiki?.battlefield.find(
-                                                                battlefield =>
-                                                                    battlefield.id ===
+                                                            battlefield.find(
+                                                                b =>
+                                                                    b.id ===
                                                                     g.battlefield
                                                             )?.name
                                                         }
@@ -117,11 +116,11 @@ export default function DeckGuideMenu(): JSX.Element {
                                                 className='dice-container'
                                                 key={`filter-${dicelist.join()}`}
                                             >
-                                                {dicelist.map((dice, i) => (
+                                                {dicelist.map((die, i) => (
                                                     <Dice
                                                         /* eslint-disable-next-line react/no-array-index-key */
-                                                        key={`filter-${dicelist.join()}-${dice}-${i}`}
-                                                        dice={dice}
+                                                        key={`filter-${dicelist.join()}-${die}-${i}`}
+                                                        die={die}
                                                     />
                                                 ))}
                                             </div>
@@ -131,9 +130,9 @@ export default function DeckGuideMenu(): JSX.Element {
                                             <div>
                                                 Battlefield:{' '}
                                                 {
-                                                    wiki?.battlefield.find(
-                                                        battlefield =>
-                                                            battlefield.id ===
+                                                    battlefield.find(
+                                                        b =>
+                                                            b.id ===
                                                             g.battlefield
                                                     )?.name
                                                 }

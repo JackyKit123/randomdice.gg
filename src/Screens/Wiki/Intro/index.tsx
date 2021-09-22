@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import ReactHtmlParser from 'react-html-parser';
-import { useSelector } from 'react-redux';
+
 import { sanitize } from 'dompurify';
 import useReplaceAnchorWithHistory from 'Misc/useReplaceAnchorWithHistory';
-import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
-import { RootState } from 'Redux/store';
+import { WikiContent } from 'types/database';
+import useRootStateSelector from 'Redux';
 import { fetchWiki } from 'Firebase';
 import PageWrapper from 'Components/PageWrapper';
 
@@ -13,23 +13,25 @@ export default function Intro({
 }: {
     type: keyof WikiContent['intro'];
 }): JSX.Element {
-    const selection = useSelector((state: RootState) => state.fetchWikiReducer);
-    const { error, wiki } = selection;
+    const {
+        wiki: { intro },
+        firebaseError,
+    } = useRootStateSelector('fetchFirebaseReducer');
 
     const wrapperRef = useRef<HTMLDivElement>(null);
-    useReplaceAnchorWithHistory(wrapperRef, [wiki]);
+    useReplaceAnchorWithHistory(wrapperRef, [intro[type]]);
 
     return (
         <PageWrapper
-            isContentReady={!!wiki}
-            error={error}
+            isContentReady={!![intro[type]]}
+            error={firebaseError}
             retryFn={fetchWiki}
             title={`${type} Introduction`}
             className='wiki intro'
             description='A wiki with Random Dice game information. Basic introductions, tips and tricks and more!'
         >
             <div ref={wrapperRef}>
-                {ReactHtmlParser(sanitize(wiki?.intro[type] ?? ''))}
+                {ReactHtmlParser(sanitize(intro[type] ?? ''))}
             </div>
         </PageWrapper>
     );

@@ -9,7 +9,7 @@ import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
 import PopUp from 'Components/PopUp';
 import { CLOSE_POPUP, OPEN_POPUP } from 'Redux/PopUp Overlay/types';
-import { Guide } from 'Redux/Fetch Firebase/Wiki/types';
+import { Guide } from 'types/database';
 import { fetchWiki } from 'Firebase';
 import MyUploadAdapter from 'Misc/ckeditorUploadAdapter';
 

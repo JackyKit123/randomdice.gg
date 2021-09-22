@@ -1,25 +1,24 @@
 import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useSelector } from 'react-redux';
 import { faPatreon } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
-import { RootState } from 'Redux/store';
-
 import { fetchPatreon } from 'Firebase';
 import PageWrapper from 'Components/PageWrapper';
+import useRootStateSelector from 'Redux';
 
 export default function PatreonIntro(): JSX.Element {
-    const { list, error } = useSelector(
-        (state: RootState) => state.fetchPatreonListReducer
+    const { patreon_list: list, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
     const highestTier = list?.sort((a, b) => b.tier - a.tier)[0]?.tier || 1;
     const tierList = new Array(highestTier)
         .fill(highestTier)
         .map((e, i) => e - i);
+
     return (
         <PageWrapper
-            isContentReady={!!list}
-            error={error}
+            isContentReady={!!list.length}
+            error={firebaseError}
             retryFn={fetchPatreon}
             title='Patreon'
             className='patreon'

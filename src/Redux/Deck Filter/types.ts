@@ -1,12 +1,11 @@
-import { Deck } from '../Fetch Firebase/Decks/types';
-import { Dice } from '../Fetch Firebase/Dices/types';
+import { Die, Deck } from 'types/database';
 
 export const FILTER_ACTION = 'FILTER_ACTION';
 
 export interface Filter {
-    legendary: Dice['id'][];
+    legendary: Die['id'][];
     profile: keyof Deck['rating'];
-    customSearch: Dice['id'];
+    customSearch: Die['id'];
     deckType: 'pvp' | 'co-op' | 'crew';
 }
 

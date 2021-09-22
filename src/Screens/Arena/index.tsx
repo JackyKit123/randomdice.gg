@@ -1,23 +1,20 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import * as math from 'mathjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUndo, faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { RootState } from 'Redux/store';
 import Dice from 'Components/Dice';
 import { fetchDices } from 'Firebase';
 
 import GoogleAds from 'Components/AdUnit';
 import ShareButtons from 'Components/ShareButton';
 import PageWrapper from 'Components/PageWrapper';
+import useRootStateSelector from 'Redux';
 
 export default function ArenaDraft(): JSX.Element {
-    const selection = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+    const { dice, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { error } = selection;
-    const { dices } = selection;
     const manualPickRef = useRef(null as null | HTMLSelectElement);
 
     const [currentPick, setCurrentPick] = useState(1);
@@ -39,12 +36,12 @@ export default function ArenaDraft(): JSX.Element {
     const [manualPick, setManualPick] = useState(-1 as number);
 
     const findDiceValue = (diceID: number): DiceValue => {
-        const dice = dices?.find(d => d.id === diceID);
+        const die = dice?.find(d => d.id === diceID);
         return {
-            dps: dice?.arenaValue.dps || 0,
-            assist: dice?.arenaValue.assist || 0,
-            slow: dice?.arenaValue.slow || 0,
-            value: dice?.arenaValue.value || 0,
+            dps: die?.arenaValue.dps ?? 0,
+            assist: die?.arenaValue.assist ?? 0,
+            slow: die?.arenaValue.slow ?? 0,
+            value: die?.arenaValue.value ?? 0,
         };
     };
 
@@ -96,7 +93,7 @@ export default function ArenaDraft(): JSX.Element {
     };
 
     const calDiceRole = (diceId: number): number => {
-        if (!dices?.find(d => d.id === diceId)) {
+        if (!dice?.find(d => d.id === diceId)) {
             return 0;
         }
         const value = findDiceValue(diceId);
@@ -163,8 +160,8 @@ export default function ArenaDraft(): JSX.Element {
     }
     return (
         <PageWrapper
-            isContentReady={!!dices}
-            error={error}
+            isContentReady={!!dice.length}
+            error={firebaseError}
             retryFn={fetchDices}
             title='Arena Draft Tool'
             className='arena-draft'
@@ -223,14 +220,14 @@ export default function ArenaDraft(): JSX.Element {
                                                 }}
                                             >
                                                 <option value={-1}>?</option>
-                                                {dices
-                                                    ?.filter(dice =>
+                                                {dice
+                                                    ?.filter(die =>
                                                         currentPick < 3
-                                                            ? dice.rarity !==
+                                                            ? die.rarity !==
                                                               'Legendary'
                                                             : true
                                                     )
-                                                    .filter(dice => {
+                                                    .filter(die => {
                                                         const activePicks = {
                                                             ...pick,
                                                         };
@@ -244,14 +241,14 @@ export default function ArenaDraft(): JSX.Element {
                                                             ...Object.values(
                                                                 activePicks
                                                             ),
-                                                        ].includes(dice.id);
+                                                        ].includes(die.id);
                                                     })
-                                                    .map(dice => (
+                                                    .map(die => (
                                                         <option
-                                                            value={dice.id}
-                                                            key={`pick-${tdIndex}-${dice.id}`}
+                                                            value={die.id}
+                                                            key={`pick-${tdIndex}-${die.id}`}
                                                         >
-                                                            {dice.name}
+                                                            {die.name}
                                                         </option>
                                                     ))}
                                             </select>
@@ -284,7 +281,7 @@ export default function ArenaDraft(): JSX.Element {
                                             }
                                         }}
                                     >
-                                        <Dice dice={pick[tdIndex]} />
+                                        <Dice die={pick[tdIndex]} />
                                     </td>
                                 ))}
                             </tr>
@@ -344,25 +341,25 @@ export default function ArenaDraft(): JSX.Element {
                                 }
                             >
                                 <option value={-1}>?</option>
-                                {dices
-                                    ?.filter(dice =>
+                                {dice
+                                    ?.filter(die =>
                                         currentPick < 3
-                                            ? dice.rarity !== 'Legendary' &&
-                                              dice.id !== 36
-                                            : dice.id !== 36
+                                            ? die.rarity !== 'Legendary' &&
+                                              die.id !== 36
+                                            : die.id !== 36
                                     )
                                     .filter(
-                                        dice =>
+                                        die =>
                                             !Object.values(deck).includes(
-                                                dice.id
+                                                die.id
                                             )
                                     )
-                                    .map(dice => (
+                                    .map(die => (
                                         <option
-                                            value={dice.id}
-                                            key={`pick--${dice.id}`}
+                                            value={die.id}
+                                            key={`pick--${die.id}`}
                                         >
-                                            {dice.name}
+                                            {die.name}
                                         </option>
                                     ))}
                             </select>
@@ -412,7 +409,7 @@ export default function ArenaDraft(): JSX.Element {
                 <h3>Your Deck</h3>
                 <div className='deck-list'>
                     {[1, 2, 3, 4, 5].map(i => (
-                        <Dice key={`deck${i}`} dice={deck[i]} />
+                        <Dice key={`deck${i}`} die={deck[i]} />
                     ))}
                 </div>
                 <h3>Deck Score</h3>

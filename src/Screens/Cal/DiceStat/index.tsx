@@ -1,27 +1,24 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Dice from 'Components/Dice';
-import { RootState } from 'Redux/store';
 import { fetchDices } from 'Firebase';
-
 import GoogleAds from 'Components/AdUnit';
 import PageWrapper from 'Components/PageWrapper';
+import useRootStateSelector from 'Redux';
 
 export default function DiceStat(): JSX.Element {
-    const selection = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+    const { dice, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { error, dices } = selection;
     const [filter, setFilter] = useState({
         activeDice: 'Fire',
         class: 1,
         level: 1,
     });
 
-    const dice = dices?.find(d => d.name === filter.activeDice);
+    const die = dice?.find(d => d.name === filter.activeDice);
     let minClass: number;
-    switch (dice?.rarity) {
+    switch (die?.rarity) {
         case 'Legendary':
             minClass = 7;
             break;
@@ -39,41 +36,41 @@ export default function DiceStat(): JSX.Element {
         setFilter({ ...filter });
     }
     const atk =
-        dice &&
+        die &&
         Math.round(
-            (dice.atk +
-                dice.cupAtk * (filter.class - minClass) +
-                dice.pupAtk * (filter.level - 1)) *
+            (die.atk +
+                die.cupAtk * (filter.class - minClass) +
+                die.pupAtk * (filter.level - 1)) *
                 100
         ) / 100;
     const spd =
-        dice &&
+        die &&
         Math.round(
-            (dice.spd +
-                dice.cupSpd * (filter.class - minClass) +
-                dice.pupSpd * (filter.level - 1)) *
+            (die.spd +
+                die.cupSpd * (filter.class - minClass) +
+                die.pupSpd * (filter.level - 1)) *
                 100
         ) / 100;
     const eff1 =
-        dice &&
+        die &&
         Math.round(
-            (dice.eff1 +
-                dice.cupEff1 * (filter.class - minClass) +
-                dice.pupEff1 * (filter.level - 1)) *
+            (die.eff1 +
+                die.cupEff1 * (filter.class - minClass) +
+                die.pupEff1 * (filter.level - 1)) *
                 100
         ) / 100;
     const eff2 =
-        dice &&
+        die &&
         Math.round(
-            (dice.eff2 +
-                dice.cupEff2 * (filter.class - minClass) +
-                dice.pupEff2 * (filter.level - 1)) *
+            (die.eff2 +
+                die.cupEff2 * (filter.class - minClass) +
+                die.pupEff2 * (filter.level - 1)) *
                 100
         ) / 100;
     return (
         <PageWrapper
-            isContentReady={!!dice}
-            error={error}
+            isContentReady={!!die}
+            error={firebaseError}
             retryFn={fetchDices}
             title='Dice Stat Calculator'
             className='dice-stat-cal cal'
@@ -90,7 +87,7 @@ export default function DiceStat(): JSX.Element {
             <hr className='divisor' />
             <div className='container'>
                 <div className='upper'>
-                    <Dice dice={dice?.id ?? -1} />
+                    <Dice die={die?.id ?? -1} />
                     <label htmlFor='class'>
                         Class :{' '}
                         <select
@@ -109,7 +106,7 @@ export default function DiceStat(): JSX.Element {
                         </select>
                     </label>
                     <label htmlFor='dice-name'>
-                        <span className={dice?.rarity}>{dice?.rarity}</span>
+                        <span className={die?.rarity}>{die?.rarity}</span>
                         <select
                             onChange={(evt): void => {
                                 const diceName = evt.target.value.replace(
@@ -120,7 +117,7 @@ export default function DiceStat(): JSX.Element {
                                 setFilter({ ...filter });
                             }}
                         >
-                            {dices?.map(d => (
+                            {dice?.map(d => (
                                 <option key={d.name}>{d.name} Dice</option>
                             ))}
                         </select>
@@ -140,12 +137,12 @@ export default function DiceStat(): JSX.Element {
                             <option>5</option>
                         </select>
                     </label>
-                    <div className='desc'>{dice?.desc}</div>
+                    <div className='desc'>{die?.desc}</div>
                 </div>
                 <div className='lower'>
                     <div className='type'>
                         <span className='label'>Type</span>
-                        <span className='value'>{dice?.type}</span>
+                        <span className='value'>{die?.type}</span>
                     </div>
                     <div className='atk'>
                         <span className='label'>Atk</span>
@@ -160,20 +157,20 @@ export default function DiceStat(): JSX.Element {
                     </div>
                     <div className='target'>
                         <span className='label'>Target</span>
-                        <span className='value'>{dice?.target || '-'}</span>
+                        <span className='value'>{die?.target || '-'}</span>
                     </div>
                     <div className='eff1'>
-                        <span className='label'>{dice?.nameEff1 || '.'}</span>
+                        <span className='label'>{die?.nameEff1 || '.'}</span>
                         <span className='value'>
                             {eff1 || '-'}
-                            {dice?.unitEff1}
+                            {die?.unitEff1}
                         </span>
                     </div>
                     <div className='eff2'>
-                        <span className='label'>{dice?.nameEff2 || '.'}</span>
+                        <span className='label'>{die?.nameEff2 || '.'}</span>
                         <span className='value'>
                             {eff2 || '-'}
-                            {dice?.unitEff2}
+                            {die?.unitEff2}
                         </span>
                     </div>
                 </div>

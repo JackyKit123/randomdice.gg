@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import Masonry from 'react-masonry-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,25 +8,31 @@ import { faEye } from '@fortawesome/free-regular-svg-icons';
 import Linkify from 'linkifyjs/react';
 import LoadingScreen from 'Components/Loading';
 import { fetchYouTube } from 'Redux/Google API/fetchData';
-import { RootState } from 'Redux/store';
-import { Info, Patreon } from 'Redux/Fetch Firebase/Patreon List/types';
+import useRootStateSelector from 'Redux';
 import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 import PopUp from 'Components/PopUp';
 import PageWrapper from 'Components/PageWrapper';
+import { Info, Patreon } from 'types/database';
 
 export default function YoutubeList(): JSX.Element {
     const dispatch = useDispatch();
-    const selector = useSelector((state: RootState) => state);
+    const youtubeApiReucer = useRootStateSelector(
+        'fetchGAPIyoutubeChannelsReducer'
+    );
+    const googleApiReducer = useRootStateSelector('initGAPIReducer');
+    const firebaseDatabaseReducer = useRootStateSelector(
+        'fetchFirebaseReducer'
+    );
     const [isT3Patreon, setIsT3Patreon] = useState<Info & Patreon>();
     const [channelID, setChannelID] = useState<string>('');
     const [loading, setLoading] = useState(false);
-    const { client } = selector.initGAPIReducer;
-    const ytList = selector.fetchGAPIyoutubeChannelsReducer.list;
-    const patreonList = selector.fetchPatreonListReducer.list;
+    const { client } = googleApiReducer;
+    const { list: ytList } = youtubeApiReucer;
+    const { patreon_list: patreonList } = firebaseDatabaseReducer;
     const error =
-        selector.fetchGAPIyoutubeChannelsReducer.error ||
-        selector.fetchPatreonListReducer.error ||
-        selector.initGAPIReducer.error;
+        firebaseDatabaseReducer.firebaseError ||
+        firebaseDatabaseReducer.firebaseError ||
+        googleApiReducer.error;
     const user = firebase.auth().currentUser;
     useEffect(() => {
         if (patreonList && user) {
@@ -94,7 +100,7 @@ export default function YoutubeList(): JSX.Element {
                             type='button'
                             onClick={async (): Promise<void> => {
                                 setLoading(true);
-                                const i = patreonList?.findIndex(
+                                const i = patreonList.findIndex(
                                     (patron: Patreon) => patron.id === user.uid
                                 );
                                 await firebase

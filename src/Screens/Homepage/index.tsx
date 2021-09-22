@@ -1,18 +1,18 @@
 import React, { useRef } from 'react';
-import { useSelector } from 'react-redux';
+
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
 import Menu from 'Components/Menu';
 import { menu } from 'Router';
 import useReplaceAnchorWithHistory from 'Misc/useReplaceAnchorWithHistory';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import ConvertEmbed from 'Components/YoutubeEmbed';
 import { navDiscord } from 'Misc/customGaEvent';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function Homepage(): JSX.Element {
-    const { news, error } = useSelector(
-        (state: RootState) => state.fetchNewsReducer
+    const { news, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
 
     const gameNewsSectionRef = useRef<HTMLDivElement>(null);
@@ -92,8 +92,8 @@ export default function Homepage(): JSX.Element {
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {news ? (
                     <ConvertEmbed htmlString={news.game} />
-                ) : error ? (
-                    `Unable to load the latest news : ${error}`
+                ) : firebaseError ? (
+                    `Unable to load the latest news : ${firebaseError}`
                 ) : (
                     'Loading News...'
                 )}
@@ -103,8 +103,8 @@ export default function Homepage(): JSX.Element {
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {news
                     ? ReactHtmlParser(sanitize(news.website))
-                    : error
-                    ? `Unable to load the latest news : ${error}`
+                    : firebaseError
+                    ? `Unable to load the latest news : ${firebaseError}`
                     : 'Loading News...'}
             </section>
             <section>

@@ -1,19 +1,18 @@
 import React, { Fragment } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { RootState } from 'Redux/store';
 import { fetchCredit } from 'Firebase';
 import PageWrapper from 'Components/PageWrapper';
+import useRootStateSelector from 'Redux';
 
 export default function Credit(): JSX.Element {
-    const { credit, error } = useSelector(
-        (state: RootState) => state.fetchCreditReducer
+    const { credit, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
 
     return (
         <PageWrapper
-            isContentReady={!!credit}
-            error={error}
+            isContentReady={!!credit.length}
+            error={firebaseError}
             retryFn={fetchCredit}
             title='Credit'
             className='credit'

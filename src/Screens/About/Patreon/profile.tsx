@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import firebase from 'firebase/app';
 import ReactHtmlParser from 'react-html-parser';
@@ -11,18 +11,18 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import LoadingScreen from 'Components/Loading';
 
 import { fetchPatreon } from 'Firebase';
-import { RootState } from 'Redux/store';
 import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
 import PopUp from 'Components/PopUp';
-import { Patreon } from 'Redux/Fetch Firebase/Patreon List/types';
 import PageWrapper from 'Components/PageWrapper';
+import useRootStateSelector from 'Redux';
+import { Patreon } from 'types/database';
 
 export default function PatreonProfile(): JSX.Element {
     const history = useHistory();
     const { name } = useParams<{ name: string }>();
     const dispatch = useDispatch();
-    const { list, error } = useSelector(
-        (state: RootState) => state.fetchPatreonListReducer
+    const { patreon_list: list, firebaseError: error } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
     const [isPatreonPageOwner, setIsPatreonPageOwner] = useState(false);
     const [editing, setEditing] = useState(false);
@@ -51,6 +51,7 @@ export default function PatreonProfile(): JSX.Element {
 
     return (
         <PageWrapper
+            isContentReady={!!list.length}
             error={error}
             retryFn={fetchPatreon}
             title={`Patreon Supporter ${name}`}

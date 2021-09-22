@@ -3,11 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dice from 'Components/Dice';
-import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
-import { RootState } from 'Redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import useRootStateSelector from 'Redux';
+import { useDispatch } from 'react-redux';
 import { Filter, FILTER_ACTION } from 'Redux/Deck Filter/types';
-import { Deck, Decks } from 'Redux/Fetch Firebase/Decks/types';
+import { Deck, DeckList, DiceList, Die } from 'types/database';
 
 function useUpdateFilter(): (filterState: Filter) => void {
     const dispatch = useDispatch();
@@ -22,7 +21,7 @@ function useUpdateFilter(): (filterState: Filter) => void {
 
 function DeckTypeFilter(): JSX.Element {
     const history = useHistory();
-    const filter = useSelector((state: RootState) => state.filterReducer);
+    const filter = useRootStateSelector('filterReducer');
     const { deckType } = filter;
     const setFilter = useUpdateFilter();
 
@@ -48,7 +47,7 @@ function DeckTypeFilter(): JSX.Element {
 }
 
 function DeckProfileFilter(): JSX.Element {
-    const filter = useSelector((state: RootState) => state.filterReducer);
+    const filter = useRootStateSelector('filterReducer');
     const { profile } = filter;
     const setFilter = useUpdateFilter();
 
@@ -74,11 +73,11 @@ function DeckProfileFilter(): JSX.Element {
 }
 
 interface DiceListProps {
-    dice: DiceType[];
+    dice: DiceList;
 }
 
 function CustomSearchFilter({ dice }: DiceListProps): JSX.Element {
-    const filter = useSelector((state: RootState) => state.filterReducer);
+    const filter = useRootStateSelector('filterReducer');
     const { customSearch } = filter;
     const setFilter = useUpdateFilter();
 
@@ -103,13 +102,13 @@ function CustomSearchFilter({ dice }: DiceListProps): JSX.Element {
                     </option>
                 ))}
             </select>
-            <Dice dice={customSearch} />
+            <Dice die={customSearch} />
         </label>
     );
 }
 
 function LegendaryListFilter({ dice }: DiceListProps): JSX.Element {
-    const filter = useSelector((state: RootState) => state.filterReducer);
+    const filter = useRootStateSelector('filterReducer');
     const { legendary } = filter;
     const setFilter = useUpdateFilter();
     const legendaryList = dice
@@ -158,9 +157,9 @@ function LegendaryListFilter({ dice }: DiceListProps): JSX.Element {
                 </button>
             </div>
             <div className='filter-container' ref={legendaryOwnedFilterRef}>
-                {legendaryList.map((die: DiceType['id']) => (
+                {legendaryList.map((die: Die['id']) => (
                     <div className='legendary-filter' key={die}>
-                        <Dice dice={die} />
+                        <Dice die={die} />
                         <input
                             value={die}
                             type='checkbox'
@@ -192,9 +191,7 @@ function LegendaryListFilter({ dice }: DiceListProps): JSX.Element {
 }
 
 export default function FilterForm(): JSX.Element {
-    const { dices: dice } = useSelector(
-        (state: RootState) => state.fetchDicesReducer
-    );
+    const { dice } = useRootStateSelector('fetchFirebaseReducer');
 
     return (
         <form className='filter'>
@@ -211,14 +208,12 @@ export default function FilterForm(): JSX.Element {
 }
 
 export function useDeckFilter(
-    decksList: Decks,
+    decksList: DeckList,
     deckType: Lowercase<Deck['type']>
-): Decks {
-    const { dices: dice } = useSelector(
-        (state: RootState) => state.fetchDicesReducer
-    );
-    const { legendary, customSearch, profile } = useSelector(
-        (state: RootState) => state.filterReducer
+): DeckList {
+    const { dice } = useRootStateSelector('fetchFirebaseReducer');
+    const { legendary, customSearch, profile } = useRootStateSelector(
+        'filterReducer'
     );
 
     const filteredDeck =

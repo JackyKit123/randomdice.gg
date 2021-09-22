@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import Dice from 'Components/Dice';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import { fetchDices } from 'Firebase';
 
 import GoogleAds from 'Components/AdUnit';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function SpeedCalculator(): JSX.Element {
-    const selection = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+    const { dice, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { error, dices } = selection;
     const [filter, setFilter] = useState({
         blizzard: {
             class: 7,
@@ -40,10 +38,10 @@ export default function SpeedCalculator(): JSX.Element {
     });
 
     const data = {
-        blizzard: dices?.find(dice => dice.id === 35),
-        ice: dices?.find(dice => dice.id === 4),
-        flow: dices?.find(dice => dice.id === 48),
-        sand: dices?.find(dice => dice.id === 30),
+        blizzard: dice?.find(die => die.id === 35),
+        ice: dice?.find(die => die.id === 4),
+        flow: dice?.find(die => die.id === 48),
+        sand: dice?.find(die => die.id === 30),
     };
     const blizzardSlow =
         data.blizzard &&
@@ -99,7 +97,7 @@ export default function SpeedCalculator(): JSX.Element {
             isContentReady={
                 !!(data.blizzard && data.ice && data.flow && data.sand)
             }
-            error={error}
+            error={firebaseError}
             retryFn={fetchDices}
             title='Mod Speed Factor Calculator'
             className='speed-cal cal'
@@ -118,7 +116,7 @@ export default function SpeedCalculator(): JSX.Element {
                 onSubmit={(evt): void => evt.preventDefault()}
             >
                 <div className='dice-container'>
-                    <Dice dice='Blizzard' />
+                    <Dice die='Blizzard' />
                     <h3 className='desc'>{data.blizzard?.desc}</h3>
                     <label htmlFor='blizzard-class'>
                         <span>Class :</span>
@@ -230,7 +228,7 @@ export default function SpeedCalculator(): JSX.Element {
                     </label>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Flow' />
+                    <Dice die='Flow' />
                     <h3 className='desc'>{data.flow?.desc}</h3>
                     <label htmlFor='flow-class'>
                         <span>Class :</span>
@@ -332,7 +330,7 @@ export default function SpeedCalculator(): JSX.Element {
                     </label>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Sand Swamp' />
+                    <Dice die='Sand Swamp' />
                     <h3 className='desc'>{data.sand?.desc}</h3>
                     <label htmlFor='sand-enable' className='checkbox-label'>
                         <span>Enabled : </span>
@@ -351,7 +349,7 @@ export default function SpeedCalculator(): JSX.Element {
                     </label>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Ice' />
+                    <Dice die='Ice' />
                     <h3 className='desc'>{data.ice?.desc}</h3>
                     <label htmlFor='ice-class'>
                         <span>Class :</span>

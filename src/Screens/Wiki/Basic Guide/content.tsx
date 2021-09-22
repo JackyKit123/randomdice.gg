@@ -1,19 +1,19 @@
 import React, { useRef } from 'react';
-import { useSelector } from 'react-redux';
+
 import { useHistory, useParams } from 'react-router-dom';
 import ShareButton from 'Components/ShareButton';
 import ConvertEmbed from 'Components/YoutubeEmbed';
 import { fetchWiki } from 'Firebase';
 import useReplaceAnchorWithHistory from 'Misc/useReplaceAnchorWithHistory';
 
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function BasicGuide(): JSX.Element {
     const history = useHistory();
     const { title } = useParams<{ title: string }>();
-    const { wiki, error } = useSelector(
-        (state: RootState) => state.fetchWikiReducer
+    const { wiki, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
 
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -27,7 +27,7 @@ export default function BasicGuide(): JSX.Element {
     }
     return (
         <PageWrapper
-            error={error}
+            error={firebaseError}
             retryFn={fetchWiki}
             title='Basic Guides and Tips'
             className='wiki guide'

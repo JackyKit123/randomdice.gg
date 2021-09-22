@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -12,18 +11,17 @@ import {
 } from 'victory';
 import Dice from 'Components/Dice';
 import GoogleAds from 'Components/AdUnit';
-import { RootState } from 'Redux/store';
-import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
+import { Die } from 'types/database';
 
 import { fetchDices } from 'Firebase';
 import findMaxCrit from 'Misc/findMaxCrit';
 import PageWrapper from 'Components/PageWrapper';
+import useRootStateSelector from 'Redux';
 
 export default function EnergyCalculator(): JSX.Element {
-    const selection = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+    const { dice, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { error, dices } = selection;
     const [filter, setFilter] = useState({
         crit: 111,
         energy: {
@@ -50,15 +48,15 @@ export default function EnergyCalculator(): JSX.Element {
     });
 
     const data = {
-        energy: dices?.find(dice => dice.id === 14),
-        crit: dices?.find(dice => dice.id === 13),
-        light: dices?.find(dice => dice.id === 10),
-        lunar: dices?.find(dice => dice.id === 47),
+        energy: dice?.find(die => die.id === 14),
+        crit: dice?.find(die => die.id === 13),
+        light: dice?.find(die => die.id === 10),
+        lunar: dice?.find(die => die.id === 47),
     } as {
-        [key: string]: DiceType;
+        [key: string]: Die;
     };
 
-    const maxCrit = findMaxCrit(dices);
+    const maxCrit = findMaxCrit(dice);
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
@@ -172,9 +170,12 @@ export default function EnergyCalculator(): JSX.Element {
     return (
         <PageWrapper
             isContentReady={
-                !!(dices && Object.values(data).every(d => d !== undefined))
+                !!(
+                    dice.length &&
+                    Object.values(data).every(d => d !== undefined)
+                )
             }
-            error={error}
+            error={firebaseError}
             retryFn={fetchDices}
             title='Energy Damage Calculator'
             className='energy-dmg-cal cal'
@@ -193,7 +194,7 @@ export default function EnergyCalculator(): JSX.Element {
             <hr className='divisor' />
             <div className='multiple-dice'>
                 <div className='dice-container'>
-                    <Dice dice='Critical' />
+                    <Dice die='Critical' />
                     <h3 className='desc'>{data.crit?.desc}</h3>
                     <form
                         className='filter'
@@ -273,7 +274,7 @@ export default function EnergyCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Lunar' />
+                    <Dice die='Lunar' />
                     <h3 className='desc'>{data.lunar?.desc}</h3>
                     <form
                         className='filter'
@@ -365,7 +366,7 @@ export default function EnergyCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Light' />
+                    <Dice die='Light' />
                     <h3 className='desc'>{data.light?.desc}</h3>
                     <form
                         className='filter'
@@ -443,7 +444,7 @@ export default function EnergyCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Energy' />
+                    <Dice die='Energy' />
                     <h3 className='desc'>{data.energy.desc}</h3>
                     <form
                         className='filter'

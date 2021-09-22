@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
-import { useSelector } from 'react-redux';
+
 import { useParams, useHistory } from 'react-router-dom';
 import useReplaceAnchorWithHistory from 'Misc/useReplaceAnchorWithHistory';
 import Dice from 'Components/Dice';
 import GoogleAds from 'Components/AdUnit';
 import SMshare from 'Components/ShareButton';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 
 import { fetchDecksGuide, fetchDices } from 'Firebase';
 import ConvertEmbed from 'Components/YoutubeEmbed';
@@ -14,16 +14,15 @@ import PageWrapper from 'Components/PageWrapper';
 export default function DeckGuideMenu(): JSX.Element | null {
     const history = useHistory();
     const { name } = useParams<{ name: string }>();
-    const { guide: allGuides, error } = useSelector(
-        (state: RootState) => state.fetchDecksGuideReducer
-    );
-    const { dices } = useSelector(
-        (state: RootState) => state.fetchDicesReducer
-    );
-    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
+    const {
+        decks_guide: allGuides,
+        dice,
+        wiki: { battlefield },
+        firebaseError,
+    } = useRootStateSelector('fetchFirebaseReducer');
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    useReplaceAnchorWithHistory(wrapperRef, [dices, wiki]);
+    useReplaceAnchorWithHistory(wrapperRef, [dice, battlefield]);
 
     const guide = allGuides?.find(
         g => g.name.toLowerCase() === name.toLowerCase()
@@ -34,8 +33,8 @@ export default function DeckGuideMenu(): JSX.Element | null {
     }
     return (
         <PageWrapper
-            isContentReady={!!(dices?.length && wiki?.battlefield?.length)}
-            error={error}
+            isContentReady={!!(dice.length && battlefield.length)}
+            error={firebaseError}
             retryFn={(dispatch): void => {
                 fetchDecksGuide(dispatch);
                 fetchDices(dispatch);
@@ -57,11 +56,11 @@ export default function DeckGuideMenu(): JSX.Element | null {
                         className='dice-container'
                         key={`guide-${dicelist.join()}`}
                     >
-                        {dicelist.map((dice, i) => (
+                        {dicelist.map((die, i) => (
                             <Dice
                                 /* eslint-disable-next-line react/no-array-index-key */
-                                key={`guide-${dicelist.join()}-${dice}${i}`}
-                                dice={dice}
+                                key={`guide-${dicelist.join()}-${die}${i}`}
+                                die={die}
                             />
                         ))}
                     </div>
@@ -71,9 +70,8 @@ export default function DeckGuideMenu(): JSX.Element | null {
                         <p>
                             Battlefield:{' '}
                             {
-                                wiki?.battlefield.find(
-                                    battlefield =>
-                                        battlefield.id === guide.battlefield
+                                battlefield.find(
+                                    b => b.id === guide.battlefield
                                 )?.name
                             }
                         </p>

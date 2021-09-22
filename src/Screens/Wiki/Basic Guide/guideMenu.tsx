@@ -1,20 +1,20 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from 'Redux/store';
+
+import useRootStateSelector from 'Redux';
 
 import { fetchWiki } from 'Firebase';
 import PageWrapper from 'Components/PageWrapper';
 
 export default function BasicGuideMenu(): JSX.Element {
-    const { wiki, error } = useSelector(
-        (state: RootState) => state.fetchWikiReducer
+    const { wiki, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
 
     return (
         <PageWrapper
             isContentReady={!!wiki?.tips}
-            error={error}
+            error={firebaseError}
             retryFn={fetchWiki}
             title='Basic Guides and Tips'
             className='wiki guide'

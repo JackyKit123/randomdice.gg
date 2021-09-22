@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 
 export default function PopUp({
     children,
@@ -13,7 +13,7 @@ export default function PopUp({
     className?: string;
 }): JSX.Element | null {
     const dispatch = useDispatch();
-    const { name } = useSelector((state: RootState) => state.popupReducer);
+    const { name } = useRootStateSelector('popupReducer');
     const overlayRef = useRef(null as HTMLDivElement | null);
 
     useEffect(() => {

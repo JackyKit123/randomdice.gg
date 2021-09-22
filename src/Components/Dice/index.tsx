@@ -1,12 +1,19 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
+import { Die } from 'types/database';
 
-export default function Dice({ dice }: { dice: number | string }): JSX.Element {
-    const { dices } = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+export default function Dice({
+    die,
+}: {
+    die: number | string | Die;
+}): JSX.Element {
+    const { dice } = useRootStateSelector('fetchFirebaseReducer');
+    const targetDice = dice?.find(
+        d =>
+            d.id === die ||
+            d.name === die ||
+            (typeof die === 'object' && d.id === die.id)
     );
-    const targetDice = dices?.find(d => d.id === dice || d.name === dice);
 
     return (
         <figure className='dice'>

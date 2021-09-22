@@ -42,7 +42,7 @@ export default function Menu(props: {
                     anchor = (
                         <>
                             <span className='active menu-item menu-icon'>
-                                <Dice dice={menu.icon || ''} />
+                                <Dice die={menu.icon || ''} />
                                 {menu.name}
                             </span>
                         </>
@@ -55,7 +55,7 @@ export default function Menu(props: {
                                 className='menu-item menu-icon'
                                 to={String(menu.path)}
                             >
-                                <Dice dice={menu.icon || ''} />
+                                <Dice die={menu.icon || ''} />
                                 {menu.name}
                             </Link>
                         </>

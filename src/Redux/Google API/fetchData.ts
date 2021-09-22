@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { fetchPatreon } from 'Firebase';
 import validateLocalstorage from 'Firebase/validateLocalstorage';
-import { PatreonList } from 'Redux/Fetch Firebase/Patreon List/types';
+import { PatreonList } from 'types/database';
 import { FETCH_GOOGLE_API_FAIL } from './types';
 import {
     FETCH_GAPI_YOUTUBE_CHANNEL_SUCCESS,

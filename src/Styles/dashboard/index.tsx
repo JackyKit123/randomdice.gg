@@ -8,7 +8,7 @@ import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
 import PopUp from 'Components/PopUp';
 import { CLOSE_POPUP, OPEN_POPUP } from 'Redux/PopUp Overlay/types';
-import { WikiContent } from 'Redux/Fetch Firebase/Wiki/types';
+import { WikiContent } from 'types/database';
 import { fetchWiki } from 'Firebase';
 
 export default function editBox(): JSX.Element {

@@ -1,19 +1,20 @@
 import React, { Fragment } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'Redux/store';
+
+import useRootStateSelector from 'Redux';
 import { fetchDiscordCommands } from 'Firebase';
 
 import PageWrapper from 'Components/PageWrapper';
 
 export default function discordBot(): JSX.Element {
-    const { commands, error } = useSelector(
-        (state: RootState) => state.fetchDiscordBotCommandsReducer
-    );
+    const {
+        'discord_bot/help': commands,
+        firebaseError,
+    } = useRootStateSelector('fetchFirebaseReducer');
 
     return (
         <PageWrapper
-            isContentReady={!!commands}
-            error={error}
+            isContentReady={!!commands.length}
+            error={firebaseError}
             retryFn={fetchDiscordCommands}
             title='Discord Bot'
             className='discord-bot'

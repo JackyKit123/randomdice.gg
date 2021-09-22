@@ -1,15 +1,6 @@
 import firebase from 'firebase/app';
 import { useDispatch } from 'react-redux';
-import * as FETCH_DICES from 'Redux/Fetch Firebase/Dices/types';
-import * as FETCH_DECKS from 'Redux/Fetch Firebase/Decks/types';
-import * as FETCH_WIKI from 'Redux/Fetch Firebase/Wiki/types';
-import * as FETCH_DECKS_GUIDE from 'Redux/Fetch Firebase/Decks Guide/types';
-import * as FETCH_CREDIT from 'Redux/Fetch Firebase/Credit/types';
 import * as FETCH_USER from 'Redux/Fetch Firebase/User/types';
-import * as FETCH_NEWS from 'Redux/Fetch Firebase/News/types';
-import * as FETCH_PATREON from 'Redux/Fetch Firebase/Patreon List/types';
-import * as FETCH_CRIT from 'Redux/Fetch Firebase/Crit/types';
-import * as FETCH_DISCORD_BOT_COMMANDS from 'Redux/Fetch Firebase/Discord Bot/types';
 import initApp from './init';
 import validateLocalstorage from './validateLocalstorage';
 
@@ -19,8 +10,6 @@ const database = firebase.apps.length
 
 async function fetch(
     dispatch: ReturnType<typeof useDispatch>,
-    successAction: string,
-    errorAction: string,
     key: string,
     forceFetch?: true
 ): Promise<void> {
@@ -28,7 +17,7 @@ async function fetch(
     const localCache = validateLocalstorage(key);
     if (localCache) {
         dispatch({
-            type: successAction,
+            type: key,
             payload: localCache,
         });
     }
@@ -36,7 +25,7 @@ async function fetch(
     try {
         if (forceFetch) {
             const data = await database.ref(`/${key}`).once('value');
-            dispatch({ type: successAction, payload: data.val() });
+            dispatch({ type: FETCH_USER.SUCCESS, payload: data.val() });
             localStorage.setItem(key, JSON.stringify(data.val()));
             return;
         }
@@ -68,39 +57,34 @@ async function fetch(
             await database.ref(`/last_updated`).once('value')
         ).val();
         const data = await database.ref(`/${key}`).once('value');
-        dispatch({ type: successAction, payload: data.val() });
+        dispatch({ type: key, payload: data.val() });
         localStorage.setItem('last_updated', JSON.stringify(remoteVersion));
         localStorage.setItem(key, JSON.stringify(data.val()));
     } catch (err) {
-        dispatch({ type: errorAction, payload: err });
+        dispatch({ type: 'firebaseError', payload: err });
     }
 }
 
 export function fetchDecks(dispatch: ReturnType<typeof useDispatch>): void {
-    fetch(dispatch, FETCH_DECKS.SUCCESS, FETCH_DECKS.FAIL, 'decks');
+    fetch(dispatch, 'decks');
 }
 
 export function fetchDices(dispatch: ReturnType<typeof useDispatch>): void {
-    fetch(dispatch, FETCH_DICES.SUCCESS, FETCH_DICES.FAIL, 'dice');
+    fetch(dispatch, 'dice');
 }
 
 export function fetchWiki(dispatch: ReturnType<typeof useDispatch>): void {
-    fetch(dispatch, FETCH_WIKI.SUCCESS, FETCH_WIKI.FAIL, 'wiki');
+    fetch(dispatch, 'wiki');
 }
 
 export function fetchDecksGuide(
     dispatch: ReturnType<typeof useDispatch>
 ): void {
-    fetch(
-        dispatch,
-        FETCH_DECKS_GUIDE.SUCCESS,
-        FETCH_DECKS_GUIDE.FAIL,
-        'decks_guide'
-    );
+    fetch(dispatch, 'decks_guide');
 }
 
 export function fetchCredit(dispatch: ReturnType<typeof useDispatch>): void {
-    fetch(dispatch, FETCH_CREDIT.SUCCESS, FETCH_CREDIT.FAIL, 'credit');
+    fetch(dispatch, 'credit');
 }
 
 export function fetchUser(
@@ -112,30 +96,25 @@ export function fetchUser(
             keyName => keyName.match(/^users\/.*/) && keyName !== `users/${uid}`
         )
         .forEach(userCache => localStorage.removeItem(userCache));
-    fetch(dispatch, FETCH_USER.SUCCESS, FETCH_USER.FAIL, `users/${uid}`, true);
+    fetch(dispatch, `users/${uid}`, true);
 }
 
 export function fetchNews(dispatch: ReturnType<typeof useDispatch>): void {
-    fetch(dispatch, FETCH_NEWS.SUCCESS, FETCH_NEWS.FAIL, 'news');
+    fetch(dispatch, 'news');
 }
 
 export function fetchPatreon(dispatch: ReturnType<typeof useDispatch>): void {
-    fetch(dispatch, FETCH_PATREON.SUCCESS, FETCH_PATREON.FAIL, 'patreon_list');
+    fetch(dispatch, 'patreon_list');
 }
 
 export function fetchCrit(dispatch: ReturnType<typeof useDispatch>): void {
-    fetch(dispatch, FETCH_CRIT.SUCCESS, FETCH_CRIT.FAIL, 'critData');
+    fetch(dispatch, 'critData');
 }
 
 export function fetchDiscordCommands(
     dispatch: ReturnType<typeof useDispatch>
 ): void {
-    fetch(
-        dispatch,
-        FETCH_DISCORD_BOT_COMMANDS.SUCCESS,
-        FETCH_DISCORD_BOT_COMMANDS.FAIL,
-        'discord_bot/help'
-    );
+    fetch(dispatch, 'discord_bot/help');
 }
 
 export default function fetchAll(

@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+
 import 'firebase/database';
 import { detected } from 'adblockdetect';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import { adblocked } from 'Misc/customGaEvent';
 
 export default function GoogleAds({
@@ -13,9 +13,8 @@ export default function GoogleAds({
     unitId: string;
     noHrDivisor?: true;
 }): JSX.Element | null {
-    const selector = useSelector((state: RootState) => state);
-    const { data } = selector.fetchUserDataReducer;
-    const { user, error } = selector.authReducer;
+    const { data } = useRootStateSelector('fetchUserDataReducer');
+    const { user, error } = useRootStateSelector('authReducer');
 
     useEffect(() => {
         if (user === 'awaiting auth state') {

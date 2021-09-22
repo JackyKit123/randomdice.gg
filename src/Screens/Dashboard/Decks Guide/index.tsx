@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import firebase from 'firebase/app';
@@ -16,21 +16,18 @@ import {
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
-import { DeckGuide, DecksGuide } from 'Redux/Fetch Firebase/Decks Guide/types';
-import { RootState } from 'Redux/store';
+import useRootStateSelector from 'Redux';
 import PopUp from 'Components/PopUp';
 import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
 import { fetchDecksGuide } from 'Firebase';
+import { DeckGuide, DeckGuides } from 'types/database';
 
 export default function updateDecksGuide(): JSX.Element {
     const dispatch = useDispatch();
     const database = firebase.database();
     const dbRef = database.ref('/decks_guide');
-    const { dices } = useSelector(
-        (state: RootState) => state.fetchDicesReducer
-    );
-    const { wiki } = useSelector((state: RootState) => state.fetchWikiReducer);
-    const [guides, setGuides] = useState<DecksGuide>();
+    const { dice, wiki } = useRootStateSelector('fetchFirebaseReducer');
+    const [guides, setGuides] = useState<DeckGuides>();
     const [activeEdit, setActiveEdit] = useState<DeckGuide>();
     const [guideToArchive, setGuideToArchive] = useState<number>();
     const [invalidGuideName, setInvalidGuideName] = useState(false);
@@ -39,7 +36,7 @@ export default function updateDecksGuide(): JSX.Element {
         dbRef.once('value').then(snapshot => setGuides(snapshot.val()));
     }, []);
 
-    if (!guides?.length || !dices?.length || !wiki?.battlefield?.length) {
+    if (!guides?.length || !dice?.length || !wiki?.battlefield?.length) {
         return (
             <Dashboard>
                 <LoadingScreen />
@@ -233,11 +230,11 @@ export default function updateDecksGuide(): JSX.Element {
                                 key={`dice-container-${i}`}
                             >
                                 <td colSpan={3}>
-                                    {dicelist.map((dice, j) => (
+                                    {dicelist.map((die, j) => (
                                         <select
                                             /* eslint-disable-next-line react/no-array-index-key */
                                             key={`${i}-${j}`}
-                                            defaultValue={dice}
+                                            defaultValue={die}
                                             onChange={(evt): void => {
                                                 activeEdit.diceList[i][
                                                     j
@@ -248,7 +245,7 @@ export default function updateDecksGuide(): JSX.Element {
                                             }}
                                         >
                                             <option value={-1}>?</option>
-                                            {dices.map(diceOption => (
+                                            {dice.map(diceOption => (
                                                 <option
                                                     key={diceOption.id}
                                                     value={diceOption.id}
@@ -414,11 +411,11 @@ export default function updateDecksGuide(): JSX.Element {
                                                 /* eslint-disable-next-line react/no-array-index-key */
                                                 key={`${dicelist.join()}${i}`}
                                             >
-                                                {dicelist.map((dice, j) => (
+                                                {dicelist.map((die, j) => (
                                                     <Dice
                                                         /* eslint-disable-next-line react/no-array-index-key */
-                                                        key={`${dicelist.join()}-${dice}${j}`}
-                                                        dice={dice}
+                                                        key={`${dicelist.join()}-${die}${j}`}
+                                                        die={die}
                                                     />
                                                 ))}
                                             </div>

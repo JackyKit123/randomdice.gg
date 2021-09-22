@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -12,18 +11,16 @@ import {
 } from 'victory';
 import Dice from 'Components/Dice';
 import GoogleAds from 'Components/AdUnit';
-import { RootState } from 'Redux/store';
-import { Dice as DiceType } from 'Redux/Fetch Firebase/Dices/types';
-
 import { fetchDices } from 'Firebase';
 import findMaxCrit from 'Misc/findMaxCrit';
 import PageWrapper from 'Components/PageWrapper';
+import useRootStateSelector from 'Redux';
+import { Die } from 'types/database';
 
 export default function ComboCalculator(): JSX.Element {
-    const selection = useSelector(
-        (state: RootState) => state.fetchDicesReducer
+    const { dice, firebaseError } = useRootStateSelector(
+        'fetchFirebaseReducer'
     );
-    const { error, dices } = selection;
     const [filter, setFilter] = useState({
         crit: 111,
         combo: {
@@ -45,14 +42,14 @@ export default function ComboCalculator(): JSX.Element {
     });
 
     const data = {
-        combo: dices?.find(dice => dice.id === 46),
-        crit: dices?.find(dice => dice.id === 13),
-        lunar: dices?.find(dice => dice.id === 47),
+        combo: dice?.find(die => die.id === 46),
+        crit: dice?.find(die => die.id === 13),
+        lunar: dice?.find(die => die.id === 47),
     } as {
-        [key: string]: DiceType | undefined;
+        [key: string]: Die | undefined;
     };
 
-    const maxCrit = findMaxCrit(dices);
+    const maxCrit = findMaxCrit(dice);
     const isInvalidCrit =
         !Number.isInteger(filter.crit) ||
         filter.crit < 111 ||
@@ -212,7 +209,7 @@ export default function ComboCalculator(): JSX.Element {
     return (
         <PageWrapper
             isContentReady={!!(data.combo && data.crit && data.lunar)}
-            error={error}
+            error={firebaseError}
             retryFn={fetchDices}
             title='Combo Damage Calculator'
             className='combo-dmg-cal cal'
@@ -231,7 +228,7 @@ export default function ComboCalculator(): JSX.Element {
             <hr className='divisor' />
             <div className='multiple-dice'>
                 <div className='dice-container'>
-                    <Dice dice='Critical' />
+                    <Dice die='Critical' />
                     <h3 className='desc'>{data.crit?.desc}</h3>
                     <form
                         className='filter'
@@ -312,7 +309,7 @@ export default function ComboCalculator(): JSX.Element {
                 </div>
 
                 <div className='dice-container'>
-                    <Dice dice='Combo' />
+                    <Dice die='Combo' />
                     <h3 className='desc'>{data.combo?.desc}</h3>
                     <form
                         className='filter'
@@ -383,7 +380,7 @@ export default function ComboCalculator(): JSX.Element {
                     </form>
                 </div>
                 <div className='dice-container'>
-                    <Dice dice='Lunar' />
+                    <Dice die='Lunar' />
                     <h3 className='desc'>{data.lunar?.desc}</h3>
                     <form
                         className='filter'

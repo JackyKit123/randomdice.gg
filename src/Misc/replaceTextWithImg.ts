@@ -1,8 +1,8 @@
-import { Dices } from 'Redux/Fetch Firebase/Dices/types';
+import { DiceList } from 'types/database';
 
 export default function replaceTextWithImgTag(
     text: string,
-    dices?: Dices
+    dices?: DiceList
 ): string {
     return text
         .replace(/{Dice:\w*( \w*)*}/g, match => {
