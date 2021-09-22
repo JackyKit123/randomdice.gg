@@ -24,7 +24,7 @@ export default function critDataCollection(): JSX.Element {
     const { dice, critData, firebaseError } = useRootStateSelector(
         'fetchFirebaseReducer'
     );
-    const { user } = useRootStateSelector('authReducer');
+    const { auth } = useRootStateSelector('authReducer');
     const database = firebase.database();
     const [typingTrophies, setTypingTrophies] = useState(0);
     const [typingCrit, setTypingCrit] = useState(0);
@@ -33,15 +33,15 @@ export default function critDataCollection(): JSX.Element {
 
     useEffect(() => {
         if (
-            user &&
-            user !== 'awaiting auth state' &&
+            auth &&
+            auth !== 'awaiting auth state' &&
             critData &&
-            critData[user.uid]
+            critData[auth.uid]
         ) {
-            setMyCrit(critData[user.uid].crit);
-            setMyTrophies(critData[user.uid].trophies);
+            setMyCrit(critData[auth.uid].crit);
+            setMyTrophies(critData[auth.uid].trophies);
         }
-    }, [user, critData]);
+    }, [auth, critData]);
 
     const maxCrit = findMaxCrit(dice);
 
@@ -152,7 +152,7 @@ export default function critDataCollection(): JSX.Element {
                 consider contributing by giving us your crit data in here. The
                 data collected is anonymous.
             </p>
-            {user && user !== 'awaiting auth state' ? (
+            {auth && auth !== 'awaiting auth state' ? (
                 <>
                     <p>
                         Please enter your data in the following form. The data
@@ -175,7 +175,7 @@ export default function critDataCollection(): JSX.Element {
                                 min={0}
                                 step={1}
                                 defaultValue={
-                                    critData?.[user.uid]?.trophies || myTrophies
+                                    critData?.[auth.uid]?.trophies || myTrophies
                                 }
                                 onChange={(evt): void => {
                                     evt.persist();
@@ -188,7 +188,7 @@ export default function critDataCollection(): JSX.Element {
                                                 evt.target.value
                                             );
                                             setMyTrophies(trophies);
-                                            if (trophies >= 0 && user) {
+                                            if (trophies >= 0 && auth) {
                                                 await Promise.all([
                                                     database
                                                         .ref(
@@ -199,12 +199,12 @@ export default function critDataCollection(): JSX.Element {
                                                         ),
                                                     database
                                                         .ref(
-                                                            `/critData/${user.uid}/crit`
+                                                            `/critData/${auth.uid}/crit`
                                                         )
                                                         .set(myCrit),
                                                     database
                                                         .ref(
-                                                            `/critData/${user.uid}/trophies`
+                                                            `/critData/${auth.uid}/trophies`
                                                         )
                                                         .set(trophies),
                                                 ]);
@@ -250,7 +250,7 @@ export default function critDataCollection(): JSX.Element {
                                 step={1}
                                 max={maxCrit}
                                 defaultValue={
-                                    critData?.[user.uid]?.crit || myCrit
+                                    critData?.[auth.uid]?.crit || myCrit
                                 }
                                 onChange={(evt): void => {
                                     evt.persist();
@@ -266,7 +266,7 @@ export default function critDataCollection(): JSX.Element {
                                             if (
                                                 crit >= 111 &&
                                                 crit < maxCrit &&
-                                                user
+                                                auth
                                             ) {
                                                 await Promise.all([
                                                     database
@@ -278,12 +278,12 @@ export default function critDataCollection(): JSX.Element {
                                                         ),
                                                     database
                                                         .ref(
-                                                            `/critData/${user.uid}/crit`
+                                                            `/critData/${auth.uid}/crit`
                                                         )
                                                         .set(crit),
                                                     database
                                                         .ref(
-                                                            `/critData/${user.uid}/trophies`
+                                                            `/critData/${auth.uid}/trophies`
                                                         )
                                                         .set(myTrophies),
                                                 ]);

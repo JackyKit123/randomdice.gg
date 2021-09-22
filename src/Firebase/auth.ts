@@ -2,7 +2,7 @@
 import firebase from 'firebase/app';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { AUTH, ERROR } from 'Redux/Firebase Auth/types';
+import { AuthActions } from 'Redux/authReducer';
 import * as ga from 'Misc/customGaEvent';
 import initApp from './init';
 import { fetchUser } from '.';
@@ -22,10 +22,15 @@ export function authStateDispatch(
     auth.onAuthStateChanged(userAuth => {
         if (userAuth && userAuth.emailVerified) {
             fetchUser(dispatch as never, userAuth.uid);
-            dispatch({ type: AUTH, payload: userAuth });
+            dispatch({
+                type: AuthActions.AuthSuccessAction,
+                payload: {
+                    auth: userAuth,
+                },
+            });
             ga.auth.login(userAuth.uid);
         } else {
-            dispatch({ type: AUTH, payload: null });
+            dispatch({ type: AuthActions.AuthFailAction });
         }
     });
 }
@@ -71,8 +76,10 @@ async function oauth(
             })) as { code: string | null; error: string | null };
 
             dispatch({
-                type: ERROR,
-                payload: 'Loading',
+                type: AuthActions.AuthSuccessAction,
+                payload: {
+                    auth: 'awaiting auth state',
+                },
             });
 
             const res = await axios.post(
@@ -81,7 +88,7 @@ async function oauth(
             const { authToken, error, accountLinked } = res.data;
 
             if (accountLinked) {
-                dispatch({ type: ERROR, payload: undefined });
+                dispatch({ type: AuthActions.AuthError, payload: undefined });
                 return;
             }
 
@@ -89,7 +96,7 @@ async function oauth(
                 switch (error) {
                     case 'provider-email-not-verified':
                         dispatch({
-                            type: ERROR,
+                            type: AuthActions.AuthError,
                             payload: `The email address has been associated with an account and your email address is not verified by ${provider}, for security reason, you are not allowed to login with ${provider}. If you wish to login with ${provider}, you can enable it in setting after login or verify your account with ${provider}.`,
                         });
                         break;
@@ -100,20 +107,20 @@ async function oauth(
                             user.sendEmailVerification();
                             logout();
                             dispatch({
-                                type: ERROR,
+                                type: AuthActions.AuthError,
                                 payload: `This email address is not verified by ${provider}. We have sent you a verification email, please verify your email.`,
                             });
                         }
                         break;
                     case 'email-not-match':
                         dispatch({
-                            type: ERROR,
+                            type: AuthActions.AuthError,
                             payload: `The email address from your ${provider} does not match the current account.`,
                         });
                         break;
                     default:
                         dispatch({
-                            type: ERROR,
+                            type: AuthActions.AuthError,
                             payload: error.message,
                         });
                 }
@@ -121,12 +128,15 @@ async function oauth(
                 await auth.signInWithCustomToken(authToken);
             }
         } catch (err) {
-            dispatch({ type: ERROR, payload: (err as Error).message });
+            dispatch({
+                type: AuthActions.AuthError,
+                payload: (err as Error).message,
+            });
         }
     }
 }
 
-export function discord(
+export function loginDiscord(
     dispatch: ReturnType<typeof useDispatch>,
     linkAccount = false
 ): void {
@@ -142,7 +152,7 @@ export function discord(
     );
 }
 
-export async function patreon(
+export async function loginPatreon(
     dispatch: ReturnType<typeof useDispatch>,
     linkAccount = false
 ): Promise<void> {

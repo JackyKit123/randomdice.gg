@@ -15,25 +15,24 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
 import Menu from 'Components/Menu';
-import * as auth from 'Firebase/auth';
+import { loginDiscord, loginPatreon, logout } from 'Firebase/auth';
 import { menu } from 'Router';
 import useRootStateSelector from 'Redux';
 import PopUp from 'Components/PopUp';
 import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
-import { ERROR } from 'Redux/Firebase Auth/types';
-import { AxiosError } from 'axios';
+import { AuthActions } from 'Redux/authReducer';
 
 export default function Header(): JSX.Element {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { user, error } = useRootStateSelector('authReducer');
-    const { data } = useRootStateSelector('fetchUserDataReducer');
+    const { auth, userData, error } = useRootStateSelector('authReducer');
+    const [updatingProfile, setUpdatingProfile] = useState(false);
     const [scrolled, setScrolled] = useState(true);
     const [menuToggle, setMenuToggle] = useState(false);
     const [typingUsername, setTypingUsername] = useState<number>(0);
     const [resizing, setResizing] = useState(false);
     const [accountLinked, setAccountLinked] = useState(
-        Object.keys(data ? data['linked-account'] : [''])
+        Object.keys(userData ? userData['linked-account'] : [''])
     );
 
     useEffect(() => {
@@ -67,18 +66,18 @@ export default function Header(): JSX.Element {
 
     // eslint-disable-next-line consistent-return
     useEffect(() => {
-        if (user && user !== 'awaiting auth state') {
+        if (auth && auth !== 'awaiting auth state') {
             dispatch({ type: CLOSE_POPUP });
-            const userData = firebase.database().ref(`users/${user.uid}`);
-            const listener = userData.on('value', snapshot => {
+            const userDataRef = firebase.database().ref(`users/${auth.uid}`);
+            const listener = userDataRef.on('value', snapshot => {
                 const val = snapshot.val();
                 if (val) {
                     setAccountLinked(Object.keys(val['linked-account']));
                 }
             });
-            return (): void => userData.off('value', listener);
+            return (): void => userDataRef.off('value', listener);
         }
-    }, [user]);
+    }, [auth]);
 
     return (
         <header className={scrolled ? 'scroll' : ''}>
@@ -105,7 +104,7 @@ export default function Header(): JSX.Element {
                         aria-label='login with discord'
                         className='discord'
                         type='button'
-                        onClick={(): void => auth.discord(dispatch)}
+                        onClick={(): void => loginDiscord(dispatch)}
                     >
                         <FontAwesomeIcon icon={faDiscord} />
                     </button>
@@ -113,12 +112,12 @@ export default function Header(): JSX.Element {
                         aria-label='login with patreon'
                         className='patreon'
                         type='button'
-                        onClick={(): Promise<void> => auth.patreon(dispatch)}
+                        onClick={(): Promise<void> => loginPatreon(dispatch)}
                     >
                         <FontAwesomeIcon icon={faPatreon} />
                     </button>
                 </div>
-                {error === 'Loading' ? (
+                {auth === 'awaiting auth state' ? (
                     <div className='loading-animation'>
                         <img
                             src='https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/Dice%20Images%2FTime?alt=media&token=5c459fc5-4059-4099-b93d-f4bc86debf6d'
@@ -134,10 +133,10 @@ export default function Header(): JSX.Element {
                         />
                     </div>
                 ) : (
-                    <span className='error'>{error}</span>
+                    error && <span className='error'>{String(error)}</span>
                 )}
             </PopUp>
-            {user && user !== 'awaiting auth state' ? (
+            {auth && auth !== 'awaiting auth state' ? (
                 <>
                     <PopUp popUpTarget='profile'>
                         <h3>Profile</h3>
@@ -150,14 +149,14 @@ export default function Header(): JSX.Element {
                         <div className='profile-and-name'>
                             <figure>
                                 <img
-                                    src={user.photoURL || ''}
+                                    src={auth.photoURL || ''}
                                     alt='Profile pic'
                                 />
                             </figure>
                             <label htmlFor='display-name'>
                                 <span>Update your display name:</span>
                                 <input
-                                    defaultValue={user.displayName || ''}
+                                    defaultValue={auth.displayName || ''}
                                     onChange={(evt): void => {
                                         evt.persist();
                                         clearTimeout(typingUsername);
@@ -165,25 +164,30 @@ export default function Header(): JSX.Element {
                                             window.setTimeout(async (): Promise<
                                                 void
                                             > => {
-                                                dispatch({
-                                                    type: ERROR,
-                                                    payload: 'Loading',
-                                                });
+                                                setUpdatingProfile(true);
                                                 try {
-                                                    await user.updateProfile({
+                                                    await auth.updateProfile({
                                                         displayName:
                                                             evt.target.value,
                                                     });
                                                     dispatch({
-                                                        type: ERROR,
-                                                        payload: undefined,
+                                                        type:
+                                                            AuthActions.AuthSuccessAction,
+                                                        payload: {
+                                                            auth,
+                                                            userData,
+                                                        },
                                                     });
                                                 } catch (err) {
                                                     dispatch({
-                                                        type: ERROR,
-                                                        payload: (err as AxiosError)
-                                                            .message,
+                                                        type:
+                                                            AuthActions.AuthError,
+                                                        payload: {
+                                                            error: err,
+                                                        },
                                                     });
+                                                } finally {
+                                                    setUpdatingProfile(false);
                                                 }
                                             }, 500)
                                         );
@@ -196,16 +200,13 @@ export default function Header(): JSX.Element {
                                     type='file'
                                     accept='image/*'
                                     onChange={async (evt): Promise<void> => {
-                                        dispatch({
-                                            type: ERROR,
-                                            payload: 'Loading',
-                                        });
+                                        setUpdatingProfile(true);
                                         try {
                                             if (evt.target.files) {
                                                 const pfpRef = firebase
                                                     .storage()
                                                     .ref(
-                                                        `Users/${user.uid}/avatar`
+                                                        `Users/${auth.uid}/avatar`
                                                     );
                                                 await pfpRef.put(
                                                     evt.target.files[0],
@@ -215,20 +216,27 @@ export default function Header(): JSX.Element {
                                                     }
                                                 );
                                                 const url = await pfpRef.getDownloadURL();
-                                                await user.updateProfile({
+                                                await auth.updateProfile({
                                                     photoURL: url,
                                                 });
                                             }
                                             dispatch({
-                                                type: ERROR,
-                                                payload: undefined,
+                                                type:
+                                                    AuthActions.AuthSuccessAction,
+                                                payload: {
+                                                    auth,
+                                                    userData,
+                                                },
                                             });
                                         } catch (err) {
                                             dispatch({
-                                                type: ERROR,
-                                                payload: (err as AxiosError)
-                                                    .message,
+                                                type: AuthActions.AuthError,
+                                                payload: {
+                                                    error: err,
+                                                },
                                             });
+                                        } finally {
+                                            setUpdatingProfile(false);
                                         }
                                     }}
                                 />
@@ -261,7 +269,7 @@ export default function Header(): JSX.Element {
                                     className='discord'
                                     type='button'
                                     onClick={(): void =>
-                                        auth.discord(dispatch, true)
+                                        loginDiscord(dispatch, true)
                                     }
                                 >
                                     <FontAwesomeIcon icon={faDiscord} />
@@ -273,20 +281,22 @@ export default function Header(): JSX.Element {
                                     className='patreon'
                                     type='button'
                                     onClick={(): Promise<void> =>
-                                        auth.patreon(dispatch, true)
+                                        loginPatreon(dispatch, true)
                                     }
                                 >
                                     <FontAwesomeIcon icon={faPatreon} />
                                 </button>
                             ) : null}
                         </div>
-                        {error === 'Loading' ? (
+                        {updatingProfile ? (
                             <FontAwesomeIcon
                                 icon={faSpinner}
                                 className='loading'
                             />
                         ) : (
-                            <span className='error'>{error}</span>
+                            error && (
+                                <span className='error'>{String(error)}</span>
+                            )
                         )}
                     </PopUp>
                     <PopUp
@@ -299,7 +309,7 @@ export default function Header(): JSX.Element {
                             type='button'
                             className='confirm'
                             onClick={(): void => {
-                                auth.logout();
+                                logout();
                                 dispatch({ type: CLOSE_POPUP });
                             }}
                         >
@@ -311,10 +321,9 @@ export default function Header(): JSX.Element {
             <div className='container'>
                 <div className='topHeaderBar headerBar'>
                     <div className='container'>
-                        {// eslint-disable-next-line no-nested-ternary
-                        user && user !== 'awaiting auth state' ? (
+                        {auth && auth !== 'awaiting auth state' ? (
                             <>
-                                {data?.editor ? (
+                                {userData?.editor ? (
                                     <span className='dashboard'>
                                         <Link to='/dashboard'>
                                             <FontAwesomeIcon icon={faEdit} />{' '}
@@ -324,16 +333,16 @@ export default function Header(): JSX.Element {
                                         </Link>
                                     </span>
                                 ) : null}
-                                {user.photoURL ? (
+                                {auth.photoURL ? (
                                     <figure>
                                         <img
-                                            src={user.photoURL}
+                                            src={auth.photoURL}
                                             alt='profile pic'
                                         />
                                     </figure>
                                 ) : null}
                                 <span className='user'>
-                                    Welcome, {user.displayName}!
+                                    Welcome, {auth.displayName}!
                                 </span>
                                 <button
                                     aria-label='edit profile'
@@ -364,20 +373,23 @@ export default function Header(): JSX.Element {
                                     <span className='text'>LOGOUT</span>
                                 </button>
                             </>
-                        ) : user === 'awaiting auth state' ? null : (
-                            <button
-                                aria-label='login'
-                                type='button'
-                                className='login'
-                                onClick={(): void => {
-                                    dispatch({
-                                        type: OPEN_POPUP,
-                                        payload: 'login',
-                                    });
-                                }}
-                            >
-                                <FontAwesomeIcon icon={faUserCircle} /> LOGIN
-                            </button>
+                        ) : (
+                            auth === null && (
+                                <button
+                                    aria-label='login'
+                                    type='button'
+                                    className='login'
+                                    onClick={(): void => {
+                                        dispatch({
+                                            type: OPEN_POPUP,
+                                            payload: 'login',
+                                        });
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faUserCircle} />{' '}
+                                    LOGIN
+                                </button>
+                            )
                         )}
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import firebase, { FirebaseError } from 'firebase/app';
 import { useLocation, Link } from 'react-router-dom';
-import * as auth from 'Firebase/auth';
+import { logout } from 'Firebase/auth';
 import Main from 'Components/Main';
 import LoadingScreen from 'Components/Loading';
 import NoMatch from 'Screens/NoMatch';
@@ -19,8 +19,7 @@ export default function Dashboard(props: {
     const dispatch = useDispatch();
     const database = firebase.database();
     const { className, children } = props;
-    const { user, error } = useRootStateSelector('authReducer');
-    const { data } = useRootStateSelector('fetchUserDataReducer');
+    const { auth, userData, error } = useRootStateSelector('authReducer');
     const [authorized, setAuthorized] = useState<'loading' | boolean>(
         'loading'
     );
@@ -41,27 +40,27 @@ export default function Dashboard(props: {
     }, [children, authorized]);
 
     useEffect(() => {
-        if (user !== 'awaiting auth state') {
-            if (user === null) {
+        if (auth !== 'awaiting auth state') {
+            if (auth === null) {
                 setAuthorized(false);
-            } else if (data) {
-                if (data.editor) {
+            } else if (userData) {
+                if (userData.editor) {
                     setAuthorized(true);
                 } else {
                     setAuthorized(false);
                 }
             }
         }
-    }, [user, data]);
+    }, [auth, userData]);
 
-    if (authorized === 'loading' || error) {
+    if (auth === 'awaiting auth state') {
         return (
             <Main title='Loading...'>
                 <LoadingScreen />
             </Main>
         );
     }
-    if (!authorized) {
+    if (!authorized || error) {
         return <NoMatch title='401 Unauthorized' />;
     }
     return (
@@ -85,7 +84,7 @@ export default function Dashboard(props: {
                             <button
                                 type='button'
                                 onClick={async (): Promise<void> => {
-                                    await auth.logout();
+                                    await logout();
                                     dispatch({
                                         type: OPEN_POPUP,
                                         payload: 'login',

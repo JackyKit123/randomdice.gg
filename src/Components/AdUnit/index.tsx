@@ -13,17 +13,16 @@ export default function GoogleAds({
     unitId: string;
     noHrDivisor?: true;
 }): JSX.Element | null {
-    const { data } = useRootStateSelector('fetchUserDataReducer');
-    const { user, error } = useRootStateSelector('authReducer');
+    const { userData, auth } = useRootStateSelector('authReducer');
 
     useEffect(() => {
-        if (user === 'awaiting auth state') {
+        if (auth === 'awaiting auth state') {
             return;
         }
 
         if (
-            (user === null || (data && !data['patreon-tier'])) &&
-            !(user && process.env.REACT_APP_ADS_EXCLUSION?.includes(user.uid))
+            (auth === null || (userData && !userData['patreon-tier'])) &&
+            !(auth && process.env.REACT_APP_ADS_EXCLUSION?.includes(auth.uid))
         ) {
             document.body.setAttribute('ads-free', 'false');
             if (detected()) {
@@ -37,14 +36,13 @@ export default function GoogleAds({
         } else {
             document.body.setAttribute('ads-free', 'true');
         }
-    }, [user, data]);
+    }, [auth, userData]);
 
     if (
-        (error && error !== 'Loading') ||
-        (data && data['patreon-tier']) ||
-        (user &&
-            user !== 'awaiting auth state' &&
-            process.env.REACT_APP_ADS_EXCLUSION?.includes(user.uid))
+        (userData && userData['patreon-tier']) ||
+        (auth &&
+            auth !== 'awaiting auth state' &&
+            process.env.REACT_APP_ADS_EXCLUSION?.includes(auth.uid))
     ) {
         return null;
     }

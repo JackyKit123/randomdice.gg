@@ -1,6 +1,6 @@
 import firebase from 'firebase/app';
 import { useDispatch } from 'react-redux';
-import * as FETCH_USER from 'Redux/Fetch Firebase/User/types';
+import { AuthActions } from 'Redux/authReducer';
 import initApp from './init';
 import validateLocalstorage from './validateLocalstorage';
 
@@ -10,8 +10,7 @@ const database = firebase.apps.length
 
 async function fetch(
     dispatch: ReturnType<typeof useDispatch>,
-    key: string,
-    forceFetch?: true
+    key: string
 ): Promise<void> {
     // apply local storage cache before fetching database
     const localCache = validateLocalstorage(key);
@@ -23,13 +22,6 @@ async function fetch(
     }
 
     try {
-        if (forceFetch) {
-            const data = await database.ref(`/${key}`).once('value');
-            dispatch({ type: FETCH_USER.SUCCESS, payload: data.val() });
-            localStorage.setItem(key, JSON.stringify(data.val()));
-            return;
-        }
-
         // check database path last updated time
         const localVersionJson = localStorage.getItem('last_updated');
         let localVersion;
@@ -87,18 +79,6 @@ export function fetchCredit(dispatch: ReturnType<typeof useDispatch>): void {
     fetch(dispatch, 'credit');
 }
 
-export function fetchUser(
-    dispatch: ReturnType<typeof useDispatch>,
-    uid: string
-): void {
-    Object.keys(localStorage)
-        .filter(
-            keyName => keyName.match(/^users\/.*/) && keyName !== `users/${uid}`
-        )
-        .forEach(userCache => localStorage.removeItem(userCache));
-    fetch(dispatch, `users/${uid}`, true);
-}
-
 export function fetchNews(dispatch: ReturnType<typeof useDispatch>): void {
     fetch(dispatch, 'news');
 }
@@ -129,4 +109,35 @@ export default function fetchAll(
     fetchPatreon(dispatch);
     fetchCrit(dispatch);
     fetchDiscordCommands(dispatch);
+}
+
+export function fetchUser(
+    dispatch: ReturnType<typeof useDispatch>,
+    uid: string
+): void {
+    const path = `users/${uid}`;
+    Object.keys(localStorage)
+        .filter(keyName => keyName.match(/^users\/.*/) && keyName !== path)
+        .forEach(userCache => localStorage.removeItem(userCache));
+    const localCache = validateLocalstorage(path);
+    if (localCache) {
+        dispatch({
+            type: AuthActions.AuthSuccessAction,
+            payload: {
+                userData: localCache,
+            },
+        });
+    }
+    database
+        .ref(`/${path}`)
+        .once('value')
+        .then(data => {
+            dispatch({
+                type: AuthActions.AuthSuccessAction,
+                payload: {
+                    userData: data.val(),
+                },
+            });
+            localStorage.setItem(path, JSON.stringify(data.val()));
+        });
 }
