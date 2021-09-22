@@ -1,181 +1,181 @@
 .dice-stat-cal {
-    .content {
-        > .container {
-            max-width: 400px;
-            margin: 0 auto;
+  .content {
+    > .container {
+      max-width: 400px;
+      margin: 0 auto;
 
-            & > .upper {
-                color: black !important;
-                background-color: #eeeeee;
-                border-top-right-radius: 15px;
-                border-top-left-radius: 15px;
-                padding: 10px;
-                font-weight: 500;
-                display: grid;
-                grid-template-rows: 60px 60px 40px;
-                grid-template-columns: 10fr 22fr 6fr;
-                /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
-                grid-template-areas:
-                    'image dicename level'
-                    'image desc desc'
-                    'class desc desc';
+      & > .upper {
+        color: black !important;
+        background-color: #eeeeee;
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+        padding: 10px;
+        font-weight: 500;
+        display: grid;
+        grid-template-rows: 60px 60px 40px;
+        grid-template-columns: 10fr 22fr 6fr;
+        /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
+        grid-template-areas:
+          'image dicename level'
+          'image desc desc'
+          'class desc desc';
 
-                select {
-                    background-color: #262626;
-                    font-weight: 600;
-                }
-
-                figure {
-                    grid-area: image;
-
-                    img {
-                        max-width: 100%;
-                        max-height: 100%;
-                        display: block;
-                    }
-                }
-
-                label {
-                    &[for='class'] {
-                        grid-area: class;
-                    }
-
-                    &[for='dice-name'] {
-                        grid-area: dicename;
-                        margin: 5px;
-                        padding: 5px;
-                        background: #999393;
-                        border-radius: 5px;
-
-                        span {
-                            display: block;
-                            margin-bottom: 3px;
-
-                            &.Legendary {
-                                color: orange;
-                            }
-
-                            &.Unique {
-                                color: purple;
-                            }
-
-                            &.Rare {
-                                color: blue;
-                            }
-
-                            &.Common {
-                                color: white;
-                            }
-                        }
-
-                        select {
-                            display: block;
-                        }
-                    }
-
-                    &[for='level'] {
-                        grid-area: level;
-                        margin: 5px;
-                    }
-                }
-
-                .desc {
-                    grid-area: desc;
-                    margin: 5px;
-                    overflow: auto;
-                    white-space: pre-wrap;
-                }
-            }
-
-            & > .lower {
-                background-color: #c4dbde;
-                border-bottom-right-radius: 15px;
-                border-bottom-left-radius: 15px;
-                padding: 10px;
-                font-weight: 500;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: 80px 80px 80px;
-
-                & > div {
-                    margin: 5px;
-                    padding: 5px;
-                    background-color: #7baab2;
-                    border-radius: 5px;
-
-                    .label {
-                        display: block;
-                        max-height: 50px;
-                        height: 35px;
-                        overflow: auto;
-                        color: #08535b;
-                    }
-
-                    .value {
-                        font-size: 20px;
-                        color: #ffffff;
-                        text-shadow: -1px -1px 0 #000000, 1px -1px 0 #000000,
-                            -1px 1px 0 #000000, 1px 1px 0 #000000;
-                    }
-                }
-            }
+        select {
+          background-color: #262626;
+          font-weight: 600;
         }
 
-        & > .table-container {
-            width: 100%;
-            max-width: 700px;
-            margin: 0 auto;
-            overflow-x: auto;
+        figure {
+          grid-area: image;
 
-            table {
-                & > thead {
-                    th {
-                        border: 1px solid #ffffff;
-                        border-bottom: 2px solid black;
-                        vertical-align: middle;
-                        font-weight: 600;
-                        font-size: 20px;
-                        padding: 10px;
-                    }
-                }
-
-                & > tbody {
-                    color: black;
-
-                    & > tr {
-                        &.common {
-                            background-color: #bfbfbf;
-                        }
-
-                        &.rare {
-                            background-color: #91baff;
-                        }
-
-                        &.unique {
-                            background-color: #b995ff;
-                        }
-
-                        &.legendary {
-                            background-color: #eacc95;
-                        }
-
-                        & > td {
-                            padding: 5px;
-                            vertical-align: middle;
-                            white-space: nowrap;
-                            border: 1px solid #ffffff;
-
-                            &:first-of-type {
-                                text-align: center;
-                            }
-
-                            p {
-                                margin: 0 auto 5px;
-                            }
-                        }
-                    }
-                }
-            }
+          img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+          }
         }
+
+        label {
+          &[for='class'] {
+            grid-area: class;
+          }
+
+          &[for='dice-name'] {
+            grid-area: dicename;
+            margin: 5px;
+            padding: 5px;
+            background: #999393;
+            border-radius: 5px;
+
+            span {
+              display: block;
+              margin-bottom: 3px;
+
+              &.Legendary {
+                color: orange;
+              }
+
+              &.Unique {
+                color: purple;
+              }
+
+              &.Rare {
+                color: blue;
+              }
+
+              &.Common {
+                color: white;
+              }
+            }
+
+            select {
+              display: block;
+            }
+          }
+
+          &[for='level'] {
+            grid-area: level;
+            margin: 5px;
+          }
+        }
+
+        .desc {
+          grid-area: desc;
+          margin: 5px;
+          overflow: auto;
+          white-space: pre-wrap;
+        }
+      }
+
+      & > .lower {
+        background-color: #c4dbde;
+        border-bottom-right-radius: 15px;
+        border-bottom-left-radius: 15px;
+        padding: 10px;
+        font-weight: 500;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 80px 80px 80px;
+
+        & > div {
+          margin: 5px;
+          padding: 5px;
+          background-color: #7baab2;
+          border-radius: 5px;
+
+          .label {
+            display: block;
+            max-height: 50px;
+            height: 35px;
+            overflow: auto;
+            color: #08535b;
+          }
+
+          .value {
+            font-size: 20px;
+            color: #ffffff;
+            text-shadow: -1px -1px 0 #000000, 1px -1px 0 #000000,
+              -1px 1px 0 #000000, 1px 1px 0 #000000;
+          }
+        }
+      }
     }
+
+    & > .table-container {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      overflow-x: auto;
+
+      table {
+        & > thead {
+          th {
+            border: 1px solid #ffffff;
+            border-bottom: 2px solid black;
+            vertical-align: middle;
+            font-weight: 600;
+            font-size: 20px;
+            padding: 10px;
+          }
+        }
+
+        & > tbody {
+          color: black;
+
+          & > tr {
+            &.common {
+              background-color: #bfbfbf;
+            }
+
+            &.rare {
+              background-color: #91baff;
+            }
+
+            &.unique {
+              background-color: #b995ff;
+            }
+
+            &.legendary {
+              background-color: #eacc95;
+            }
+
+            & > td {
+              padding: 5px;
+              vertical-align: middle;
+              white-space: nowrap;
+              border: 1px solid #ffffff;
+
+              &:first-of-type {
+                text-align: center;
+              }
+
+              p {
+                margin: 0 auto 5px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

@@ -15,24 +15,22 @@ import swConfig from './swConfig';
 import 'Styles';
 
 ReactDOM.render(
-    <React.StrictMode>
-        <ReduxProvider store={store}>
-            <Router>
-                <Analytics
-                    id={
-                        process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID || ''
-                    }
-                >
-                    <FilterProvider>
-                        <PopupProvider>
-                            <App />
-                        </PopupProvider>
-                    </FilterProvider>
-                </Analytics>
-            </Router>
-        </ReduxProvider>
-    </React.StrictMode>,
-    document.getElementById('root')
+  <React.StrictMode>
+    <ReduxProvider store={store}>
+      <Router>
+        <Analytics
+          id={process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID || ''}
+        >
+          <FilterProvider>
+            <PopupProvider>
+              <App />
+            </PopupProvider>
+          </FilterProvider>
+        </Analytics>
+      </Router>
+    </ReduxProvider>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 
 serviceWorker.register(swConfig);

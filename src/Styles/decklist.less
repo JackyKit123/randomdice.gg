@@ -1,231 +1,231 @@
 @import './cross_import_lesshat.less';
 
 .popup-overlay > .popup > .container .deck-list {
-    text-align: center;
-    vertical-align: middle;
-    border-bottom: 5px double #ffffff;
-    margin: 0 0 30px;
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 5px double #ffffff;
+  margin: 0 0 30px;
 
-    &.original {
-        border-bottom: 10px double #ffffff;
-        padding: 0;
-    }
+  &.original {
+    border-bottom: 10px double #ffffff;
+    padding: 0;
+  }
 
-    figure {
-        display: inline-block;
-        max-width: 20%;
-    }
+  figure {
+    display: inline-block;
+    max-width: 20%;
+  }
 
-    h5 {
-        font-style: italic;
-        margin-bottom: 10px;
-    }
+  h5 {
+    font-style: italic;
+    margin-bottom: 10px;
+  }
 
-    &:last-child {
-        margin-bottom: 0;
-        border-bottom: 0;
-    }
+  &:last-child {
+    margin-bottom: 0;
+    border-bottom: 0;
+  }
 }
 
 .deck-list {
-    p.updated {
-        text-align: center;
-        font-style: italic;
-    }
+  p.updated {
+    text-align: center;
+    font-style: italic;
+  }
 
-    .table-container {
-        overflow: auto;
-        max-width: 700px;
-        margin: 0 auto;
-        height: 500px;
+  .table-container {
+    overflow: auto;
+    max-width: 700px;
+    margin: 0 auto;
+    height: 500px;
 
-        table {
-            border-spacing: 0;
-            height: 100%;
-            width: 100%;
-            text-align: center;
-            position: relative;
-            border-collapse: collapse;
+    table {
+      border-spacing: 0;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      border-collapse: collapse;
 
-            & > thead {
-                tr {
-                    th {
-                        background-color: #414141;
-                        position: sticky;
-                        top: 0;
-                        z-index: 5;
-                        height: 40px;
-                        padding: 0 5px;
-                        vertical-align: middle;
-                        .box-shadow(9px 4px 7px 0 rgba(0, 0, 0, 0.4));
-                    }
-                }
-            }
-
-            & > tbody {
-                & > tr {
-                    & > td {
-                        vertical-align: middle;
-
-                        .deck-container {
-                            min-height: 54px;
-                            .display(flex);
-                            .flex-direction(row);
-                            .justify-content(space-between);
-
-                            figure {
-                                width: 50px;
-                            }
-
-                            &.grey-out {
-                                .filter(brightness(0.5));
-                            }
-                        }
-
-                        .battlefield-link {
-                            font: inherit;
-                        }
-
-                        .button-container {
-                            height: 100%;
-                            .display(flex);
-                            .flex-direction(column);
-                            .justify-content(space-around);
-
-                            button {
-                                font-size: 15px;
-                                padding: 5px;
-                                border-radius: 5px;
-                                position: relative;
-                                cursor: pointer;
-
-                                &::after {
-                                    pointer-events: none;
-                                    color: #05292e;
-                                    background-color: rgba(238, 238, 238, 0.85);
-                                    border-radius: 3px;
-                                    content: 'Click to Show';
-                                    position: absolute;
-                                    right: 40px;
-                                    opacity: 0;
-                                    white-space: nowrap;
-                                    padding: 3px;
-                                    .transition(all 0.2s ease-in-out);
-                                }
-
-                                &:hover,
-                                &:focus {
-                                    &::after {
-                                        display: inline-block;
-                                        opacity: 1;
-                                    }
-                                }
-
-                                &:disabled {
-                                    cursor: auto;
-
-                                    &::after {
-                                        content: '';
-                                        opacity: 0;
-                                    }
-                                }
-                            }
-                        }
-
-                        .link-container {
-                            height: 100%;
-                            .display(flex);
-                            .flex-direction(column);
-                            .justify-content(space-around);
-
-                            & > .deck-guide-link {
-                                &[href$='/decks/guide/'] {
-                                    display: none;
-                                }
-                                position: relative;
-                                border-width: 2px;
-                                border-style: outset;
-                                border-color: rgb(118, 118, 118);
-                                display: block;
-                                text-align: center;
-                                margin: 0 auto;
-                                text-decoration: none;
-                                font-size: 15px;
-                                background-color: #05292e;
-                                padding: 6px;
-                                border-radius: 5px;
-                                color: #ffffff;
-                                .transition(all 0.2s ease-in-out);
-
-                                &::after {
-                                    pointer-events: none;
-                                    color: #05292e;
-                                    background-color: rgba(238, 238, 238, 0.85);
-                                    border-radius: 3px;
-                                    content: 'Click to Navigate';
-                                    position: absolute;
-                                    right: 40px;
-                                    opacity: 0;
-                                    white-space: nowrap;
-                                    padding: 3px;
-                                    .transition(all 0.2s ease-in-out);
-                                }
-
-                                &:hover,
-                                &:focus {
-                                    &::after {
-                                        display: inline-block;
-                                        opacity: 1;
-                                    }
-                                }
-
-                                &:hover,
-                                &:active,
-                                &:focus {
-                                    color: #05292e;
-                                    background-color: #eeeeee;
-                                }
-
-                                &:disabled {
-                                    background-color: #aaaaaa;
-
-                                    &:hover,
-                                    &:active,
-                                    &:focus {
-                                        cursor: initial;
-                                        color: #ffffff;
-                                        background-color: #aaaaaa;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    &:nth-of-type(odd):not(.nomatch) {
-                        background: #2f2f2f;
-                    }
-
-                    &:nth-of-type(even) {
-                        background: #282828;
-                    }
-
-                    &.nomatch {
-                        position: relative;
-
-                        & > td {
-                            z-index: 1;
-                            position: absolute;
-                            background-color: #f07a7a;
-                            left: 0;
-                            right: 0;
-                            margin: 0 auto;
-                            top: 0;
-                            bottom: 0;
-                            line-height: 200px;
-                        }
-                    }
-                }
-            }
+      & > thead {
+        tr {
+          th {
+            background-color: #414141;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            height: 40px;
+            padding: 0 5px;
+            vertical-align: middle;
+            .box-shadow(9px 4px 7px 0 rgba(0, 0, 0, 0.4));
+          }
         }
+      }
+
+      & > tbody {
+        & > tr {
+          & > td {
+            vertical-align: middle;
+
+            .deck-container {
+              min-height: 54px;
+              .display(flex);
+              .flex-direction(row);
+              .justify-content(space-between);
+
+              figure {
+                width: 50px;
+              }
+
+              &.grey-out {
+                .filter(brightness(0.5));
+              }
+            }
+
+            .battlefield-link {
+              font: inherit;
+            }
+
+            .button-container {
+              height: 100%;
+              .display(flex);
+              .flex-direction(column);
+              .justify-content(space-around);
+
+              button {
+                font-size: 15px;
+                padding: 5px;
+                border-radius: 5px;
+                position: relative;
+                cursor: pointer;
+
+                &::after {
+                  pointer-events: none;
+                  color: #05292e;
+                  background-color: rgba(238, 238, 238, 0.85);
+                  border-radius: 3px;
+                  content: 'Click to Show';
+                  position: absolute;
+                  right: 40px;
+                  opacity: 0;
+                  white-space: nowrap;
+                  padding: 3px;
+                  .transition(all 0.2s ease-in-out);
+                }
+
+                &:hover,
+                &:focus {
+                  &::after {
+                    display: inline-block;
+                    opacity: 1;
+                  }
+                }
+
+                &:disabled {
+                  cursor: auto;
+
+                  &::after {
+                    content: '';
+                    opacity: 0;
+                  }
+                }
+              }
+            }
+
+            .link-container {
+              height: 100%;
+              .display(flex);
+              .flex-direction(column);
+              .justify-content(space-around);
+
+              & > .deck-guide-link {
+                &[href$='/decks/guide/'] {
+                  display: none;
+                }
+                position: relative;
+                border-width: 2px;
+                border-style: outset;
+                border-color: rgb(118, 118, 118);
+                display: block;
+                text-align: center;
+                margin: 0 auto;
+                text-decoration: none;
+                font-size: 15px;
+                background-color: #05292e;
+                padding: 6px;
+                border-radius: 5px;
+                color: #ffffff;
+                .transition(all 0.2s ease-in-out);
+
+                &::after {
+                  pointer-events: none;
+                  color: #05292e;
+                  background-color: rgba(238, 238, 238, 0.85);
+                  border-radius: 3px;
+                  content: 'Click to Navigate';
+                  position: absolute;
+                  right: 40px;
+                  opacity: 0;
+                  white-space: nowrap;
+                  padding: 3px;
+                  .transition(all 0.2s ease-in-out);
+                }
+
+                &:hover,
+                &:focus {
+                  &::after {
+                    display: inline-block;
+                    opacity: 1;
+                  }
+                }
+
+                &:hover,
+                &:active,
+                &:focus {
+                  color: #05292e;
+                  background-color: #eeeeee;
+                }
+
+                &:disabled {
+                  background-color: #aaaaaa;
+
+                  &:hover,
+                  &:active,
+                  &:focus {
+                    cursor: initial;
+                    color: #ffffff;
+                    background-color: #aaaaaa;
+                  }
+                }
+              }
+            }
+          }
+
+          &:nth-of-type(odd):not(.nomatch) {
+            background: #2f2f2f;
+          }
+
+          &:nth-of-type(even) {
+            background: #282828;
+          }
+
+          &.nomatch {
+            position: relative;
+
+            & > td {
+              z-index: 1;
+              position: absolute;
+              background-color: #f07a7a;
+              left: 0;
+              right: 0;
+              margin: 0 auto;
+              top: 0;
+              bottom: 0;
+              line-height: 200px;
+            }
+          }
+        }
+      }
     }
+  }
 }

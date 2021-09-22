@@ -1,3 +1,3 @@
 export default {
-    onUpdate: (): void => window.location.reload(),
+  onUpdate: (): void => window.location.reload(),
 };

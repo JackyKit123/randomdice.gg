@@ -6,15 +6,15 @@ import fetchFirebaseReducer from './fetchFirebaseReducer';
 import authReducer from './authReducer';
 
 const rootReducer = combineReducers({
-    authReducer,
-    initGAPIReducer,
-    fetchGAPIyoutubeChannelsReducer,
-    fetchFirebaseReducer,
+  authReducer,
+  initGAPIReducer,
+  fetchGAPIyoutubeChannelsReducer,
+  fetchFirebaseReducer,
 });
 export type RootState = ReturnType<typeof rootReducer>;
 export const store = createStore(
-    rootReducer,
-    process.env.NODE_ENV === 'development'
-        ? composeWithDevTools(applyMiddleware())
-        : undefined
+  rootReducer,
+  process.env.NODE_ENV === 'development'
+    ? composeWithDevTools(applyMiddleware())
+    : undefined
 );

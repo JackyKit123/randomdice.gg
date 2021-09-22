@@ -1,136 +1,136 @@
 @import './cross_import_lesshat.less';
 
 .arena-draft {
-    select {
-        margin: 10px 0;
+  select {
+    margin: 10px 0;
+    max-width: 100%;
+  }
+
+  section {
+    text-align: center;
+
+    input {
+      margin: 0 auto 10px;
+      height: 35px;
+      width: 100%;
+      max-width: 200px;
+      text-align: center;
+      font-size: 25px;
+      line-height: 25px;
+      font-weight: 500;
+      color: #6ba4a5;
+      background: #ffffff;
+      -webkit-text-fill-color: #6ba4a5;
+
+      &.invalid {
+        color: #ff7777;
+        -webkit-text-fill-color: #ff7777;
+      }
+    }
+
+    &.pick {
+      .manual {
+        font-weight: 500;
+        font-size: 20px;
+        margin: 10px auto;
+
+        button {
+          font-size: 15px;
+          padding: 3px;
+          margin: 0 0 0 10px;
+        }
+      }
+
+      button {
+        display: inline-block;
+        margin: 20px;
+      }
+    }
+
+    &.deck {
+      & > .deck-list {
+        .display(flex);
+        .flex-direction(row);
+        .justify-content(center);
         max-width: 100%;
+        width: 500px;
+        margin: 0 auto;
+
+        figure {
+          width: 20%;
+        }
+      }
     }
 
-    section {
-        text-align: center;
+    &.winrate {
+      max-height: 0;
+      overflow: hidden;
+      .transition(max-height 1s ease-out);
 
-        input {
-            margin: 0 auto 10px;
-            height: 35px;
-            width: 100%;
-            max-width: 200px;
-            text-align: center;
-            font-size: 25px;
-            line-height: 25px;
-            font-weight: 500;
-            color: #6ba4a5;
-            background: #ffffff;
-            -webkit-text-fill-color: #6ba4a5;
+      &.show {
+        max-height: 1000px;
 
-            &.invalid {
-                color: #ff7777;
-                -webkit-text-fill-color: #ff7777;
+        & > label {
+          &[for$='reward'] {
+            font-size: 20px;
+
+            & > input {
+              display: block;
+              margin-top: 6px;
             }
+          }
+          display: block;
         }
-
-        &.pick {
-            .manual {
-                font-weight: 500;
-                font-size: 20px;
-                margin: 10px auto;
-
-                button {
-                    font-size: 15px;
-                    padding: 3px;
-                    margin: 0 0 0 10px;
-                }
-            }
-
-            button {
-                display: inline-block;
-                margin: 20px;
-            }
-        }
-
-        &.deck {
-            & > .deck-list {
-                .display(flex);
-                .flex-direction(row);
-                .justify-content(center);
-                max-width: 100%;
-                width: 500px;
-                margin: 0 auto;
-
-                figure {
-                    width: 20%;
-                }
-            }
-        }
-
-        &.winrate {
-            max-height: 0;
-            overflow: hidden;
-            .transition(max-height 1s ease-out);
-
-            &.show {
-                max-height: 1000px;
-
-                & > label {
-                    &[for$='reward'] {
-                        font-size: 20px;
-
-                        & > input {
-                            display: block;
-                            margin-top: 6px;
-                        }
-                    }
-                    display: block;
-                }
-            }
-        }
+      }
     }
+  }
 
-    .table-container {
-        text-align: center;
-        overflow-x: auto;
-        overflow-y: hidden;
+  .table-container {
+    text-align: center;
+    overflow-x: auto;
+    overflow-y: hidden;
 
-        & > table {
-            margin: 0 auto;
+    & > table {
+      margin: 0 auto;
 
-            tr {
-                &:nth-of-type(n + 3) td {
-                    border: 2px ridge #ffffff;
-                }
-
-                td {
-                    padding: 5px;
-                    max-width: calc(40vw - 60px);
-
-                    &.dice-container {
-                        img {
-                            width: 140px;
-                            max-width: 100%;
-                        }
-
-                        &.active img {
-                            cursor: pointer;
-                            border: 3px outset #ffffff;
-                        }
-                    }
-
-                    &:hover,
-                    &:focus {
-                        &.dice-container.active img {
-                            border-style: inset;
-                        }
-                    }
-
-                    &.value {
-                        font-size: 24px;
-                        font-weight: 400;
-                    }
-
-                    h4 {
-                        margin: 0;
-                    }
-                }
-            }
+      tr {
+        &:nth-of-type(n + 3) td {
+          border: 2px ridge #ffffff;
         }
+
+        td {
+          padding: 5px;
+          max-width: calc(40vw - 60px);
+
+          &.dice-container {
+            img {
+              width: 140px;
+              max-width: 100%;
+            }
+
+            &.active img {
+              cursor: pointer;
+              border: 3px outset #ffffff;
+            }
+          }
+
+          &:hover,
+          &:focus {
+            &.dice-container.active img {
+              border-style: inset;
+            }
+          }
+
+          &.value {
+            font-size: 24px;
+            font-weight: 400;
+          }
+
+          h4 {
+            margin: 0;
+          }
+        }
+      }
     }
+  }
 }

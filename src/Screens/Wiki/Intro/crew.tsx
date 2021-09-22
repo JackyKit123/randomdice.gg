@@ -2,5 +2,5 @@ import React from 'react';
 import Intro from '.';
 
 export default function CrewIntro(): JSX.Element {
-    return <Intro type='Crew' />;
+  return <Intro type='Crew' />;
 }
