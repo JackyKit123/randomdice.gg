@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,7 @@ import { Die } from 'types/database';
 import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 import ShareButtons from 'Components/ShareButton';
 import PageWrapper from 'Components/PageWrapper';
-import FilterForm, { useDeckFilter } from './Filter';
+import FilterForm, { useDeckFilter, FilterContext } from 'Components/Filter';
 
 export default function DeckList(): JSX.Element {
     const location = useLocation();
@@ -22,11 +22,11 @@ export default function DeckList(): JSX.Element {
     const {
         decks,
         decks_guide: guide,
-        dice: dices,
+        dice,
         wiki: { battlefield },
         firebaseError,
     } = useRootStateSelector('fetchFirebaseReducer');
-    const filter = useRootStateSelector('filterReducer');
+    const filter = useContext(FilterContext);
     const deckType = location.pathname
         .replace(/^\/decks\//i, '')
         .toLowerCase() as 'pvp' | 'co-op' | 'crew';
@@ -36,7 +36,7 @@ export default function DeckList(): JSX.Element {
     return (
         <PageWrapper
             isContentReady={Boolean(
-                dices?.length &&
+                dice?.length &&
                     decks?.length &&
                     guide?.length &&
                     battlefield?.length
@@ -94,7 +94,7 @@ export default function DeckList(): JSX.Element {
                 {findAlt
                     .map(alt => ({
                         id: alt,
-                        alternatives: dices?.find(die => die.id === alt)
+                        alternatives: dice?.find(die => die.id === alt)
                             ?.alternatives,
                     }))
                     .map(die => (
@@ -165,15 +165,14 @@ export default function DeckList(): JSX.Element {
                                             <div
                                                 className={`deck-container ${
                                                     !(
-                                                        deck.every(dice =>
-                                                            dices?.find(
+                                                        deck.every(die =>
+                                                            dice.find(
                                                                 d =>
-                                                                    d.id ===
-                                                                    dice
+                                                                    d.id === die
                                                             )?.rarity ===
                                                             'Legendary'
-                                                                ? filter.legendary.includes(
-                                                                      dice
+                                                                ? filter.legendaryOwned.includes(
+                                                                      die
                                                                   )
                                                                 : true
                                                         ) &&
