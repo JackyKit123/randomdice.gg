@@ -2,6 +2,7 @@ import './components/ad.less';
 import './components/dashboard.less';
 import './components/dice.less';
 import './components/error.less';
+import './components/filter.less';
 import './components/header-footer.less';
 import './components/loading.less';
 import './components/main.less';

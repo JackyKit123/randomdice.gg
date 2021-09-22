@@ -1,10 +1,10 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import useRootStateSelector from 'Redux';
 import GoogleAds from 'Components/AdUnit';
 import Dice from 'Components/Dice';
@@ -18,6 +18,7 @@ import FilterForm, { useDeckFilter, FilterContext } from 'Components/Filter';
 
 export default function DeckList(): JSX.Element {
     const location = useLocation();
+    const history = useHistory();
     const dispatch = useDispatch();
     const {
         decks,
@@ -26,12 +27,19 @@ export default function DeckList(): JSX.Element {
         wiki: { battlefield },
         firebaseError,
     } = useRootStateSelector('fetchFirebaseReducer');
-    const filter = useContext(FilterContext);
+    const { customSearch, profile, legendaryOwned, setDeckType } = useContext(
+        FilterContext
+    );
     const deckType = location.pathname
         .replace(/^\/decks\//i, '')
         .toLowerCase() as 'pvp' | 'co-op' | 'crew';
-    const sortedDeck = useDeckFilter(decks ?? [], deckType);
+    const sortedDeck = useDeckFilter(decks ?? []);
     const [findAlt, setFindAlt] = useState([] as Die['id'][]);
+
+    useEffect(() => {
+        setDeckType(deckType);
+        history.push(`/decks/${deckType}`);
+    }, [deckType]);
 
     return (
         <PageWrapper
@@ -157,7 +165,7 @@ export default function DeckList(): JSX.Element {
                                     <td>
                                         {deckInfo.type === '-'
                                             ? '-'
-                                            : deckInfo.rating[filter.profile] ||
+                                            : deckInfo.rating[profile] ||
                                               deckInfo.rating.default}
                                     </td>
                                     <td>
@@ -171,16 +179,15 @@ export default function DeckList(): JSX.Element {
                                                                     d.id === die
                                                             )?.rarity ===
                                                             'Legendary'
-                                                                ? filter.legendaryOwned.includes(
+                                                                ? legendaryOwned.includes(
                                                                       die
                                                                   )
                                                                 : true
                                                         ) &&
-                                                        (filter.customSearch ===
-                                                        -1
+                                                        (customSearch === -1
                                                             ? true
                                                             : deck.includes(
-                                                                  filter.customSearch
+                                                                  customSearch
                                                               ))
                                                     )
                                                         ? 'grey-out'

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,6 +16,7 @@ import { CLOSE_POPUP, OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 import { fetchDecks } from 'Firebase';
 import { Battlefield, Deck, DeckGuides, DeckList, Die } from 'types/database';
 import useRootStateSelector from 'Redux';
+import FilterForm, { FilterContext, useDeckFilter } from 'Components/Filter';
 
 function DeckRow({
     deckInfo,
@@ -82,7 +83,9 @@ export default function updateDeck(): JSX.Element {
     const dispatch = useDispatch();
     const database = firebase.database();
     const { dice, wiki } = useRootStateSelector('fetchFirebaseReducer');
-    const filterRef = useRef(null as null | HTMLDivElement);
+    const { deckType, legendaryOwned, customSearch } = useContext(
+        FilterContext
+    );
     const [decks, setDecks] = useState<DeckList>([]);
     const [guides, setGuides] = useState<DeckGuides>([]);
     const initialNewDeckState = {
@@ -105,20 +108,6 @@ export default function updateDeck(): JSX.Element {
         id: -1,
         dice: [[]] as Die['id'][][],
     });
-    const [filter, setFilter] = useState({
-        type: '?' as '?' | 'PvP' | 'Co-op' | 'Crew',
-        customSearch: -1,
-        dice: [] as number[],
-    });
-
-    useEffect(() => {
-        if (dice) {
-            filter.dice = dice
-                .filter(die => die.rarity === 'Legendary')
-                .map(die => die.id);
-            setFilter({ ...filter });
-        }
-    }, [dice]);
 
     const initialEditState = {
         id: -1,
@@ -137,6 +126,7 @@ export default function updateDeck(): JSX.Element {
     const invalidRatingToAdd = !Object.values(deckToAdd.rating).every(
         rating => typeof rating === 'undefined' || (rating >= 0 && rating <= 10)
     );
+    const filteredDeck = useDeckFilter(decks);
 
     useEffect(() => {
         database
@@ -530,125 +520,7 @@ export default function updateDeck(): JSX.Element {
             ) : null}
             <hr className='divisor' />
             <h4>Filter</h4>
-            <label htmlFor='deck-type-filter'>
-                Deck Type :{' '}
-                <select
-                    onChange={(evt): void => {
-                        filter.type = evt.target.value as
-                            | '?'
-                            | 'PvP'
-                            | 'Co-op'
-                            | 'Crew';
-                        setFilter({ ...filter });
-                    }}
-                >
-                    <option>?</option>
-                    <option>PvP</option>
-                    <option>Co-op</option>
-                    <option>Crew</option>
-                </select>
-            </label>
-            <label htmlFor='Custom Search'>
-                Custom Search :{' '}
-                <select
-                    name='Custom Search'
-                    defaultValue={filter.customSearch}
-                    onChange={(evt): void => {
-                        filter.customSearch = Number(evt.target.value);
-                        setFilter({ ...filter });
-                    }}
-                    data-value={filter.customSearch}
-                >
-                    <option value={-1}>?</option>
-                    {dice.map(die => (
-                        <option value={die.id} key={die.id}>
-                            {die.name}
-                        </option>
-                    ))}
-                </select>
-                <Dice die={filter.customSearch} />
-            </label>
-            {typeof filter.dice !== 'undefined' ? (
-                <label htmlFor='dice-filter'>
-                    <span>Dice : </span>
-                    <button
-                        data-select-all={
-                            (filter.dice.length || 0) <
-                            dice.filter(die => die.rarity === 'Legendary')
-                                .length
-                        }
-                        type='button'
-                        onClick={(evt): void => {
-                            const target = evt.target as HTMLButtonElement;
-                            const { current } = filterRef;
-                            if (current) {
-                                current
-                                    .querySelectorAll('input[type="checkbox"]')
-                                    .forEach(checkbox => {
-                                        // eslint-disable-next-line no-param-reassign
-                                        (checkbox as HTMLInputElement).checked =
-                                            target.innerText === 'Select All';
-                                    });
-                            }
-                            filter.dice =
-                                target.innerText === 'Select All'
-                                    ? dice
-                                          .filter(
-                                              die => die.rarity === 'Legendary'
-                                          )
-                                          .map(die => die.id)
-                                    : [];
-                            setFilter({ ...filter });
-                        }}
-                    >
-                        {(filter.dice.length || 0) ===
-                        dice.filter(die => die.rarity === 'Legendary').length
-                            ? 'Deselect All'
-                            : 'Select All'}
-                    </button>
-                    <div ref={filterRef}>
-                        {dice
-                            ?.filter(die => die.rarity === 'Legendary')
-                            .map(die => (
-                                <div key={die.id} className='dice-container'>
-                                    <Dice die={die.id} />
-                                    <input
-                                        value={die.id}
-                                        type='checkbox'
-                                        defaultChecked
-                                        onChange={(evt): void => {
-                                            if (evt.target.checked) {
-                                                if (
-                                                    !filter.dice.includes(
-                                                        Number(evt.target.value)
-                                                    )
-                                                ) {
-                                                    filter.dice = [
-                                                        ...filter.dice,
-                                                        Number(
-                                                            evt.target.value
-                                                        ),
-                                                    ];
-                                                    setFilter({ ...filter });
-                                                }
-                                            } else {
-                                                filter.dice = filter.dice.filter(
-                                                    dieId =>
-                                                        dieId !==
-                                                        Number(evt.target.value)
-                                                );
-                                                setFilter({ ...filter });
-                                            }
-                                        }}
-                                    />
-                                    <span className='checkbox-styler'>
-                                        <FontAwesomeIcon icon={faCheck} />
-                                    </span>
-                                </div>
-                            ))}
-                    </div>
-                </label>
-            ) : null}
+            <FilterForm withOptionalDeckType />
             <div className='table-container'>
                 <table>
                     <thead>
@@ -667,23 +539,24 @@ export default function updateDeck(): JSX.Element {
                         </tr>
                     </thead>
                     <tbody>
-                        {decks
+                        {filteredDeck
                             .filter(
                                 deckInfo =>
-                                    (filter.type === '?' ||
-                                        filter.type === deckInfo.type) &&
+                                    (deckType === '?' ||
+                                        deckType ===
+                                            deckInfo.type.toLowerCase()) &&
                                     deckInfo.decks.some(deck =>
                                         deck.every(die =>
                                             dice.find(d => d.id === die)
                                                 ?.rarity === 'Legendary'
-                                                ? filter.dice.includes(die)
+                                                ? legendaryOwned.includes(die)
                                                 : true
                                         )
                                     ) &&
-                                    (filter.customSearch === -1
+                                    (customSearch === -1
                                         ? true
                                         : deckInfo.decks.some(deck =>
-                                              deck.includes(filter.customSearch)
+                                              deck.includes(customSearch)
                                           ))
                             )
                             .concat(
