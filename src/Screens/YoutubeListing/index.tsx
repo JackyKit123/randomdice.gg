@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import Masonry from 'react-masonry-component';
@@ -9,13 +9,79 @@ import Linkify from 'linkifyjs/react';
 import LoadingScreen from 'Components/Loading';
 import { fetchYouTube } from 'Redux/Google API/fetchData';
 import useRootStateSelector from 'Redux';
-import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
-import PopUp from 'Components/PopUp';
+import { popupContext } from 'Components/PopUp';
 import PageWrapper from 'Components/PageWrapper';
 import { Info, Patreon } from 'types/database';
+import { Client } from 'Redux/Google API/Client/types';
+
+interface PopupProps {
+    user: firebase.User;
+    youtubeId: string;
+    client: Client;
+}
+
+function AddYouTubeChannelPopup({
+    user,
+    youtubeId,
+    client,
+}: PopupProps): JSX.Element {
+    const dispatch = useDispatch();
+    const [channelID, setChannelID] = useState<string>('');
+    const [loading, setLoading] = useState(false);
+    const { patreon_list: patreonList } = useRootStateSelector(
+        'fetchFirebaseReducer'
+    );
+
+    return (
+        <div className='youtube'>
+            {' '}
+            <p>
+                Enter your Youtube Channel ID here:{' '}
+                <a
+                    href={`https://support.google.com/youtube/answer/3250431?hl=en#:~:text=Find%20your%20channel's%20user%20ID,Sign%20in%20to%20YouTube.&text=From%20the%20left%20Menu%2C%20select,channel's%20user%20and%20channel%20IDs.`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                >
+                    Where&apos;s my Channel ID?
+                </a>
+            </p>
+            <input
+                type='textbox'
+                placeholder='Channel ID'
+                defaultValue={youtubeId}
+                onChange={(evt): void => setChannelID(evt.target.value)}
+            />
+            {loading ? <LoadingScreen /> : null}
+            <button
+                type='button'
+                onClick={async (): Promise<void> => {
+                    setLoading(true);
+                    const i = patreonList.findIndex(
+                        (patron: Patreon) => patron.id === user.uid
+                    );
+                    await firebase
+                        .database()
+                        .ref(`/patreon_list/${i}/${user.uid}/youtubeId`)
+                        .set(channelID);
+                    await firebase
+                        .database()
+                        .ref('/last_updated/patreon_list')
+                        .set(new Date().toISOString());
+                    if (client) {
+                        await fetchYouTube(dispatch, client);
+                    }
+                    setLoading(false);
+                }}
+            >
+                Submit
+            </button>
+        </div>
+    );
+}
 
 export default function YoutubeList(): JSX.Element {
     const dispatch = useDispatch();
+    const { openPopup } = useContext(popupContext);
     const youtubeApiReucer = useRootStateSelector(
         'fetchGAPIyoutubeChannelsReducer'
     );
@@ -24,15 +90,11 @@ export default function YoutubeList(): JSX.Element {
         'fetchFirebaseReducer'
     );
     const [isT3Patreon, setIsT3Patreon] = useState<Info & Patreon>();
-    const [channelID, setChannelID] = useState<string>('');
-    const [loading, setLoading] = useState(false);
     const { client } = googleApiReducer;
     const { list: ytList } = youtubeApiReucer;
     const { patreon_list: patreonList } = firebaseDatabaseReducer;
     const error =
-        firebaseDatabaseReducer.firebaseError ||
-        firebaseDatabaseReducer.firebaseError ||
-        googleApiReducer.error;
+        firebaseDatabaseReducer.firebaseError || googleApiReducer.error;
     const user = firebase.auth().currentUser;
     useEffect(() => {
         if (patreonList && user) {
@@ -50,9 +112,11 @@ export default function YoutubeList(): JSX.Element {
         fetchYouTube(dispatch, client);
     }, [patreonList, client]);
 
+    const youtubeId = isT3Patreon?.[isT3Patreon?.id]?.youtubeId;
+
     return (
         <PageWrapper
-            isContentReady={!!(ytList.length && patreonList?.length)}
+            isContentReady={!!(ytList.length && patreonList.length)}
             error={error}
             title='Youtubers'
             className='youtube'
@@ -72,72 +136,27 @@ export default function YoutubeList(): JSX.Element {
                 then add your YouTube channel here.
             </p>
 
-            {isT3Patreon && user ? (
+            {client && youtubeId && user && (
                 <>
-                    <PopUp popUpTarget='add-yt'>
-                        <p>
-                            Enter your Youtube Channel ID here:{' '}
-                            <a
-                                href={`https://support.google.com/youtube/answer/3250431?hl=en#:~:text=Find%20your%20channel's%20user%20ID,Sign%20in%20to%20YouTube.&text=From%20the%20left%20Menu%2C%20select,channel's%20user%20and%20channel%20IDs.`}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                            >
-                                Where&apos;s my Channel ID?
-                            </a>
-                        </p>
-                        <input
-                            type='textbox'
-                            placeholder='Channel ID'
-                            defaultValue={
-                                isT3Patreon[isT3Patreon?.id].youtubeId
-                            }
-                            onChange={(evt): void =>
-                                setChannelID(evt.target.value)
-                            }
-                        />
-                        {loading ? <LoadingScreen /> : null}
-                        <button
-                            type='button'
-                            onClick={async (): Promise<void> => {
-                                setLoading(true);
-                                const i = patreonList.findIndex(
-                                    (patron: Patreon) => patron.id === user.uid
-                                );
-                                await firebase
-                                    .database()
-                                    .ref(
-                                        `/patreon_list/${i}/${user.uid}/youtubeId`
-                                    )
-                                    .set(channelID);
-                                await firebase
-                                    .database()
-                                    .ref('/last_updated/patreon_list')
-                                    .set(new Date().toISOString());
-                                if (client) {
-                                    await fetchYouTube(dispatch, client);
-                                }
-                                setLoading(false);
-                            }}
-                        >
-                            Submit
-                        </button>
-                    </PopUp>
                     <p>
                         Add your YouTube Channel to this page :{' '}
                         <button
                             type='button'
-                            onClick={(): void => {
-                                dispatch({
-                                    type: OPEN_POPUP,
-                                    payload: 'add-yt',
-                                });
-                            }}
+                            onClick={(): void =>
+                                openPopup(
+                                    <AddYouTubeChannelPopup
+                                        client={client}
+                                        youtubeId={youtubeId}
+                                        user={user}
+                                    />
+                                )
+                            }
                         >
                             <FontAwesomeIcon icon={faPlus} />
                         </button>
                     </p>
                 </>
-            ) : null}
+            )}
             <hr className='divisor' />
             <Masonry className='masonry'>
                 {ytList.map(info => (

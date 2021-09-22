@@ -1,79 +1,99 @@
-import React, { useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
-import useRootStateSelector from 'Redux';
+import React, {
+    useRef,
+    useEffect,
+    createContext,
+    ReactNode,
+    Dispatch,
+    SetStateAction,
+    useState,
+} from 'react';
+import { useHistory } from 'react-router-dom';
 
-export default function PopUp({
+interface PopupContext {
+    openPopup: Dispatch<SetStateAction<ReactNode>>;
+    closePopup: () => void;
+}
+
+export const popupContext = createContext<PopupContext>({
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    openPopup: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    closePopup: () => {},
+});
+
+interface ProviderProps {
+    children: ReactNode;
+}
+
+export default function PopupProvider({
     children,
-    popUpTarget,
-    className,
-}: {
-    children: React.ReactNode;
-    popUpTarget: string;
-    className?: string;
-}): JSX.Element | null {
-    const dispatch = useDispatch();
-    const { name } = useRootStateSelector('popupReducer');
+}: ProviderProps): JSX.Element | null {
+    const [popupContent, openPopup] = useState<ReactNode>(null);
+    const closePopup = (): void => {
+        openPopup(null);
+    };
     const overlayRef = useRef(null as HTMLDivElement | null);
+    const history = useHistory();
 
+    // eslint-disable-next-line consistent-return
     useEffect(() => {
-        if (name) {
+        if (popupContent) {
             document.body.classList.add('popup-opened');
             if (overlayRef.current) {
                 overlayRef.current.focus();
             }
-        } else {
-            document.body.classList.remove('popup-opened');
+            const unblock = history.block();
+            return unblock;
         }
-    }, [name]);
+        document.body.classList.remove('popup-opened');
+    }, [popupContent]);
 
-    useEffect(
-        () => (): void => {
-            dispatch({ type: CLOSE_POPUP });
-        },
-        []
-    );
-
-    if (popUpTarget !== name) {
-        return null;
-    }
+    useEffect(() => {
+        const unlisten = history.listen(() => closePopup());
+        return unlisten;
+    }, [history]);
 
     return (
-        <div
-            className='popup-overlay'
-            role='button'
-            tabIndex={0}
-            onClick={(evt): void => {
-                const target = evt.target as HTMLDivElement;
-                if (target.classList.contains('popup-overlay')) {
-                    dispatch({ type: CLOSE_POPUP });
-                }
-            }}
-            onKeyUp={(evt): void => {
-                if (evt.key === 'Escape') {
-                    dispatch({ type: CLOSE_POPUP });
-                }
-            }}
-        >
-            <div className='popup'>
+        <popupContext.Provider value={{ openPopup, closePopup }}>
+            {popupContent && (
                 <div
-                    className={`${className || ''} container`}
-                    ref={overlayRef}
-                    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                    className='popup-overlay'
+                    role='button'
                     tabIndex={0}
+                    onClick={(evt): void => {
+                        const target = evt.target as HTMLDivElement;
+                        if (target.classList.contains('popup-overlay')) {
+                            closePopup();
+                        }
+                    }}
+                    onKeyUp={(evt): void => {
+                        if (evt.key === 'Escape') {
+                            closePopup();
+                        }
+                    }}
                 >
-                    {children}
-                    <button
-                        type='button'
-                        className='close'
-                        onClick={(): void => {
-                            dispatch({ type: CLOSE_POPUP });
-                        }}
-                    >
-                        Close
-                    </button>
+                    <div className='popup'>
+                        <div
+                            className='container'
+                            ref={overlayRef}
+                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+                            tabIndex={0}
+                        >
+                            {popupContent}
+                            <button
+                                type='button'
+                                className='close'
+                                onClick={(): void => closePopup()}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            )}
+            {children}
+        </popupContext.Provider>
     );
 }
+
+export { ConfirmedSubmitNotification } from './components';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -7,13 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
-import PopUp from 'Components/PopUp';
-import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
+import { ConfirmedSubmitNotification, popupContext } from 'Components/PopUp';
 import { WikiContent } from 'types/database';
 import { fetchWiki } from 'Firebase';
 
 export default function editIntro(): JSX.Element {
     const dispatch = useDispatch();
+    const { openPopup } = useContext(popupContext);
     const database = firebase.database();
     const dbRef = database.ref('/wiki/intro');
     const [content, setContent] = useState<WikiContent['intro']>();
@@ -30,29 +30,14 @@ export default function editIntro(): JSX.Element {
         );
     }
 
+    const handleSubmit = async (): Promise<void> => {
+        await database.ref('/last_updated/wiki').set(new Date().toISOString());
+        await dbRef.set(content);
+        fetchWiki(dispatch);
+    };
+
     return (
         <Dashboard className='intro'>
-            <PopUp popUpTarget='confirm-submit'>
-                <h3>Please Confirm</h3>
-                <p>
-                    Are you sure to want to submit all the content for game
-                    introduction?
-                </p>
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={(): void => {
-                        database
-                            .ref('/last_updated/wiki')
-                            .set(new Date().toISOString());
-                        dbRef.set(content);
-                        fetchWiki(dispatch);
-                        dispatch({ type: CLOSE_POPUP });
-                    }}
-                >
-                    Yes
-                </button>
-            </PopUp>
             {['PvP', 'Co-op', 'Crew', 'Arena', 'Store'].map(type => (
                 <div className='block' key={type}>
                     <h3>{type}</h3>
@@ -114,12 +99,14 @@ export default function editIntro(): JSX.Element {
             <button
                 type='button'
                 className='submit'
-                onClick={(): void => {
-                    dispatch({
-                        type: OPEN_POPUP,
-                        payload: 'confirm-submit',
-                    });
-                }}
+                onClick={(): void =>
+                    openPopup(
+                        <ConfirmedSubmitNotification
+                            promptText='Are you sure to want to submit all the content for game introduction?'
+                            confirmHandler={handleSubmit}
+                        />
+                    )
+                }
             >
                 <FontAwesomeIcon icon={faCheck} />
             </button>

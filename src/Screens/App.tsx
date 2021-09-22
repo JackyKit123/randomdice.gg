@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Analytics from 'react-router-ga';
 import Header from 'Components/Header';
 import Footer from 'Components/Footer';
 import Main from 'Components/Main';
@@ -27,7 +25,7 @@ export default function App(): JSX.Element {
 
     try {
         return (
-            <Router>
+            <>
                 <Helmet>
                     <title>Random Dice</title>
                     <meta
@@ -44,17 +42,12 @@ export default function App(): JSX.Element {
                         content='A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.'
                     />
                 </Helmet>
-                <Analytics
-                    id={
-                        process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID || ''
-                    }
-                >
-                    <Header />
-                    {mapRouter(menu)}
-                    <ToTop />
-                    <Footer />
-                </Analytics>
-            </Router>
+
+                <Header />
+                {mapRouter(menu)}
+                <ToTop />
+                <Footer />
+            </>
         );
     } catch (err) {
         return (

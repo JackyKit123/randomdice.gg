@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -17,8 +17,7 @@ import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
 import useRootStateSelector from 'Redux';
-import PopUp from 'Components/PopUp';
-import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
+import { ConfirmedSubmitNotification, popupContext } from 'Components/PopUp';
 import { fetchDecksGuide } from 'Firebase';
 import { DeckGuide, DeckGuides } from 'types/database';
 
@@ -31,6 +30,7 @@ export default function updateDecksGuide(): JSX.Element {
     const [activeEdit, setActiveEdit] = useState<DeckGuide>();
     const [guideToArchive, setGuideToArchive] = useState<number>();
     const [invalidGuideName, setInvalidGuideName] = useState(false);
+    const { openPopup } = useContext(popupContext);
 
     useEffect(() => {
         dbRef.once('value').then(snapshot => setGuides(snapshot.val()));
@@ -44,96 +44,49 @@ export default function updateDecksGuide(): JSX.Element {
         );
     }
 
+    const confirmSubmit = async (): Promise<void> => {
+        if (activeEdit) {
+            const clone = [...guides];
+            clone.sort((a, b) => b.id - a.id);
+            const i = clone.findIndex(guide => guide.id === activeEdit?.id);
+            if (i === -1) {
+                clone.push(activeEdit);
+            } else {
+                clone[i] = activeEdit;
+            }
+            setGuides(clone);
+            await Promise.all([
+                database
+                    .ref('/last_updated/decks_guide')
+                    .set(new Date().toISOString()),
+                dbRef.set(clone),
+            ]);
+            fetchDecksGuide(dispatch);
+            setActiveEdit(undefined);
+        }
+    };
+
+    const confirmArchive = async (): Promise<void> => {
+        const archiveTarget = guides.find(guide => guide.id === guideToArchive);
+        if (archiveTarget) {
+            archiveTarget.archived = !archiveTarget.archived;
+            const newGuides = guides.map(guide =>
+                guide.id === guideToArchive ? archiveTarget : guide
+            );
+            setGuideToArchive(undefined);
+            setGuides(newGuides);
+            await Promise.all([
+                database
+                    .ref('/last_updated/decks_guide')
+                    .set(new Date().toISOString()),
+                dbRef.set(newGuides),
+            ]);
+            fetchDecksGuide(dispatch);
+        }
+    };
+
     return (
         <Dashboard className='decks-guide'>
-            <PopUp popUpTarget='confirm-submit'>
-                <h3>Please Confirm</h3>
-                <p>Are you sure to want to submit this deck guide?</p>
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={(): void => {
-                        if (activeEdit) {
-                            const clone = [...guides];
-                            clone.sort((a, b) => b.id - a.id);
-                            const i = clone.findIndex(
-                                guide => guide.id === activeEdit?.id
-                            );
-                            if (i === -1) {
-                                clone.push(activeEdit);
-                            } else {
-                                clone[i] = activeEdit;
-                            }
-                            setGuides(clone);
-                            database
-                                .ref('/last_updated/decks_guide')
-                                .set(new Date().toISOString());
-                            dbRef.set(clone);
-                            fetchDecksGuide(dispatch);
-                            setActiveEdit(undefined);
-                            dispatch({ type: CLOSE_POPUP });
-                        }
-                    }}
-                >
-                    Yes
-                </button>
-            </PopUp>
-            <PopUp popUpTarget='confirm-discard'>
-                <h3>Please Confirm</h3>
-                <p>
-                    Are you sure to want to discard the changes your made and go
-                    back?
-                </p>
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={(): void => {
-                        if (activeEdit) {
-                            setActiveEdit(undefined);
-                            dispatch({ type: CLOSE_POPUP });
-                        }
-                    }}
-                >
-                    Yes
-                </button>
-            </PopUp>
-            <PopUp popUpTarget='confirm-archive'>
-                <h3>Please Confirm</h3>
-                <p>
-                    Are you sure to want to{' '}
-                    {guides.find(guide => guide.id === guideToArchive)?.archived
-                        ? 'unarchive'
-                        : 'archive'}{' '}
-                    this guide?
-                </p>
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={(): void => {
-                        const archiveTarget = guides.find(
-                            guide => guide.id === guideToArchive
-                        );
-                        if (archiveTarget) {
-                            archiveTarget.archived = !archiveTarget.archived;
-                            const newGuides = guides.map(guide =>
-                                guide.id === guideToArchive
-                                    ? archiveTarget
-                                    : guide
-                            );
-                            setGuideToArchive(undefined);
-                            setGuides(newGuides);
-                            database
-                                .ref('/last_updated/decks_guide')
-                                .set(new Date().toISOString());
-                            dbRef.set(newGuides);
-                            fetchDecksGuide(dispatch);
-                        }
-                        dispatch({ type: CLOSE_POPUP });
-                    }}
-                >
-                    Yes
-                </button>
-            </PopUp>
             <p>
                 To update a written deck guide, press the pencil button to
                 navigate into the editor screen, once the you can update the
@@ -333,24 +286,30 @@ export default function updateDecksGuide(): JSX.Element {
                                     type='button'
                                     className='submit'
                                     disabled={invalidGuideName}
-                                    onClick={(): void => {
-                                        dispatch({
-                                            type: OPEN_POPUP,
-                                            payload: 'confirm-submit',
-                                        });
-                                    }}
+                                    onClick={(): void =>
+                                        openPopup(
+                                            <ConfirmedSubmitNotification
+                                                promptText='Are you sure to want to submit this deck guide?'
+                                                confirmHandler={confirmSubmit}
+                                            />
+                                        )
+                                    }
                                 >
                                     <FontAwesomeIcon icon={faCheck} />
                                 </button>
                                 <button
                                     type='button'
                                     className='back'
-                                    onClick={(): void => {
-                                        dispatch({
-                                            type: OPEN_POPUP,
-                                            payload: 'confirm-discard',
-                                        });
-                                    }}
+                                    onClick={(): void =>
+                                        openPopup(
+                                            <ConfirmedSubmitNotification
+                                                promptText='Are you sure to want to discard the changes your made and go back?'
+                                                confirmHandler={(): void =>
+                                                    setActiveEdit(undefined)
+                                                }
+                                            />
+                                        )
+                                    }
                                 >
                                     <FontAwesomeIcon icon={faUndo} />
                                 </button>
@@ -462,10 +421,22 @@ export default function updateDecksGuide(): JSX.Element {
                                             className='archive'
                                             onClick={(): void => {
                                                 setGuideToArchive(guide.id);
-                                                dispatch({
-                                                    type: OPEN_POPUP,
-                                                    payload: 'confirm-archive',
-                                                });
+                                                openPopup(
+                                                    <ConfirmedSubmitNotification
+                                                        promptText={`Are you sure to want to ${
+                                                            guides.find(
+                                                                g =>
+                                                                    g.id ===
+                                                                    guideToArchive
+                                                            )?.archived
+                                                                ? 'unarchive'
+                                                                : 'archive'
+                                                        } this guide?`}
+                                                        confirmHandler={
+                                                            confirmArchive
+                                                        }
+                                                    />
+                                                );
                                             }}
                                         >
                                             <FontAwesomeIcon

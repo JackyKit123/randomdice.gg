@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-indent */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
@@ -8,17 +8,64 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import useRootStateSelector from 'Redux';
 import GoogleAds from 'Components/AdUnit';
 import Dice from 'Components/Dice';
-import PopUp from 'Components/PopUp';
+import { popupContext } from 'Components/PopUp';
 import { fetchDecks, fetchDices } from 'Firebase';
 import { Die } from 'types/database';
-import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 import ShareButtons from 'Components/ShareButton';
 import PageWrapper from 'Components/PageWrapper';
 import FilterForm, { useDeckFilter, FilterContext } from 'Components/Filter';
 
+function AlternativesList({
+    alternatives,
+}: {
+    alternatives: Die['id'][];
+}): JSX.Element {
+    const { dice } = useRootStateSelector('fetchFirebaseReducer');
+
+    return (
+        <div className='deck-list'>
+            <h3>Alternatives List</h3>
+            <div className='original'>
+                <Dice die={alternatives[0]} />
+                <Dice die={alternatives[1]} />
+                <Dice die={alternatives[2]} />
+                <Dice die={alternatives[3]} />
+                <Dice die={alternatives[4]} />
+            </div>
+            {alternatives
+                .map(alt => ({
+                    id: alt,
+                    alternatives: dice?.find(die => die.id === alt)
+                        ?.alternatives,
+                }))
+                .map(die => (
+                    <div key={die.id}>
+                        <Dice die={die.id} />
+                        {die.alternatives ? (
+                            <>
+                                <h4>{die.alternatives.desc}</h4>
+                                <h5>Alternatives :</h5>
+                                <div className='replacement'>
+                                    {die.alternatives.list?.map(altDice =>
+                                        altDice ? (
+                                            <Dice die={altDice} key={altDice} />
+                                        ) : null
+                                    )}
+                                </div>
+                            </>
+                        ) : (
+                            <h4>You should not need to replace this.</h4>
+                        )}
+                    </div>
+                ))}
+        </div>
+    );
+}
+
 export default function DeckList(): JSX.Element {
     const location = useLocation();
     const history = useHistory();
+    const { openPopup } = useContext(popupContext);
     const dispatch = useDispatch();
     const {
         decks,
@@ -34,7 +81,6 @@ export default function DeckList(): JSX.Element {
         .replace(/^\/decks\//i, '')
         .toLowerCase() as 'pvp' | 'co-op' | 'crew';
     const sortedDeck = useDeckFilter(decks ?? []);
-    const [findAlt, setFindAlt] = useState([] as Die['id'][]);
 
     useEffect(() => {
         setDeckType(deckType);
@@ -90,45 +136,6 @@ export default function DeckList(): JSX.Element {
                     : 'a mix of factors for the highest wave, consistency, and the speed of the deck.'}
             </p>
             <hr className='divisor' />
-            <PopUp popUpTarget='alt'>
-                <h3>Alternatives List</h3>
-                <div className='original'>
-                    <Dice die={findAlt[0]} />
-                    <Dice die={findAlt[1]} />
-                    <Dice die={findAlt[2]} />
-                    <Dice die={findAlt[3]} />
-                    <Dice die={findAlt[4]} />
-                </div>
-                {findAlt
-                    .map(alt => ({
-                        id: alt,
-                        alternatives: dice?.find(die => die.id === alt)
-                            ?.alternatives,
-                    }))
-                    .map(die => (
-                        <div key={die.id}>
-                            <Dice die={die.id} />
-                            {die.alternatives ? (
-                                <>
-                                    <h4>{die.alternatives.desc}</h4>
-                                    <h5>Alternatives :</h5>
-                                    <div className='replacement'>
-                                        {die.alternatives.list?.map(altDice =>
-                                            altDice ? (
-                                                <Dice
-                                                    die={altDice}
-                                                    key={altDice}
-                                                />
-                                            ) : null
-                                        )}
-                                    </div>
-                                </>
-                            ) : (
-                                <h4>You should not need to replace this.</h4>
-                            )}
-                        </div>
-                    ))}
-            </PopUp>
             <FilterForm />
             <GoogleAds unitId='8891384324' />
             <hr className='divisor' />
@@ -235,13 +242,15 @@ export default function DeckList(): JSX.Element {
                                                     }
                                                     aria-label='see alternatives'
                                                     type='button'
-                                                    onClick={(): void => {
-                                                        dispatch({
-                                                            type: OPEN_POPUP,
-                                                            payload: 'alt',
-                                                        });
-                                                        setFindAlt(deck);
-                                                    }}
+                                                    onClick={(): void =>
+                                                        openPopup(
+                                                            <AlternativesList
+                                                                alternatives={
+                                                                    deck
+                                                                }
+                                                            />
+                                                        )
+                                                    }
                                                 >
                                                     <FontAwesomeIcon
                                                         icon={faExchangeAlt}

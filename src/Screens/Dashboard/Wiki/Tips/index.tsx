@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -7,14 +7,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
-import PopUp from 'Components/PopUp';
-import { CLOSE_POPUP, OPEN_POPUP } from 'Redux/PopUp Overlay/types';
+import { ConfirmedSubmitNotification, popupContext } from 'Components/PopUp';
 import { Guide } from 'types/database';
 import { fetchWiki } from 'Firebase';
 import MyUploadAdapter from 'Misc/ckeditorUploadAdapter';
 
 export default function editGuides(): JSX.Element {
     const dispatch = useDispatch();
+    const { openPopup } = useContext(popupContext);
     const selectRef = useRef(null as null | HTMLSelectElement);
     const database = firebase.database();
     const dbRef = database.ref('/wiki/tips');
@@ -65,7 +65,6 @@ export default function editGuides(): JSX.Element {
                 selectRef.current.value = '?';
             }
         }
-        dispatch({ type: CLOSE_POPUP });
     };
 
     const handleDelete = async (): Promise<void> => {
@@ -81,36 +80,10 @@ export default function editGuides(): JSX.Element {
                 selectRef.current.value = '?';
             }
         }
-        dispatch({ type: CLOSE_POPUP });
     };
 
     return (
         <Dashboard className='guide'>
-            <PopUp popUpTarget='confirm-submit'>
-                <h3>Please Confirm</h3>
-                <p>
-                    Are you sure to want to update the information for this
-                    guide?
-                </p>
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={handleSubmit}
-                >
-                    Yes
-                </button>
-            </PopUp>
-            <PopUp popUpTarget='confirm-delete'>
-                <h3>Please Confirm</h3>
-                <p>Are you sure to want to delete this guide?</p>
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={handleDelete}
-                >
-                    Yes
-                </button>
-            </PopUp>
             <h3>Update Guide Information</h3>
             <label htmlFor='select-guides'>
                 Select A Guide:
@@ -255,12 +228,14 @@ export default function editGuides(): JSX.Element {
                         disabled={invalidTitleChar || emptyTitle}
                         type='button'
                         className='submit'
-                        onClick={(): void => {
-                            dispatch({
-                                type: OPEN_POPUP,
-                                payload: 'confirm-submit',
-                            });
-                        }}
+                        onClick={(): void =>
+                            openPopup(
+                                <ConfirmedSubmitNotification
+                                    promptText='Are you sure to want to update the information for this guide?'
+                                    confirmHandler={handleSubmit}
+                                />
+                            )
+                        }
                     >
                         <FontAwesomeIcon icon={faCheck} />
                     </button>
@@ -268,12 +243,14 @@ export default function editGuides(): JSX.Element {
                         disabled={invalidTitleChar || emptyTitle}
                         type='button'
                         className='submit'
-                        onClick={(): void => {
-                            dispatch({
-                                type: OPEN_POPUP,
-                                payload: 'confirm-delete',
-                            });
-                        }}
+                        onClick={(): void =>
+                            openPopup(
+                                <ConfirmedSubmitNotification
+                                    promptText='Are you sure to want to delete this guide?'
+                                    confirmHandler={handleDelete}
+                                />
+                            )
+                        }
                     >
                         <FontAwesomeIcon icon={faTrashAlt} />
                     </button>

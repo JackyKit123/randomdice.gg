@@ -1,6 +1,103 @@
 @import '../cross_import_lesshat.less';
 
 body {
+    .popup-overlay > .popup > .container {
+        text-align: center;
+        line-height: 20px;
+
+        a {
+            font-size: inherit;
+        }
+
+        .loading {
+            font-size: 30px;
+            margin: 10px auto;
+        }
+
+        span {
+            display: block;
+
+            &.error {
+                color: #ff0000;
+                font-style: italic;
+                margin-bottom: 5px;
+            }
+        }
+
+        .profile-and-name {
+            text-align: left;
+            margin: 10px 40px;
+            .display(flex);
+            .flex-direction(row);
+            .justify-content(space-around);
+            .align-items(center);
+            .flex-wrap(wrap);
+
+            & > figure {
+                border: 3px inset #05292e;
+                border-radius: 5px;
+                height: 100px;
+                overflow: hidden;
+                margin: 5px;
+
+                & > img {
+                    height: 100%;
+                }
+            }
+
+            & > label {
+                span {
+                    font-size: 18px;
+                    margin-bottom: 3px;
+                }
+
+                input {
+                    height: 30px;
+                    font-size: 18px;
+                }
+            }
+        }
+
+        .oauth {
+            margin: 10px auto;
+
+            button,
+            span {
+                display: inline-block;
+                padding: 0;
+                border: 0;
+                background: none;
+
+                &:not(:last-of-type) {
+                    margin-right: 10px;
+                }
+            }
+
+            span {
+                font-size: 48px;
+            }
+
+            button {
+                font-size: 40px;
+                cursor: pointer;
+            }
+
+            .discord {
+                background: #ffffff;
+                border-radius: 5px;
+                padding: 4px 5px 0;
+                color: #7289da;
+            }
+
+            .patreon {
+                background: #f96854;
+                border-radius: 5px;
+                padding: 4px 5px 0;
+                color: #052d49;
+            }
+        }
+    }
+
     header,
     footer {
         width: 100%;
@@ -13,108 +110,6 @@ body {
     }
 
     header {
-        .popup-overlay > .popup > .container {
-            text-align: center;
-            line-height: 20px;
-
-            &.confirm-logout button {
-                display: inline-block;
-                margin: 0 10px;
-            }
-
-            a {
-                font-size: inherit;
-            }
-
-            .loading {
-                font-size: 30px;
-                margin: 10px auto;
-            }
-
-            span {
-                display: block;
-
-                &.error {
-                    color: #ff0000;
-                    font-style: italic;
-                    margin-bottom: 5px;
-                }
-            }
-
-            .profile-and-name {
-                text-align: left;
-                margin: 10px 40px;
-                .display(flex);
-                .flex-direction(row);
-                .justify-content(space-around);
-                .align-items(center);
-                .flex-wrap(wrap);
-
-                & > figure {
-                    border: 3px inset #05292e;
-                    border-radius: 5px;
-                    height: 100px;
-                    overflow: hidden;
-                    margin: 5px;
-
-                    & > img {
-                        height: 100%;
-                    }
-                }
-
-                & > label {
-                    span {
-                        font-size: 18px;
-                        margin-bottom: 3px;
-                    }
-
-                    input {
-                        height: 30px;
-                        font-size: 18px;
-                    }
-                }
-            }
-
-            .oauth {
-                margin: 10px auto;
-
-                button,
-                span {
-                    display: inline-block;
-                    padding: 0;
-                    border: 0;
-                    background: none;
-
-                    &:not(:last-of-type) {
-                        margin-right: 10px;
-                    }
-                }
-
-                span {
-                    font-size: 48px;
-                }
-
-                button {
-                    font-size: 40px;
-                    cursor: pointer;
-                }
-
-                .discord {
-                    background: #ffffff;
-                    border-radius: 5px;
-                    padding: 4px 5px 0;
-                    color: #7289da;
-                }
-
-                .patreon {
-                    background: #f96854;
-                    border-radius: 5px;
-                    padding: 4px 5px 0;
-                    color: #052d49;
-                }
-            }
-        }
-
         & > .container {
             position: fixed;
 
@@ -265,7 +260,12 @@ body {
                                             position: initial;
                                             margin-left: 0;
                                             visibility: visible;
-                                            background-color: rgba(49, 49, 49, 0.9);
+                                            background-color: rgba(
+                                                49,
+                                                49,
+                                                49,
+                                                0.9
+                                            );
                                             padding: 10px;
                                             border-bottom: 2px solid #525252;
                                             height: auto;
@@ -461,7 +461,7 @@ body {
             }
         }
 
-        /*&.scroll {
+        /* &.scroll {
             @media @desktop {
                 & > .header-placeholder {
                     height: 80px;
@@ -477,7 +477,7 @@ body {
                     }
                 }
             }
-        }*/
+        } */
     }
 
     footer {

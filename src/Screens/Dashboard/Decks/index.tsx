@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,8 +11,7 @@ import {
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
 import Dice from 'Components/Dice';
-import PopUp from 'Components/PopUp';
-import { CLOSE_POPUP, OPEN_POPUP } from 'Redux/PopUp Overlay/types';
+import { ConfirmedSubmitNotification, popupContext } from 'Components/PopUp';
 import { fetchDecks } from 'Firebase';
 import { Battlefield, Deck, DeckGuides, DeckList, Die } from 'types/database';
 import useRootStateSelector from 'Redux';
@@ -82,6 +81,7 @@ const MemoRow = React.memo(DeckRow);
 export default function updateDeck(): JSX.Element {
     const dispatch = useDispatch();
     const database = firebase.database();
+    const { openPopup } = useContext(popupContext);
     const { dice, wiki } = useRootStateSelector('fetchFirebaseReducer');
     const { deckType, legendaryOwned, customSearch } = useContext(
         FilterContext
@@ -123,9 +123,6 @@ export default function updateDeck(): JSX.Element {
     const invalidRating = !Object.values(activeEdit.rating).every(
         rating => typeof rating === 'undefined' || (rating >= 0 && rating <= 10)
     );
-    const invalidRatingToAdd = !Object.values(deckToAdd.rating).every(
-        rating => typeof rating === 'undefined' || (rating >= 0 && rating <= 10)
-    );
     const filteredDeck = useDeckFilter(decks);
 
     useEffect(() => {
@@ -139,7 +136,7 @@ export default function updateDeck(): JSX.Element {
             .then(snapshot => setGuides(snapshot.val()));
     }, []);
 
-    const sortDecksAndUpdate = (deckList: DeckList): void => {
+    const sortDecksAndUpdate = async (deckList: DeckList): Promise<void> => {
         deckList.sort((a, b) => {
             if (a.rating.default > b.rating.default) {
                 return -1;
@@ -155,92 +152,61 @@ export default function updateDeck(): JSX.Element {
             }
             return 0;
         });
-        database.ref('/last_updated/decks').set(new Date().toISOString());
-        database.ref('/decks').set([...deckList]);
+        await Promise.all([
+            database.ref('/last_updated/decks').set(new Date().toISOString()),
+            database.ref('/decks').set([...deckList]),
+        ]);
         setDecks([...deckList]);
         fetchDecks(dispatch);
     };
 
-    const updateDecks = (): void => {
+    const updateDecks = async (): Promise<void> => {
         const updated = decks.map(deck =>
             deck.id === activeEdit.id ? activeEdit : deck
         );
-        sortDecksAndUpdate([...updated]);
+        await sortDecksAndUpdate([...updated]);
         setActiveEdit({ ...initialEditState });
     };
 
-    const deleteDeck = (): void => {
+    const deleteDeck = async (): Promise<void> => {
         const deleted = decks.filter(deck => deck.id !== deckToDelete.id);
-        sortDecksAndUpdate([...deleted]);
+        await sortDecksAndUpdate([...deleted]);
         setDeckToDelete({ id: -1, dice: [[]] as Die['id'][][] });
     };
 
-    const addDeck = (): void => {
-        const clone = {
-            ...deckToAdd,
-        };
-        if (invalidRatingToAdd) {
-            return;
-        }
-        decks.sort((a, b) => (a.id > b.id ? 1 : -1));
-        const newId = decks.findIndex((deck, i) => deck.id - 1 !== i);
-        if (newId === -1) {
-            clone.id = decks.length + 1;
-        } else {
-            clone.id = newId + 1;
-        }
-        if (clone.type === 'Co-op (Pair)' || clone.type === 'Co-op (Solo)') {
-            clone.type = 'Co-op';
-        }
-        sortDecksAndUpdate([...decks, clone as Deck]);
-        dispatch({ type: CLOSE_POPUP });
-    };
-
-    if (!dice?.length || !decks?.length || !wiki?.battlefield?.length) {
-        return (
-            <Dashboard>
-                <LoadingScreen />
-            </Dashboard>
+    const AddDeckPopup = useCallback((): JSX.Element => {
+        const { closePopup } = useContext(popupContext);
+        const invalidRatingToAdd = !Object.values(deckToAdd.rating).every(
+            rating =>
+                typeof rating === 'undefined' || (rating >= 0 && rating <= 10)
         );
-    }
 
-    return (
-        <Dashboard className='deck'>
-            <PopUp popUpTarget='error'>
-                <h3>Error</h3>
-                <p>
-                    You need to fix the following errors before you can save
-                    your updated deck onto the database.
-                </p>
-                {invalidRating ? (
-                    <span className='invalid-warning'>
-                        Invalid Rating Input.
-                    </span>
-                ) : null}
-            </PopUp>
-            <PopUp popUpTarget='delete' className='delete'>
-                <h3>Please confirm</h3>
-                <p>Are you sure you want to delete this deck?</p>
-                {deckToDelete.dice.map((deck, i) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <div key={i}>
-                        {deck.map(die => (
-                            <Dice key={die} die={die} />
-                        ))}
-                    </div>
-                ))}
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={(): void => {
-                        deleteDeck();
-                        dispatch({ type: CLOSE_POPUP });
-                    }}
-                >
-                    Yes
-                </button>
-            </PopUp>
-            <PopUp popUpTarget='add-deck'>
+        const addDeck = async (): Promise<void> => {
+            const clone = {
+                ...deckToAdd,
+            };
+            if (invalidRatingToAdd) {
+                return;
+            }
+            decks.sort((a, b) => (a.id > b.id ? 1 : -1));
+            const newId = decks.findIndex((deck, i) => deck.id - 1 !== i);
+            if (newId === -1) {
+                clone.id = decks.length + 1;
+            } else {
+                clone.id = newId + 1;
+            }
+            if (
+                clone.type === 'Co-op (Pair)' ||
+                clone.type === 'Co-op (Solo)'
+            ) {
+                clone.type = 'Co-op';
+            }
+            sortDecksAndUpdate([...decks, clone as Deck]);
+            closePopup();
+        };
+
+        return (
+            <div className='add-deck'>
                 <h3>Add A Deck</h3>
                 <form onSubmit={(evt): void => evt.preventDefault()}>
                     {['default', 'c8', 'c9', 'c10'].map(ratingType => (
@@ -484,7 +450,31 @@ export default function updateDeck(): JSX.Element {
                 >
                     Submit
                 </button>
-            </PopUp>
+            </div>
+        );
+    }, [guides, setDeckToAdd, deckToAdd, wiki, dice]);
+
+    if (!dice?.length || !decks?.length || !wiki?.battlefield?.length) {
+        return (
+            <Dashboard>
+                <LoadingScreen />
+            </Dashboard>
+        );
+    }
+
+    const invalidRatingPrompt = (
+        <>
+            <h3>Error</h3>
+            <p>
+                You need to fix the following errors before you can save your
+                updated deck onto the database.
+            </p>
+            <span className='invalid-warning'>Invalid Rating Input.</span>
+        </>
+    );
+
+    return (
+        <Dashboard className='deck'>
             <h3>Update Deck List</h3>
             <p>
                 To Edit the decks, press the edit button, once you are done
@@ -506,10 +496,7 @@ export default function updateDeck(): JSX.Element {
                             guide: [-1],
                             battlefield: -1,
                         });
-                        dispatch({
-                            type: OPEN_POPUP,
-                            payload: 'add-deck',
-                        });
+                        openPopup(<AddDeckPopup />);
                     }}
                 >
                     <FontAwesomeIcon icon={faPlusCircle} />
@@ -887,11 +874,9 @@ export default function updateDeck(): JSX.Element {
                                                             )
                                                         ) {
                                                             if (invalidRating) {
-                                                                dispatch({
-                                                                    type: OPEN_POPUP,
-                                                                    payload:
-                                                                        'error',
-                                                                });
+                                                                openPopup(
+                                                                    invalidRatingPrompt
+                                                                );
                                                             } else {
                                                                 updateDecks();
                                                             }
@@ -925,10 +910,34 @@ export default function updateDeck(): JSX.Element {
                                                     id: deckInfo.id,
                                                     dice: deckInfo.decks,
                                                 });
-                                                dispatch({
-                                                    type: OPEN_POPUP,
-                                                    payload: 'delete',
-                                                });
+                                                openPopup(
+                                                    <ConfirmedSubmitNotification
+                                                        promptText='Are you sure you want to delete this deck?'
+                                                        confirmHandler={
+                                                            deleteDeck
+                                                        }
+                                                    >
+                                                        {deckToDelete.dice.map(
+                                                            (deck, i) => (
+                                                                // eslint-disable-next-line react/no-array-index-key
+                                                                <div key={i}>
+                                                                    {deck.map(
+                                                                        die => (
+                                                                            <Dice
+                                                                                key={
+                                                                                    die
+                                                                                }
+                                                                                die={
+                                                                                    die
+                                                                                }
+                                                                            />
+                                                                        )
+                                                                    )}
+                                                                </div>
+                                                            )
+                                                        )}
+                                                    </ConfirmedSubmitNotification>
+                                                );
                                             }}
                                         >
                                             <FontAwesomeIcon

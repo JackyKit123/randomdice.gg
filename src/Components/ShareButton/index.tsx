@@ -1,5 +1,4 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useContext } from 'react';
 import {
     FacebookShareButton,
     FacebookIcon,
@@ -12,22 +11,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import * as ga from 'Misc/customGaEvent';
-import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
+import { popupContext } from 'Components/PopUp';
 
-import PopUp from 'Components/PopUp';
+function CopiedNotification(): JSX.Element {
+    return (
+        <div className='share'>
+            <h3>Copied</h3>
+            <span>The url has been copied to your clipboard.</span>
+        </div>
+    );
+}
 
 export default function ShareButtons(props: {
     name: string;
     url?: string;
 }): JSX.Element {
     const { name, url } = props;
-    const dispatch = useDispatch();
+    const { openPopup } = useContext(popupContext);
+
     return (
         <div className='share'>
-            <PopUp popUpTarget='copied'>
-                <h3>Copied</h3>
-                <span>The url has been copied to your clipboard.</span>
-            </PopUp>
             <h4>Share this page</h4>
             <FacebookShareButton
                 url={url || window.location.href}
@@ -66,7 +69,7 @@ export default function ShareButtons(props: {
                         await navigator.clipboard.writeText(
                             url || window.location.href
                         );
-                        dispatch({ type: OPEN_POPUP, payload: 'copied' });
+                        openPopup(<CopiedNotification />);
                     } else {
                         navigator.share({
                             title: name,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
@@ -8,13 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
-import PopUp from 'Components/PopUp';
-import { CLOSE_POPUP, OPEN_POPUP } from 'Redux/PopUp Overlay/types';
+import { ConfirmedSubmitNotification, popupContext } from 'Components/PopUp';
 import { Die, DiceList } from 'types/database';
 import { fetchDices } from 'Firebase';
 
 export default function editDice(): JSX.Element {
     const dispatch = useDispatch();
+    const { openPopup } = useContext(popupContext);
     const selectRef = useRef(null as null | HTMLSelectElement);
     const database = firebase.database();
     const storage = firebase.storage();
@@ -193,7 +193,6 @@ export default function editDice(): JSX.Element {
                 selectRef.current.value = '?';
             }
         }
-        dispatch({ type: CLOSE_POPUP });
     };
 
     const handleDelete = async (): Promise<void> => {
@@ -209,41 +208,10 @@ export default function editDice(): JSX.Element {
                 selectRef.current.value = '?';
             }
         }
-        dispatch({ type: CLOSE_POPUP });
     };
 
     return (
         <Dashboard className='dice'>
-            <PopUp popUpTarget='confirm-submit'>
-                <h3>Please Confirm</h3>
-                <p>
-                    Are you sure to want to update the information for this
-                    dice?
-                </p>
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={handleSubmit}
-                >
-                    Yes
-                </button>
-            </PopUp>
-            <PopUp popUpTarget='confirm-delete'>
-                <h3>Please Confirm</h3>
-                <p>
-                    Are you sure to want to delete this dice, the action is
-                    irreversible, it may break the the deck list and other
-                    tools. Make sure you have deleted those related content
-                    before deleting the dice.
-                </p>
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={handleDelete}
-                >
-                    Yes
-                </button>
-            </PopUp>
             <label htmlFor='select-dice'>
                 Select A Dice:
                 <select
@@ -956,10 +924,12 @@ export default function editDice(): JSX.Element {
                         type='button'
                         className='submit'
                         onClick={(): void => {
-                            dispatch({
-                                type: OPEN_POPUP,
-                                payload: 'confirm-submit',
-                            });
+                            openPopup(
+                                <ConfirmedSubmitNotification
+                                    promptText='Are you sure to want to update the information for this dice?'
+                                    confirmHandler={handleSubmit}
+                                />
+                            );
                         }}
                     >
                         <FontAwesomeIcon icon={faCheck} />
@@ -969,10 +939,12 @@ export default function editDice(): JSX.Element {
                         type='button'
                         className='submit'
                         onClick={(): void => {
-                            dispatch({
-                                type: OPEN_POPUP,
-                                payload: 'confirm-delete',
-                            });
+                            openPopup(
+                                <ConfirmedSubmitNotification
+                                    promptText='Are you sure to want to delete this dice, the action is irreversible, it may break the the deck list and other tools. Make sure you have deleted those related content before deleting the dice.'
+                                    confirmHandler={handleDelete}
+                                />
+                            );
                         }}
                     >
                         <FontAwesomeIcon icon={faTrashAlt} />

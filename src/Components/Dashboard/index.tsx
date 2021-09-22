@@ -1,5 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import firebase, { FirebaseError } from 'firebase/app';
 import { useLocation, Link } from 'react-router-dom';
@@ -8,15 +7,16 @@ import Main from 'Components/Main';
 import LoadingScreen from 'Components/Loading';
 import NoMatch from 'Screens/NoMatch';
 import { menu } from 'Router';
-import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
 import useRootStateSelector from 'Redux';
+import { popupContext } from 'Components/PopUp';
+import { LoginPopup } from 'Components/PopUp/components';
 
 export default function Dashboard(props: {
     className?: string;
     children?: ReactNode;
 }): JSX.Element {
     const location = useLocation();
-    const dispatch = useDispatch();
+    const { openPopup } = useContext(popupContext);
     const database = firebase.database();
     const { className, children } = props;
     const { auth, userData, error } = useRootStateSelector('authReducer');
@@ -85,10 +85,7 @@ export default function Dashboard(props: {
                                 type='button'
                                 onClick={async (): Promise<void> => {
                                     await logout();
-                                    dispatch({
-                                        type: OPEN_POPUP,
-                                        payload: 'login',
-                                    });
+                                    openPopup(<LoginPopup />);
                                 }}
                             >
                                 Relog Now

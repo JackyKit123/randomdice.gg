@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+    Dispatch,
+    SetStateAction,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import firebase from 'firebase/app';
@@ -8,26 +14,79 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import LoadingScreen from 'Components/Loading';
-
+import Loading from 'Components/Loading';
 import { fetchPatreon } from 'Firebase';
-import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
-import PopUp from 'Components/PopUp';
+import { popupContext } from 'Components/PopUp';
 import PageWrapper from 'Components/PageWrapper';
 import useRootStateSelector from 'Redux';
 import { Patreon } from 'types/database';
 
+interface SubmittedNotificationProps {
+    content: string;
+    setEditing: Dispatch<SetStateAction<boolean>>;
+}
+
+function SubmittedNotification({
+    content,
+    setEditing,
+}: SubmittedNotificationProps): JSX.Element {
+    const dispatch = useDispatch();
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const { closePopup } = useContext(popupContext);
+
+    return (
+        <>
+            <h3>Please Confirm</h3>
+            <p>Are you sure to want to submit your message?</p>
+            {submitLoading ? <Loading /> : null}
+            <button
+                type='button'
+                className='confirm'
+                onClick={async (): Promise<void> => {
+                    const uid = firebase.auth().currentUser?.uid;
+                    if (!uid) {
+                        closePopup();
+                    }
+                    setSubmitLoading(true);
+                    const listArr = (
+                        await firebase
+                            .database()
+                            .ref(`/patreon_list`)
+                            .once('value')
+                    ).val();
+                    const i = listArr.findIndex(
+                        (patron: Patreon) => patron.id === uid
+                    );
+                    await firebase
+                        .database()
+                        .ref(`/patreon_list/${i}/${uid}/message`)
+                        .set(content);
+                    await firebase
+                        .database()
+                        .ref('/last_updated/patreon_list')
+                        .set(new Date().toISOString());
+                    fetchPatreon(dispatch);
+                    setEditing(false);
+                    setSubmitLoading(false);
+                    closePopup();
+                }}
+            >
+                Yes
+            </button>
+        </>
+    );
+}
+
 export default function PatreonProfile(): JSX.Element {
     const history = useHistory();
     const { name } = useParams<{ name: string }>();
-    const dispatch = useDispatch();
+    const { openPopup } = useContext(popupContext);
     const { patreon_list: list, firebaseError: error } = useRootStateSelector(
         'fetchFirebaseReducer'
     );
     const [isPatreonPageOwner, setIsPatreonPageOwner] = useState(false);
     const [editing, setEditing] = useState(false);
     const [content, setContent] = useState('');
-    const [submitLoading, setSubmitLoading] = useState(false);
     const user = firebase.auth().currentUser;
 
     useEffect(() => {
@@ -57,45 +116,6 @@ export default function PatreonProfile(): JSX.Element {
             title={`Patreon Supporter ${name}`}
             className='patreon-profile'
         >
-            <PopUp popUpTarget='confirm-submit'>
-                <h3>Please Confirm</h3>
-                <p>Are you sure to want to submit your message?</p>
-                {submitLoading ? <LoadingScreen /> : null}
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={async (): Promise<void> => {
-                        const uid = firebase.auth().currentUser?.uid;
-                        if (!uid) {
-                            dispatch({ type: CLOSE_POPUP });
-                        }
-                        setSubmitLoading(true);
-                        const listArr = (
-                            await firebase
-                                .database()
-                                .ref(`/patreon_list`)
-                                .once('value')
-                        ).val();
-                        const i = listArr.findIndex(
-                            (patron: Patreon) => patron.id === uid
-                        );
-                        await firebase
-                            .database()
-                            .ref(`/patreon_list/${i}/${uid}/message`)
-                            .set(content);
-                        await firebase
-                            .database()
-                            .ref('/last_updated/patreon_list')
-                            .set(new Date().toISOString());
-                        fetchPatreon(dispatch);
-                        setEditing(false);
-                        setSubmitLoading(false);
-                        dispatch({ type: CLOSE_POPUP });
-                    }}
-                >
-                    Yes
-                </button>
-            </PopUp>
             {isPatreonPageOwner ? (
                 <button
                     aria-label='edit paragraph'
@@ -147,12 +167,14 @@ export default function PatreonProfile(): JSX.Element {
                         aria-label='submit'
                         type='button'
                         className='submit'
-                        onClick={(): void => {
-                            dispatch({
-                                type: OPEN_POPUP,
-                                payload: 'confirm-submit',
-                            });
-                        }}
+                        onClick={(): void =>
+                            openPopup(
+                                <SubmittedNotification
+                                    content={content}
+                                    setEditing={setEditing}
+                                />
+                            )
+                        }
                     >
                         <FontAwesomeIcon icon={faCheck} />
                     </button>

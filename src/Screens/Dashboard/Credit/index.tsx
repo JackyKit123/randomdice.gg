@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useContext } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
@@ -11,11 +11,11 @@ import {
 import { People, Credit } from 'types/database';
 import Dashboard from 'Components/Dashboard';
 import LoadingScreen from 'Components/Loading';
-import PopUp from 'Components/PopUp';
-import { OPEN_POPUP, CLOSE_POPUP } from 'Redux/PopUp Overlay/types';
+import { ConfirmedSubmitNotification, popupContext } from 'Components/PopUp';
 import { fetchCredit } from 'Firebase';
 
 export default function editCredit(): JSX.Element {
+    const { openPopup } = useContext(popupContext);
     const dispatch = useDispatch();
     const database = firebase.database();
     const storage = firebase.storage();
@@ -188,20 +188,6 @@ export default function editCredit(): JSX.Element {
 
     return (
         <Dashboard className='credit'>
-            <PopUp popUpTarget='confirm-submit'>
-                <h3>Please Confirm</h3>
-                <p>Are you sure to want to update the credit?</p>
-                <button
-                    type='button'
-                    className='confirm'
-                    onClick={(): void => {
-                        handleSubmit();
-                        dispatch({ type: CLOSE_POPUP });
-                    }}
-                >
-                    Yes
-                </button>
-            </PopUp>
             <h3>Update Credit</h3>
             {credit.map(category => (
                 <Fragment key={category.id}>
@@ -324,12 +310,14 @@ export default function editCredit(): JSX.Element {
             <button
                 type='button'
                 className='submit'
-                onClick={(): void => {
-                    dispatch({
-                        type: OPEN_POPUP,
-                        payload: 'confirm-submit',
-                    });
-                }}
+                onClick={(): void =>
+                    openPopup(
+                        <ConfirmedSubmitNotification
+                            promptText='Are you sure to want to update the credit?'
+                            confirmHandler={handleSubmit}
+                        />
+                    )
+                }
             >
                 <FontAwesomeIcon icon={faCheck} />
             </button>

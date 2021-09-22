@@ -1,33 +1,33 @@
 @import './cross_import_lesshat.less';
 
-.deck-list {
-    .popup-overlay > .popup > .container > div {
-        text-align: center;
-        vertical-align: middle;
-        border-bottom: 5px double #ffffff;
-        margin: 0 0 30px;
+.popup-overlay > .popup > .container .deck-list {
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 5px double #ffffff;
+    margin: 0 0 30px;
 
-        &.original {
-            border-bottom: 10px double #ffffff;
-            padding: 0;
-        }
-
-        figure {
-            display: inline-block;
-            max-width: 20%;
-        }
-
-        h5 {
-            font-style: italic;
-            margin-bottom: 10px;
-        }
-
-        &:last-child {
-            margin-bottom: 0;
-            border-bottom: 0;
-        }
+    &.original {
+        border-bottom: 10px double #ffffff;
+        padding: 0;
     }
 
+    figure {
+        display: inline-block;
+        max-width: 20%;
+    }
+
+    h5 {
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+        border-bottom: 0;
+    }
+}
+
+.deck-list {
     p.updated {
         text-align: center;
         font-style: italic;

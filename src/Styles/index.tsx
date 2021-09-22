@@ -12,6 +12,7 @@ import './components/share.less';
 import './components/to-top.less';
 import './dashboard/battlefield.less';
 import './dashboard/boss.less';
+import './dashboard/box.less';
 import './dashboard/credit.less';
 import './dashboard/deck.less';
 import './dashboard/dice.less';

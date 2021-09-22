@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
     VictoryChart,
@@ -15,12 +15,13 @@ import useRootStateSelector from 'Redux';
 import ShareButtons from 'Components/ShareButton';
 import findMaxCrit from 'Misc/findMaxCrit';
 import { fetchCrit, fetchDices } from 'Firebase';
-import { OPEN_POPUP } from 'Redux/PopUp Overlay/types';
-
 import PageWrapper from 'Components/PageWrapper';
+import { LoginPopup } from 'Components/PopUp/components';
+import { popupContext } from 'Components/PopUp';
 
 export default function critDataCollection(): JSX.Element {
     const dispatch = useDispatch();
+    const { openPopup } = useContext(popupContext);
     const { dice, critData, firebaseError } = useRootStateSelector(
         'fetchFirebaseReducer'
     );
@@ -301,12 +302,7 @@ export default function critDataCollection(): JSX.Element {
                     Please{' '}
                     <button
                         type='button'
-                        onClick={(): void => {
-                            dispatch({
-                                type: OPEN_POPUP,
-                                payload: 'login',
-                            });
-                        }}
+                        onClick={(): void => openPopup(<LoginPopup />)}
                     >
                         Login
                     </button>{' '}
