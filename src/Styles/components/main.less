@@ -1,103 +1,109 @@
 @import '../cross_import_lesshat.less';
 
 body {
-    .banner {
+  .banner {
+    width: 100%;
+    height: 650px;
+    // weird hack since there is basically no native support for this
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FBanner.jpg?alt=media&token=e998fe3c-efdc-484b-9629-cb0e6db746ff')
+        no-repeat center;
+    background-size: cover;
+    position: relative;
+
+    &.offline {
+      .filter(grayscale(100%));
+
+      span {
+        position: absolute;
+        bottom: 0;
+        background: #000000;
+        color: #ffffff;
+        padding: 7px 5px;
         width: 100%;
-        height: 650px;
-        // weird hack since there is basically no native support for this
-        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://firebasestorage.googleapis.com/v0/b/random-dice-web.appspot.com/o/General%20Images%2FBanner.jpg?alt=media&token=e998fe3c-efdc-484b-9629-cb0e6db746ff') no-repeat center;
-        background-size: cover;
-        position: relative;
-
-        &.offline {
-            .filter(grayscale(100%));
-
-            span {
-                position: absolute;
-                bottom: 0;
-                background: #000000;
-                color: #ffffff;
-                padding: 7px 5px;
-                width: 100%;
-                text-align: center;
-
-                @media @mobile {
-                    text-align: left;
-                }
-            }
-        }
-
-        @media @desktop {
-            background-position: center 50%;
-        }
+        text-align: center;
 
         @media @mobile {
-            background-position: center 20%;
+          text-align: left;
         }
-
-        & > .title-container {
-            overflow: hidden;
-            display: table;
-            max-width: 1400px;
-            margin: auto;
-            height: 100%;
-            padding: 0 10px;
-
-            & > h2.title {
-                display: table-cell;
-                font-weight: 700;
-                font-size: 90px;
-                color: #ffffff;
-                text-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
-                vertical-align: middle;
-                text-align: center;
-
-                @media @mobile {
-                    font-size: 70px;
-                }
-            }
-        }
+      }
     }
 
-    .main {
-        .box-shadow(0 -6px 20px 1px rgba(0, 0, 0, 0.75));
-        position: relative;
-        height: 100%;
+    @media @desktop {
+      background-position: center 50%;
+    }
 
-        .calc(min-height, ~'100vh - 750px');
-        .display(flex);
-        .flex-direction(column);
-        .align-items(center);
-        padding: 20px 10px;
+    @media @mobile {
+      background-position: center 20%;
+    }
 
-        & > .content {
-            .box-shadow(0 0 20px -1px rgba(0, 0, 0, 0.6));
-            .transition(box-shadow 0.5s ease);
+    & > .title-container {
+      overflow: hidden;
+      display: table;
+      max-width: 1400px;
+      margin: auto;
+      height: 100%;
+      padding: 0 10px;
 
-            &:hover {
-                .box-shadow(0 0 50px -1px rgba(0, 0, 0, 0.4));
-            }
+      & > h2.title {
+        display: table-cell;
+        font-weight: 700;
+        font-size: 90px;
+        color: #ffffff;
+        text-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+        vertical-align: middle;
+        text-align: center;
 
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.07);
-            border-radius: 10px;
-            max-width: 1400px;
-            min-height: 200px;
-            width: 100%;
-
-            .VictoryContainer {
-                pointer-events: auto !important;
-                touch-action: auto !important;
-
-                & > div {
-                    z-index: 0 !important;
-                }
-            }
+        @media @mobile {
+          font-size: 70px;
         }
+      }
     }
+  }
 
-    h1, h2, h3, h4, h5, h6, strong {
-        color: white;
-        font-weight: 700 !important;
+  .main {
+    .box-shadow(0 -6px 20px 1px rgba(0, 0, 0, 0.75));
+    position: relative;
+    height: 100%;
+
+    .calc(min-height, ~'100vh - 750px');
+    .display(flex);
+    .flex-direction(column);
+    .align-items(center);
+    padding: 20px 10px;
+
+    & > .content {
+      .box-shadow(0 0 20px -1px rgba(0, 0, 0, 0.6));
+      .transition(box-shadow 0.5s ease);
+
+      &:hover {
+        .box-shadow(0 0 50px -1px rgba(0, 0, 0, 0.4));
+      }
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      max-width: 1400px;
+      min-height: 200px;
+      width: 100%;
+
+      .VictoryContainer {
+        pointer-events: auto !important;
+        touch-action: auto !important;
+
+        & > div {
+          z-index: 0 !important;
+        }
+      }
     }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  strong {
+    color: white;
+    font-weight: 700 !important;
+  }
 }

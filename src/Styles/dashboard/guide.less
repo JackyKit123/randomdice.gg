@@ -1,94 +1,94 @@
 @import '../cross_import_lesshat.less';
 
 .dashboard.decks-guide {
-    .dice-container {
-        margin: 0 auto;
-        max-width: 500px;
+  .dice-container {
+    margin: 0 auto;
+    max-width: 500px;
 
-        & > figure {
-            display: inline-block;
-            width: 20%;
-            height: auto;
-        }
+    & > figure {
+      display: inline-block;
+      width: 20%;
+      height: auto;
     }
+  }
 
-    label[for='add-guide'] {
-        line-height: 30px;
-        margin-bottom: 20px;
-        font-size: 24px;
-        display: block;
-
-        button {
-            display: inline-block;
-            margin: 0 10px;
-            font-size: 15px;
-        }
-    }
-
-    table {
-        border-spacing: 2px;
-        max-width: 700px;
-        width: 100%;
-        margin: 0 auto;
-
-        tbody {
-            & > tr {
-                &.archived {
-                    .filter(grayscale(1));
-                }
-
-                &:nth-of-type(odd) {
-                    background: #2f2f2f;
-                }
-
-                &:nth-of-type(even) {
-                    background: #282828;
-                }
-
-                & > td {
-                    padding: 10px;
-                    border: 5px ridge #ededed;
-                    vertical-align: middle;
-                    text-align: center;
-                    font-weight: 500;
-                    line-height: 32px;
-                }
-            }
-        }
-
-        &.guide-menu > tbody > tr:first-of-type > td:first-of-type {
-            width: 50px;
-        }
-
-        &.editing > tbody > tr {
-            &:nth-of-type(2) {
-                td:first-of-type {
-                    width: 50%;
-                }
-            }
-
-            &.dice-container > td select {
-                display: inline-block;
-                margin: 10px;
-            }
-        }
-    }
+  label[for='add-guide'] {
+    line-height: 30px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    display: block;
 
     button {
-        &.archive,
-        &.submit,
-        &.back,
-        &.add,
-        &.edit {
-            margin: 0;
-            padding: 5px;
-            font-size: 10px;
-            display: inline-block;
+      display: inline-block;
+      margin: 0 10px;
+      font-size: 15px;
+    }
+  }
+
+  table {
+    border-spacing: 2px;
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+
+    tbody {
+      & > tr {
+        &.archived {
+          .filter(grayscale(1));
         }
 
-        &.submit,
-        &.back {
-            margin: 0 10px;
+        &:nth-of-type(odd) {
+          background: #2f2f2f;
         }
+
+        &:nth-of-type(even) {
+          background: #282828;
+        }
+
+        & > td {
+          padding: 10px;
+          border: 5px ridge #ededed;
+          vertical-align: middle;
+          text-align: center;
+          font-weight: 500;
+          line-height: 32px;
+        }
+      }
     }
+
+    &.guide-menu > tbody > tr:first-of-type > td:first-of-type {
+      width: 50px;
+    }
+
+    &.editing > tbody > tr {
+      &:nth-of-type(2) {
+        td:first-of-type {
+          width: 50%;
+        }
+      }
+
+      &.dice-container > td select {
+        display: inline-block;
+        margin: 10px;
+      }
+    }
+  }
+
+  button {
+    &.archive,
+    &.submit,
+    &.back,
+    &.add,
+    &.edit {
+      margin: 0;
+      padding: 5px;
+      font-size: 10px;
+      display: inline-block;
+    }
+
+    &.submit,
+    &.back {
+      margin: 0 10px;
+    }
+  }
 }

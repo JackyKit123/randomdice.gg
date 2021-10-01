@@ -1,32 +1,32 @@
 .dice-mechanics {
-    p.intro {
-        span.version {
-            font-weight: 700;
-        }
+  p.intro {
+    span.version {
+      font-weight: 700;
+    }
+  }
+
+  .row {
+    h3 {
+      display: inline-block;
     }
 
-    .row {
-        h3 {
-            display: inline-block;
-        }
-
-        p {
-            min-height: 100px;
-        }
-
-        figure {
-            width: 150px;
-            margin-bottom: 20px;
-        }
-
-        &:nth-of-type(odd) > figure {
-            float: left;
-            margin-right: 20px;
-        }
-
-        &:nth-of-type(even) > figure {
-            float: right;
-            margin-left: 20px;
-        }
+    p {
+      min-height: 100px;
     }
+
+    figure {
+      width: 150px;
+      margin-bottom: 20px;
+    }
+
+    &:nth-of-type(odd) > figure {
+      float: left;
+      margin-right: 20px;
+    }
+
+    &:nth-of-type(even) > figure {
+      float: right;
+      margin-left: 20px;
+    }
+  }
 }
