@@ -12,6 +12,7 @@ import fetchFirebase from 'Firebase';
 import { authStateDispatch } from 'Firebase/auth';
 import { menu } from 'Router/menu';
 import ToTop from 'Components/ToTop';
+import { ErrorBoundary } from 'react-error-boundary';
 
 export default function App(): JSX.Element {
   const dispatch = useDispatch();
@@ -23,34 +24,31 @@ export default function App(): JSX.Element {
     ga.installEvent.mountListener();
   }, []);
 
-  try {
-    return (
-      <>
-        <Helmet>
-          <title>Random Dice</title>
-          <meta property='og:title' content='Random Dice Community Web' />
-          <meta
-            name='og:description'
-            content='A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.'
-          />
-          <meta name='author' content='JackyKit' />
-          <meta
-            name='description'
-            content='A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.'
-          />
-        </Helmet>
-
-        <Header />
-        {mapRouter(menu)}
-        <ToTop />
-        <Footer />
-      </>
-    );
-  } catch (err) {
-    return (
-      <Main title='Error'>
-        <ErrorDisplay error={err} />
-      </Main>
-    );
-  }
+  return (
+    <ErrorBoundary
+      fallbackRender={({ error }): JSX.Element => (
+        <Main title='Oops, something went wrong'>
+          <ErrorDisplay error={error} />
+        </Main>
+      )}
+    >
+      <Helmet>
+        <title>Random Dice</title>
+        <meta property='og:title' content='Random Dice Community Web' />
+        <meta
+          name='og:description'
+          content='A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.'
+        />
+        <meta name='author' content='JackyKit' />
+        <meta
+          name='description'
+          content='A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.'
+        />
+      </Helmet>
+      <Header />
+      {mapRouter(menu)}
+      <ToTop />
+      <Footer />
+    </ErrorBoundary>
+  );
 }
