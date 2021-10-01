@@ -12,7 +12,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from 'Screens/App';
 import * as serviceWorker from './serviceWorker';
 import swConfig from './swConfig';
-import 'Styles';
+import 'styles';
 
 ReactDOM.render(
   <React.StrictMode>
