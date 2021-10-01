@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
 
-const src = path.join(__dirname, '..', 'src', 'Misc', 'menuConfig.ts');
+const src = path.join(__dirname, '..', 'src', 'router', 'menu.ts');
 const tmp = path.join(__dirname, 'menuConfig.tmp.js');
 const out = path.join(__dirname, '..', 'public', 'sitemap.txt');
 
