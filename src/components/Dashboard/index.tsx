@@ -115,3 +115,9 @@ export default function Dashboard(props: {
     </main>
   );
 }
+
+export { default as TextInput } from './Input/TextInput';
+export { default as Dropdown } from './Input/Dropdown';
+export { default as NumberInput } from './Input/NumberInput';
+export { default as SubmitButton } from './Input/SubmitButton';
+export { default as Image } from './Input/Image';
