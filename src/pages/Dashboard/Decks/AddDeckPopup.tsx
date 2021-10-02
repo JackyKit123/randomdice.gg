@@ -1,4 +1,4 @@
-import { popupContext } from '@components/PopUp';
+import { popupContext } from 'components/PopUp';
 import React, { useContext, useState } from 'react';
 import useRootStateSelector from '@redux';
 import { Deck, DeckGuides, DeckList, Die } from 'types/database';

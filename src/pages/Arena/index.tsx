@@ -3,12 +3,12 @@ import React, { useState, useRef } from 'react';
 import * as math from 'mathjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUndo, faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
-import Dice from '@components/Dice';
+import Dice from 'components/Dice';
 import { fetchDices } from 'misc/firebase';
 
-import GoogleAds from '@components/AdUnit';
-import ShareButtons from '@components/ShareButton';
-import PageWrapper from '@components/PageWrapper';
+import GoogleAds from 'components/AdUnit';
+import ShareButtons from 'components/ShareButton';
+import PageWrapper from 'components/PageWrapper';
 import useRootStateSelector from '@redux';
 
 export default function ArenaDraft(): JSX.Element {

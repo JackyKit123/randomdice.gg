@@ -9,9 +9,9 @@ import {
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { People, Credit } from 'types/database';
-import Dashboard from '@components/Dashboard';
-import LoadingScreen from '@components/Loading';
-import { ConfirmedSubmitNotification, popupContext } from '@components/PopUp';
+import Dashboard from 'components/Dashboard';
+import LoadingScreen from 'components/Loading';
+import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
 import { fetchCredit } from 'misc/firebase';
 
 export default function editCredit(): JSX.Element {

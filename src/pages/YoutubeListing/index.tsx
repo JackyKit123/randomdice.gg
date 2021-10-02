@@ -6,11 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faUsers, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-regular-svg-icons';
 import Linkify from 'linkifyjs/react';
-import LoadingScreen from '@components/Loading';
+import LoadingScreen from 'components/Loading';
 import { fetchYouTube } from '@redux/Google API/fetchData';
 import useRootStateSelector from '@redux';
-import { popupContext } from '@components/PopUp';
-import PageWrapper from '@components/PageWrapper';
+import { popupContext } from 'components/PopUp';
+import PageWrapper from 'components/PageWrapper';
 import { Info, Patreon } from 'types/database';
 import { Client } from '@redux/Google API/Client/types';
 

@@ -3,12 +3,12 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
 import { useLocation } from 'react-router-dom';
-import GoogleAds from '@components/AdUnit';
+import GoogleAds from 'components/AdUnit';
 import useRootStateSelector from '@redux';
 
 import { fetchWiki } from 'misc/firebase';
 import { WikiContent } from 'types/database';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 
 export default function BattlefieldGuide(): JSX.Element {
   const { hash } = useLocation();

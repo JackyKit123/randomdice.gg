@@ -9,13 +9,13 @@ import {
   VictoryLabel,
   VictoryLegend,
 } from 'victory';
-import Dice from '@components/Dice';
+import Dice from 'components/Dice';
 import useRootStateSelector from '@redux';
 import { fetchDices } from 'misc/firebase';
 
-import GoogleAds from '@components/AdUnit';
+import GoogleAds from 'components/AdUnit';
 import findMaxCrit from 'misc/findMaxCrit';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 
 export default function SolarCalculator(): JSX.Element {
   const { dice, firebaseError } = useRootStateSelector('fetchFirebaseReducer');

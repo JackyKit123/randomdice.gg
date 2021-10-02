@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 
 import { useHistory, useParams } from 'react-router-dom';
-import ShareButton from '@components/ShareButton';
-import ConvertEmbed from '@components/YoutubeEmbed';
+import ShareButton from 'components/ShareButton';
+import ConvertEmbed from 'components/YoutubeEmbed';
 import { fetchWiki } from 'misc/firebase';
 import useReplaceAnchorWithHistory from 'misc/useReplaceAnchorWithHistory';
 
 import useRootStateSelector from '@redux';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 
 export default function BasicGuide(): JSX.Element {
   const history = useHistory();

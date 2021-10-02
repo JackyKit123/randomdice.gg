@@ -6,7 +6,7 @@ import useReplaceAnchorWithHistory from 'misc/useReplaceAnchorWithHistory';
 import { WikiContent } from 'types/database';
 import useRootStateSelector from '@redux';
 import { fetchWiki } from 'misc/firebase';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 
 export default function Intro({
   type,

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, Suspense, lazy } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Loading from '@components/Loading';
-import Main from '@components/Main';
+import Loading from 'components/Loading';
+import Main from 'components/Main';
 import { Menu } from './menu';
 
 const mapRouter = (

@@ -11,11 +11,11 @@ import {
 } from 'victory';
 import { Die } from 'types/database';
 
-import Dice from '@components/Dice';
+import Dice from 'components/Dice';
 import { fetchDices } from 'misc/firebase';
-import GoogleAds from '@components/AdUnit';
+import GoogleAds from 'components/AdUnit';
 import findMaxCrit from 'misc/findMaxCrit';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 import useRootStateSelector from '@redux';
 
 export default function DpsCalculator(): JSX.Element {

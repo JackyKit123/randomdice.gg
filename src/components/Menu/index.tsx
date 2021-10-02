@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { Menu as MenuProp } from 'router';
-import Dice from '@components/Dice';
+import Dice from 'components/Dice';
 
 export default function Menu(props: {
   menuList: MenuProp[];

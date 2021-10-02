@@ -6,14 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import useRootStateSelector from '@redux';
-import GoogleAds from '@components/AdUnit';
-import Dice from '@components/Dice';
-import { popupContext } from '@components/PopUp';
+import GoogleAds from 'components/AdUnit';
+import Dice from 'components/Dice';
+import { popupContext } from 'components/PopUp';
 import { fetchDecks, fetchDices } from 'misc/firebase';
 import { Die } from 'types/database';
-import ShareButtons from '@components/ShareButton';
-import PageWrapper from '@components/PageWrapper';
-import FilterForm, { useDeckFilter, FilterContext } from '@components/Filter';
+import ShareButtons from 'components/ShareButton';
+import PageWrapper from 'components/PageWrapper';
+import FilterForm, { useDeckFilter, FilterContext } from 'components/Filter';
 
 function AlternativesList({
   alternatives,

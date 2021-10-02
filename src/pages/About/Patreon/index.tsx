@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPatreon } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
 import { fetchPatreon } from 'misc/firebase';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 import useRootStateSelector from '@redux';
 
 export default function PatreonIntro(): JSX.Element {

@@ -6,9 +6,9 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
-import Dashboard from '@components/Dashboard';
-import LoadingScreen from '@components/Loading';
-import { ConfirmedSubmitNotification, popupContext } from '@components/PopUp';
+import Dashboard from 'components/Dashboard';
+import LoadingScreen from 'components/Loading';
+import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
 import { WikiContent } from 'types/database';
 import { fetchWiki } from 'misc/firebase';
 

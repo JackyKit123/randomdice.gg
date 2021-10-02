@@ -3,13 +3,13 @@ import { Helmet } from 'react-helmet';
 import firebase, { FirebaseError } from 'firebase/app';
 import { useLocation, Link } from 'react-router-dom';
 import { logout } from 'misc/firebase/auth';
-import Main from '@components/Main';
-import LoadingScreen from '@components/Loading';
+import Main from 'components/Main';
+import LoadingScreen from 'components/Loading';
 import NoMatch from 'pages/NoMatch';
 import { menu } from 'router';
 import useRootStateSelector from '@redux';
-import { popupContext } from '@components/PopUp';
-import { LoginPopup } from '@components/PopUp/components';
+import { popupContext } from 'components/PopUp';
+import { LoginPopup } from 'components/PopUp/components';
 
 export default function Dashboard(props: {
   className?: string;

@@ -14,16 +14,16 @@ import {
   faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
-import Menu from '@components/Menu';
+import Menu from 'components/Menu';
 import { loginDiscord, loginPatreon, logout } from 'misc/firebase/auth';
 import { menu } from 'router';
 import useRootStateSelector from '@redux';
-import { popupContext } from '@components/PopUp';
+import { popupContext } from 'components/PopUp';
 import { AuthActions } from '@redux/authReducer';
 import {
   ConfirmedSubmitNotification,
   LoginPopup,
-} from '@components/PopUp/components';
+} from 'components/PopUp/components';
 
 function ProfilePopup(): JSX.Element {
   const dispatch = useDispatch();

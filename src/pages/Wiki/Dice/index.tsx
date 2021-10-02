@@ -4,13 +4,13 @@ import { Link, useLocation } from 'react-router-dom';
 
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
-import Dice from '@components/Dice';
-import GoogleAds from '@components/AdUnit';
+import Dice from 'components/Dice';
+import GoogleAds from 'components/AdUnit';
 import useReplaceAnchorWithHistory from 'misc/useReplaceAnchorWithHistory';
 import useRootStateSelector from '@redux';
 
 import { fetchWiki } from 'misc/firebase';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 
 export default function DiceMechanic(): JSX.Element {
   const { hash } = useLocation();

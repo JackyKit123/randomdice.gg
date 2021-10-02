@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { combinations } from 'mathjs';
 import ReactHtmlParser from 'react-html-parser';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 import replaceTextWithImgTag from 'misc/replaceTextWithImg';
-import GoogleAds from '@components/AdUnit';
+import GoogleAds from 'components/AdUnit';
 
 export default function GoldCalculator(): JSX.Element {
   const [filter, setFilter] = useState({

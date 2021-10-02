@@ -14,10 +14,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Loading from '@components/Loading';
+import Loading from 'components/Loading';
 import { fetchPatreon } from 'misc/firebase';
-import { popupContext } from '@components/PopUp';
-import PageWrapper from '@components/PageWrapper';
+import { popupContext } from 'components/PopUp';
+import PageWrapper from 'components/PageWrapper';
 import useRootStateSelector from '@redux';
 import { Patreon } from 'types/database';
 

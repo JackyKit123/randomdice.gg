@@ -2,14 +2,14 @@ import React, { useRef } from 'react';
 
 import { useParams, useHistory } from 'react-router-dom';
 import useReplaceAnchorWithHistory from 'misc/useReplaceAnchorWithHistory';
-import Dice from '@components/Dice';
-import GoogleAds from '@components/AdUnit';
-import SMshare from '@components/ShareButton';
+import Dice from 'components/Dice';
+import GoogleAds from 'components/AdUnit';
+import SMshare from 'components/ShareButton';
 import useRootStateSelector from '@redux';
 
 import { fetchDecksGuide, fetchDices } from 'misc/firebase';
-import ConvertEmbed from '@components/YoutubeEmbed';
-import PageWrapper from '@components/PageWrapper';
+import ConvertEmbed from 'components/YoutubeEmbed';
+import PageWrapper from 'components/PageWrapper';
 
 export default function DeckGuideMenu(): JSX.Element | null {
   const history = useHistory();

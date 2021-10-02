@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 
 import { Link } from 'react-router-dom';
-import Dice from '@components/Dice';
+import Dice from 'components/Dice';
 import useRootStateSelector from '@redux';
 
 import { fetchDecksGuide, fetchDices } from 'misc/firebase';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 
 export default function DeckGuideMenu(): JSX.Element {
   const {

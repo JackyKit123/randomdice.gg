@@ -8,14 +8,14 @@ import {
   faCheck,
   faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import Dashboard from '@components/Dashboard';
-import LoadingScreen from '@components/Loading';
-import Dice from '@components/Dice';
-import { ConfirmedSubmitNotification, popupContext } from '@components/PopUp';
+import Dashboard from 'components/Dashboard';
+import LoadingScreen from 'components/Loading';
+import Dice from 'components/Dice';
+import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
 import { fetchDecks } from 'misc/firebase';
 import { Battlefield, Deck, DeckGuides, DeckList, Die } from 'types/database';
 import useRootStateSelector from '@redux';
-import FilterForm, { FilterContext, useDeckFilter } from '@components/Filter';
+import FilterForm, { FilterContext, useDeckFilter } from 'components/Filter';
 import AddDeckPopup from './AddDeckPopup';
 
 function DeckRow({

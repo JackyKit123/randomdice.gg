@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Dice from '@components/Dice';
+import Dice from 'components/Dice';
 import useRootStateSelector from '@redux';
 import { DeckList, DiceList, Die } from 'types/database';
 import { FilterContext } from './context';

@@ -2,13 +2,13 @@ import React, { useRef } from 'react';
 
 import ReactHtmlParser from 'react-html-parser';
 import { sanitize } from 'dompurify';
-import Menu from '@components/Menu';
+import Menu from 'components/Menu';
 import { menu } from 'router';
 import useReplaceAnchorWithHistory from 'misc/useReplaceAnchorWithHistory';
 import useRootStateSelector from '@redux';
-import ConvertEmbed from '@components/YoutubeEmbed';
+import ConvertEmbed from 'components/YoutubeEmbed';
 import { navDiscord } from 'misc/customGaEvent';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 
 export default function Homepage(): JSX.Element {
   const { news, firebaseError } = useRootStateSelector('fetchFirebaseReducer');

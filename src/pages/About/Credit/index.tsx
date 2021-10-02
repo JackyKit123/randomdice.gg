@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchCredit } from 'misc/firebase';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 import useRootStateSelector from '@redux';
 
 export default function Credit(): JSX.Element {

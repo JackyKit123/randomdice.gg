@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import useRootStateSelector from '@redux';
 
 import { fetchWiki } from 'misc/firebase';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 
 export default function BasicGuideMenu(): JSX.Element {
   const { wiki, firebaseError } = useRootStateSelector('fetchFirebaseReducer');

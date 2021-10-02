@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Dice from '@components/Dice';
+import Dice from 'components/Dice';
 import { fetchDices } from 'misc/firebase';
 
 import findMaxCrit from 'misc/findMaxCrit';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 import useRootStateSelector from '@redux';
 
 export default function GearCalculator(): JSX.Element {

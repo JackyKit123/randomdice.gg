@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import useRootStateSelector from '@redux';
 import { fetchDiscordCommands } from 'misc/firebase';
 
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 
 export default function discordBot(): JSX.Element {
   const { 'discord_bot/help': commands, firebaseError } = useRootStateSelector(

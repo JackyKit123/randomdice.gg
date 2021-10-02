@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Dice from '@components/Dice';
+import Dice from 'components/Dice';
 import { fetchDices } from 'misc/firebase';
-import GoogleAds from '@components/AdUnit';
-import PageWrapper from '@components/PageWrapper';
+import GoogleAds from 'components/AdUnit';
+import PageWrapper from 'components/PageWrapper';
 import useRootStateSelector from '@redux';
 
 export default function DiceStat(): JSX.Element {

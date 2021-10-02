@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Helmet } from 'react-helmet';
 import { useHistory } from 'react-router-dom';
-import Dice from '@components/Dice';
-import PageWrapper from '@components/PageWrapper';
+import Dice from 'components/Dice';
+import PageWrapper from 'components/PageWrapper';
 
 export default function NoMatch(props: {
   title?: string;

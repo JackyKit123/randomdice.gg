@@ -1,6 +1,6 @@
-import Loading from '@components/Loading';
-import Main from '@components/Main';
-import Error from '@components/Error';
+import Loading from 'components/Loading';
+import Main from 'components/Main';
+import Error from 'components/Error';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation } from 'react-router-dom';

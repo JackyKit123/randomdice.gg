@@ -5,9 +5,9 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import firebase from 'firebase/app';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import Dashboard from '@components/Dashboard';
-import LoadingScreen from '@components/Loading';
-import { ConfirmedSubmitNotification, popupContext } from '@components/PopUp';
+import Dashboard from 'components/Dashboard';
+import LoadingScreen from 'components/Loading';
+import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
 import MyUploadAdapter from 'misc/ckeditorUploadAdapter';
 import { fetchNews } from 'misc/firebase';
 

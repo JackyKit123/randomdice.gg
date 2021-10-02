@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import * as ga from 'misc/customGaEvent';
-import { popupContext } from '@components/PopUp';
+import { popupContext } from 'components/PopUp';
 
 function CopiedNotification(): JSX.Element {
   return (

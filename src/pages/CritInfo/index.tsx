@@ -12,12 +12,12 @@ import {
 import * as math from 'mathjs';
 import firebase from 'firebase/app';
 import useRootStateSelector from '@redux';
-import ShareButtons from '@components/ShareButton';
+import ShareButtons from 'components/ShareButton';
 import findMaxCrit from 'misc/findMaxCrit';
 import { fetchCrit, fetchDices } from 'misc/firebase';
-import PageWrapper from '@components/PageWrapper';
-import { LoginPopup } from '@components/PopUp/components';
-import { popupContext } from '@components/PopUp';
+import PageWrapper from 'components/PageWrapper';
+import { LoginPopup } from 'components/PopUp/components';
+import { popupContext } from 'components/PopUp';
 
 export default function critDataCollection(): JSX.Element {
   const dispatch = useDispatch();

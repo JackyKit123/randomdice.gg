@@ -9,11 +9,11 @@ import {
   VictoryLabel,
   VictoryLegend,
 } from 'victory';
-import Dice from '@components/Dice';
-import GoogleAds from '@components/AdUnit';
+import Dice from 'components/Dice';
+import GoogleAds from 'components/AdUnit';
 import { fetchDices } from 'misc/firebase';
 import findMaxCrit from 'misc/findMaxCrit';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 import useRootStateSelector from '@redux';
 import { Die } from 'types/database';
 

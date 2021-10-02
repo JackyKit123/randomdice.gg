@@ -13,11 +13,11 @@ import {
   faArchive,
   faBoxOpen,
 } from '@fortawesome/free-solid-svg-icons';
-import Dashboard from '@components/Dashboard';
-import LoadingScreen from '@components/Loading';
-import Dice from '@components/Dice';
+import Dashboard from 'components/Dashboard';
+import LoadingScreen from 'components/Loading';
+import Dice from 'components/Dice';
 import useRootStateSelector from '@redux';
-import { ConfirmedSubmitNotification, popupContext } from '@components/PopUp';
+import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
 import { fetchDecksGuide } from 'misc/firebase';
 import { DeckGuide, DeckGuides } from 'types/database';
 

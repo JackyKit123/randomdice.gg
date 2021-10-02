@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
-import Header from '@components/Header';
-import Footer from '@components/Footer';
-import Main from '@components/Main';
-import ErrorDisplay from '@components/Error';
+import Header from 'components/Header';
+import Footer from 'components/Footer';
+import Main from 'components/Main';
+import ErrorDisplay from 'components/Error';
 import mapRouter from 'router';
 import * as ga from 'misc/customGaEvent';
 import loadGAPI from '@redux/Google API/init';
 import fetchFirebase from 'misc/firebase';
 import { authStateDispatch } from 'misc/firebase/auth';
 import { menu } from 'router/menu';
-import ToTop from '@components/ToTop';
+import ToTop from 'components/ToTop';
 import { ErrorBoundary } from 'react-error-boundary';
 
 export default function App(): JSX.Element {

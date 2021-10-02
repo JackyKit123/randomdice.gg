@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PageWrapper from '@components/PageWrapper';
+import PageWrapper from 'components/PageWrapper';
 import { navDiscord } from 'misc/customGaEvent';
 
 export default function CommunityListing(): JSX.Element {

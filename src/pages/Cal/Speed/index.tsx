@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import Dice from '@components/Dice';
+import Dice from 'components/Dice';
 import useRootStateSelector from '@redux';
 import { fetchDices } from 'misc/firebase';
 
-import GoogleAds from '@components/AdUnit';
-import PageWrapper from '@components/PageWrapper';
+import GoogleAds from 'components/AdUnit';
+import PageWrapper from 'components/PageWrapper';
 
 export default function SpeedCalculator(): JSX.Element {
   const { dice, firebaseError } = useRootStateSelector('fetchFirebaseReducer');
