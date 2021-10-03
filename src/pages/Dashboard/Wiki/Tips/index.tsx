@@ -6,7 +6,6 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'components/Dashboard';
-import LoadingScreen from 'components/Loading';
 import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
 import { Guide } from 'types/database';
 import { fetchWiki } from 'misc/firebase';
@@ -18,7 +17,7 @@ export default function editGuides(): JSX.Element {
   const selectRef = useRef(null as null | HTMLSelectElement);
   const database = firebase.database();
   const dbRef = database.ref('/wiki/tips');
-  const [guides, setGuides] = useState<Guide[]>();
+  const [guides, setGuides] = useState<Guide[]>([]);
 
   const initialState = {
     id: -1,
@@ -31,14 +30,6 @@ export default function editGuides(): JSX.Element {
   useEffect(() => {
     dbRef.once('value').then(snapshot => setGuides(snapshot.val()));
   }, []);
-
-  if (!guides) {
-    return (
-      <Dashboard>
-        <LoadingScreen />
-      </Dashboard>
-    );
-  }
 
   const emptyTitle = activeEdit.title.length <= 0;
   const invalidTitleChar = /(;|\/|\?|:|@|=|&)/.test(activeEdit.title);
@@ -83,7 +74,7 @@ export default function editGuides(): JSX.Element {
   };
 
   return (
-    <Dashboard className='guide'>
+    <Dashboard className='guide' isDataReady={!!guides.length}>
       <h3>Update Guide Information</h3>
       <label htmlFor='select-guides'>
         Select A Guide:

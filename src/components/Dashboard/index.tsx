@@ -11,14 +11,20 @@ import useRootStateSelector from '@redux';
 import { popupContext } from 'components/PopUp';
 import { LoginPopup } from 'components/PopUp/components';
 
-export default function Dashboard(props: {
+interface Props {
   className?: string;
   children?: ReactNode;
-}): JSX.Element {
+  isDataReady?: boolean;
+}
+
+export default function Dashboard({
+  className,
+  children,
+  isDataReady = true,
+}: Props): JSX.Element {
   const location = useLocation();
   const { openPopup } = useContext(popupContext);
   const database = firebase.database();
-  const { className, children } = props;
   const { auth, userData, error } = useRootStateSelector('authReducer');
   const [authorized, setAuthorized] = useState<'loading' | boolean>('loading');
   const [sessionExpired, setSessionExpired] = useState(false);
@@ -101,14 +107,18 @@ export default function Dashboard(props: {
               )}
           </nav>
           <hr className='divisor' />
-          {children || (
-            <>
-              <h3>Dashboard</h3>
-              <p>
-                This is the homepage of the dashboard, click on any item above
-                in the navigation menu to begin editing.
-              </p>
-            </>
+          {!isDataReady ? (
+            <LoadingScreen />
+          ) : (
+            children || (
+              <>
+                <h3>Dashboard</h3>
+                <p>
+                  This is the homepage of the dashboard, click on any item above
+                  in the navigation menu to begin editing.
+                </p>
+              </>
+            )
           )}
         </div>
       </div>
@@ -121,3 +131,4 @@ export { default as Dropdown } from './Input/Dropdown';
 export { default as NumberInput } from './Input/NumberInput';
 export { default as SubmitButton } from './Input/SubmitButton';
 export { default as Image } from './Input/Image';
+export { default as Selector } from './Selector';

@@ -1,111 +1,56 @@
-import React, { useState, useEffect, Fragment, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import firebase from 'firebase/app';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import Dashboard from 'components/Dashboard';
-import LoadingScreen from 'components/Loading';
-import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
-import MyUploadAdapter from 'misc/ckeditorUploadAdapter';
+import Dashboard, { SubmitButton, TextInput } from 'components/Dashboard';
 import { fetchNews } from 'misc/firebase';
 
 export default function editPatchNote(): JSX.Element {
   const dispatch = useDispatch();
-  const { openPopup } = useContext(popupContext);
   const database = firebase.database();
   const dbRef = database.ref('/news');
-  const [content, setContent] = useState<{ game: string; website: string }>();
+  const [gameNews, setGameNews] = useState('');
+  const [websiteNews, setWebsiteNews] = useState('');
 
   useEffect(() => {
-    dbRef.once('value').then(snapshot => setContent(snapshot.val()));
+    dbRef.once('value').then(snapshot => {
+      const data = snapshot.val();
+      setGameNews(data.game);
+      setWebsiteNews(data.website);
+    });
   }, []);
-
-  if (!content) {
-    return (
-      <Dashboard>
-        <LoadingScreen />
-      </Dashboard>
-    );
-  }
 
   const handleSubmit = async (): Promise<void> => {
     await Promise.all([
       database.ref('/last_updated/news').set(new Date().toISOString()),
-      dbRef.set(content),
+      dbRef.set({
+        game: gameNews,
+        website: websiteNews,
+      }),
     ]);
     fetchNews(dispatch);
   };
 
   return (
-    <Dashboard className='news'>
-      {['Game', 'Website'].map(type => (
-        <Fragment key={type}>
-          <h3>Update {type} News</h3>
-          <CKEditor
-            editor={ClassicEditor}
-            onInit={(editor: {
-              plugins: {
-                get(
-                  arg: 'FileRepository'
-                ): {
-                  createUploadAdapter(loader: { file: Promise<File> }): void;
-                };
-              };
-            }): void => {
-              // eslint-disable-next-line no-param-reassign
-              editor.plugins.get('FileRepository').createUploadAdapter = (
-                loader
-              ): MyUploadAdapter => new MyUploadAdapter(loader);
-            }}
-            data={content[type.toLowerCase() as 'game' | 'website']}
-            config={{
-              removePlugins: ['heading'],
-              toolbar: [
-                'undo',
-                'redo',
-                '|',
-                'bold',
-                'italic',
-                'numberedList',
-                'bulletedList',
-                '|',
-                'link',
-                '|',
-                'imageUpload',
-                'imageTextAlternative',
-                'mediaembed',
-              ],
-            }}
-            onBlur={(
-              _: unknown,
-              editor: {
-                getData: () => string;
-              }
-            ): void => {
-              content[
-                type.toLowerCase() as 'game' | 'website'
-              ] = editor.getData();
-              setContent({ ...content });
-            }}
-          />
-        </Fragment>
-      ))}
-      <button
-        type='button'
-        className='submit'
-        onClick={(): void => {
-          openPopup(
-            <ConfirmedSubmitNotification
-              promptText='Are you sure to want to update the news?'
-              confirmHandler={handleSubmit}
-            />
-          );
-        }}
-      >
-        <FontAwesomeIcon icon={faCheck} />
-      </button>
+    <Dashboard className='news' isDataReady={!!gameNews && !!websiteNews}>
+      <h3>Update Game News</h3>
+      <TextInput
+        type='rich-text'
+        value={gameNews}
+        setValue={setGameNews}
+        toolbar='with-image'
+      />
+      <h3>Update Website News</h3>
+      <TextInput
+        type='rich-text'
+        value={websiteNews}
+        setValue={setWebsiteNews}
+        toolbar='with-image'
+      />
+      <SubmitButton
+        submitPromptText='Are you sure to want to update the news?'
+        onSubmit={handleSubmit}
+        type='submit'
+      />
     </Dashboard>
   );
 }

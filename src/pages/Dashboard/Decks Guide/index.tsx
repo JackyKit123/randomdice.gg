@@ -14,7 +14,6 @@ import {
   faBoxOpen,
 } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'components/Dashboard';
-import LoadingScreen from 'components/Loading';
 import Dice from 'components/Dice';
 import useRootStateSelector from '@redux';
 import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
@@ -36,16 +35,8 @@ export default function updateDecksGuide(): JSX.Element {
     dbRef.once('value').then(snapshot => setGuides(snapshot.val()));
   }, []);
 
-  if (!guides?.length || !dice?.length || !wiki?.battlefield?.length) {
-    return (
-      <Dashboard>
-        <LoadingScreen />
-      </Dashboard>
-    );
-  }
-
   const confirmSubmit = async (): Promise<void> => {
-    if (activeEdit) {
+    if (activeEdit && guides) {
       const clone = [...guides];
       clone.sort((a, b) => b.id - a.id);
       const i = clone.findIndex(guide => guide.id === activeEdit?.id);
@@ -65,10 +56,10 @@ export default function updateDecksGuide(): JSX.Element {
   };
 
   const confirmArchive = async (): Promise<void> => {
-    const archiveTarget = guides.find(guide => guide.id === guideToArchive);
+    const archiveTarget = guides?.find(guide => guide.id === guideToArchive);
     if (archiveTarget) {
       archiveTarget.archived = !archiveTarget.archived;
-      const newGuides = guides.map(guide =>
+      const newGuides = guides?.map(guide =>
         guide.id === guideToArchive ? archiveTarget : guide
       );
       setGuideToArchive(undefined);
@@ -82,7 +73,12 @@ export default function updateDecksGuide(): JSX.Element {
   };
 
   return (
-    <Dashboard className='decks-guide'>
+    <Dashboard
+      className='decks-guide'
+      isDataReady={
+        !!(guides?.length && dice?.length && wiki?.battlefield?.length)
+      }
+    >
       <p>
         To update a written deck guide, press the pencil button to navigate into
         the editor screen, once the you can update the deck of the guide. Once
@@ -297,6 +293,7 @@ export default function updateDecksGuide(): JSX.Element {
             <button
               type='button'
               onClick={(): void => {
+                if (!guides) return;
                 const clone = [...guides];
                 clone.sort((a, b) => a.id - b.id);
                 let newId = clone.findIndex((guide, i) => guide.id !== i);
@@ -319,7 +316,7 @@ export default function updateDecksGuide(): JSX.Element {
           </label>
           <table className='guide-menu'>
             <tbody>
-              {guides.map((guide, i) => (
+              {guides?.map((guide, i) => (
                 <tr key={guide.id} className={guide.archived ? 'archived' : ''}>
                   <td>{guide.type}</td>
                   <td>

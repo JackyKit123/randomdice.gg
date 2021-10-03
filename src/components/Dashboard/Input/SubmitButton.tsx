@@ -22,12 +22,15 @@ export default function SubmitButton({
     <button
       disabled={isInvalid}
       type='button'
-      className='delete'
+      className={type}
       onClick={(): void =>
         openPopup(
           <ConfirmedSubmitNotification
             promptText={submitPromptText}
-            confirmHandler={onSubmit}
+            confirmHandler={async (): Promise<void> => {
+              if (type === 'submit' && isInvalid) return;
+              await onSubmit();
+            }}
           />
         )
       }

@@ -1,304 +1,136 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 import firebase from 'firebase/app';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
-import Dashboard from 'components/Dashboard';
-import LoadingScreen from 'components/Loading';
-import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
-import { WikiContent } from 'types/database';
+import Dashboard, {
+  Image,
+  Selector,
+  SubmitButton,
+  TextInput,
+} from 'components/Dashboard';
+import { Box, WikiContent } from 'types/database';
 import { fetchWiki } from 'misc/firebase';
+import updateImage, { deleteImage } from 'misc/firebase/updateImage';
 
 export default function editBox(): JSX.Element {
   const dispatch = useDispatch();
-  const { openPopup } = useContext(popupContext);
   const selectRef = useRef(null as null | HTMLSelectElement);
   const database = firebase.database();
   const dbRef = database.ref('/wiki/box');
-  const storage = firebase.storage();
-  const [boxInfo, setBoxInfo] = useState<WikiContent['box']>();
-
-  const initialState = {
-    id: -1,
-    name: '',
-    img: '',
-    from: '',
-    contain: '',
-  };
-  const [activeEdit, setActiveEdit] = useState({ ...initialState });
+  const [boxInfo, setBoxInfo] = useState<WikiContent['box']>([]);
+  const [boxId, setBoxId] = useState<Box['id']>();
+  const [boxName, setBoxName] = useState<Box['name']>('');
+  const [boxImg, setBoxImg] = useState<Box['name']>('');
+  const [boxFrom, setBoxFrom] = useState<Box['name']>('');
+  const [boxContain, setBoxContain] = useState<Box['name']>('');
 
   useEffect(() => {
     dbRef.once('value').then(snapshot => setBoxInfo(snapshot.val()));
   }, []);
 
-  if (!boxInfo) {
-    return (
-      <Dashboard>
-        <LoadingScreen />
-      </Dashboard>
-    );
-  }
-
-  const invalidName = activeEdit.name.length <= 0;
-  const invalidImg = activeEdit.img.length <= 0;
-  const invalidFrom = activeEdit.from.length <= 0;
-  const invalidContain = activeEdit.contain.length <= 0;
+  const invalidName = boxName.length <= 0;
+  const invalidImg = boxImg.length <= 0;
+  const invalidFrom = boxFrom.length <= 0;
+  const invalidContain = boxContain.length <= 0;
   const invalidInput =
     invalidName || invalidImg || invalidFrom || invalidContain;
 
-  const handleSubmit = async (): Promise<void> => {
-    if (activeEdit) {
-      const originalBox = boxInfo.find(box => box.id === activeEdit.id);
-      if (/^data:image\/([a-zA-Z]*);base64,/.test(activeEdit.img)) {
-        if (originalBox) {
-          await storage.ref(`Box Images/${originalBox.name}`).delete();
-        }
-        await storage
-          .ref(`Box Images/${activeEdit.name}`)
-          .putString(activeEdit.img, 'data_url', {
-            cacheControl: 'public,max-age=31536000',
-          });
-        const newUrl = await storage
-          .ref(`Box Images/${activeEdit.name}`)
-          .getDownloadURL();
-        activeEdit.img = newUrl;
-      } else if (originalBox && originalBox.name !== activeEdit.name) {
-        const reader = new FileReader();
-        const img = (
-          await axios.get(originalBox.img, {
-            responseType: 'blob',
-          })
-        ).data;
-        await storage.ref(`Box Images/${originalBox.name}`).delete();
-        reader.readAsDataURL(img);
-        reader.onloadend = async (): Promise<void> => {
-          const base64 = reader.result as string;
-          await storage
-            .ref(`Box Images/${activeEdit.name}`)
-            .putString(base64, 'data_url', {
-              cacheControl: 'public,max-age=31536000',
-            });
-          const newUrl = await storage
-            .ref(`Box Images/${activeEdit.name}`)
-            .getDownloadURL();
-          activeEdit.img = newUrl;
-          const result = boxInfo.map(box => {
-            if (box.id === activeEdit.id) {
-              return activeEdit;
-            }
-            return box;
-          });
-          database.ref('/last_updated/wiki').set(new Date().toISOString());
-          dbRef.set(result);
-          fetchWiki(dispatch);
-          setBoxInfo(result);
-          setActiveEdit({ ...initialState });
-          if (selectRef.current) {
-            selectRef.current.value = '?';
-          }
-        };
-      }
-      let updateBox = false;
-      const result = boxInfo.map(box => {
-        if (box.id === activeEdit.id) {
-          updateBox = true;
-          return activeEdit;
-        }
-        return box;
-      });
-      if (!updateBox) {
-        result.push(activeEdit);
-      }
-      database.ref('/last_updated/wiki').set(new Date().toISOString());
-      dbRef.set(result);
-      fetchWiki(dispatch);
-      setBoxInfo(result);
-      setActiveEdit({ ...initialState });
-      if (selectRef.current) {
-        selectRef.current.value = '?';
-      }
+  const update = async (boxList: Box[]): Promise<void> => {
+    await Promise.all([
+      database.ref('/last_updated/wiki').set(new Date().toISOString()),
+      dbRef.set(boxList),
+    ]);
+    fetchWiki(dispatch);
+    setBoxInfo(boxList);
+    setBoxId(-1);
+    if (selectRef.current) {
+      selectRef.current.value = '?';
     }
   };
 
+  const handleSubmit = async (): Promise<void> => {
+    if (typeof boxId === 'undefined' || invalidInput) return;
+    const oldBox = boxInfo.find(box => box.id === boxId);
+    const box: Box = {
+      id: boxId,
+      img: await updateImage(boxImg, 'Box Images', boxName, oldBox?.name),
+      name: boxName,
+      from: boxFrom,
+      contain: boxContain,
+    };
+    const result = [
+      ...(boxInfo.some(b => b.id === boxId) ? [box] : []),
+      ...boxInfo,
+    ];
+    await update(result);
+  };
+
   const handleDelete = async (): Promise<void> => {
-    const originalBox = boxInfo.find(box => box.id === activeEdit.id);
-    if (originalBox) {
-      await storage.ref(`Box Images/${originalBox.name}`).delete();
-      const result = boxInfo.filter(box => box.id !== activeEdit.id);
-      database.ref('/last_updated/wiki').set(new Date().toISOString());
-      dbRef.set(result);
-      fetchWiki(dispatch);
-      setBoxInfo(result);
-      setActiveEdit({ ...initialState });
-      if (selectRef.current) {
-        selectRef.current.value = '?';
-      }
+    const oldBox = boxInfo.find(box => box.id === boxId);
+    if (oldBox) {
+      await deleteImage('Box Images', oldBox.name);
+      const result = boxInfo.filter(box => box.id !== boxId);
+      await update(result);
     }
   };
 
   return (
-    <Dashboard className='box'>
+    <Dashboard className='box' isDataReady={!!boxInfo.length}>
       <h3>Update Box Information</h3>
-      <label htmlFor='select-box'>
-        Select A Box:
-        <select
-          ref={selectRef}
-          name='select-box'
-          onChange={(evt): void => {
-            if (evt.target.value === '?') {
-              setActiveEdit({ ...initialState });
-            } else {
-              const foundBox = boxInfo.find(
-                box => box.name === evt.target.value
-              );
-              if (foundBox) {
-                setActiveEdit({ ...foundBox });
-              } else {
-                boxInfo.sort((a, b) => (a.id < b.id ? -1 : 1));
-                let newId = boxInfo.findIndex((box, i) => box.id !== i);
-                if (newId === -1) {
-                  newId = boxInfo.length;
-                }
-                const clone = { ...initialState };
-                clone.id = newId;
-                setActiveEdit(clone);
-              }
+      <Selector
+        name='Box'
+        selectRef={selectRef}
+        data={boxInfo}
+        setActive={setBoxId}
+      />
+      {typeof boxId !== 'undefined' && (
+        <form onSubmit={(evt): void => evt.preventDefault()}>
+          <TextInput
+            name='Name'
+            isInvalid={invalidName}
+            invalidWarningText='Box Name should not be empty.'
+            value={boxName}
+            setValue={setBoxName}
+          />
+          <Image
+            src={boxImg}
+            setSrc={setBoxImg}
+            alt='box'
+            isInvalid={invalidImg}
+          />
+          <TextInput
+            name='Obtained from'
+            isInvalid={invalidFrom}
+            invalidWarningText='Box origin should not be empty.'
+            value={boxFrom}
+            setValue={setBoxFrom}
+          />
+          <TextInput
+            name='Contains'
+            isInvalid={invalidContain}
+            invalidWarningText='You can use the following text and convert the text to image.'
+            value={boxContain}
+            setValue={setBoxContain}
+          />
+          <span>
+            You can use the following text and convert the text to image.
+          </span>
+          <span>
+            {
+              '{Gold} {Diamond} {Common Dice} {Rare Dice} {Unique Dice} {Legendary Dice} {Dice:Dice Name}'
             }
-          }}
-        >
-          <option>?</option>
-          {boxInfo.map(box => (
-            <option key={box.name}>{box.name}</option>
-          ))}
-          <option>Add a New Box</option>
-        </select>
-      </label>
-      {activeEdit.id < 0 ? null : (
-        <>
-          <form onSubmit={(evt): void => evt.preventDefault()}>
-            <label htmlFor='box-name'>
-              Name:
-              <input
-                key={`box${activeEdit.id}-name`}
-                className={invalidName ? 'invalid' : ''}
-                defaultValue={activeEdit.name}
-                type='textbox'
-                onChange={(evt): void => {
-                  activeEdit.name = evt.target.value;
-                  setActiveEdit({ ...activeEdit });
-                }}
-              />
-            </label>
-            {invalidName ? (
-              <div className='invalid-warning'>
-                Box Name should not be empty.
-              </div>
-            ) : null}
-            <label htmlFor='box-image'>
-              Image:
-              <img src={activeEdit.img} alt='box' />
-              <input
-                key={`box${activeEdit.id}-img`}
-                type='file'
-                alt='box'
-                accept='image/*'
-                className={invalidImg ? 'invalid' : ''}
-                onChange={(evt): void => {
-                  if (evt.target.files) {
-                    const reader = new FileReader();
-                    const file = evt.target.files[0];
-                    reader.readAsDataURL(file);
-                    reader.onloadend = (): void => {
-                      activeEdit.img = reader.result as string;
-                      setActiveEdit({ ...activeEdit });
-                    };
-                  }
-                }}
-              />
-            </label>
-            {invalidImg ? (
-              <div className='invalid-warning'>
-                Please upload a box image in format.
-              </div>
-            ) : null}
-            <label htmlFor='box-from'>
-              Obtained from:
-              <input
-                key={`box${activeEdit.id}-from`}
-                className={invalidFrom ? 'invalid' : ''}
-                defaultValue={activeEdit.from}
-                type='textbox'
-                onChange={(evt): void => {
-                  activeEdit.from = evt.target.value;
-                  setActiveEdit({ ...activeEdit });
-                }}
-              />
-            </label>
-            {invalidFrom ? (
-              <div className='invalid-warning'>
-                Box origin should not be empty.
-              </div>
-            ) : null}
-            <label htmlFor='box-contain'>
-              Contains:
-              <input
-                key={`box${activeEdit.id}-contain`}
-                className={invalidContain ? 'invalid' : ''}
-                defaultValue={activeEdit.contain}
-                type='textbox'
-                onChange={(evt): void => {
-                  activeEdit.contain = evt.target.value;
-                  setActiveEdit({ ...activeEdit });
-                }}
-              />
-            </label>
-            <span>
-              You can use the following text and convert the text to image.
-            </span>
-            <span>
-              {
-                '{Gold} {Diamond} {Common Dice} {Rare Dice} {Unique Dice} {Legendary Dice} {Dice:Dice Name}'
-              }
-            </span>
-            {invalidContain ? (
-              <div className='invalid-warning'>
-                Box Reward should not be empty.
-              </div>
-            ) : null}
-          </form>
+          </span>
           <hr className='divisor' />
-          <button
-            disabled={invalidInput}
-            type='button'
-            className='submit'
-            onClick={(): void =>
-              openPopup(
-                <ConfirmedSubmitNotification
-                  promptText='Are you sure to want to update the information for this box?'
-                  confirmHandler={handleSubmit}
-                />
-              )
-            }
-          >
-            <FontAwesomeIcon icon={faCheck} />
-          </button>
-          <button
-            disabled={invalidInput}
-            type='button'
-            className='submit'
-            onClick={(): void =>
-              openPopup(
-                <ConfirmedSubmitNotification
-                  promptText='Are you sure to want to delete this box?'
-                  confirmHandler={handleDelete}
-                />
-              )
-            }
-          >
-            <FontAwesomeIcon icon={faTrashAlt} />
-          </button>
-        </>
+          <SubmitButton
+            type='submit'
+            submitPromptText='Are you sure to want to update the information for this box?'
+            onSubmit={handleSubmit}
+          />
+          <SubmitButton
+            type='delete'
+            submitPromptText='Are you sure to want to delete this box?'
+            onSubmit={handleDelete}
+          />
+        </form>
       )}
     </Dashboard>
   );

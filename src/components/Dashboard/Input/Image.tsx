@@ -1,11 +1,11 @@
 import InvalidWarning from 'components/InvalidWarning';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
 interface Props {
   isInvalid?: boolean;
   src: string;
   alt: string;
-  setSrc: Dispatch<SetStateAction<string>>;
+  setSrc: (src: string) => void;
   extraImageProps?: Record<string, unknown>;
 }
 

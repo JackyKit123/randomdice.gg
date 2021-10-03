@@ -5,10 +5,10 @@ import Dashboard, {
   Dropdown,
   Image,
   NumberInput,
+  Selector,
   SubmitButton,
   TextInput,
 } from 'components/Dashboard';
-import LoadingScreen from 'components/Loading';
 import { Die, DiceList } from 'types/database';
 import { fetchDices } from 'misc/firebase';
 import updateImage, { deleteImage } from 'misc/firebase/updateImage';
@@ -65,56 +65,43 @@ export default function editDice(): JSX.Element {
 
   useEffect(() => {
     const die = diceList.find(d => d.id === dieId);
-    if (!die) return;
-    setDieName(die.name);
-    setDieType(die.type);
-    setDieDescription(die.desc);
-    setDieDetail(die.detail);
-    setDieImgSrc(die.img);
-    setDieTarget(die.target);
-    setDieRarity(die.rarity);
-    setDieAtk(die.atk);
-    setDieSpd(die.spd);
-    setDieEff1(die.eff1);
-    setDieEff2(die.eff2);
-    setDieNameEff1(die.nameEff1);
-    setDieNameEff2(die.nameEff2);
-    setDieUnitEff1(die.unitEff1);
-    setDieUnitEff2(die.unitEff2);
-    setDieCupAtk(die.cupAtk);
-    setDieCupSpd(die.cupSpd);
-    setDieCupEff1(die.cupEff1);
-    setDieCupEff2(die.cupEff2);
-    setDiePupAtk(die.pupAtk);
-    setDiePupSpd(die.pupSpd);
-    setDiePupEff1(die.pupEff1);
-    setDiePupEff2(die.pupEff2);
-    setArenaValueType(die.arenaValue.type);
-    setArenaValueAssist(die.arenaValue.assist);
-    setArenaValueDps(die.arenaValue.dps);
-    setArenaValueSlow(die.arenaValue.slow);
-    setArenaValueValue(die.arenaValue.value);
+    setDieName(die?.name ?? '');
+    setDieType(die?.type ?? 'Physical');
+    setDieDescription(die?.desc ?? '');
+    setDieDetail(die?.detail ?? '');
+    setDieImgSrc(die?.img ?? '');
+    setDieTarget(die?.target ?? '-');
+    setDieRarity(die?.rarity ?? 'Common');
+    setDieAtk(die?.atk ?? 0);
+    setDieSpd(die?.spd ?? 0);
+    setDieEff1(die?.eff1 ?? 0);
+    setDieEff2(die?.eff2 ?? 0);
+    setDieNameEff1(die?.nameEff1 ?? '');
+    setDieNameEff2(die?.nameEff2 ?? '');
+    setDieUnitEff1(die?.unitEff1 ?? '');
+    setDieUnitEff2(die?.unitEff2 ?? '');
+    setDieCupAtk(die?.cupAtk ?? 0);
+    setDieCupSpd(die?.cupSpd ?? 0);
+    setDieCupEff1(die?.cupEff1 ?? 0);
+    setDieCupEff2(die?.cupEff2 ?? 0);
+    setDiePupAtk(die?.pupAtk ?? 0);
+    setDiePupSpd(die?.pupSpd ?? 0);
+    setDiePupEff1(die?.pupEff1 ?? 0);
+    setDiePupEff2(die?.pupEff2 ?? 0);
+    setArenaValueType(die?.arenaValue.type ?? 'Main Dps');
+    setArenaValueAssist(die?.arenaValue.assist ?? 0);
+    setArenaValueDps(die?.arenaValue.dps ?? 0);
+    setArenaValueSlow(die?.arenaValue.slow ?? 0);
+    setArenaValueValue(die?.arenaValue.value ?? 0);
   }, [dieId]);
 
-  if (!diceList.length) {
-    return (
-      <Dashboard>
-        <LoadingScreen />
-      </Dashboard>
-    );
-  }
-
-  const invalidName = !!dieName && /\bdice\b/i.test(dieName);
-  const invalidImg = !!dieImgSrc && dieImgSrc.length <= 0;
-  const invalidDescription = !!dieDescription && dieDescription.length <= 0;
-  const invalidArenaDps =
-    !!arenaValueDps && (arenaValueDps < 0 || arenaValueDps > 10);
-  const invalidArenaSlow =
-    !!arenaValueSlow && (arenaValueSlow < 0 || arenaValueSlow > 10);
-  const invalidArenaAssist =
-    !!arenaValueAssist && (arenaValueAssist < 0 || arenaValueAssist > 10);
-  const invalidArenaValue =
-    !!arenaValueValue && (arenaValueValue < 0 || arenaValueValue > 10);
+  const invalidName = /\bdice\b/i.test(dieName);
+  const invalidImg = dieImgSrc.length <= 0;
+  const invalidDescription = dieDescription.length <= 0;
+  const invalidArenaDps = arenaValueDps < 0 || arenaValueDps > 10;
+  const invalidArenaSlow = arenaValueSlow < 0 || arenaValueSlow > 10;
+  const invalidArenaAssist = arenaValueAssist < 0 || arenaValueAssist > 10;
+  const invalidArenaValue = arenaValueValue < 0 || arenaValueValue > 10;
   const invalidInput =
     invalidImg ||
     invalidName ||
@@ -125,8 +112,10 @@ export default function editDice(): JSX.Element {
     invalidArenaValue;
 
   const update = async (newDiceList: DiceList): Promise<void> => {
-    database.ref('/last_updated/dice').set(new Date().toISOString());
-    dbRef.set(newDiceList);
+    await Promise.all([
+      database.ref('/last_updated/dice').set(new Date().toISOString()),
+      dbRef.set(newDiceList),
+    ]);
     fetchDices(dispatch);
     setDiceList(newDiceList);
     setDieId(undefined);
@@ -136,24 +125,25 @@ export default function editDice(): JSX.Element {
   };
 
   const handleSubmit = async (): Promise<void> => {
-    if (!dieId) return;
+    if (typeof dieId === 'undefined' || invalidInput) return;
+    const oldDie = diceList.find(d => d.id === dieId);
     const die: Die = {
       id: dieId,
-      name: dieName,
+      name: dieName.trim(),
       type: dieType,
-      desc: dieDescription,
-      detail: dieDetail,
-      img: dieImgSrc,
+      desc: dieDescription.trim(),
+      detail: dieDetail.trim(),
+      img: await updateImage(dieImgSrc, 'Dice Images', dieName, oldDie?.name),
       target: dieTarget,
       rarity: dieRarity,
       atk: dieAtk,
       spd: dieSpd,
       eff1: dieEff1,
       eff2: dieEff2,
-      nameEff1: dieNameEff1,
-      nameEff2: dieNameEff2,
-      unitEff1: dieUnitEff1,
-      unitEff2: dieUnitEff2,
+      nameEff1: dieNameEff1.trim(),
+      nameEff2: dieNameEff2.trim(),
+      unitEff1: dieUnitEff1.trim(),
+      unitEff2: dieUnitEff2.trim(),
       cupAtk: dieCupAtk,
       cupSpd: dieCupSpd,
       cupEff1: dieCupEff1,
@@ -170,14 +160,6 @@ export default function editDice(): JSX.Element {
         value: arenaValueValue,
       },
     };
-
-    const oldDie = diceList.find(d => d.id === die?.id);
-    die.img = await updateImage(
-      dieImgSrc,
-      'Dice Images',
-      dieName,
-      oldDie?.name
-    );
 
     const result = [
       ...(diceList.some(d => d.id === die.id) ? [die] : []),
@@ -210,221 +192,189 @@ export default function editDice(): JSX.Element {
   };
 
   return (
-    <Dashboard className='dice'>
-      <label htmlFor='select-dice'>
-        Select A Dice:
-        <select
-          ref={selectRef}
-          name='select-dice'
-          onChange={(evt): void => {
-            if (evt.target.value === '?') {
-              setDieId(undefined);
-            } else {
-              const foundDice = diceList.find(
-                dice => dice.id === Number(evt.target.value)
-              );
-              if (foundDice) {
-                setDieId(foundDice.id);
-              } else {
-                diceList.sort((a, b) => (a.id < b.id ? -1 : 1));
-                let newId = diceList.findIndex((dice, i) => dice.id !== i);
-                if (newId === -1) {
-                  newId = diceList.length;
-                }
-                setDieId(newId);
-              }
-            }
-          }}
-        >
-          <option>?</option>
-          {diceList.map(dice => (
-            <option key={dice.id} value={dice.id} id={dice.id.toString()}>
-              {dice.name}
-            </option>
-          ))}
-          <option>Add a New Dice</option>
-        </select>
-      </label>
+    <Dashboard className='dice' isDataReady={!!diceList.length}>
+      <Selector
+        name='Dice'
+        selectRef={selectRef}
+        data={diceList}
+        setActive={setDieId}
+      />
       <hr className='divisor' />
       {typeof dieId !== 'undefined' && (
-        <>
-          <form onSubmit={(evt): void => evt.preventDefault()}>
-            <h3>Dice Stat</h3>
-            <Image
-              src={dieImgSrc}
-              setSrc={setDieImgSrc}
-              alt='dice'
-              isInvalid={invalidImg}
-              extraImageProps={{ 'data-dice-rarity': dieRarity }}
-            />
-            <TextInput
-              name='Name'
-              isInvalid={invalidName}
-              invalidWarningText="Do not include the word 'dice' in the name"
-              value={dieName}
-              setValue={setDieName}
-            />
-            <Dropdown
-              name='Type'
-              value={dieType}
-              setValue={setDieType}
-              options={['Physical', 'Magic', 'Buff', 'Merge', 'Transform']}
-            />
-            <TextInput
-              name='Description'
-              isInvalid={invalidDescription}
-              invalidWarningText='Dice Description should be not empty.'
-              value={dieDescription}
-              setValue={setDieDescription}
-            />
-            <Dropdown
-              name='Target'
-              value={dieTarget}
-              setValue={setDieTarget}
-              options={['-', 'Front', 'Strongest', 'Random', 'Weakest']}
-            />
-            <Dropdown
-              name='Rarity'
-              value={dieRarity}
-              setValue={setDieRarity}
-              options={['Common', 'Rare', 'Unique', 'Legendary']}
-            />
-            <NumberInput
-              name='Base Attack'
-              value={dieAtk}
-              setValue={setDieAtk}
-            />
-            <NumberInput
-              name='Class Up Attack'
-              value={dieCupAtk}
-              setValue={setDieCupAtk}
-            />
-            <NumberInput
-              name='Level Up Attack'
-              value={diePupAtk}
-              setValue={setDiePupAtk}
-            />
-            <NumberInput
-              name='Base Attack Speed'
-              value={dieSpd}
-              setValue={setDieSpd}
-            />
-            <NumberInput
-              name='Class Up Attack Speed'
-              value={dieCupSpd}
-              setValue={setDieCupSpd}
-            />
-            <NumberInput
-              name='Level Up Attack Speed'
-              value={diePupSpd}
-              setValue={setDiePupSpd}
-            />
-            <TextInput
-              name='Effect 1 Name'
-              value={dieNameEff1}
-              setValue={setDieNameEff1}
-            />
-            <TextInput
-              name='Effect 1 Unit'
-              value={dieUnitEff1}
-              setValue={setDieUnitEff1}
-            />
-            <NumberInput
-              name='Base Effect 1 Value'
-              value={dieEff1}
-              setValue={setDieEff1}
-            />
-            <NumberInput
-              name='Class Up Effect 1 Value'
-              value={dieCupEff1}
-              setValue={setDieCupEff1}
-            />
-            <NumberInput
-              name='Level Up Effect 1 Value'
-              value={diePupEff1}
-              setValue={setDiePupEff1}
-            />
-            <TextInput
-              name='Effect 2 Name'
-              value={dieNameEff2}
-              setValue={setDieNameEff2}
-            />
-            <TextInput
-              name='Effect 2 Unit'
-              value={dieUnitEff2}
-              setValue={setDieUnitEff2}
-            />
-            <NumberInput
-              name='Base Effect 2 Value'
-              value={dieEff2}
-              setValue={setDieEff2}
-            />
-            <NumberInput
-              name='Class Up Effect 2 Value'
-              value={dieCupEff2}
-              setValue={setDieCupEff2}
-            />
-            <NumberInput
-              name='Level Up Effect 2 Value'
-              value={diePupEff2}
-              setValue={setDiePupEff2}
-            />
-            <hr className='divisor' />
-            <h3>Arena</h3>
-            <Dropdown
-              name='Value Type'
-              value={arenaValueType}
-              setValue={setArenaValueType}
-              options={['Main Dps', 'Assist Dps', 'Slow', 'Value']}
-            />
-            <NumberInput
-              name='DPS Value'
-              isInvalid={invalidArenaDps}
-              invalidWarningText='Value must be between 0-10.'
-              value={arenaValueDps}
-              setValue={setArenaValueDps}
-              min={0}
-              max={10}
-              step={1}
-            />
-            <NumberInput
-              name='Slow Value'
-              isInvalid={invalidArenaSlow}
-              invalidWarningText='Value must be between 0-10.'
-              value={arenaValueSlow}
-              setValue={setArenaValueSlow}
-              min={0}
-              max={10}
-              step={1}
-            />
-            <NumberInput
-              name='Assist Value'
-              isInvalid={invalidArenaAssist}
-              invalidWarningText='Value must be between 0-10.'
-              value={arenaValueAssist}
-              setValue={setArenaValueAssist}
-              min={0}
-              max={10}
-              step={1}
-            />
-            <NumberInput
-              name='Value / Buff Value'
-              isInvalid={invalidArenaValue}
-              invalidWarningText='Value must be between 0-10.'
-              value={arenaValueValue}
-              setValue={setArenaValueValue}
-              min={0}
-              max={10}
-              step={1}
-            />
-            <hr className='divisor' />
-            <h3>Detail Dice Mechanic</h3>
-            <TextInput
-              type='rich-text'
-              value={dieDetail}
-              setValue={setDieDetail}
-            />
-          </form>
+        <form onSubmit={(evt): void => evt.preventDefault()}>
+          <h3>Dice Stat</h3>
+          <Image
+            src={dieImgSrc}
+            setSrc={setDieImgSrc}
+            alt='dice'
+            isInvalid={invalidImg}
+            extraImageProps={{ 'data-dice-rarity': dieRarity }}
+          />
+          <TextInput
+            name='Name'
+            isInvalid={invalidName}
+            invalidWarningText="Do not include the word 'dice' in the name"
+            value={dieName}
+            setValue={setDieName}
+          />
+          <Dropdown
+            name='Type'
+            value={dieType}
+            setValue={setDieType}
+            options={['Physical', 'Magic', 'Buff', 'Merge', 'Transform']}
+          />
+          <TextInput
+            name='Description'
+            isInvalid={invalidDescription}
+            invalidWarningText='Dice Description should be not empty.'
+            value={dieDescription}
+            setValue={setDieDescription}
+          />
+          <Dropdown
+            name='Target'
+            value={dieTarget}
+            setValue={setDieTarget}
+            options={['-', 'Front', 'Strongest', 'Random', 'Weakest']}
+          />
+          <Dropdown
+            name='Rarity'
+            value={dieRarity}
+            setValue={setDieRarity}
+            options={['Common', 'Rare', 'Unique', 'Legendary']}
+          />
+          <NumberInput name='Base Attack' value={dieAtk} setValue={setDieAtk} />
+          <NumberInput
+            name='Class Up Attack'
+            value={dieCupAtk}
+            setValue={setDieCupAtk}
+          />
+          <NumberInput
+            name='Level Up Attack'
+            value={diePupAtk}
+            setValue={setDiePupAtk}
+          />
+          <NumberInput
+            name='Base Attack Speed'
+            value={dieSpd}
+            setValue={setDieSpd}
+          />
+          <NumberInput
+            name='Class Up Attack Speed'
+            value={dieCupSpd}
+            setValue={setDieCupSpd}
+          />
+          <NumberInput
+            name='Level Up Attack Speed'
+            value={diePupSpd}
+            setValue={setDiePupSpd}
+          />
+          <TextInput
+            name='Effect 1 Name'
+            value={dieNameEff1}
+            setValue={setDieNameEff1}
+          />
+          <TextInput
+            name='Effect 1 Unit'
+            value={dieUnitEff1}
+            setValue={setDieUnitEff1}
+          />
+          <NumberInput
+            name='Base Effect 1 Value'
+            value={dieEff1}
+            setValue={setDieEff1}
+          />
+          <NumberInput
+            name='Class Up Effect 1 Value'
+            value={dieCupEff1}
+            setValue={setDieCupEff1}
+          />
+          <NumberInput
+            name='Level Up Effect 1 Value'
+            value={diePupEff1}
+            setValue={setDiePupEff1}
+          />
+          <TextInput
+            name='Effect 2 Name'
+            value={dieNameEff2}
+            setValue={setDieNameEff2}
+          />
+          <TextInput
+            name='Effect 2 Unit'
+            value={dieUnitEff2}
+            setValue={setDieUnitEff2}
+          />
+          <NumberInput
+            name='Base Effect 2 Value'
+            value={dieEff2}
+            setValue={setDieEff2}
+          />
+          <NumberInput
+            name='Class Up Effect 2 Value'
+            value={dieCupEff2}
+            setValue={setDieCupEff2}
+          />
+          <NumberInput
+            name='Level Up Effect 2 Value'
+            value={diePupEff2}
+            setValue={setDiePupEff2}
+          />
+          <hr className='divisor' />
+          <h3>Arena</h3>
+          <Dropdown
+            name='Value Type'
+            value={arenaValueType}
+            setValue={setArenaValueType}
+            options={['Main Dps', 'Assist Dps', 'Slow', 'Value']}
+          />
+          <NumberInput
+            name='DPS Value'
+            isInvalid={invalidArenaDps}
+            invalidWarningText='Value must be between 0-10.'
+            value={arenaValueDps}
+            setValue={setArenaValueDps}
+            min={0}
+            max={10}
+            step={1}
+          />
+          <NumberInput
+            name='Slow Value'
+            isInvalid={invalidArenaSlow}
+            invalidWarningText='Value must be between 0-10.'
+            value={arenaValueSlow}
+            setValue={setArenaValueSlow}
+            min={0}
+            max={10}
+            step={1}
+          />
+          <NumberInput
+            name='Assist Value'
+            isInvalid={invalidArenaAssist}
+            invalidWarningText='Value must be between 0-10.'
+            value={arenaValueAssist}
+            setValue={setArenaValueAssist}
+            min={0}
+            max={10}
+            step={1}
+          />
+          <NumberInput
+            name='Value / Buff Value'
+            isInvalid={invalidArenaValue}
+            invalidWarningText='Value must be between 0-10.'
+            value={arenaValueValue}
+            setValue={setArenaValueValue}
+            min={0}
+            max={10}
+            step={1}
+          />
+          <hr className='divisor' />
+          <h3>Detail Dice Mechanic</h3>
+          <TextInput
+            type='rich-text'
+            value={dieDetail}
+            setValue={setDieDetail}
+            toolbar='basic'
+          />
+
           <hr className='divisor' />
           <SubmitButton
             submitPromptText='Are you sure to want to update the information for this dice?'
@@ -438,7 +388,7 @@ export default function editDice(): JSX.Element {
             isInvalid={invalidInput}
             type='delete'
           />
-        </>
+        </form>
       )}
     </Dashboard>
   );

@@ -146,14 +146,23 @@ export interface Guide {
   content: string;
 }
 
+export interface Boss {
+  id: number;
+  name: string;
+  img: string;
+  desc: string;
+}
+
+export interface Box {
+  id: number;
+  name: string;
+  img: string;
+  from: string;
+  contain: string;
+}
+
 export interface WikiContent {
-  box: {
-    id: number;
-    name: string;
-    img: string;
-    from: string;
-    contain: string;
-  }[];
+  box: Box[];
   intro: {
     PvP: string;
     'Co-op': string;
@@ -161,12 +170,7 @@ export interface WikiContent {
     Arena: string;
     Store: string;
   };
-  boss: {
-    id: number;
-    name: string;
-    img: string;
-    desc: string;
-  }[];
+  boss: Boss[];
   tips: Guide[];
   battlefield: Battlefield[];
 }

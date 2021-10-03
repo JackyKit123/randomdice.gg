@@ -9,7 +9,6 @@ import {
   faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from 'components/Dashboard';
-import LoadingScreen from 'components/Loading';
 import Dice from 'components/Dice';
 import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
 import { fetchDecks } from 'misc/firebase';
@@ -156,14 +155,6 @@ export default function updateDeck(): JSX.Element {
     setDeckToDelete({ id: -1, dice: [[]] as Die['id'][][] });
   };
 
-  if (!dice?.length || !decks?.length || !wiki?.battlefield?.length) {
-    return (
-      <Dashboard>
-        <LoadingScreen />
-      </Dashboard>
-    );
-  }
-
   const invalidRatingPrompt = (
     <>
       <h3>Error</h3>
@@ -176,7 +167,12 @@ export default function updateDeck(): JSX.Element {
   );
 
   return (
-    <Dashboard className='deck'>
+    <Dashboard
+      className='deck'
+      isDataReady={
+        !!(dice?.length && decks?.length && wiki?.battlefield?.length)
+      }
+    >
       <h3>Update Deck List</h3>
       <p>
         To Edit the decks, press the edit button, once you are done editing,

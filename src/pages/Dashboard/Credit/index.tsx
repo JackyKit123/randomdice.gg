@@ -1,27 +1,24 @@
-import React, { useState, useEffect, Fragment, useContext } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCheck,
-  faPlusCircle,
-  faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { People, Credit } from 'types/database';
-import Dashboard from 'components/Dashboard';
-import LoadingScreen from 'components/Loading';
-import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
+import Dashboard, {
+  Image,
+  SubmitButton,
+  TextInput,
+} from 'components/Dashboard';
 import { fetchCredit } from 'misc/firebase';
+import updateImage, { deleteImage } from 'misc/firebase/updateImage';
+import InvalidWarning from 'components/InvalidWarning';
 
 export default function editCredit(): JSX.Element {
-  const { openPopup } = useContext(popupContext);
   const dispatch = useDispatch();
   const database = firebase.database();
-  const storage = firebase.storage();
   const dbRef = database.ref('/credit');
-  const [initialCredit, setInitialCredit] = useState<Credit>();
-  const [credit, setCredit] = useState<Credit>();
+  const [initialCredit, setInitialCredit] = useState<Credit>([]);
+  const [credit, setCredit] = useState<Credit>([]);
 
   useEffect(() => {
     dbRef.once('value').then(snapshot => {
@@ -30,39 +27,29 @@ export default function editCredit(): JSX.Element {
     });
   }, []);
 
-  if (!credit || !initialCredit) {
-    return (
-      <Dashboard>
-        <LoadingScreen />
-      </Dashboard>
-    );
-  }
-
   const edited = (categoryId: number, personId: number): People | undefined =>
     initialCredit
       .find(category => category.id === categoryId)
       ?.people.find(person => person.id === personId);
 
-  const creditChanged = (): boolean => {
-    return !credit.every(
-      category =>
-        category.people.every(person => {
-          const personEdited = edited(category.id, person.id);
-          if (!personEdited) {
-            return false;
-          }
-          return (
-            person.img === personEdited.img &&
-            person.name === personEdited.name &&
-            person.role === personEdited.role
-          );
-        }) &&
-        category.people.length ===
-          initialCredit.find(
-            initialCategory => category.id === initialCategory.id
-          )?.people.length
-    );
-  };
+  const creditChanged = !credit.every(
+    category =>
+      category.people.every(person => {
+        const personEdited = edited(category.id, person.id);
+        if (!personEdited) {
+          return false;
+        }
+        return (
+          person.img === personEdited.img &&
+          person.name === personEdited.name &&
+          person.role === personEdited.role
+        );
+      }) &&
+      category.people.length ===
+        initialCredit.find(
+          initialCategory => category.id === initialCategory.id
+        )?.people.length
+  );
 
   const addPerson = (categoryId: number): void => {
     const category = credit.find(crd => crd.id === categoryId);
@@ -107,186 +94,111 @@ export default function editCredit(): JSX.Element {
   };
 
   const handleSubmit = async (): Promise<void> => {
-    initialCredit.forEach(category =>
-      category.people.forEach(person => {
-        if (
-          credit
-            .find(categoryUpdated => categoryUpdated.id === category.id)
-            ?.people.find(personUpdated => personUpdated.id === person.id) ===
-          undefined
-        ) {
-          storage.ref(`People Images/${person.name}`).delete();
-        }
-      })
+    await Promise.all(
+      initialCredit.map(category =>
+        Promise.all(
+          category.people.map(async person => {
+            if (
+              credit
+                .find(categoryUpdated => categoryUpdated.id === category.id)
+                ?.people.find(
+                  personUpdated => personUpdated.id === person.id
+                ) === undefined
+            )
+              await deleteImage('People Images', person.name);
+          })
+        )
+      )
     );
     await Promise.all(
-      credit.map(async category => {
-        await Promise.all(
+      credit.map(async category =>
+        Promise.all(
           category.people.map(async person => {
             const personEdited = edited(category.id, person.id);
-            if (/^data:image\/([a-zA-Z]*);base64,/.test(person.img)) {
-              if (personEdited) {
-                await storage
-                  .ref(`People Images/${personEdited.name}`)
-                  .delete();
-              }
-              await storage
-                .ref(`People Images/${person.name}`)
-                .putString(person.img, 'data_url', {
-                  cacheControl: 'public,max-age=31536000',
-                });
-              const newUrl = await storage
-                .ref(`People Images/${person.name}`)
-                .getDownloadURL();
-              // eslint-disable-next-line no-param-reassign
-              person.img = newUrl;
-            } else if (personEdited && person.name !== personEdited.name) {
-              const img = (
-                await axios.get(person.img, {
-                  responseType: 'blob',
-                })
-              ).data;
-              await storage.ref(`People Images/${personEdited.name}`).delete();
-              const reader = new FileReader();
-              reader.readAsDataURL(img);
-              reader.onloadend = async (): Promise<void> => {
-                const base64 = reader.result as string;
-                await storage
-                  .ref(`People Images/${person.name}`)
-                  .putString(base64, 'data_url', {
-                    cacheControl: 'public,max-age=31536000',
-                  });
-                const newUrl = await storage
-                  .ref(`People Images/${person.name}`)
-                  .getDownloadURL();
-                // eslint-disable-next-line no-param-reassign
-                person.img = newUrl;
-              };
-            }
+            // eslint-disable-next-line no-param-reassign
+            person.img = await updateImage(
+              person.img,
+              'People Images',
+              person.name,
+              personEdited?.name
+            );
           })
-        );
-      })
+        )
+      )
     );
-    database.ref('/last_updated/credit').set(new Date().toISOString());
-    database.ref('/credit').set(credit);
+    await Promise.all([
+      database.ref('/last_updated/credit').set(new Date().toISOString()),
+      database.ref('/credit').set(credit),
+    ]);
     setInitialCredit(credit);
     fetchCredit(dispatch);
   };
 
   return (
-    <Dashboard className='credit'>
+    <Dashboard
+      className='credit'
+      isDataReady={!!(credit.length && initialCredit.length)}
+    >
       <h3>Update Credit</h3>
       {credit.map(category => (
         <Fragment key={category.id}>
           <h4>{category.category}</h4>
           {category.people.map(person => (
             <form key={person.id}>
-              <label htmlFor='person-name'>
-                Name:
-                <input
-                  className={
-                    invalidInput(category.id, person.id, 'name')
-                      ? 'invalid'
-                      : ''
-                  }
-                  defaultValue={person.name}
-                  type='textbox'
-                  onChange={(evt): void => {
-                    // eslint-disable-next-line no-param-reassign
-                    person.name = evt.target.value;
-                    setCredit([...credit]);
-                  }}
-                />
-              </label>
-              {invalidInput(category.id, person.id, 'name') ? (
-                <span className='invalid-warning'>
-                  Name should not be empty.
-                </span>
-              ) : null}
-              <label htmlFor='person-role'>
-                Role:
-                <input
-                  className={
-                    invalidInput(category.id, person.id, 'role')
-                      ? 'invalid'
-                      : ''
-                  }
-                  defaultValue={person.role}
-                  type='textbox'
-                  onChange={(evt): void => {
-                    // eslint-disable-next-line no-param-reassign
-                    person.role = evt.target.value;
-                    setCredit([...credit]);
-                  }}
-                />
-              </label>
-              {invalidInput(category.id, person.id, 'role') ? (
-                <span className='invalid-warning'>
-                  Role should not be empty.
-                </span>
-              ) : null}
-              <label htmlFor='person-img'>
-                Image:
-                <figure>
-                  <img src={person.img} alt={person.name} />
-                </figure>
-                <input
-                  className={
-                    invalidInput(category.id, person.id, 'img') ? 'invalid' : ''
-                  }
-                  type='file'
-                  alt='boss'
-                  accept='image/*'
-                  onChange={(evt): void => {
-                    if (evt.target.files) {
-                      const reader = new FileReader();
-                      const file = evt.target.files[0];
-                      reader.readAsDataURL(file);
-                      reader.onloadend = (): void => {
-                        // eslint-disable-next-line no-param-reassign
-                        person.img = reader.result as string;
-                        setCredit([...credit]);
-                      };
-                    }
-                  }}
-                />
-              </label>
-              {invalidInput(category.id, person.id, 'img') ? (
-                <span className='invalid-warning'>
-                  Please upload a square image in png format.
-                </span>
-              ) : null}
-              <button
-                type='button'
-                onClick={(): void => deletePerson(category.id, person.id)}
-              >
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </button>
+              <TextInput
+                name='Name'
+                isInvalid={invalidInput(category.id, person.id, 'name')}
+                invalidWarningText='Name should not be empty.'
+                value={person.name}
+                setValue={(value): void => {
+                  // eslint-disable-next-line no-param-reassign
+                  person.name = value;
+                  setCredit([...credit]);
+                }}
+              />
+              <TextInput
+                name='Role'
+                isInvalid={invalidInput(category.id, person.id, 'role')}
+                invalidWarningText='Name should not be empty.'
+                value={person.role}
+                setValue={(value): void => {
+                  // eslint-disable-next-line no-param-reassign
+                  person.role = value;
+                  setCredit([...credit]);
+                }}
+              />
+              <Image
+                src={person.img}
+                alt={person.name}
+                isInvalid={invalidInput(category.id, person.id, 'img')}
+                setSrc={(src): void => {
+                  // eslint-disable-next-line no-param-reassign
+                  person.img = src;
+                  setCredit([...credit]);
+                }}
+              />
+              <SubmitButton
+                submitPromptText='Are you sure you want to delete this person from credit?'
+                onSubmit={(): void => deletePerson(category.id, person.id)}
+                type='delete'
+              />
             </form>
           ))}
           <button type='button' onClick={(): void => addPerson(category.id)}>
             <FontAwesomeIcon icon={faPlusCircle} />
           </button>
-          {creditChanged() ? (
-            <span className='invalid-warning'>You have unsaved changes.</span>
-          ) : null}
+          <InvalidWarning
+            isInvalid={creditChanged}
+            invalidWarningText='You have unsaved changes.'
+          />
         </Fragment>
       ))}
       <hr className='divisor' />
-      <button
-        type='button'
-        className='submit'
-        onClick={(): void =>
-          openPopup(
-            <ConfirmedSubmitNotification
-              promptText='Are you sure to want to update the credit?'
-              confirmHandler={handleSubmit}
-            />
-          )
-        }
-      >
-        <FontAwesomeIcon icon={faCheck} />
-      </button>
+      <SubmitButton
+        submitPromptText='Are you sure you want to update the credit?'
+        onSubmit={handleSubmit}
+        type='submit'
+      />
     </Dashboard>
   );
 }
