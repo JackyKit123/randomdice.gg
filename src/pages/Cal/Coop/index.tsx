@@ -4,19 +4,22 @@ import ReactHtmlParser from 'react-html-parser';
 import PageWrapper from 'components/PageWrapper';
 import replaceTextWithImgTag from 'misc/replaceTextWithImg';
 import GoogleAds from 'components/AdUnit';
+import useRootStateSelector from '@redux';
 
 export default function GoldCalculator(): JSX.Element {
-  const [filter, setFilter] = useState({
-    class: 12,
-    currentGold: 0,
-    targetGold: 0,
-    currentDiamond: 0,
-    targetDiamond: 0,
-    luck: 0.5,
-    legendary: 0,
-    targetWave: 30,
-    custom: false,
-  });
+  const {
+    wiki: { boss },
+  } = useRootStateSelector('fetchFirebaseReducer');
+  const [myClass, setClass] = useState(12);
+  const [currentGold, setCurrentGold] = useState(0);
+  const [targetGold, setTargetGold] = useState(0);
+  const [currentDiamond, setCurrentDiamond] = useState(0);
+  const [targetDiamond, setTargetDiamond] = useState(0);
+  const [luck, setLuck] = useState(0);
+  const [legendary, setLegendary] = useState(0);
+  const [targetWave, setTargetWave] = useState(30);
+  const [custom, setCustom] = useState(false);
+
   const cardBoxGoldPerClass = new Map([
     [1, 320],
     [2, 432],
@@ -41,24 +44,20 @@ export default function GoldCalculator(): JSX.Element {
   ]);
 
   const coopWaveMode = new Map([
-    [30, 'Gear'],
-    [45, 'Solar Timer'],
-    [60, 'Generic Wave 60 Run'],
+    [60, 'Mirror YinYang'],
+    [70, 'Pantheon YinYang'],
   ]);
 
   const isInvalidCurrentGold =
-    !Number.isInteger(filter.currentGold) || filter.currentGold < 0;
+    !Number.isInteger(currentGold) || currentGold < 0;
   const isInvalidCurrentDiamond =
-    !Number.isInteger(filter.currentDiamond) || filter.currentDiamond < 0;
-  const isInvalidTargetGold =
-    !Number.isInteger(filter.targetGold) || filter.targetGold < 0;
+    !Number.isInteger(currentDiamond) || currentDiamond < 0;
+  const isInvalidTargetGold = !Number.isInteger(targetGold) || targetGold < 0;
   const isInvalidTargetDiamond =
-    !Number.isInteger(filter.targetDiamond) || filter.targetDiamond < 0;
-  const invalidGoldRelationship = filter.currentGold > filter.targetGold;
-  const invalidDiamondRelationship =
-    filter.currentDiamond > filter.targetDiamond;
-  const isInvalidWave =
-    !Number.isInteger(filter.targetWave) || filter.targetWave <= 0;
+    !Number.isInteger(targetDiamond) || targetDiamond < 0;
+  const invalidGoldRelationship = currentGold > targetGold;
+  const invalidDiamondRelationship = currentDiamond > targetDiamond;
+  const isInvalidWave = !Number.isInteger(targetWave) || targetWave <= 0;
   const invalidInput =
     isInvalidCurrentGold ||
     isInvalidTargetGold ||
@@ -68,25 +67,26 @@ export default function GoldCalculator(): JSX.Element {
     invalidDiamondRelationship ||
     isInvalidWave;
 
-  const minutesPerRun = filter.targetWave / 3.333 + 1;
+  const earlyWaveCount = (boss.length - 1) * 5;
+  const minutesPerRun = targetWave / 3.333 + 1;
   const cardsPerRun =
-    filter.targetWave > 35
-      ? Math.floor((filter.targetWave - 35) / 2) * 8 +
-        ((filter.targetWave - 1) % 2) * 2 +
-        56
-      : Math.floor(filter.targetWave / 5) * 8 +
-        (filter.targetWave % 5) +
-        Number(filter.targetWave % 5 >= 3);
-  const goldPerBox = cardBoxGoldPerClass.get(filter.class) || 0;
+    targetWave > earlyWaveCount
+      ? Math.floor((targetWave - earlyWaveCount) / 2) * 8 +
+        ((targetWave - 1) % 2) * 2 +
+        (earlyWaveCount / 5) * 8
+      : Math.floor(targetWave / 5) * 8 +
+        (targetWave % 5) +
+        Number(targetWave % 5 >= 3);
+  const goldPerBox = cardBoxGoldPerClass.get(myClass) || 0;
   const diamondPerBox = 3;
-  const goldAim = filter.targetGold - filter.currentGold;
-  const diamondAim = filter.targetDiamond - filter.currentDiamond;
-  const boxNeededForLegendary = (box = filter.legendary): number => {
+  const goldAim = targetGold - currentGold;
+  const diamondAim = targetDiamond - currentDiamond;
+  const boxNeededForLegendary = (box = legendary): number => {
     let probAccumulator = 0;
-    for (let n = 0; n < filter.legendary; n += 1) {
+    for (let n = 0; n < legendary; n += 1) {
       probAccumulator += combinations(box, n) * 0.01 ** n * 0.99 ** (box - n);
     }
-    if (probAccumulator > filter.luck) {
+    if (probAccumulator > luck) {
       return boxNeededForLegendary(box + 1);
     }
     return box;
@@ -154,10 +154,9 @@ export default function GoldCalculator(): JSX.Element {
             <select
               name='class'
               defaultValue={12}
-              onChange={(evt: React.ChangeEvent<HTMLSelectElement>): void => {
-                filter.class = Number(evt.target.value);
-                setFilter({ ...filter });
-              }}
+              onChange={(evt: React.ChangeEvent<HTMLSelectElement>): void =>
+                setClass(Number(evt.target.value))
+              }
             >
               <option>1</option>
               <option>2</option>
@@ -192,11 +191,9 @@ export default function GoldCalculator(): JSX.Element {
               className={
                 isInvalidCurrentGold || invalidGoldRelationship ? 'invalid' : ''
               }
-              onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
-                const val = Number(evt.target.value);
-                filter.currentGold = val;
-                setFilter({ ...filter });
-              }}
+              onChange={(evt: React.ChangeEvent<HTMLInputElement>): void =>
+                setCurrentGold(Number(evt.target.value))
+              }
             />
           </label>
           <label htmlFor='target-gold'>
@@ -210,11 +207,9 @@ export default function GoldCalculator(): JSX.Element {
               className={
                 isInvalidTargetGold || invalidGoldRelationship ? 'invalid' : ''
               }
-              onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
-                const val = Number(evt.target.value);
-                filter.targetGold = val;
-                setFilter({ ...filter });
-              }}
+              onChange={(evt: React.ChangeEvent<HTMLInputElement>): void =>
+                setTargetGold(Number(evt.target.value))
+              }
             />
           </label>
           {isInvalidCurrentGold || isInvalidTargetGold ? (
@@ -249,11 +244,9 @@ export default function GoldCalculator(): JSX.Element {
                   ? 'invalid'
                   : ''
               }
-              onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
-                const val = Number(evt.target.value);
-                filter.currentDiamond = val;
-                setFilter({ ...filter });
-              }}
+              onChange={(evt: React.ChangeEvent<HTMLInputElement>): void =>
+                setCurrentDiamond(Number(evt.target.value))
+              }
             />
           </label>
           <label htmlFor='target-diamond'>
@@ -269,11 +262,9 @@ export default function GoldCalculator(): JSX.Element {
                   ? 'invalid'
                   : ''
               }
-              onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
-                const val = Number(evt.target.value);
-                filter.targetDiamond = val;
-                setFilter({ ...filter });
-              }}
+              onChange={(evt: React.ChangeEvent<HTMLInputElement>): void =>
+                setTargetDiamond(Number(evt.target.value))
+              }
             />
           </label>
           {isInvalidCurrentDiamond || isInvalidTargetDiamond ? (
@@ -300,11 +291,9 @@ export default function GoldCalculator(): JSX.Element {
             <select
               name='target-legendary'
               defaultValue={0}
-              onChange={(evt: React.ChangeEvent<HTMLSelectElement>): void => {
-                const val = Number(evt.target.value);
-                filter.legendary = val;
-                setFilter({ ...filter });
-              }}
+              onChange={(evt: React.ChangeEvent<HTMLSelectElement>): void =>
+                setLegendary(Number(evt.target.value))
+              }
             >
               <option>0</option>
               <option>1</option>
@@ -324,11 +313,9 @@ export default function GoldCalculator(): JSX.Element {
             <select
               name='legendary-luck'
               defaultValue={0.5}
-              onChange={(evt: React.ChangeEvent<HTMLSelectElement>): void => {
-                const val = Number(evt.target.value);
-                filter.luck = val;
-                setFilter({ ...filter });
-              }}
+              onChange={(evt: React.ChangeEvent<HTMLSelectElement>): void =>
+                setLuck(Number(evt.target.value))
+              }
             >
               <option value={0.1}>Very Unlucky (10%)</option>
               <option value={0.3}>Unlucky (30%)</option>
@@ -344,12 +331,9 @@ export default function GoldCalculator(): JSX.Element {
             <select
               name='wave'
               onChange={(evt: React.ChangeEvent<HTMLSelectElement>): void => {
-                filter.custom = evt.target.value === 'Custom';
-                if (!filter.custom) {
-                  const val = Number(evt.target.value);
-                  filter.targetWave = val;
-                }
-                setFilter({ ...filter });
+                const isCustom = evt.target.value === 'Custom';
+                setCustom(isCustom);
+                if (!isCustom) setTargetWave(Number(evt.target.value));
               }}
             >
               {Array.from(coopWaveMode.entries()).map(([wave, name]) => (
@@ -360,7 +344,7 @@ export default function GoldCalculator(): JSX.Element {
               ))}
               <option>Custom</option>
             </select>
-            {filter.custom ? (
+            {custom ? (
               <input
                 type='number'
                 min={1}
@@ -368,11 +352,9 @@ export default function GoldCalculator(): JSX.Element {
                 name='wave'
                 placeholder='Wave#'
                 className={isInvalidWave ? 'invalid' : ''}
-                onChange={(evt: React.ChangeEvent<HTMLInputElement>): void => {
-                  const val = Number(evt.target.value);
-                  filter.targetWave = val;
-                  setFilter({ ...filter });
-                }}
+                onChange={(evt: React.ChangeEvent<HTMLInputElement>): void =>
+                  setTargetWave(Number(evt.target.value))
+                }
               />
             ) : null}
           </label>
