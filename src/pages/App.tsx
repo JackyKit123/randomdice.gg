@@ -13,6 +13,10 @@ import { authStateDispatch } from 'misc/firebase/auth';
 import { menu } from 'router/menu';
 import ToTop from 'components/ToTop';
 import { ErrorBoundary } from 'react-error-boundary';
+import { Provider as FilterProvider } from 'components/Filter';
+import PopupProvider from 'components/PopUp';
+import Analytics from 'react-router-ga';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 export default function App(): JSX.Element {
   const dispatch = useDispatch();
@@ -32,23 +36,33 @@ export default function App(): JSX.Element {
         </Main>
       )}
     >
-      <Helmet>
-        <title>Random Dice</title>
-        <meta property='og:title' content='Random Dice Community Web' />
-        <meta
-          name='og:description'
-          content='A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.'
-        />
-        <meta name='author' content='JackyKit' />
-        <meta
-          name='description'
-          content='A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.'
-        />
-      </Helmet>
-      <Header />
-      {mapRouter(menu)}
-      <ToTop />
-      <Footer />
+      <Router>
+        <Analytics
+          id={process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID || ''}
+        >
+          <FilterProvider>
+            <PopupProvider>
+              <Helmet>
+                <title>Random Dice</title>
+                <meta property='og:title' content='Random Dice Community Web' />
+                <meta
+                  name='og:description'
+                  content='A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.'
+                />
+                <meta name='author' content='JackyKit' />
+                <meta
+                  name='description'
+                  content='A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, game tips and more. Created by the best players in the game community, with many useful resources to help you succeed in the game.'
+                />
+              </Helmet>
+              <Header />
+              {mapRouter(menu)}
+              <ToTop />
+              <Footer />
+            </PopupProvider>
+          </FilterProvider>
+        </Analytics>
+      </Router>
     </ErrorBoundary>
   );
 }
