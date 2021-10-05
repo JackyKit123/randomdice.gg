@@ -298,7 +298,10 @@ export default function DpsCalculator(): JSX.Element {
   return (
     <PageWrapper
       isContentReady={
-        !!(dice?.length && Object.values(data).every(d => d !== undefined))
+        !!(
+          dice?.length &&
+          Object.values(data).every(die => typeof die !== 'undefined')
+        )
       }
       error={firebaseError}
       retryFn={fetchDices}
