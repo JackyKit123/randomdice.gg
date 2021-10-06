@@ -27,13 +27,13 @@ export default function DeckGuideMenu(): JSX.Element | null {
   const guide = allGuides?.find(
     g => g.name.toLowerCase() === name.toLowerCase()
   );
-  if (!guide) {
+  if (allGuides.length && !guide) {
     history.push('/decks/guide');
     return <></>;
   }
   return (
     <PageWrapper
-      isContentReady={!!(dice.length && battlefield.length)}
+      isContentReady={!!(guide && dice.length && battlefield.length)}
       error={firebaseError}
       retryFn={(dispatch): void => {
         fetchDecksGuide(dispatch);
@@ -49,9 +49,9 @@ export default function DeckGuideMenu(): JSX.Element | null {
           </div>
         ) : null}
         <h3>
-          {guide.name} ({guide.type})
+          {guide?.name} ({guide?.type})
         </h3>
-        {guide.diceList.map(dicelist => (
+        {guide?.diceList.map(dicelist => (
           <div className='dice-container' key={`guide-${dicelist.join()}`}>
             {dicelist.map((die, i) => (
               <Dice
