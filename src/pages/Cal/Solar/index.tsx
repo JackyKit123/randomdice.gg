@@ -106,8 +106,8 @@ export default function SolarCalculator(): JSX.Element {
     diceData.crit.pupEff1 * (filter.critical.level - 1);
   const lunarCritBuff = filter.lunar.active ? filter.lunar.pip * 5 : 0;
 
-  const atkSpdMultiplier = Math.max(1 - lightBuff / 100, 0.01);
-  const lunarAtkSpdMultiplier = Math.max(1 - lunarSpdBuff / 100, 0.01);
+  const atkSpdMultiplier = Math.max(1 - lightBuff / 100, 0.025);
+  const lunarAtkSpdMultiplier = Math.max(1 - lunarSpdBuff / 100, 0.025);
   const basicAtkSpd = filter.solar.active ? 0.4 : diceData.solar.spd;
   const buffedAtkSpd = basicAtkSpd * atkSpdMultiplier;
   const lunarBuffedAtkSpd = basicAtkSpd * lunarAtkSpdMultiplier;
