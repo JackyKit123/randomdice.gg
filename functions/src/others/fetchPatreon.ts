@@ -9,142 +9,149 @@ const auth = app.auth();
 const database = app.database();
 
 interface Member {
-    id: string;
-    relationships: {
-        currently_entitled_tiers: {
-            data: { id: string }[];
-        };
-        user: {
-            data: {
-                id: string;
-            };
-        };
+  id: string;
+  relationships: {
+    currently_entitled_tiers: {
+      data: { id: string }[];
     };
+    user: {
+      data: {
+        id: string;
+      };
+    };
+  };
 }
 
 type PatreonProfile = {
-    id: string;
-    name: string;
-    img: string | undefined;
-    tier: number;
+  id: string;
+  name: string;
+  img: string | undefined;
+  tier: number;
 } & {
-    [uid: string]: object;
+  [uid: string]: object;
 };
 
 export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
-    const url = 'https://www.patreon.com/api/oauth2/v2';
-    const { access_token } = functions.config().patreon;
-    const headers = {
-        Authorization: `Bearer ${access_token}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-    };
+  const url = 'https://www.patreon.com/api/oauth2';
+  const refreshToken = (
+    await database.ref('/token_storage').once('value')
+  ).val();
 
-    const [memberData, campaignData] = (
-        await Promise.all([
-            axios.get(
-                `${url}/campaigns/4696297/members?include=currently_entitled_tiers,user`,
-                {
-                    headers,
-                }
-            ),
-            axios.get(`${url}/campaigns/4696297?include=tiers`, {
-                headers,
-            }),
-        ])
-    ).map(res => res.data);
+  const headers: { [key: string]: any } = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
 
-    const tierList = campaignData.included.map(
-        (tier: { id: string }) => tier.id
-    );
+  const {
+    data: { access_token },
+  } = await axios.post(
+    `${url}/token`,
+    `grant_type=refresh_token&refresh_token=${refreshToken}&client_id=mcsy6u4brWts2SHqlVuV4jo_BVLO3Ynfa0HJsnYcozdqkOYv-lWhLz1x6BZzwQTq&client_secret=${
+      functions.config().patreon.secret
+    }`
+  );
 
-    const [patreonList, users, existingProfiles] = await Promise.all([
-        Promise.all(
-            memberData.data.map(async (member: Member) => {
-                const tierArr = member.relationships.currently_entitled_tiers.data.map(
-                    t => t.id
-                );
-                let tier = 0;
-                for (let i = tierList.length; i > 0; i -= 1) {
-                    if (tierArr.includes(tierList[i - 1])) {
-                        tier = i;
-                    }
-                }
-                const userData = (
-                    await axios.get(
-                        `${url}/members/${member.id}?fields%5Bmember%5D=full_name`,
-                        {
-                            headers,
-                        }
-                    )
-                ).data;
+  headers.Authorization = `Bearer ${access_token}`;
 
-                return {
-                    id: member.relationships.user.data.id,
-                    name: userData.data.attributes.full_name,
-                    tier,
-                };
-            }) as PatreonProfile[]
-        ),
-        (await database.ref('/users').once('value')).val() as {
-            [key: string]: {
-                'linked-account': { patreon?: string };
-                'patreon-tier'?: number;
-            };
-        },
-        (
-            await database.ref(`/patreon_list`).once('value')
-        ).val() as PatreonProfile[],
-    ]);
+  const [memberData, campaignData] = (
+    await Promise.all([
+      axios.get(
+        `${url}/v2/campaigns/4696297/members?include=currently_entitled_tiers,user`,
+        {
+          headers,
+        }
+      ),
+      axios.get(`${url}/v2/campaigns/4696297?include=tiers`, {
+        headers,
+      }),
+    ])
+  ).map(res => res.data);
 
-    await Promise.all(
-        patreonList.map(async (newProfile, i) => {
-            const uid = Object.entries(users).find(
-                ([, userData]) =>
-                    userData['linked-account'].patreon === newProfile.id
-            )?.[0];
-            const existingProfile = existingProfiles.find(
-                profile => profile.id === uid || profile.id === newProfile.id
-            );
+  const tierList = campaignData.included.map((tier: { id: string }) => tier.id);
 
-            let user: firebase.auth.UserRecord | undefined;
-            try {
-                if (!uid) {
-                    user = undefined;
-                } else {
-                    user = await auth.getUser(uid);
-                }
-            } catch (err) {
-                user = undefined;
+  const [patreonList, users, existingProfiles] = await Promise.all([
+    Promise.all(
+      memberData.data.map(async (member: Member) => {
+        const tierArr = member.relationships.currently_entitled_tiers.data.map(
+          t => t.id
+        );
+        let tier = 0;
+        for (let i = tierList.length; i > 0; i -= 1) {
+          if (tierArr.includes(tierList[i - 1])) {
+            tier = i;
+          }
+        }
+        const userData = (
+          await axios.get(
+            `${url}/v2/members/${member.id}?fields%5Bmember%5D=full_name`,
+            {
+              headers,
             }
-            const updated =
-                existingProfiles?.findIndex(p => p.id === uid) !== i ||
-                !existingProfile ||
-                existingProfile.id !== uid ||
-                existingProfile.tier !== newProfile.tier ||
-                (user?.displayName &&
-                    existingProfile.name !== user.displayName) ||
-                existingProfile.img !== user?.photoURL;
-            if (!updated) return;
+          )
+        ).data;
 
-            await Promise.all([
-                ...(uid && user
-                    ? [
-                          database.ref(`/patreon_list/${i}`).set({
-                              id: uid,
-                              tier: newProfile.tier,
-                              name: user.displayName ?? newProfile.name,
-                              img: user.photoURL ?? null,
-                              [uid]: existingProfile?.[uid] ?? null,
-                          }),
-                          database
-                              .ref(`/users/${uid}/patreon-tier`)
-                              .set(newProfile.tier),
-                      ]
-                    : [database.ref(`/patreon_list/${i}`).set(newProfile)]),
-                database
-                    .ref('/last_updated/patreon_list')
-                    .set(new Date().toISOString()),
-            ]);
-        })
-    );
+        return {
+          id: member.relationships.user.data.id,
+          name: userData.data.attributes.full_name,
+          tier,
+        };
+      }) as PatreonProfile[]
+    ),
+    (await database.ref('/users').once('value')).val() as {
+      [key: string]: {
+        'linked-account': { patreon?: string };
+        'patreon-tier'?: number;
+      };
+    },
+    (
+      await database.ref(`/patreon_list`).once('value')
+    ).val() as PatreonProfile[],
+  ]);
+
+  await Promise.all(
+    patreonList.map(async (newProfile, i) => {
+      const uid = Object.entries(users).find(
+        ([, userData]) => userData['linked-account'].patreon === newProfile.id
+      )?.[0];
+      const existingProfile = existingProfiles.find(
+        profile => profile.id === uid || profile.id === newProfile.id
+      );
+
+      let user: firebase.auth.UserRecord | undefined;
+      try {
+        if (!uid) {
+          user = undefined;
+        } else {
+          user = await auth.getUser(uid);
+        }
+      } catch (err) {
+        user = undefined;
+      }
+      const updated =
+        existingProfiles?.findIndex(p => p.id === uid) !== i ||
+        !existingProfile ||
+        existingProfile.id !== uid ||
+        existingProfile.tier !== newProfile.tier ||
+        (user?.displayName && existingProfile.name !== user.displayName) ||
+        existingProfile.img !== user?.photoURL;
+      if (!updated) return;
+
+      await Promise.all([
+        ...(uid && user
+          ? [
+              database.ref(`/patreon_list/${i}`).set({
+                id: uid,
+                tier: newProfile.tier,
+                name: user.displayName ?? newProfile.name,
+                img: user.photoURL ?? null,
+                [uid]: existingProfile?.[uid] ?? null,
+              }),
+              database.ref(`/users/${uid}/patreon-tier`).set(newProfile.tier),
+            ]
+          : [database.ref(`/patreon_list/${i}`).set(newProfile)]),
+        database
+          .ref('/last_updated/patreon_list')
+          .set(new Date().toISOString()),
+      ]);
+    })
+  );
 });
