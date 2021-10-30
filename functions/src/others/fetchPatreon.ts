@@ -33,16 +33,15 @@ type PatreonProfile = {
 
 export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
   const url = 'https://www.patreon.com/api/oauth2';
-  const refreshToken = (
-    await database.ref('/token_storage').once('value')
-  ).val();
+  const ref = database.ref('/token_storage/patreon');
+  const refreshToken = (await ref.once('value')).val();
 
-  const headers: { [key: string]: any } = {
+  const headers: { [key: string]: unknown } = {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
   const {
-    data: { access_token },
+    data: { access_token, refresh_token },
   } = await axios.post(
     `${url}/token`,
     `grant_type=refresh_token&refresh_token=${refreshToken}&client_id=mcsy6u4brWts2SHqlVuV4jo_BVLO3Ynfa0HJsnYcozdqkOYv-lWhLz1x6BZzwQTq&client_secret=${
@@ -63,8 +62,9 @@ export default functions.pubsub.schedule('*/5 * * * *').onRun(async () => {
       axios.get(`${url}/v2/campaigns/4696297?include=tiers`, {
         headers,
       }),
+      ref.set(refresh_token),
     ])
-  ).map(res => res.data);
+  ).map(res => res && res.data);
 
   const tierList = campaignData.included.map((tier: { id: string }) => tier.id);
 
