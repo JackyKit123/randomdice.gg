@@ -308,9 +308,7 @@ export default function ArenaDraft(): JSX.Element {
                 <option value={-1}>?</option>
                 {dice
                   ?.filter(die =>
-                    currentPick < 3
-                      ? die.rarity !== 'Legendary' && die.id !== 36
-                      : die.id !== 36
+                    currentPick < 3 ? die.rarity !== 'Legendary' : true
                   )
                   .filter(die => !Object.values(deck).includes(die.id))
                   .map(die => (
