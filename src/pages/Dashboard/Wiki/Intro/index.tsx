@@ -4,10 +4,14 @@ import firebase from 'firebase/app';
 import Dashboard, { SubmitButton, TextInput } from 'components/Dashboard';
 import { WikiContent } from 'types/database';
 import { fetchWiki } from 'misc/firebase';
+import useUnsavedWarning from 'pages/Dashboard/useUnsavedWarning';
 
 export default function editIntro(): JSX.Element {
   const dispatch = useDispatch();
   const database = firebase.database();
+  const [editState, setEditState] = useState<'init' | 'unedited' | 'edited'>(
+    'init'
+  );
   const dbRef = database.ref('/wiki/intro');
   const [pvpIntro, setPvpIntro] = useState('');
   const [coopIntro, setCoopIntro] = useState('');
@@ -23,8 +27,15 @@ export default function editIntro(): JSX.Element {
       setCrewIntro(data.Crew);
       setArenaIntro(data.Arena);
       setStoreIntro(data.Store);
+      setEditState('unedited');
     });
   }, []);
+
+  useEffect(() => {
+    if (editState !== 'init') {
+      setEditState('edited');
+    }
+  }, [editState, pvpIntro, coopIntro, crewIntro, arenaIntro, storeIntro]);
 
   const handleSubmit = async (): Promise<void> => {
     await Promise.all([
@@ -38,7 +49,10 @@ export default function editIntro(): JSX.Element {
       }),
     ]);
     fetchWiki(dispatch);
+    setEditState('unedited');
   };
+
+  useUnsavedWarning(editState === 'edited');
 
   return (
     <Dashboard

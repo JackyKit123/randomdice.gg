@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import firebase from 'firebase/app';
 import Dashboard, { SubmitButton, TextInput } from 'components/Dashboard';
 import { fetchNews } from 'misc/firebase';
+import useUnsavedWarning from '../useUnsavedWarning';
 
 export default function editPatchNote(): JSX.Element {
   const dispatch = useDispatch();
@@ -10,12 +11,16 @@ export default function editPatchNote(): JSX.Element {
   const dbRef = database.ref('/news');
   const [gameNews, setGameNews] = useState('');
   const [websiteNews, setWebsiteNews] = useState('');
+  const [editState, setEditState] = useState<'init' | 'unedited' | 'edited'>(
+    'init'
+  );
 
   useEffect(() => {
     dbRef.once('value').then(snapshot => {
       const data = snapshot.val();
       setGameNews(data.game);
       setWebsiteNews(data.website);
+      setEditState('unedited');
     });
   }, []);
 
@@ -29,6 +34,14 @@ export default function editPatchNote(): JSX.Element {
     ]);
     fetchNews(dispatch);
   };
+
+  useEffect(() => {
+    if (editState !== 'init') {
+      setEditState('edited');
+    }
+  }, [editState, gameNews, websiteNews]);
+
+  useUnsavedWarning(editState === 'edited');
 
   return (
     <Dashboard className='news' isDataReady={!!gameNews && !!websiteNews}>

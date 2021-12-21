@@ -19,6 +19,7 @@ import useRootStateSelector from '@redux';
 import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
 import { fetchDecksGuide } from 'misc/firebase';
 import { DeckGuide, DeckGuides } from 'types/database';
+import useUnsavedWarning from '../useUnsavedWarning';
 
 export default function updateDecksGuide(): JSX.Element {
   const dispatch = useDispatch();
@@ -71,6 +72,8 @@ export default function updateDecksGuide(): JSX.Element {
       fetchDecksGuide(dispatch);
     }
   };
+
+  useUnsavedWarning(!!activeEdit);
 
   return (
     <Dashboard
