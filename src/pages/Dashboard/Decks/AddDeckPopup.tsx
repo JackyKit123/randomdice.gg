@@ -41,12 +41,12 @@ export default function AddDeckPopup({
     if (invalidRatingToAdd) {
       return;
     }
-    decks.sort((a, b) => (a.id > b.id ? 1 : -1));
-    const newId = decks.findIndex((deck, i) => deck.id - 1 !== i);
-    if (newId === -1) {
-      clone.id = decks.length + 1;
-    } else {
-      clone.id = newId + 1;
+    for (
+      let newId = decks.length;
+      decks.some(deck => deck.id === newId);
+      newId += 1
+    ) {
+      clone.id = newId;
     }
     if (clone.type === 'Co-op (Pair)' || clone.type === 'Co-op (Solo)') {
       clone.type = 'Co-op';

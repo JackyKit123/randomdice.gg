@@ -12,7 +12,7 @@ import Dashboard from 'components/Dashboard';
 import Dice from 'components/Dice';
 import { ConfirmedSubmitNotification, popupContext } from 'components/PopUp';
 import { fetchDecks } from 'misc/firebase';
-import { Battlefield, Deck, DeckGuides, DeckList, Die } from 'types/database';
+import { Battlefield, Deck, DeckGuides, DeckList } from 'types/database';
 import useRootStateSelector from '@redux';
 import FilterForm, { FilterContext, useDeckFilter } from 'components/Filter';
 import AddDeckPopup from './AddDeckPopup';
@@ -85,10 +85,6 @@ export default function updateDeck(): JSX.Element {
   const { deckType, legendaryOwned, customSearch } = useContext(FilterContext);
   const [decks, setDecks] = useState<DeckList>([]);
   const [guides, setGuides] = useState<DeckGuides>([]);
-  const [deckToDelete, setDeckToDelete] = useState({
-    id: -1,
-    dice: [[]] as Die['id'][][],
-  });
 
   const initialEditState = {
     id: -1,
@@ -147,12 +143,6 @@ export default function updateDeck(): JSX.Element {
     );
     await sortDecksAndUpdate([...updated]);
     setActiveEdit({ ...initialEditState });
-  };
-
-  const deleteDeck = async (): Promise<void> => {
-    const deleted = decks.filter(deck => deck.id !== deckToDelete.id);
-    await sortDecksAndUpdate([...deleted]);
-    setDeckToDelete({ id: -1, dice: [[]] as Die['id'][][] });
   };
 
   const invalidRatingPrompt = (
@@ -458,18 +448,19 @@ export default function updateDeck(): JSX.Element {
                       disabled={deckInfo.id < 0}
                       type='button'
                       onClick={(): void => {
-                        setDeckToDelete({
-                          id: deckInfo.id,
-                          dice: deckInfo.decks,
-                        });
                         openPopup(
                           <ConfirmedSubmitNotification
                             promptText='Are you sure you want to delete this deck?'
-                            confirmHandler={deleteDeck}
+                            confirmHandler={async (): Promise<void> => {
+                              const deleted = decks.filter(
+                                deck => deck.id !== deckInfo.id
+                              );
+                              await sortDecksAndUpdate([...deleted]);
+                            }}
                           >
-                            {deckToDelete.dice.map((deck, i) => (
+                            {deckInfo.decks.map((deck, i) => (
                               // eslint-disable-next-line react/no-array-index-key
-                              <div key={i}>
+                              <div className='deck-container' key={i}>
                                 {deck.map(die => (
                                   <Dice key={die} die={die} />
                                 ))}

@@ -1,41 +1,55 @@
 @import '../cross_import_lesshat.less';
 
-.popup-overlay > .popup > .container .add-deck {
-  .delete figure {
-    display: inline-block;
-    width: 20%;
+.popup-overlay > .popup > .container {
+  & .add-deck {
+    .delete figure {
+      display: inline-block;
+      width: 20%;
+    }
+
+    form {
+      .display(flex);
+      .flex-direction(column);
+      .flex-wrap(wrap);
+      .justify-content(center);
+      text-align: center;
+      margin-bottom: 20px;
+
+      label {
+        font-size: 20px;
+
+        input,
+        select {
+          display: inline-block;
+          height: 32px;
+          margin: 10px 0;
+        }
+
+        &[for$='rating'] > input {
+          display: block;
+          margin: 5px auto;
+        }
+
+        &[for^='dice-list'] > div {
+          max-width: 300px;
+          margin: 5px auto;
+          .display(flex);
+          .flex-direction(column);
+          .align-items(center);
+        }
+      }
+    }
   }
 
-  form {
+  .deck-container,
+  .edit-container {
+    min-height: 54px;
     .display(flex);
-    .flex-direction(column);
-    .flex-wrap(wrap);
-    .justify-content(center);
-    text-align: center;
-    margin-bottom: 20px;
+    .flex-direction(row);
+    .justify-content(space-between);
 
-    label {
-      font-size: 20px;
-
-      input,
-      select {
-        display: inline-block;
-        height: 32px;
-        margin: 10px 0;
-      }
-
-      &[for$='rating'] > input {
-        display: block;
-        margin: 5px auto;
-      }
-
-      &[for^='dice-list'] > div {
-        max-width: 300px;
-        margin: 5px auto;
-        .display(flex);
-        .flex-direction(column);
-        .align-items(center);
-      }
+    figure {
+      width: 50px;
     }
   }
 }
