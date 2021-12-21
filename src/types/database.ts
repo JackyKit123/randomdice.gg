@@ -64,7 +64,14 @@ interface ArenaValue {
 export interface Die {
   id: number;
   name: string;
-  type: 'Physical' | 'Magic' | 'Buff' | 'Merge' | 'Transform' | 'Install';
+  type:
+    | 'Physical'
+    | 'Magic'
+    | 'Buff'
+    | 'Merge'
+    | 'Transform'
+    | 'Install'
+    | 'Debuff';
   desc: string;
   detail: string;
   img: string;

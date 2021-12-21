@@ -32,7 +32,7 @@ function validate(key: string, data: unknown): boolean {
             typeof datum === 'object' &&
             typeof datum.id === 'number' &&
             typeof datum.name === 'string' &&
-            /(?:Physical|Magic|Buff|Merge|Transform|Install)/i.test(
+            /(?:Physical|Magic|Buff|Merge|Transform|Install|Debuff)/i.test(
               datum.type
             ) &&
             typeof datum.desc === 'string' &&

@@ -217,7 +217,15 @@ export default function editDice(): JSX.Element {
             name='Type'
             value={dieType}
             setValue={setDieType}
-            options={['Physical', 'Magic', 'Buff', 'Merge', 'Transform']}
+            options={[
+              'Physical',
+              'Magic',
+              'Buff',
+              'Merge',
+              'Transform',
+              'Debuff',
+              'Install',
+            ]}
           />
           <TextInput
             name='Description'
