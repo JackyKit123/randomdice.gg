@@ -102,12 +102,13 @@ export default function editBattlefield(): JSX.Element {
       battlefieldName,
       oldBattlefield?.name
     );
-    const result = [
-      ...(battlefieldInfo.some(b => b.id === battlefield.id)
-        ? [battlefield]
-        : []),
-      ...battlefieldInfo,
-    ];
+
+    const result = battlefieldInfo.map(b =>
+      b.id === battlefield.id ? battlefield : b
+    );
+    if (!result.some(b => b.id === battlefield.id)) {
+      result.push(battlefield);
+    }
     await update(result);
   };
 

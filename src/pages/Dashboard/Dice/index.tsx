@@ -161,23 +161,19 @@ export default function editDice(): JSX.Element {
       },
     };
 
-    const result = [
-      ...(diceList.some(d => d.id === die.id) ? [die] : []),
-      ...diceList,
-    ].sort((a, b) => {
+    const result = diceList.map(d => (d.id === dieId ? die : d));
+    if (!result.some(d => d.id === dieId)) {
+      result.push(die);
+    }
+
+    result.sort((a, b) => {
       const rarityVal = {
         Common: 0,
         Rare: 1,
         Unique: 2,
         Legendary: 3,
       };
-      if (rarityVal[a.rarity] < rarityVal[b.rarity]) {
-        return -1;
-      }
-      if (rarityVal[a.rarity] > rarityVal[b.rarity]) {
-        return 1;
-      }
-      return 0;
+      return rarityVal[a.rarity] - rarityVal[b.rarity];
     });
     await update(result);
   };

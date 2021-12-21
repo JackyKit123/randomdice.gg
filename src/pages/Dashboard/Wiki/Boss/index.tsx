@@ -59,10 +59,10 @@ export default function editBoss(): JSX.Element {
       img: await updateImage(bossImg, 'Boss Images', bossName, oldBoss?.name),
       desc: bossDesc,
     };
-    const result = [
-      ...(bossInfo.some(b => b.id === bossId) ? [boss] : []),
-      ...bossInfo,
-    ];
+    const result = bossInfo.map(b => (b.id === boss.id ? boss : b));
+    if (!result.some(b => b.id === boss.id)) {
+      result.push(boss);
+    }
     await update(result);
   };
 

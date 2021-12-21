@@ -57,10 +57,10 @@ export default function editBox(): JSX.Element {
       from: boxFrom,
       contain: boxContain,
     };
-    const result = [
-      ...(boxInfo.some(b => b.id === boxId) ? [box] : []),
-      ...boxInfo,
-    ];
+    const result = boxInfo.map(b => (b.id === box.id ? box : b));
+    if (!boxInfo.some(b => b.id === box.id)) {
+      result.push(box);
+    }
     await update(result);
   };
 
