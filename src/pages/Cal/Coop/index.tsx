@@ -51,7 +51,6 @@ export default function GoldCalculator(): JSX.Element {
     [174, 'Solar C12 Moon Crack Snowball >2000% Crit'],
     [270, 'C11 Galaxy Snowball'],
     [300, 'Recharge C12 Moon Sword Snowball'],
-    [4000, 'C15 Solar C15 Moon C15 Sword Snowball + C15 Earthquake Clone Ass Bubble']
   ]);
 
   const isInvalidCurrentGold =
