@@ -1,17 +1,29 @@
-# randomdice.gg
+[![randomdice.gg](https://raw.githubusercontent.com/JackyKit123/randomdice.gg/master/public/android-chrome-192x192.png)](https://randomdice.gg/)
 
-A resourceful website for Random Dice! Interactive Deck Builders, dice calculators, 
-game tips and more. Created by the best players in the game community, with many 
-useful resources to help you succeed in the game.
+# [randomdice.gg](https://randomdice.gg/)
 
-## Development
-PRs are welcome!
+[![Discord](https://img.shields.io/discord/804222694488932362.svg?logo=discord&label=)](https://discord.randomdice.gg/)
 
-### Prerequisites
+# About
+
+randomdice.gg is a resourceful website for [Random Dice](https://www.111percent.net/)! Sporting 
+Interactive Deck Builders, dice calculators, game tips and more. The site was created and now 
+maintainedby the best players in the game community, with many useful resources to help succeed 
+in Random Dice.
+
+# Contributing
+**PRs are welcome!**
+
+It's recommended that you join the [randomdice.gg discord](https://discord.randomdice.gg/) first to talk to JackyKit about the 
+changes you wish to make first.
+
+# Development
+
+## Prerequisites
  - NodeJS 10 + npm
  - Yarn package manager `npm i -g yarn`
 
-Start by installing dependencies:
+## Installing dependencies
 
 ```bash
 yarn
@@ -22,61 +34,31 @@ cd randomdice.gg-discord-bot
 npm i
 ```
 
-### Environment Variables Used
+## Setting up Environment Variables
 
-Create a .env.development.local file and include the following variables otherwise the web app will not work.
+Create a `.env.development.local` file and include the following variables otherwise the web app will not work.
 
-REACT_APP_GOOGLE_API_KEY
+`REACT_APP_GOOGLE_API_KEY=YOUR_API_KEY_HERE`
 
-This api key is restricted for production domain https://randomdice.gg/, you should create your own api key for development purpose via the [Google Cloud Platform](https://console.cloud.google.com/apis/credentials)
+Create your own api key for development purposes via the [Google Cloud Platform](https://console.cloud.google.com/apis/credentials)
 
-# Other information
+## Yarn scripts
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
+*to be run in the project directory*
 
 ### `yarn start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### ~~`yarn test`~~
-
-#### removed test because I live on the dark side.
-
-~~Launches the test runner in the interactive watch mode.<br />~~
-~~See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.~~
+Starts the development server accessible at [http://localhost:3000](http://localhost:3000). <br/>
+This page will automatically reload upon edits to the code
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the site to the `build` folder for deployment<br />
+Read the [deployment documentation](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+*note: tests do not exist and the project has been ejected*
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Learn More
 
-### ~~`yarn eject`~~
-
-#### Create React App is already ejected
-
-~~**Note: this is a one-way operation. Once you `eject`, you can’t go back!**~~
-
-~~If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.~~
-
-~~Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.~~
-
-~~You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.~~
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started). <br/>
 To learn React, check out the [React documentation](https://reactjs.org/).
