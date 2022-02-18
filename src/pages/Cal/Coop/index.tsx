@@ -44,8 +44,14 @@ export default function GoldCalculator(): JSX.Element {
   ]);
 
   const coopWaveMode = new Map([
-    [60, 'Mirror YinYang'],
     [70, 'Pantheon YinYang'],
+    [94, 'Colloseum Star/Solar C10 Moon Crack Snowball'],
+    [110, 'Solar C11 Moon Crack Snowball'],
+    [158, 'Solar C12 Moon Crack Snowball'],
+    [174, 'Solar C12 Moon Crack Snowball >2000% Crit'],
+    [270, 'C11 Galaxy Snowball'],
+    [300, 'Recharge C12 Moon Sword Snowball']
+    [4000, 'C15 Solar C15 Moon C15 Sword Snowball + C15 Earthquake Clone Ass Bubble']
   ]);
 
   const isInvalidCurrentGold =
