@@ -36,8 +36,10 @@ export default function Main(props: {
         />
       </Helmet>
       <div className={`banner ${!online ? 'offline' : ''}`}>
-        <div className='title-container'>
-          <h2 className='title'>{title}</h2>
+        <div className='banner-blur'>
+          <div className='title-container'>
+            <h2 className='title'>{title}</h2>
+          </div>
         </div>
         {!online ? (
           <span>

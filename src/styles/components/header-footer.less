@@ -120,7 +120,8 @@ body {
         &.topHeaderBar {
           z-index: 2;
           height: 30px;
-          background-color: #1c1c1c;
+          background-color: rgba(28, 28, 28, 0.75);
+          backdrop-filter: blur(24px);
           //.box-shadow(0 -5px 10px 11px rgba(0, 0, 0, 1));
 
           & > .container {
@@ -175,7 +176,7 @@ body {
 
               &:hover,
               &:focus {
-                color: #6ba4a5;
+                color: #7295ff;
               }
             }
           }
@@ -185,8 +186,9 @@ body {
           .transition(height, 0.4s ease-out);
           z-index: 1;
           height: 60px;
-          background-color: #3a3a3a;
-          .box-shadow(0 -8px 20px 11px rgba(0, 0, 0, 1));
+          background-color: rgba(58, 58, 58, 0.75);
+          backdrop-filter: blur(24px);
+          .box-shadow(0 -8px 40px 1px rgba(0, 0, 0, 0.6));
 
           @media @mobile {
             height: 50px;
@@ -336,16 +338,19 @@ body {
                       visibility: visible;
                       opacity: 1;
                       z-index: 10;
+                      transform: translateY(0);
                     }
                   }
 
                   & > nav {
-                    .transition(all 0.3s ease-in-out);
+                    .transition(all 0.15s ease-out);
                     opacity: 0;
                     visibility: hidden;
                     z-index: 10;
                     position: absolute;
                     background-color: rgba(45, 45, 45, 0.9);
+                    border-radius: 5px;
+                    transform: translateY(0.75rem);
                     right: 0;
                     top: 60px;
                     padding: 0 30px;
@@ -368,7 +373,7 @@ body {
                         &.active {
                           cursor: context-menu;
                           color: #ffffff;
-                          text-shadow: #b2b2b2 0 0 9px;
+                          text-shadow: rgba(178, 178, 178, 0.47) 0 0 8px;
                           font-weight: 700;
                         }
                       }
@@ -382,7 +387,7 @@ body {
 
                     span.active {
                       cursor: context-menu;
-                      color: #6ba4a5;
+                      color: #7295ff;
                       font-weight: 700;
                     }
                   }
@@ -399,7 +404,7 @@ body {
 
                     span.active {
                       cursor: context-menu;
-                      color: #6ba4a5;
+                      color: #7295ff;
                       font-weight: 700;
                     }
 
@@ -417,13 +422,13 @@ body {
                         &:hover,
                         &:focus {
                           & > a {
-                            color: #6ba4a5;
+                            color: #7295ff;
                           }
                         }
 
                         span.active {
                           cursor: context-menu;
-                          color: #6ba4a5;
+                          color: #7295ff;
                           font-weight: 700;
                         }
                       }
@@ -478,7 +483,7 @@ body {
 
     & > .container {
       bottom: 0;
-      background-color: #05292e;
+      background-color: #7295ff;
       color: #ffffff;
 
       &.upper {
