@@ -35,7 +35,6 @@ const mapRouter = (
     <Route
       key='Route-path-404'
       component={lazy(() => import('pages/NoMatch'))}
-      status={404}
     />
   );
 };

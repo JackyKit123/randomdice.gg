@@ -17,6 +17,10 @@
           width: 100%;
         }
       }
+
+      & > iframe {
+        border-radius: 1rem;
+      }
     }
 
     nav.menu {
@@ -29,7 +33,7 @@
         padding: 0 10px;
         font-size: 25px;
         font-weight: 500;
-        color: #6ba4a5;
+        color: #7295ff;
         display: block;
         margin-bottom: 20px;
         width: 25%;
@@ -88,5 +92,22 @@
     display: flex;
     width: 100%;
     justify-content: center;
+    animation-name: float;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(10px);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
   }
 }

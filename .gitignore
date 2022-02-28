@@ -35,3 +35,6 @@ yarn-error.log*
 
 # Google Play App Key
 /.key
+
+# idea based tools
+.idea/
