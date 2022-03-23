@@ -65,6 +65,14 @@ export default function DiceStat(): JSX.Element {
         die.pupEff2 * (filter.level - 1)) *
         100
     ) / 100;
+   const eff3 =
+    die &&
+    Math.round(
+      (die.eff3 +
+        die.cupEff3 * (filter.class - minClass) +
+        die.pupEff3 * (filter.level - 1)) *
+        100
+    ) / 100;
   return (
     <PageWrapper
       isContentReady={!!die}
@@ -165,6 +173,13 @@ export default function DiceStat(): JSX.Element {
             <span className='value'>
               {eff2 || '-'}
               {die?.unitEff2}
+            </span>
+            </div>
+          <div className='eff3'>
+            <span className='label'>{die?.nameEff3 || '.'}</span>
+            <span className='value'>
+              {eff3 || '-'}
+              {die?.unitEff3}
             </span>
           </div>
         </div>
