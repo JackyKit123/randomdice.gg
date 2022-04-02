@@ -30,7 +30,7 @@ export default function discordBot(): JSX.Element {
         discord server!
       </p>
       <a
-        href='https://discord.com/oauth2/authorize?client_id=723917706641801316&permissions=355393&scope=bot'
+        href='https://discord.com/oauth2/authorize?client_id=723917706641801316&permissions=355393&scope=bot%20applications.commands'
         rel='noopener noreferrer'
         target='_blank'
       >
