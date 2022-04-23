@@ -41,13 +41,14 @@ export default function AddDeckPopup({
     if (invalidRatingToAdd) {
       return;
     }
-    for (
-      let newId = decks.length;
-      decks.some(deck => deck.id === newId);
-      newId += 1
-    ) {
-      clone.id = newId;
+    let newId = decks.length;
+
+    // eslint-disable-next-line no-loop-func
+    while (decks.some(deck => deck.id === newId)) {
+      newId += 1;
     }
+
+    clone.id = newId;
     if (clone.type === 'Co-op (Pair)' || clone.type === 'Co-op (Solo)') {
       clone.type = 'Co-op';
     }
