@@ -31,18 +31,23 @@ export default function editDice(): JSX.Element {
   const [dieSpd, setDieSpd] = useState<Die['spd']>(0);
   const [dieEff1, setDieEff1] = useState<Die['eff1']>(0);
   const [dieEff2, setDieEff2] = useState<Die['eff2']>(0);
+  const [dieEff3, setDieEff3] = useState<Die['eff3']>(0);
   const [dieNameEff1, setDieNameEff1] = useState<Die['nameEff1']>('-');
   const [dieNameEff2, setDieNameEff2] = useState<Die['nameEff2']>('-');
+  const [dieNameEff3, setDieNameEff3] = useState<Die['nameEff3']>('-');
   const [dieUnitEff1, setDieUnitEff1] = useState<Die['unitEff1']>('-');
   const [dieUnitEff2, setDieUnitEff2] = useState<Die['unitEff2']>('-');
+  const [dieUnitEff3, setDieUnitEff3] = useState<Die['unitEff3']>('-');
   const [dieCupAtk, setDieCupAtk] = useState<Die['cupAtk']>(0);
   const [dieCupSpd, setDieCupSpd] = useState<Die['cupSpd']>(0);
   const [dieCupEff1, setDieCupEff1] = useState<Die['cupEff1']>(0);
   const [dieCupEff2, setDieCupEff2] = useState<Die['cupEff2']>(0);
+  const [dieCupEff3, setDieCupEff3] = useState<Die['cupEff3']>(0);
   const [diePupAtk, setDiePupAtk] = useState<Die['pupAtk']>(0);
   const [diePupSpd, setDiePupSpd] = useState<Die['pupSpd']>(0);
   const [diePupEff1, setDiePupEff1] = useState<Die['pupEff1']>(0);
   const [diePupEff2, setDiePupEff2] = useState<Die['pupEff2']>(0);
+  const [diePupEff3, setDiePupEff3] = useState<Die['pupEff3']>(0);
   const [arenaValueType, setArenaValueType] = useState<
     Die['arenaValue']['type']
   >('Main Dps');
@@ -78,16 +83,20 @@ export default function editDice(): JSX.Element {
     setDieEff2(die?.eff2 ?? 0);
     setDieNameEff1(die?.nameEff1 ?? '');
     setDieNameEff2(die?.nameEff2 ?? '');
+    setDieNameEff3(die?.nameEff3 ?? '');
     setDieUnitEff1(die?.unitEff1 ?? '');
     setDieUnitEff2(die?.unitEff2 ?? '');
+    setDieUnitEff3(die?.unitEff3 ?? '');
     setDieCupAtk(die?.cupAtk ?? 0);
     setDieCupSpd(die?.cupSpd ?? 0);
     setDieCupEff1(die?.cupEff1 ?? 0);
     setDieCupEff2(die?.cupEff2 ?? 0);
+    setDieCupEff3(die?.cupEff3 ?? 0);
     setDiePupAtk(die?.pupAtk ?? 0);
     setDiePupSpd(die?.pupSpd ?? 0);
     setDiePupEff1(die?.pupEff1 ?? 0);
     setDiePupEff2(die?.pupEff2 ?? 0);
+    setDiePupEff3(die?.pupEff3 ?? 0);
     setArenaValueType(die?.arenaValue.type ?? 'Main Dps');
     setArenaValueAssist(die?.arenaValue.assist ?? 0);
     setArenaValueDps(die?.arenaValue.dps ?? 0);
@@ -140,18 +149,23 @@ export default function editDice(): JSX.Element {
       spd: dieSpd,
       eff1: dieEff1,
       eff2: dieEff2,
+      eff3: dieEff3,
       nameEff1: dieNameEff1.trim(),
       nameEff2: dieNameEff2.trim(),
+      nameEff3: dieNameEff3.trim(),
       unitEff1: dieUnitEff1.trim(),
       unitEff2: dieUnitEff2.trim(),
+      unitEff3: dieUnitEff3.trim(),
       cupAtk: dieCupAtk,
       cupSpd: dieCupSpd,
       cupEff1: dieCupEff1,
       cupEff2: dieCupEff2,
+      cupEff3: dieCupEff3,
       pupAtk: diePupAtk,
       pupSpd: diePupSpd,
       pupEff1: diePupEff1,
       pupEff2: diePupEff2,
+      pupEff3: diePupEff3,
       arenaValue: {
         type: arenaValueType,
         dps: arenaValueDps,
@@ -321,6 +335,31 @@ export default function editDice(): JSX.Element {
             name='Level Up Effect 2 Value'
             value={diePupEff2}
             setValue={setDiePupEff2}
+          />
+          <TextInput
+            name='Effect 3 Name'
+            value={dieNameEff3}
+            setValue={setDieNameEff3}
+          />
+          <TextInput
+            name='Effect 3 Unit'
+            value={dieUnitEff3}
+            setValue={setDieUnitEff3}
+          />
+          <NumberInput
+            name='Base Effect 3 Value'
+            value={dieEff3}
+            setValue={setDieEff3}
+          />
+          <NumberInput
+            name='Class Up Effect 3 Value'
+            value={dieCupEff3}
+            setValue={setDieCupEff3}
+          />
+          <NumberInput
+            name='Level Up Effect 3 Value'
+            value={diePupEff3}
+            setValue={setDiePupEff3}
           />
           <hr className='divisor' />
           <h3>Arena</h3>
